@@ -2,7 +2,7 @@ using System;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+public class TruckController : MonoBehaviour
 {
     [SerializeField] float motorForce = 100f;
     [SerializeField] float breakForce = 1000f;
@@ -45,7 +45,7 @@ public class CarController : MonoBehaviour
         GetInput();
         HandleMotor();
         HandleSteering();
-        //UpdateWheels();
+        UpdateWheels();
     }
 
     public void GetInput()
