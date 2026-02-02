@@ -1,10 +1,13 @@
 using System;
+using Unity.Netcode;
 using UnityEditor;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
-public class TruckController : MonoBehaviour
+public class TruckController : NetworkBehaviour
 {
+    public static TruckController instance;
+    
     [SerializeField] float motorForce = 100f;
     [SerializeField] float breakForce = 1000f;
     [SerializeField] float maxSteerAngle = 30f;
@@ -26,6 +29,8 @@ public class TruckController : MonoBehaviour
     [Header("Movement settings")] 
     [SerializeField, Range(0, 1f)] private float freinMoteur;
     [SerializeField, Range(0.5f, 1.5f)] private float adherence;
+
+    public Transform spawnPlayer;
     
     float horizontalInput;
     float verticalInput;
@@ -35,16 +40,29 @@ public class TruckController : MonoBehaviour
 
     private Rigidbody rb;
 
-    private void Start()
+    private void Awake()
     {
+        instance = this;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+        
         rb = GetComponent<Rigidbody>();
         rb.angularDamping = 1.5f;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        
+        GameObject camObj = new GameObject("Camera of " +  gameObject.name);
+        Camera cam = camObj.AddComponent<Camera>();
+        camObj.AddComponent<SmoothFollowCamera>().target = transform;
     }
 
     void Update()
     {
+        if (!IsOwner) return;
+        
         rb.centerOfMass = centerOfMass;
 
         frontLeftWheelCollider.wheelDampingRate  = freinMoteur;
