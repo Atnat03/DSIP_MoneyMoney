@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
@@ -22,6 +23,10 @@ public class TruckController : MonoBehaviour
     public Transform backLeftWheelTransform;
     public Transform backRightWheelTransform;
 
+    [Header("Movement settings")] 
+    [SerializeField, Range(0, 1f)] private float freinMoteur;
+    [SerializeField, Range(0.5f, 1.5f)] private float adherence;
+    
     float horizontalInput;
     float verticalInput;
     float currentSteerAngle;
@@ -41,6 +46,27 @@ public class TruckController : MonoBehaviour
     void Update()
     {
         rb.centerOfMass = centerOfMass;
+
+        frontLeftWheelCollider.wheelDampingRate  = freinMoteur;
+        frontRightWheelCollider.wheelDampingRate  = freinMoteur;
+        backLeftWheelCollider.wheelDampingRate  = freinMoteur;
+        backRightWheelCollider.wheelDampingRate  = freinMoteur;
+        
+        WheelFrictionCurve fl = frontLeftWheelCollider.forwardFriction;
+        fl.stiffness = adherence;
+        frontLeftWheelCollider.forwardFriction = fl;
+        
+        WheelFrictionCurve fr = frontRightWheelCollider.forwardFriction;
+        fr.stiffness = adherence;
+        frontRightWheelCollider.forwardFriction = fr;
+        
+        WheelFrictionCurve bl = backLeftWheelCollider.forwardFriction;
+        bl.stiffness = adherence;
+        backLeftWheelCollider.forwardFriction = bl;
+        
+        WheelFrictionCurve br = backRightWheelCollider.forwardFriction;
+        br.stiffness = adherence;
+        backRightWheelCollider.forwardFriction = br;
         
         GetInput();
         HandleMotor();
