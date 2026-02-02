@@ -151,11 +151,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   rb: {fileID: 181980028882359877}
   cameraTarget: {fileID: 7738082004865093122}
-  cameraTransform: {fileID: 0}
   moveSpeed: 5
   mouseSensibility: 5
   verticalLimit: {x: -80, y: 80}
-  cameraSmoothFollow: 15
+  cameraSmoothFollow: 50
   groundedPoint: {fileID: 818274366944525555}
   distanceToGround: 0.15
   jumpForce: 5
