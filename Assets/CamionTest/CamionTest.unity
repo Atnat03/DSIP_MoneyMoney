@@ -814,7 +814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e58ed8eae91bb70499b8380811f11e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
-  motorForce: 5000
+  motorForce: 3000
   breakForce: 10000
   maxSteerAngle: 33
   centerOfMass: {x: 1, y: -0.5, z: 0}
@@ -826,7 +826,7 @@ MonoBehaviour:
   frontRightWheelTransform: {fileID: 6730843815152474798}
   backLeftWheelTransform: {fileID: 3009594071581074618}
   backRightWheelTransform: {fileID: 1264598492724994554}
-  freinMoteur: 0.3
+  freinMoteur: 0.5
   adherence: 1.5
 --- !u!1 &739337604
 GameObject:
@@ -1093,7 +1093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SmoothFollowCamera
   target: {fileID: 623840951}
   offset: {x: 0, y: 5, z: -20}
-  followSpeed: 25
+  followSpeed: 10
   rotationSpeed: 5
 --- !u!1 &928789811
 GameObject:
@@ -1250,8 +1250,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.75
   m_SuspensionSpring:
-    spring: 70000
-    damper: 2000
+    spring: 38000
+    damper: 4800
     targetPosition: 0.5
   m_SuspensionDistance: 1
   m_ForceAppPointDistance: 0
@@ -1573,8 +1573,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.75
   m_SuspensionSpring:
-    spring: 70000
-    damper: 2000
+    spring: 42000
+    damper: 5500
     targetPosition: 0.5
   m_SuspensionDistance: 1
   m_ForceAppPointDistance: 0
@@ -2070,8 +2070,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.75
   m_SuspensionSpring:
-    spring: 70000
-    damper: 2000
+    spring: 42000
+    damper: 5500
     targetPosition: 0.5
   m_SuspensionDistance: 1
   m_ForceAppPointDistance: 0
@@ -2347,8 +2347,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.75
   m_SuspensionSpring:
-    spring: 70000
-    damper: 2000
+    spring: 38000
+    damper: 4800
     targetPosition: 0.5
   m_SuspensionDistance: 1
   m_ForceAppPointDistance: 0

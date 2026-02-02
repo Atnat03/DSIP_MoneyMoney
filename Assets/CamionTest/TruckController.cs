@@ -85,6 +85,8 @@ public class TruckController : MonoBehaviour
     {
         frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+        backLeftWheelCollider.motorTorque = verticalInput * motorForce;
+        backRightWheelCollider.motorTorque = verticalInput * motorForce;
 
         currentBreakForce = isBreaking ? breakForce : 0f;
         ApplyBraking();
