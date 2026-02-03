@@ -37,6 +37,10 @@ public class TruckController : NetworkBehaviour
     private Rigidbody rb;
 
     public AudioClip klaxon;
+    
+    public float durationBeforeReset = 2f;
+    private float t = 0f;
+    private bool isFallen = false;
 
     private void Awake()
     {
@@ -52,9 +56,9 @@ public class TruckController : NetworkBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         
-        /*GameObject camObj = new GameObject("Camera of " +  gameObject.name);
+        GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
-        camObj.AddComponent<SmoothFollowCamera>().target = transform;*/
+        camObj.AddComponent<SmoothFollowCamera>().target = transform;
     }
 
     void Update()
@@ -67,13 +71,14 @@ public class TruckController : NetworkBehaviour
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+        CheckFall();
 
         if (Input.GetKeyDown(KeyCode.K))
         {
             PlayHornServerRpc();
         }
     }
-    
+
     [ServerRpc]
     void PlayHornServerRpc()
     {
@@ -134,4 +139,48 @@ public class TruckController : NetworkBehaviour
         UpdateSingleWheel(backLeftWheelCollider, backLeftWheelTransform);
         UpdateSingleWheel(backRightWheelCollider, backRightWheelTransform);
     }
+
+    private void CheckFall()
+    {
+        Vector3 rot = transform.rotation.eulerAngles;
+
+        float x = NormalizeAngle(rot.x);
+        float z = NormalizeAngle(rot.z);
+
+        if (!isFallen && (Mathf.Abs(x) > 75f || Mathf.Abs(z) > 75f))
+        {
+            Debug.Log("Camion tombé");
+            isFallen = true;
+            t = durationBeforeReset;
+        }
+
+        if (isFallen)
+        {
+            t -= Time.deltaTime;
+
+            if (t <= 0f)
+            {
+                ResetTruck();
+            }
+        }
+    }
+
+    float NormalizeAngle(float angle)
+    {
+        if (angle > 180f)
+            angle -= 360f;
+        return angle;
+    }
+
+    void ResetTruck()
+    {
+        Debug.Log("Camion redressé");
+
+        Vector3 rot = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
+
+        transform.position += Vector3.up * 2f;
+        isFallen = false;
+    }
+
 }
