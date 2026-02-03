@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Shooting
 {
@@ -11,14 +11,16 @@ namespace Shooting
 
         public float MaxDistance { get; set; } = 1000f;
         // Invoked whenever the shooter successfully shoots
-        public UnityEvent OnShoot { get; }
+        public Action OnShoot { get; set; }
         // Invoked when a target is hit, with said target as parameter
-        public UnityEvent<TargetInfo> OnTargetHit { get; }
+        public Action<ITarget> OnTargetHit { get; set; }
         public bool EnableCallbacks { get; set; } = true;
+        // Penetration allows a bullet to pass through and touch multiple targets 
+        public bool EnablePenetration { get; set; } = false;
 
         #endregion
 
-        
+
         /// <summary>
         /// Checks if it's possible to shoot, and does it if so
         /// </summary>
@@ -35,14 +37,14 @@ namespace Shooting
         private List<BulletInfo> Shoot(Vector3 Pos, Vector3 Dir)
         {
             // Add logic here to replace raycast shots by physics shots
-            var result = ShootByRaycast(Pos, Dir);
             OnShoot_Callback();
+            var result = ShootByRaycast(Pos, Dir);
             return result;
         }
 
         // Overload in case we don't need the first target specifically
         private List<BulletInfo> ShootByRaycast(Vector3 Pos, Vector3 Dir)
-            => ShootByRaycast(Pos, Dir, out TargetInfo tempData);
+            => ShootByRaycast(Pos, Dir, out ITarget tempData);
 
         /// <summary>
         /// By default, shoots a single bullet. Can be overloaded to shoot multiple bullets (like a shotgun)
@@ -51,16 +53,16 @@ namespace Shooting
         /// <param name="Dir"></param>
         /// <param name="firstTarget"></param>
         /// <returns>The infos of all the bullets shot</returns>
-        private List<BulletInfo> ShootByRaycast(Vector3 Pos, Vector3 Dir, out TargetInfo firstTarget)
+        private List<BulletInfo> ShootByRaycast(Vector3 Pos, Vector3 Dir, out ITarget firstTarget)
         {
             List<BulletInfo> result = new();
             BulletInfo singleBullet = ShootBulletByRaycast(Pos, Dir, out bool tempData);
             result.Add(singleBullet);
 
             if (singleBullet.HitTargets.Count > 0)
-                firstTarget = singleBullet.HitTargetsInfo[0];
+                firstTarget = singleBullet.HitTargets[0];
             else
-                firstTarget = new TargetInfo();
+                firstTarget = null;
 
             return result;
         }
@@ -71,7 +73,7 @@ namespace Shooting
 
             RaycastHit[] hitInfos = Physics.RaycastAll(Pos, Dir, MaxDistance);
 
-            BulletInfo result = new BulletInfo();
+            BulletInfo result = new BulletInfo(true);
 
             foreach (RaycastHit hitInfo in hitInfos)
             {
@@ -93,15 +95,16 @@ namespace Shooting
                 // If it is a non-null target, add it to the result list
                 if (hitObjectIsTarget && target != null)
                 {
-                    TargetInfo ti = new TargetInfo(target, hitInfo.transform, hitInfo.collider);
                     result.Shooter = this;
                     result.HasHit = true;
-                    result.HitTargetsInfo.Add(ti);
-                    result.HitTargets.Add(target);
-                    result.Positions.Add(hitInfo.point);
                     hasHit = true;
+                    if (EnablePenetration || (result.HitTargets.Count == 0 && result.Positions.Count == 0))
+                    {
+                        result.HitTargets.Add(target);
+                        result.Positions.Add(hitInfo.point);
+                    }
 
-                    OnTargetHit_Callback(ti);
+                        OnTargetHit_Callback(target);
                 }
             }
             return result;
@@ -113,7 +116,7 @@ namespace Shooting
                 OnShoot.Invoke();
         }
 
-        private void OnTargetHit_Callback(TargetInfo info)
+        private void OnTargetHit_Callback(ITarget info)
         {
             if (EnableCallbacks)
                 OnTargetHit.Invoke(info);

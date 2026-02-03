@@ -33,6 +33,7 @@ public class FPSController : MonoBehaviour
         camObj.transform.position = new Vector3(0, 0, -10);
         cam.clearFlags = CameraClearFlags.Skybox;
         cam.fieldOfView = 60f;
+        cam.tag = "MainCamera";
         cameraTransform = camObj.transform;
         
         Cursor.lockState = CursorLockMode.Locked;

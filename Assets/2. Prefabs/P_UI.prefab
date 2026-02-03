@@ -247,6 +247,7 @@ GameObject:
   - component: {fileID: 5048485122403236231}
   - component: {fileID: 3918442355663223569}
   - component: {fileID: 8251206120551157673}
+  - component: {fileID: 612105095184426882}
   m_Layer: 5
   m_Name: CrossHair
   m_TagString: Untagged
@@ -311,6 +312,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &612105095184426882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3419342952883649758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 054074f4607e8c14bb145ca97521c95f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UICrosshair
+  _shootingSprite: {fileID: 21300000, guid: abc4094b8dfb1a54199e3ead9df12e46, type: 3}
+  _shootingColor: {r: 1, g: 0.8066038, b: 0.8066038, a: 1}
+  _shootingSize: {x: 64, y: 64}
+  _hitSprite: {fileID: 21300000, guid: abc4094b8dfb1a54199e3ead9df12e46, type: 3}
+  _hitColor: {r: 1, g: 0, b: 0, a: 1}
+  _hitSize: {x: 64, y: 64}
+  _disabledSprite: {fileID: 21300000, guid: abc4094b8dfb1a54199e3ead9df12e46, type: 3}
+  _disabledColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
+  _disabledSize: {x: 64, y: 64}
 --- !u!1 &3842199594117690395
 GameObject:
   m_ObjectHideFlags: 0
