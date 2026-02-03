@@ -305,30 +305,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7404709223442755977, guid: 0c0231d7697b7ca42a8232e5bce2b8d8, type: 3}
   m_PrefabInstance: {fileID: 292788424}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &354040890 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 116780015938773511, guid: 8ae2f5cd0e1d0ea42b10ab7a88d22355, type: 3}
-  m_PrefabInstance: {fileID: 1951248065}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &354040894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 354040890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3e01a942b46fc14581011c47a7e3adc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
-  _crosshair: {fileID: 1414039948063902878}
-  _onShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  _onHit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &403307051
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1539,6 +1515,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_Player
       objectReference: {fileID: 0}
+    - target: {fileID: 632150567856117366, guid: 8ae2f5cd0e1d0ea42b10ab7a88d22355, type: 3}
+      propertyPath: _crosshair
+      value: 
+      objectReference: {fileID: 1414039948063902878}
     - target: {fileID: 9007723052840850965, guid: 8ae2f5cd0e1d0ea42b10ab7a88d22355, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1582,10 +1562,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 116780015938773511, guid: 8ae2f5cd0e1d0ea42b10ab7a88d22355, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 354040894}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ae2f5cd0e1d0ea42b10ab7a88d22355, type: 3}
 --- !u!1001 &2027983016
 PrefabInstance:

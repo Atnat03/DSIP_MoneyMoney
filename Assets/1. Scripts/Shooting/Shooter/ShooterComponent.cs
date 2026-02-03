@@ -25,6 +25,8 @@ namespace Shooting
 
         // REFACTO : Shouldn't have a reference to the UI
         [SerializeField] private UICrosshair _crosshair;
+        [SerializeField] private LineRenderer _shotTrailPrefab;
+        private List<LineRenderer> _trails = new();
         int framesSinceUIUpdate = int.MaxValue/2;
 
         [SerializeField] private UnityEvent _onShoot;
@@ -39,28 +41,49 @@ namespace Shooting
             shooter.OnTargetHit += _ => OnHit.Invoke();
 
             // REFACTO : Remove deppendencies to UI
-            CrosshairFeedbacks();
+            ApplyFeedbacks();
         }
 
-        private void CrosshairFeedbacks()
+        private void ApplyFeedbacks()
         {
-            if (_crosshair == null)
-                return;
-            shooter.OnShoot += _crosshair.SetShooting;
-            shooter.OnShoot += () => { framesSinceUIUpdate = 0; };
-            shooter.OnTargetHit += _ => _crosshair.SetHit();
-            shooter.OnTargetHit += _ => { framesSinceUIUpdate = 0; };
-        }
+            if (_crosshair != null)
+            {
+                shooter.OnShoot += _crosshair.SetShooting;
+                shooter.OnShoot += () => { framesSinceUIUpdate = 0; };
+                shooter.OnTargetHit += _ => _crosshair.SetHit();
+                shooter.OnTargetHit += _ => { framesSinceUIUpdate = 0; };
+            }
 
+            shooter.OnShoot += MakeTrail;
+            
+        }
+        private void MakeTrail()
+        {
+            if (_shotTrailPrefab != null)
+            {
+                LineRenderer trail = GameObject.Instantiate(_shotTrailPrefab);
+                trail.transform.position = Vector3.zero;
+                Vector3[] positions = new Vector3[2];
+                positions[0] = Camera.main.transform.position;
+                positions[1] = Camera.main.transform.position + Camera.main.transform.forward * MaxDistance;
+                trail.SetPositions(positions);
+                _trails.Add(trail);
+            }
+        }
         private void Update()
         {
             // REFACTO : Feedbacks shouldn't be handled this way
-            if (_crosshair != null)
+            framesSinceUIUpdate++;
+            if (_crosshair != null && framesSinceUIUpdate > 30)
             {
-                framesSinceUIUpdate++;
-                if (framesSinceUIUpdate > 30)
-                    _crosshair.SetDefault();
+                _crosshair.SetDefault();
+                foreach (var trail in _trails)
+                {
+                    if (trail != null)
+                        Destroy(trail);
+                }
             }
+            
 
             HandleInputs();
         }
