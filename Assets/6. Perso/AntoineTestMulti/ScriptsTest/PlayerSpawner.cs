@@ -6,6 +6,8 @@ public class PlayerSpawner : NetworkBehaviour
     public GameObject player1Prefab;
     public GameObject player2Prefab;
     public Camera startCam;
+    
+    public Transform defaultSpawnPoint;
 
     private void Start()
     {
@@ -34,15 +36,16 @@ public class PlayerSpawner : NetworkBehaviour
 
         GameObject playerInstance = Instantiate(prefabToSpawn);
         
-        
         if (clientId != 0)
         {
             playerInstance.transform.position = TruckController.instance.spawnPlayer.position;
             playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
             playerInstance.transform.SetParent(TruckController.instance.transform, true);
+            playerInstance.GetComponent<FPSControllerMulti>().GetInTruck();
         }
         else
         {
+            playerInstance.transform.position = defaultSpawnPoint.position;
             playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
         }
         
