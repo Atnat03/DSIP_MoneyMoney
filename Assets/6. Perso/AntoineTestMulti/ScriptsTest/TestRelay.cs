@@ -14,6 +14,7 @@ public class TestRelay : MonoBehaviour
     public static string LastJoinCode;
     public static TestRelay instance;
     private bool isSigningIn = false;
+    public float timerToError = 20;
 
     private void Awake()
     {
@@ -103,7 +104,7 @@ public class TestRelay : MonoBehaviour
 
     private IEnumerator CheckConnectionAfterDelay()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(timerToError);
         if (!NetworkManager.Singleton.IsConnectedClient)
         {
             Debug.LogError("Connexion échouée !");
