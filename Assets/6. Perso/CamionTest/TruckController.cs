@@ -26,10 +26,6 @@ public class TruckController : NetworkBehaviour
     public Transform backLeftWheelTransform;
     public Transform backRightWheelTransform;
 
-    [Header("Movement settings")] 
-    [SerializeField, Range(0, 1f)] private float freinMoteur;
-    [SerializeField, Range(0.5f, 1.5f)] private float adherence;
-
     public Transform spawnPlayer;
     
     float horizontalInput;
@@ -39,6 +35,8 @@ public class TruckController : NetworkBehaviour
     bool isBreaking;
 
     private Rigidbody rb;
+
+    public AudioClip klaxon;
 
     private void Awake()
     {
@@ -54,9 +52,9 @@ public class TruckController : NetworkBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         
-        GameObject camObj = new GameObject("Camera of " +  gameObject.name);
+        /*GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
-        camObj.AddComponent<SmoothFollowCamera>().target = transform;
+        camObj.AddComponent<SmoothFollowCamera>().target = transform;*/
     }
 
     void Update()
@@ -64,32 +62,16 @@ public class TruckController : NetworkBehaviour
         if (!IsOwner) return;
         
         rb.centerOfMass = centerOfMass;
-
-        frontLeftWheelCollider.wheelDampingRate  = freinMoteur;
-        frontRightWheelCollider.wheelDampingRate  = freinMoteur;
-        backLeftWheelCollider.wheelDampingRate  = freinMoteur;
-        backRightWheelCollider.wheelDampingRate  = freinMoteur;
-        
-        WheelFrictionCurve fl = frontLeftWheelCollider.forwardFriction;
-        fl.stiffness = adherence;
-        frontLeftWheelCollider.forwardFriction = fl;
-        
-        WheelFrictionCurve fr = frontRightWheelCollider.forwardFriction;
-        fr.stiffness = adherence;
-        frontRightWheelCollider.forwardFriction = fr;
-        
-        WheelFrictionCurve bl = backLeftWheelCollider.forwardFriction;
-        bl.stiffness = adherence;
-        backLeftWheelCollider.forwardFriction = bl;
-        
-        WheelFrictionCurve br = backRightWheelCollider.forwardFriction;
-        br.stiffness = adherence;
-        backRightWheelCollider.forwardFriction = br;
         
         GetInput();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            GetComponent<AudioSource>().PlayOneShot(klaxon);
+        }
     }
 
     public void GetInput()

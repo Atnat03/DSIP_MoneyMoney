@@ -6,7 +6,7 @@ public class SmoothFollowCamera : MonoBehaviour
     public Transform target; 
 
     [Header("Camera settings")]
-    public Vector3 offset = new Vector3(0f, 5f, -10f);
+    public Vector3 offset = new Vector3(0f, 2f, 10f);
     public float followSpeed = 10f; 
     public float rotationSpeed = 5f;
 
