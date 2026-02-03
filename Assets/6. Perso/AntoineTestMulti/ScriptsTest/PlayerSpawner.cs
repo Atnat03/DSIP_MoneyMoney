@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 public class PlayerSpawner : NetworkBehaviour
@@ -16,40 +17,58 @@ public class PlayerSpawner : NetworkBehaviour
 
     private void OnDisable()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+        if (NetworkManager.Singleton != null)
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
 
     private void OnClientConnected(ulong clientId)
     {
         if (!IsServer) return;
 
-        GameObject prefabToSpawn;
-
-        if (clientId == 0)
-        {
-            prefabToSpawn = player1Prefab;
-        }
-        else
-        {
-            prefabToSpawn = player2Prefab;
-        }
-
+        GameObject prefabToSpawn = (clientId == 0) ? player1Prefab : player2Prefab;
         GameObject playerInstance = Instantiate(prefabToSpawn);
-        
+    
         if (clientId != 0)
         {
+            // Position le joueur dans le camion
             playerInstance.transform.position = TruckController.instance.spawnPlayer.position;
+            
+            // Spawn le joueur sur le réseau
             playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-            playerInstance.transform.SetParent(TruckController.instance.transform, true);
-            playerInstance.GetComponent<FPSControllerMulti>().GetInTruck();
+        
+            // NE PAS UTILISER SetParent avec des Rigidbody !
+            // playerInstance.transform.SetParent(TruckController.instance.transform, true);
+            
+            // Garde le NetworkTransform en mode world space
+            var netTransform = playerInstance.GetComponent<NetworkTransform>();
+            if (netTransform != null)
+            {
+                netTransform.InLocalSpace = false; // IMPORTANT : World space
+            }
+            
+            // Notifie le client propriétaire qu'il est dans le camion
+            NotifyPlayerInTruckClientRpc(playerInstance.GetComponent<NetworkObject>().NetworkObjectId);
         }
         else
         {
             playerInstance.transform.position = defaultSpawnPoint.position;
             playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
         }
-        
-        startCam.gameObject.SetActive(false);
+    
+        if (startCam != null)
+            startCam.gameObject.SetActive(false);
     }
 
+    [ClientRpc]
+    private void NotifyPlayerInTruckClientRpc(ulong playerNetworkId)
+    {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerNetworkId, out NetworkObject playerNetObj))
+        {
+            var fpsController = playerNetObj.GetComponent<FPSControllerMulti>();
+            if (fpsController != null && fpsController.IsOwner)
+            {
+                fpsController.GetInTruck();
+            }
+        }
+    }
 }
