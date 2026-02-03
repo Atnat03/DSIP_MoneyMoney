@@ -70,8 +70,20 @@ public class TruckController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.K))
         {
-            GetComponent<AudioSource>().PlayOneShot(klaxon);
+            PlayHornServerRpc();
         }
+    }
+    
+    [ServerRpc]
+    void PlayHornServerRpc()
+    {
+        PlayHornClientRpc();
+    }
+
+    [ClientRpc]
+    void PlayHornClientRpc()
+    {
+        GetComponent<AudioSource>().PlayOneShot(klaxon);
     }
 
     public void GetInput()
