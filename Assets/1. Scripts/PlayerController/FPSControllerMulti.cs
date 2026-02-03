@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FPSControllerMulti : NetworkBehaviour
 {
@@ -29,7 +30,11 @@ public class FPSControllerMulti : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        if (!IsOwner)
+        {
+            transform.GetChild(1).GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+            return;
+        }
         
         GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
