@@ -7,6 +7,7 @@ public class FPSControllerMulti : NetworkBehaviour
 {
     [Header("References")]
     [SerializeField] Rigidbody rb;
+    private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
     
@@ -27,6 +28,8 @@ public class FPSControllerMulti : NetworkBehaviour
     float pitch;
     float horizontalInput;
     private float verticalInput;
+    
+    public bool isInTruck = false;
 
     public override void OnNetworkSpawn()
     {
@@ -85,6 +88,11 @@ public class FPSControllerMulti : NetworkBehaviour
         rb.linearVelocity = velocity;
         
         isGrounded = CheckGround();
+        
+        if (truckRb != null && isInTruck)
+        {
+            rb.linearVelocity += truckRb.linearVelocity;
+        }
     }
 
     void LateUpdate()
@@ -96,4 +104,17 @@ public class FPSControllerMulti : NetworkBehaviour
         
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
     }
+
+    public void GetInTruck()
+    {
+        isInTruck = true;
+        truckRb = TruckController.instance.GetComponent<Rigidbody>();
+    }
+
+    public void GetOutTruck()
+    {
+        truckRb = null;
+        isInTruck = false;
+    }
+
 }
