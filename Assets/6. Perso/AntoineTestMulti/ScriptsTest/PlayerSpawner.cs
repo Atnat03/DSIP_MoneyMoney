@@ -35,7 +35,7 @@ public class PlayerSpawner : NetworkBehaviour
         GameObject playerInstance = Instantiate(prefabToSpawn);
         
         
-        if (clientId == 1)
+        if (clientId != 0)
         {
             playerInstance.transform.position = TruckController.instance.spawnPlayer.position;
             playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);

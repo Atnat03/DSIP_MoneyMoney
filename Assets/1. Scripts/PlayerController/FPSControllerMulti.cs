@@ -36,6 +36,9 @@ public class FPSControllerMulti : NetworkBehaviour
         cam.fieldOfView = 60f;
         cameraTransform = camObj.transform;
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
     }
