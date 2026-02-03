@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5676198823432455012}
   - component: {fileID: 1294844248340955509}
   - component: {fileID: 2643748147131639999}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FPS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,8 +62,8 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 2
-  m_Constraints: 0
+  m_Interpolate: 1
+  m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!114 &5676198823432455012
 MonoBehaviour:
@@ -162,6 +162,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  isInTruck: 0
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +175,7 @@ GameObject:
   - component: {fileID: 7196548543536368380}
   - component: {fileID: 1781850262982390510}
   - component: {fileID: 4139055748245228669}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Yeux
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +191,7 @@ Transform:
   m_GameObject: {fileID: 6868865806728251795}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.392}
+  m_LocalPosition: {x: 0, y: 0, z: 0.375}
   m_LocalScale: {x: 0.65687, y: 0.15856, z: 0.22882284}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -283,7 +284,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 818274366944525555}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GroundedPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,7 +318,7 @@ GameObject:
   - component: {fileID: 9099656966727688658}
   - component: {fileID: 2826011770840567580}
   - component: {fileID: 2971744948151488077}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BodyVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +404,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8569929788688803911}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 0c7b0192aa860ed4f8b936791f7ed484, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -428,7 +429,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7738082004865093122}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
