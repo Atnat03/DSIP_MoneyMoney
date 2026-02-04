@@ -30,23 +30,12 @@ public class PlayerSpawner : NetworkBehaviour
     
         if (clientId != 0)
         {
-            // Position le joueur dans le camion
+            // IMPORTANT : Positionner le joueur AVANT de le spawner
             playerInstance.transform.position = TruckController.instance.spawnPlayer.position;
+            playerInstance.transform.rotation = TruckController.instance.transform.rotation;
             
-            // Spawn le joueur sur le réseau
             playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-        
-            // NE PAS UTILISER SetParent avec des Rigidbody !
-            // playerInstance.transform.SetParent(TruckController.instance.transform, true);
             
-            // Garde le NetworkTransform en mode world space
-            var netTransform = playerInstance.GetComponent<NetworkTransform>();
-            if (netTransform != null)
-            {
-                netTransform.InLocalSpace = false; // IMPORTANT : World space
-            }
-            
-            // Notifie le client propriétaire qu'il est dans le camion
             NotifyPlayerInTruckClientRpc(playerInstance.GetComponent<NetworkObject>().NetworkObjectId);
         }
         else
@@ -62,11 +51,13 @@ public class PlayerSpawner : NetworkBehaviour
     [ClientRpc]
     private void NotifyPlayerInTruckClientRpc(ulong playerNetworkId)
     {
+        print("NotifyPlayerInTruckClientRpc");
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerNetworkId, out NetworkObject playerNetObj))
         {
             var fpsController = playerNetObj.GetComponent<FPSControllerMulti>();
             if (fpsController != null && fpsController.IsOwner)
             {
+                print("Calling GetInTruck on player");
                 fpsController.GetInTruck();
             }
         }

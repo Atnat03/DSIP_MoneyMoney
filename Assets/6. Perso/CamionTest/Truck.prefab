@@ -1429,6 +1429,9 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 7417354736578841563}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 7300443574470156473}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
@@ -1497,6 +1500,31 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
   m_PrefabInstance: {fileID: 7394564067151399481}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7417354736578841563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7665035335031617384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3834253144
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &7300443574470156473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1509,6 +1537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e58ed8eae91bb70499b8380811f11e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
+  ShowTopMostFoldoutHeaderGroup: 1
   motorForce: 3000
   breakForce: 10000
   maxSteerAngle: 33
@@ -1521,8 +1550,9 @@ MonoBehaviour:
   frontRightWheelTransform: {fileID: 6434478890879571878}
   backLeftWheelTransform: {fileID: 8379310555841359709}
   backRightWheelTransform: {fileID: 5382987996356731026}
-  freinMoteur: 0.5
-  adherence: 1.5
+  spawnPlayer: {fileID: 0}
+  klaxon: {fileID: 0}
+  durationBeforeReset: 2
 --- !u!54 &1987050485352191353
 Rigidbody:
   m_ObjectHideFlags: 0
