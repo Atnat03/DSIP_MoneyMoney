@@ -26,7 +26,6 @@ public class TruckController : NetworkBehaviour
     public Transform backLeftWheelTransform;
     public Transform backRightWheelTransform;
 
-    public Transform spawnPlayer;
     
     float horizontalInput;
     float verticalInput;
@@ -47,47 +46,71 @@ public class TruckController : NetworkBehaviour
     [SerializeField] public Vector3 boundsSize = new Vector3(5f, 3f, 10f); 
     [SerializeField] public float boundsPushForce = 10f;
 
+    public Transform driverPos;
+    public Transform spawnPassager;
+
+    private TruckInteraction truckInteraction;
+
     private void Awake()
     {
         instance = this;
+        truckInteraction = GetComponent<TruckInteraction>();
     }
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
-        
         rb = GetComponent<Rigidbody>();
         rb.angularDamping = 1.5f;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         
-        GameObject camObj = new GameObject("Camera of " +  gameObject.name);
-        Camera cam = camObj.AddComponent<Camera>();
-        camObj.AddComponent<SmoothFollowCamera>().target = transform;
+        // Le camion n'a pas de propriétaire unique, il appartient au serveur
+        // Seul le serveur gère la physique
+        if (!IsServer) return;
     }
 
     void Update()
     {
-        if (!IsOwner) return;
+        // Seul le serveur gère la physique et le reset
+        if (!IsServer) 
+        {
+            UpdateWheelsVisual();
+            return;
+        }
         
         rb.centerOfMass = centerOfMass;
         
-        GetInput();
+        // Vérifier si quelqu'un contrôle le camion
+        if (truckInteraction != null && truckInteraction.HasDriver())
+        {
+            // Le camion est contrôlé par le conducteur
+            // Les inputs sont envoyés via ServerRpc depuis le conducteur
+        }
+        
         HandleMotor();
         HandleSteering();
         UpdateWheels();
         CheckFall();
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            PlayHornServerRpc();
-        }
     }
 
-    [ServerRpc]
-    void PlayHornServerRpc()
+    /// <summary>
+    /// Appelé par le conducteur pour envoyer ses inputs
+    /// </summary>
+    [ServerRpc(RequireOwnership = false)]
+    public void SendInputsServerRpc(float horizontal, float vertical, bool breaking, bool horn, ServerRpcParams rpcParams = default)
     {
-        PlayHornClientRpc();
+        // Vérifier que c'est bien le conducteur qui envoie les inputs
+        if (truckInteraction != null && truckInteraction.IsDriver(rpcParams.Receive.SenderClientId))
+        {
+            horizontalInput = horizontal;
+            verticalInput = vertical;
+            isBreaking = breaking;
+            
+            if (horn)
+            {
+                PlayHornClientRpc();
+            }
+        }
     }
 
     [ClientRpc]
@@ -137,8 +160,18 @@ public class TruckController : NetworkBehaviour
         wheelTransform.position = pos;
         wheelTransform.rotation = rot;
     }
+    
     private void UpdateWheels()
     {
+        UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
+        UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);
+        UpdateSingleWheel(backLeftWheelCollider, backLeftWheelTransform);
+        UpdateSingleWheel(backRightWheelCollider, backRightWheelTransform);
+    }
+    
+    private void UpdateWheelsVisual()
+    {
+        // Clients non-serveur mettent juste à jour les visuels
         UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
         UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);
         UpdateSingleWheel(backLeftWheelCollider, backLeftWheelTransform);
@@ -190,12 +223,12 @@ public class TruckController : NetworkBehaviour
     
     private void OnDrawGizmos()
     {
-            Gizmos.color = Color.green;
-            Vector3 worldCenter = transform.TransformPoint(boundsCenter);
-            
-            Matrix4x4 oldMatrix = Gizmos.matrix;
-            Gizmos.matrix = Matrix4x4.TRS(worldCenter, transform.rotation, Vector3.one);
-            Gizmos.DrawWireCube(Vector3.zero, boundsSize);
-            Gizmos.matrix = oldMatrix;
+        Gizmos.color = Color.green;
+        Vector3 worldCenter = transform.TransformPoint(boundsCenter);
+        
+        Matrix4x4 oldMatrix = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(worldCenter, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, boundsSize);
+        Gizmos.matrix = oldMatrix;
     }
 }
