@@ -1357,13 +1357,14 @@ MonoBehaviour:
   firePoint: {fileID: 2178149800737986530}
   rotationSpeed: 8
   gunElevationSpeed: 8
-  detectionRadius: 60
+  detectionRadius: 20
   targetLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 65536
   fireRate: 0.5
   bulletVisualPrefab: {fileID: 8243927357346351360, guid: ec397038f9f592141a17b50b21bb8ecc, type: 3}
   bulletVisualSpeed: 120
+  damage: 10
 --- !u!1 &8639841333092637422
 GameObject:
   m_ObjectHideFlags: 0
