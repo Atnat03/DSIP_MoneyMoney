@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5676198823432455012}
   - component: {fileID: 1294844248340955509}
   - component: {fileID: 2643748147131639999}
+  - component: {fileID: 4320335311200352144}
   m_Layer: 7
   m_Name: FPS
   m_TagString: Untagged
@@ -170,6 +171,32 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   truckFollowStrength: 0.5
+  controller: {fileID: 4320335311200352144}
+--- !u!143 &4320335311200352144
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5129542687232109276}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0
