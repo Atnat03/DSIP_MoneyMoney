@@ -25,9 +25,8 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField] bool isGrounded = false;
     [SerializeField] LayerMask groundLayer;
     
-    [Header("Truck Bounds (Local Space)")]
-    [SerializeField] Vector3 truckBoundsMin = new Vector3(-2f, 0f, -3f);
-    [SerializeField] Vector3 truckBoundsMax = new Vector3(2f, 3f, 3f);
+    [Header("Truck Physics")]
+    [SerializeField] float truckDamping = 5f;
     
     float yaw;
     float pitch;
@@ -35,21 +34,20 @@ public class FPSControllerMulti : NetworkBehaviour
     private float verticalInput;
     
     public bool isInTruck = false;
-    private Vector3 lastTruckPosition;
-    private Quaternion lastTruckRotation;
+    private Transform truckParent;
 
+    [Header("Truck Interaction")]
+    [SerializeField] float interactDistance = 5f;
+    [SerializeField] LayerMask truckLayer;
+
+    [SerializeField] float truckFollowStrength = 0.5f;
+    
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
         {
             transform.GetChild(1).GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
             return;
-        }
-        
-        NetworkTransform netTransform = GetComponent<NetworkTransform>();
-        if (netTransform != null)
-        {
-            netTransform.InLocalSpace = false; // TOUJOURS en world space
         }
         
         GameObject camObj = new GameObject("Camera of " +  gameObject.name);
@@ -59,26 +57,6 @@ public class FPSControllerMulti : NetworkBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
-        rb.mass = 70f; 
-        rb.linearDamping = 0f; 
-        rb.angularDamping = 0.05f;
-    
-        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // IMPORTANT
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
-    
-        rb.sleepThreshold = 0f;
-        rb.maxDepenetrationVelocity = 2f; // Augmenté pour mieux gérer les collisions
-        
-        // Configure le CapsuleCollider
-        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
-        if (capsule != null)
-        {
-            capsule.radius = 0.3f;
-            capsule.height = 1.8f;
-            capsule.center = new Vector3(0, 0.9f, 0);
-        }
 
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
@@ -87,7 +65,7 @@ public class FPSControllerMulti : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-        
+     
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         
@@ -104,92 +82,117 @@ public class FPSControllerMulti : NetworkBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
-
+    
     private bool CheckGround()
     {
         return Physics.Raycast(groundedPoint.position, Vector3.down, distanceToGround, groundLayer);
     }
 
+    private Vector3 lastTruckPosition;
+
     void FixedUpdate()
     {
         if (!IsOwner) return;
-    
-        if (truckRb != null && isInTruck)
+
+        Vector3 camForward = cameraTransform.forward;
+        camForward.y = 0;
+        Vector3 camRight = cameraTransform.right;
+        camRight.y = 0;
+
+        Vector3 move = (camForward * verticalInput + camRight * horizontalInput).normalized;
+
+        if (isInTruck && truckRb != null)
         {
-            // Calcule le mouvement du camion depuis la dernière frame
-            Vector3 truckDeltaPosition = truckRb.position - lastTruckPosition;
-            Quaternion truckDeltaRotation = truckRb.rotation * Quaternion.Inverse(lastTruckRotation);
-            
-            // Applique le mouvement du camion au joueur
-            // Cela fait bouger le joueur avec le camion tout en gardant la physique active
-            rb.MovePosition(rb.position + truckDeltaPosition);
-            
-            // Applique la rotation du camion autour de son centre
-            Vector3 offset = rb.position - truckRb.position;
-            offset = truckDeltaRotation * offset;
-            rb.MovePosition(truckRb.position + offset);
-            
-            // Mouvement relatif du joueur DANS le camion
-            Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
-            Vector3 targetVelocity = move * moveSpeed;
-            
-            // Convertit la vélocité cible en espace local du camion
-            Vector3 localTargetVel = TruckController.instance.transform.InverseTransformDirection(targetVelocity);
-            targetVelocity = TruckController.instance.transform.TransformDirection(localTargetVel);
-            
-            Vector3 currentVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            Vector3 velocityDiff = targetVelocity - currentVelocity;
-            
-            rb.AddForce(velocityDiff * rb.mass * 15f, ForceMode.Force);
-            
-            // Applique les contraintes de position (bounds)
-            ClampPositionInTruck();
-            
-            // Sauvegarde la position/rotation du camion pour la prochaine frame
+            transform.localPosition += move * moveSpeed * Time.fixedDeltaTime;
+
+            Vector3 truckDelta = truckRb.position - lastTruckPosition;
             lastTruckPosition = truckRb.position;
-            lastTruckRotation = truckRb.rotation;
+
+            Vector3 targetPos = transform.position + truckDelta;
+            transform.position = Vector3.Lerp(transform.position, targetPos, truckFollowStrength);
+            
+            transform.position += Vector3.down * 9.81f * Time.fixedDeltaTime;
+            
+            ApplyTruckBounds();
         }
+
         else
         {
-            // HORS DU CAMION : Contrôle direct
-            Vector3 move = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
             Vector3 velocity = move * moveSpeed;
             velocity.y = rb.linearVelocity.y;
             rb.linearVelocity = velocity;
+
+            isGrounded = CheckGround();
         }
-    
-        isGrounded = CheckGround();
     }
 
-    void ClampPositionInTruck()
+
+    private void ApplyTruckBounds()
     {
-        if (TruckController.instance == null) return;
+        if (truckRb == null) return;
+
+        Vector3 localPosition = truckRb.transform.InverseTransformPoint(transform.position);
         
-        // Convertit la position du joueur en espace local du camion
-        Vector3 localPos = TruckController.instance.transform.InverseTransformPoint(rb.position);
+        Vector3 min = TruckController.instance.boundsCenter - TruckController.instance.boundsSize * 0.5f;
+        Vector3 max = TruckController.instance.boundsCenter + TruckController.instance.boundsSize * 0.5f;
         
-        // Clamp dans les bounds
-        Vector3 clampedLocalPos = new Vector3(
-            Mathf.Clamp(localPos.x, truckBoundsMin.x, truckBoundsMax.x),
-            Mathf.Clamp(localPos.y, truckBoundsMin.y, truckBoundsMax.y),
-            Mathf.Clamp(localPos.z, truckBoundsMin.z, truckBoundsMax.z)
-        );
+        Vector3 pushForce = Vector3.zero;
+        bool isOutOfBounds = false;
         
-        // Si la position a été clampée, repositionne le joueur
-        if (Vector3.Distance(localPos, clampedLocalPos) > 0.01f)
+        if (localPosition.x < min.x)
         {
-            Vector3 clampedWorldPos = TruckController.instance.transform.TransformPoint(clampedLocalPos);
-            rb.position = clampedWorldPos;
+            localPosition.x = min.x;
+            pushForce.x = TruckController.instance.boundsPushForce;
+            isOutOfBounds = true;
+        }
+        else if (localPosition.x > max.x)
+        {
+            localPosition.x = max.x;
+            pushForce.x = -TruckController.instance.boundsPushForce;
+            isOutOfBounds = true;
+        }
+        
+        if (localPosition.y < min.y)
+        {
+            localPosition.y = min.y;
+            pushForce.y = TruckController.instance.boundsPushForce;
+            isOutOfBounds = true;
+        }
+        else if (localPosition.y > max.y)
+        {
+            localPosition.y = max.y;
+            pushForce.y = -TruckController.instance.boundsPushForce;
+            isOutOfBounds = true;
+        }
+        
+        if (localPosition.z < min.z)
+        {
+            localPosition.z = min.z;
+            pushForce.z = TruckController.instance.boundsPushForce;
+            isOutOfBounds = true;
+        }
+        else if (localPosition.z > max.z)
+        {
+            localPosition.z = max.z;
+            pushForce.z = -TruckController.instance.boundsPushForce;
+            isOutOfBounds = true;
+        }
+        
+        if (isOutOfBounds)
+        {
+            Vector3 correctedWorldPosition = truckRb.transform.TransformPoint(localPosition);
+            transform.position = correctedWorldPosition;
             
-            // Réduit la vélocité dans la direction du mur
-            Vector3 normalizedDiff = (localPos - clampedLocalPos).normalized;
-            Vector3 worldNormal = TruckController.instance.transform.TransformDirection(normalizedDiff);
+            Vector3 worldPushForce = truckRb.transform.TransformDirection(pushForce);
+            rb.AddForce(worldPushForce, ForceMode.Acceleration);
             
-            float velocityInNormalDirection = Vector3.Dot(rb.linearVelocity, worldNormal);
-            if (velocityInNormalDirection > 0)
-            {
-                rb.linearVelocity -= worldNormal * velocityInNormalDirection * 0.8f;
-            }
+            Vector3 localVelocity = truckRb.transform.InverseTransformDirection(rb.linearVelocity);
+            
+            if (Mathf.Abs(pushForce.x) > 0) localVelocity.x = 0;
+            if (Mathf.Abs(pushForce.y) > 0) localVelocity.y = 0;
+            if (Mathf.Abs(pushForce.z) > 0) localVelocity.z = 0;
+            
+            rb.linearVelocity = truckRb.transform.TransformDirection(localVelocity);
         }
     }
 
@@ -202,22 +205,74 @@ public class FPSControllerMulti : NetworkBehaviour
         
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
     }
-
+    
     public void GetInTruck()
     {
+        print("GetInTruck - Requesting server to set parent");
+        
+        SetParentServerRpc(true);
+        
         isInTruck = true;
+        rb.useGravity = false;
+        rb.linearDamping = 0f;
+        rb.isKinematic = true;
+        
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         
-        if (truckRb != null)
+        NetworkTransform netTransform = GetComponent<NetworkTransform>();
+        if (netTransform != null)
         {
-            lastTruckPosition = truckRb.position;
-            lastTruckRotation = truckRb.rotation;
+            netTransform.InLocalSpace = true;
         }
     }
 
     public void GetOutTruck()
     {
-        truckRb = null;
+        print("GetOutTruck - Requesting server to clear parent");
+        
+        SetParentServerRpc(false);
+        
         isInTruck = false;
+        truckRb = null;
+        truckParent = null;
+        rb.isKinematic = false;
+        
+        rb.useGravity = true;
+        rb.linearDamping = 0f;
+        
+        NetworkTransform netTransform = GetComponent<NetworkTransform>();
+        if (netTransform != null)
+        {
+            netTransform.InLocalSpace = false;
+        }
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetParentServerRpc(bool setParent)
+    {
+        if (setParent)
+        {
+            Transform truckTransform = TruckController.instance.transform;
+            truckParent = truckTransform.Find("PlayerParent");
+            if (truckParent == null)
+            {
+                truckParent = truckTransform;
+            }
+        
+            NetworkObject netObj = GetComponent<NetworkObject>();
+            if (netObj != null)
+            {
+                netObj.TrySetParent(truckParent);
+            }
+        }
+        else
+        {
+            NetworkObject netObj = GetComponent<NetworkObject>();
+            if (netObj != null)
+            {
+                netObj.TrySetParent((Transform)null);
+            }
+        }
+    }
+
 }
