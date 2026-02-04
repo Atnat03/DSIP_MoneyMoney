@@ -11,6 +11,7 @@ public class FPSControllerMulti : NetworkBehaviour
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
+    [SerializeField] private CapsuleCollider capsule;
     
     [Header("Move Settings")]
     [SerializeField] float moveSpeed = 5f;
@@ -69,126 +70,105 @@ public class FPSControllerMulti : NetworkBehaviour
 
     private Vector3 lastTruckPosition;
 
+    public CharacterController controller;
+
     void Update()
     {
         if (!IsOwner) return;
-             
+
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        
+
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
-        
+
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
         {
-            Debug.Log("Jump");
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-        
-        Vector3 camForward = cameraTransform.forward;
-        camForward.y = 0;
-        Vector3 camRight = cameraTransform.right;
-        camRight.y = 0;
-
-        Vector3 move = (camForward * verticalInput + camRight * horizontalInput).normalized;
-
-        if (isInTruck && truckRb != null)
-        {
-            transform.localPosition += move * moveSpeed * Time.fixedDeltaTime;
-
-            Vector3 truckDelta = truckRb.position - lastTruckPosition;
-            lastTruckPosition = truckRb.position;
-
-            Vector3 targetPos = transform.position + truckDelta;
-            transform.position = Vector3.Lerp(transform.position, targetPos, truckFollowStrength);
-            
-            transform.position += Vector3.down * 9.81f * Time.fixedDeltaTime;
-            
-            ApplyTruckBounds();
+            controller.Move(Vector3.up * jumpForce * Time.deltaTime);
         }
 
-        else
-        {
-            Vector3 velocity = move * moveSpeed;
-            velocity.y = rb.linearVelocity.y;
-            rb.linearVelocity = velocity;
+        Vector3 move = Vector3.zero;
+        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+        move = transform.TransformDirection(localMove) * moveSpeed * Time.deltaTime;
 
-            isGrounded = CheckGround();
-        }
+        Vector3 truckDelta = truckRb.position - lastTruckPosition;
+        lastTruckPosition = truckRb.position;
+
+        move += truckDelta;
+        move -= Vector3.up * 9.81f * Time.deltaTime;
+
+        controller.Move(move);
     }
 
 
-    private void ApplyTruckBounds()
+    private bool ApplyTruckBounds()
     {
-        if (truckRb == null) return;
+        float halfHeight = capsule.height * 0.5f;
+        float radius = capsule.radius;
 
         Vector3 localPosition = truckRb.transform.InverseTransformPoint(transform.position);
-        
+
         Vector3 min = TruckController.instance.boundsCenter - TruckController.instance.boundsSize * 0.5f;
         Vector3 max = TruckController.instance.boundsCenter + TruckController.instance.boundsSize * 0.5f;
-        
+
         Vector3 pushForce = Vector3.zero;
         bool isOutOfBounds = false;
-        
-        if (localPosition.x < min.x)
+
+        if (localPosition.x - radius < min.x)
         {
-            localPosition.x = min.x;
             pushForce.x = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        else if (localPosition.x > max.x)
+        else if (localPosition.x + radius > max.x)
         {
-            localPosition.x = max.x;
             pushForce.x = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        
-        if (localPosition.y < min.y)
+
+        if (localPosition.y - halfHeight < min.y)
         {
-            localPosition.y = min.y;
             pushForce.y = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        else if (localPosition.y > max.y)
+        else if (localPosition.y + halfHeight > max.y)
         {
-            localPosition.y = max.y;
             pushForce.y = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        
-        if (localPosition.z < min.z)
+
+        if (localPosition.z - radius < min.z)
         {
-            localPosition.z = min.z;
             pushForce.z = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        else if (localPosition.z > max.z)
+        else if (localPosition.z + radius > max.z)
         {
-            localPosition.z = max.z;
             pushForce.z = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        
-        if (isOutOfBounds)
+
+        /*if (isOutOfBounds)
         {
             Vector3 correctedWorldPosition = truckRb.transform.TransformPoint(localPosition);
             transform.position = correctedWorldPosition;
-            
+
             Vector3 worldPushForce = truckRb.transform.TransformDirection(pushForce);
             rb.AddForce(worldPushForce, ForceMode.Acceleration);
-            
+
             Vector3 localVelocity = truckRb.transform.InverseTransformDirection(rb.linearVelocity);
-            
+
             if (Mathf.Abs(pushForce.x) > 0) localVelocity.x = 0;
             if (Mathf.Abs(pushForce.y) > 0) localVelocity.y = 0;
             if (Mathf.Abs(pushForce.z) > 0) localVelocity.z = 0;
-            
+
             rb.linearVelocity = truckRb.transform.TransformDirection(localVelocity);
-        }
+        }*/
+
+        return isOutOfBounds;
     }
 
     void LateUpdate()
@@ -204,43 +184,36 @@ public class FPSControllerMulti : NetworkBehaviour
     public void GetInTruck()
     {
         print("GetInTruck - Requesting server to set parent");
-        
         SetParentServerRpc(true);
-        
+
         isInTruck = true;
+
         rb.useGravity = false;
-        rb.linearDamping = 0f;
         rb.isKinematic = true;
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
-        
+
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
-        {
             netTransform.InLocalSpace = true;
-        }
     }
 
     public void GetOutTruck()
     {
         print("GetOutTruck - Requesting server to clear parent");
-        
         SetParentServerRpc(false);
-        
+
         isInTruck = false;
         truckRb = null;
-        truckParent = null;
+
         rb.isKinematic = false;
-        
         rb.useGravity = true;
-        rb.linearDamping = 0f;
-        
+
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
-        {
             netTransform.InLocalSpace = false;
-        }
     }
+
 
     [ServerRpc(RequireOwnership = false)]
     private void SetParentServerRpc(bool setParent)

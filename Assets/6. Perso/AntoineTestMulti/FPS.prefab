@@ -151,6 +151,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   rb: {fileID: 181980028882359877}
   cameraTarget: {fileID: 7738082004865093122}
+  capsule: {fileID: 2971744948151488077}
   moveSpeed: 10
   mouseSensibility: 5
   verticalLimit: {x: -80, y: 80}
@@ -168,7 +169,7 @@ MonoBehaviour:
   truckLayer:
     serializedVersion: 2
     m_Bits: 256
-  truckFollowStrength: 0.75
+  truckFollowStrength: 0.5
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0
