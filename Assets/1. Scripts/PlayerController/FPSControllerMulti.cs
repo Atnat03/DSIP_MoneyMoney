@@ -72,45 +72,53 @@ public class FPSControllerMulti : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
-             
+
+        // --- Input ---
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        
+
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
-        
+
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // --- Jump ---
+        if (!isInTruck && Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            Debug.Log("Jump");
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
-        
-        Vector3 camForward = cameraTransform.forward;
-        camForward.y = 0;
-        Vector3 camRight = cameraTransform.right;
-        camRight.y = 0;
 
-        Vector3 move = (camForward * verticalInput + camRight * horizontalInput).normalized;
+        // --- Calcul du mouvement ---
+        Vector3 move = Vector3.zero;
 
         if (isInTruck && truckRb != null)
         {
-            transform.localPosition += move * moveSpeed * Time.fixedDeltaTime;
+            // Mouvement relatif à l'orientation locale du joueur
+            Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+            move = transform.TransformDirection(localMove);
+        }
+        else
+        {
+            Vector3 camForward = cameraTransform.forward;
+            camForward.y = 0;
+            Vector3 camRight = cameraTransform.right;
+            camRight.y = 0;
+            move = (camForward * verticalInput + camRight * horizontalInput).normalized;
+        }
 
+        if (isInTruck && truckRb != null)
+        {
             Vector3 truckDelta = truckRb.position - lastTruckPosition;
             lastTruckPosition = truckRb.position;
 
-            Vector3 targetPos = transform.position + truckDelta;
-            transform.position = Vector3.Lerp(transform.position, targetPos, truckFollowStrength);
-            
+            transform.position += move * moveSpeed * Time.fixedDeltaTime + truckDelta;
+
             transform.position += Vector3.down * 9.81f * Time.fixedDeltaTime;
-            
+
             ApplyTruckBounds();
         }
-
         else
         {
             Vector3 velocity = move * moveSpeed;
