@@ -70,6 +70,8 @@ public class FPSControllerMulti : NetworkBehaviour
 
     private Vector3 lastTruckPosition;
 
+    public CharacterController controller;
+
     void Update()
     {
         if (!IsOwner) return;
@@ -84,54 +86,27 @@ public class FPSControllerMulti : NetworkBehaviour
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
 
-        if (!isInTruck && Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            controller.Move(Vector3.up * jumpForce * Time.deltaTime);
         }
 
         Vector3 move = Vector3.zero;
+        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+        move = transform.TransformDirection(localMove) * moveSpeed * Time.deltaTime;
 
-        if (isInTruck && truckRb != null)
-        {
-            Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-            move = transform.TransformDirection(localMove);
-        }
-        else
-        {
-            Vector3 camForward = cameraTransform.forward;
-            camForward.y = 0;
-            Vector3 camRight = cameraTransform.right;
-            camRight.y = 0;
-            move = (camForward * verticalInput + camRight * horizontalInput).normalized;
-        }
+        Vector3 truckDelta = truckRb.position - lastTruckPosition;
+        lastTruckPosition = truckRb.position;
 
-        if (isInTruck && truckRb != null)
-        {
-            Vector3 truckDelta = truckRb.position - lastTruckPosition;
-            lastTruckPosition = truckRb.position;
+        move += truckDelta;
+        move -= Vector3.up * 9.81f * Time.deltaTime;
 
-            transform.position += move * moveSpeed * Time.fixedDeltaTime + truckDelta;
-
-            transform.position += Vector3.down * 9.81f * Time.fixedDeltaTime;
-
-            ApplyTruckBounds();
-        }
-        else
-        {
-            Vector3 velocity = move * moveSpeed;
-            velocity.y = rb.linearVelocity.y;
-            rb.linearVelocity = velocity;
-
-            isGrounded = CheckGround();
-        }
+        controller.Move(move);
     }
 
 
-    private void ApplyTruckBounds()
+    private bool ApplyTruckBounds()
     {
-        if (truckRb == null) return;
-        if (capsule == null) return;
-
         float halfHeight = capsule.height * 0.5f;
         float radius = capsule.radius;
 
@@ -145,44 +120,38 @@ public class FPSControllerMulti : NetworkBehaviour
 
         if (localPosition.x - radius < min.x)
         {
-            localPosition.x = min.x + radius;
             pushForce.x = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
         else if (localPosition.x + radius > max.x)
         {
-            localPosition.x = max.x - radius;
             pushForce.x = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
 
         if (localPosition.y - halfHeight < min.y)
         {
-            localPosition.y = min.y + halfHeight;
             pushForce.y = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
         else if (localPosition.y + halfHeight > max.y)
         {
-            localPosition.y = max.y - halfHeight;
             pushForce.y = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
 
         if (localPosition.z - radius < min.z)
         {
-            localPosition.z = min.z + radius;
             pushForce.z = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
         else if (localPosition.z + radius > max.z)
         {
-            localPosition.z = max.z - radius;
             pushForce.z = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
 
-        if (isOutOfBounds)
+        /*if (isOutOfBounds)
         {
             Vector3 correctedWorldPosition = truckRb.transform.TransformPoint(localPosition);
             transform.position = correctedWorldPosition;
@@ -197,7 +166,9 @@ public class FPSControllerMulti : NetworkBehaviour
             if (Mathf.Abs(pushForce.z) > 0) localVelocity.z = 0;
 
             rb.linearVelocity = truckRb.transform.TransformDirection(localVelocity);
-        }
+        }*/
+
+        return isOutOfBounds;
     }
 
     void LateUpdate()
@@ -213,43 +184,36 @@ public class FPSControllerMulti : NetworkBehaviour
     public void GetInTruck()
     {
         print("GetInTruck - Requesting server to set parent");
-        
         SetParentServerRpc(true);
-        
+
         isInTruck = true;
+
         rb.useGravity = false;
-        rb.linearDamping = 0f;
         rb.isKinematic = true;
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
-        
+
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
-        {
             netTransform.InLocalSpace = true;
-        }
     }
 
     public void GetOutTruck()
     {
         print("GetOutTruck - Requesting server to clear parent");
-        
         SetParentServerRpc(false);
-        
+
         isInTruck = false;
         truckRb = null;
-        truckParent = null;
+
         rb.isKinematic = false;
-        
         rb.useGravity = true;
-        rb.linearDamping = 0f;
-        
+
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
-        {
             netTransform.InLocalSpace = false;
-        }
     }
+
 
     [ServerRpc(RequireOwnership = false)]
     private void SetParentServerRpc(bool setParent)
