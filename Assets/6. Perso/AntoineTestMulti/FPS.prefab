@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5676198823432455012}
   - component: {fileID: 1294844248340955509}
   - component: {fileID: 2643748147131639999}
-  - component: {fileID: 2266873853551275981}
   m_Layer: 7
   m_Name: FPS
   m_TagString: Untagged
@@ -30,9 +29,9 @@ Transform:
   m_GameObject: {fileID: 5129542687232109276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.22826, y: 1, z: -8.58506}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7738082004865093122}
   - {fileID: 3909352973056730244}
@@ -47,9 +46,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5129542687232109276}
   serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 30
+  m_LinearDamping: 0.1
+  m_AngularDamping: 0.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -64,7 +63,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!114 &5676198823432455012
 MonoBehaviour:
@@ -152,40 +151,24 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   rb: {fileID: 181980028882359877}
   cameraTarget: {fileID: 7738082004865093122}
-  moveSpeed: 5
+  moveSpeed: 10
   mouseSensibility: 5
   verticalLimit: {x: -80, y: 80}
   cameraSmoothFollow: 500
   groundedPoint: {fileID: 818274366944525555}
   distanceToGround: 0.15
-  jumpForce: 5
+  jumpForce: 50
   isGrounded: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  truckBoundsMin: {x: -2, y: 0, z: -3}
-  truckBoundsMax: {x: 2, y: 3, z: 3}
+  truckDamping: 2
   isInTruck: 0
---- !u!114 &2266873853551275981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5129542687232109276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3e01a942b46fc14581011c47a7e3adc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
-  _crosshair: {fileID: 0}
-  _shotTrailPrefab: {fileID: 2751325827363714088, guid: cd3615a53bed1ba4aa1a4886c3ed22db, type: 3}
-  _onShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  _onHit:
-    m_PersistentCalls:
-      m_Calls: []
+  interactDistance: 5
+  truckLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  truckFollowStrength: 0.5
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0

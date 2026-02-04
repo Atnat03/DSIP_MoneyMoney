@@ -41,6 +41,11 @@ public class TruckController : NetworkBehaviour
     public float durationBeforeReset = 2f;
     private float t = 0f;
     private bool isFallen = false;
+    
+    [Header("Truck Bounds")]
+    [SerializeField] public Vector3 boundsCenter = Vector3.zero; 
+    [SerializeField] public Vector3 boundsSize = new Vector3(5f, 3f, 10f); 
+    [SerializeField] public float boundsPushForce = 10f;
 
     private void Awake()
     {
@@ -182,5 +187,15 @@ public class TruckController : NetworkBehaviour
         transform.position += Vector3.up * 2f;
         isFallen = false;
     }
-
+    
+    private void OnDrawGizmos()
+    {
+            Gizmos.color = Color.green;
+            Vector3 worldCenter = transform.TransformPoint(boundsCenter);
+            
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+            Gizmos.matrix = Matrix4x4.TRS(worldCenter, transform.rotation, Vector3.one);
+            Gizmos.DrawWireCube(Vector3.zero, boundsSize);
+            Gizmos.matrix = oldMatrix;
+    }
 }
