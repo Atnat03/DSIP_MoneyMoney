@@ -22,7 +22,7 @@ public class PlayerRayCast : MonoBehaviour
                 uiController.OnInteract();
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Interact.RayInteract(gameObject);
+                    Interact.RayInteract(hit.collider.gameObject, gameObject);
                 }
             }
             else
