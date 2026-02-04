@@ -57,7 +57,7 @@ public class BanditVehicleAI : MonoBehaviour
         }
 
         Rigidbody truckRb = truck.GetComponent<Rigidbody>();
-        float truckSpeed = truckRb != null ? truckRb.velocity.magnitude : 0f;
+        float truckSpeed = truckRb != null ? truckRb.linearVelocity.magnitude : 0f;
 
         Vector3 targetPoint = GetTargetPoint();
         Vector3 toTarget = targetPoint - transform.position;
