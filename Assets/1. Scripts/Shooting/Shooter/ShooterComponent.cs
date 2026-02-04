@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using UI;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,12 +33,20 @@ namespace Shooting
 
         [SerializeField] private UnityEvent _onShoot;
         [SerializeField] private UnityEvent _onHit;
+
+        private int maxAmmo, currentAmmo;
+        private TextMeshProUGUI _currentAmmoText;
+        
         #endregion
 
         #region Methods
         private void Start()
         {
+            _crosshair = GameObject.Find("CrossHair").GetComponent<UICrosshair>();
+            _currentAmmoText = GameObject.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
+            
             shooter.OnShoot += OnShoot.Invoke;
+            currentAmmo = maxAmmo;
             shooter.OnTargetHit += (target) => OnTargetHit.Invoke(target);
             shooter.OnTargetHit += _ => OnHit.Invoke();
 
@@ -94,6 +104,12 @@ namespace Shooting
                 TryShoot();
         }
 
+        public void Reload()
+        {
+            currentAmmo = maxAmmo;
+            _currentAmmoText.text = currentAmmo.ToString();
+        }
+
         public bool TryShoot()
         {
             Camera camera = Camera.main;
@@ -101,10 +117,12 @@ namespace Shooting
             Vector3 Dir = camera.transform.forward;
             List<BulletInfo> bullets;
             bool canShoot = shooter.TryShoot(Pos, Dir, out bullets);
-            if (canShoot)
+            if (canShoot && currentAmmo > 0)
             {
                 Debug.Log("Player has shot");
                 WarnShotTargets(bullets);
+                currentAmmo--;
+                _currentAmmoText.text = currentAmmo.ToString();
             }
             else
                 Debug.Log("Player failed to shoot");
