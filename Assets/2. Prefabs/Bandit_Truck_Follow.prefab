@@ -779,9 +779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877fbd9089fb0974b947aaea1bac51f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bandit_Health
-  maxHealth: 500
-  tickDmg: 0
-  currentHealth: 0
+  maxHealth: 20
   healthBar: {fileID: 4189391593949609610}
 --- !u!1 &7175343954216360111
 GameObject:
@@ -852,7 +850,7 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0

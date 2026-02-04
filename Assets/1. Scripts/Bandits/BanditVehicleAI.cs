@@ -1,3 +1,4 @@
+using Shooting;
 using UnityEngine;
 
 public class BanditVehicleAI : MonoBehaviour
@@ -39,10 +40,12 @@ public class BanditVehicleAI : MonoBehaviour
     {
         if (truck == null)
         {
+            /*
             var t = GameObject.Find("Trucknathan(Clone)");
             if (t != null) truck = t.transform;
 
             lookAtTarget.target = t.transform;
+            */
             return;
         }
 
@@ -161,7 +164,7 @@ public class BanditVehicleAI : MonoBehaviour
         else
         {
             currentSpeed = 0f;
-            isStopping = false;
+            //isStopping = false;
         }
 
         // Suivi du sol

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5676198823432455012}
   - component: {fileID: 1294844248340955509}
   - component: {fileID: 2643748147131639999}
+  - component: {fileID: 2266873853551275981}
   m_Layer: 7
   m_Name: FPS
   m_TagString: Untagged
@@ -162,7 +163,29 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  truckBoundsMin: {x: -2, y: 0, z: -3}
+  truckBoundsMax: {x: 2, y: 3, z: 3}
   isInTruck: 0
+--- !u!114 &2266873853551275981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5129542687232109276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e01a942b46fc14581011c47a7e3adc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
+  _crosshair: {fileID: 0}
+  _shotTrailPrefab: {fileID: 2751325827363714088, guid: cd3615a53bed1ba4aa1a4886c3ed22db, type: 3}
+  _onShoot:
+    m_PersistentCalls:
+      m_Calls: []
+  _onHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0

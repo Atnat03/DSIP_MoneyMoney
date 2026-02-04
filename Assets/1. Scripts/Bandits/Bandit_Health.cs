@@ -1,39 +1,44 @@
 using System;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
+using Shooting;
 
-public class Bandit_Health : MonoBehaviour
+public class Bandit_Health : MonoBehaviour, ITarget
 {
-    public float maxHealth;
-    public float tickDmg;
-    public float currentHealth;
-    public Image healthBar;
+    [Header("Health")]
+    public float maxHealth = 100f;
+    private float currentHealth;
 
-    public void Start()
+    [Header("UI")]
+    public Image healthBar;
+    
+    public Action<BulletInfo> OnShot { get; private set; }
+    public Collider Collider { get; private set; }
+
+    private void Awake()
     {
         currentHealth = maxHealth;
+        Collider = GetComponent<Collider>();
+        OnShot = HandleShot;
     }
 
-    public void Update()
+    private void HandleShot(BulletInfo bullet)
     {
-        TakeDamage(tickDmg);
+        TakeDamage(bullet.Damage);
     }
-
 
     public void TakeDamage(float dmg)
     {
-        Debug.Log("plz");
         currentHealth -= dmg;
-        healthBar.fillAmount = currentHealth / maxHealth;
 
-        if (currentHealth <= 0)
-        {
+        if (healthBar != null)
+            healthBar.fillAmount = currentHealth / maxHealth;
+
+        if (currentHealth <= 0f)
             Die();
-        }
     }
 
-    public void Die()
+    private void Die()
     {
         GetComponent<BanditVehicleAI>().StopVehicle();
     }
