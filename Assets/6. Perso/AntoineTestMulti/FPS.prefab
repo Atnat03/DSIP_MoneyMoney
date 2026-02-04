@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 5676198823432455012}
   - component: {fileID: 1294844248340955509}
   - component: {fileID: 2643748147131639999}
-  - component: {fileID: 4320335311200352144}
+  - component: {fileID: -6553493833157429361}
+  - component: {fileID: 359454556623227309}
   m_Layer: 7
   m_Name: FPS
   m_TagString: Untagged
@@ -47,7 +48,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5129542687232109276}
   serializedVersion: 5
-  m_Mass: 30
+  m_Mass: 1
   m_LinearDamping: 0.1
   m_AngularDamping: 0.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -158,21 +159,22 @@ MonoBehaviour:
   verticalLimit: {x: -80, y: 80}
   cameraSmoothFollow: 500
   groundedPoint: {fileID: 818274366944525555}
-  distanceToGround: 0.15
+  distanceToGround: 0
   jumpForce: 50
   isGrounded: 0
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
-  truckDamping: 2
+    m_Bits: 4294967295
+  truckDamping: 5
   isInTruck: 0
-  interactDistance: 5
+  interactDistance: 100
   truckLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 16384
   truckFollowStrength: 0.5
-  controller: {fileID: 4320335311200352144}
---- !u!143 &4320335311200352144
+  isDriver: 0
+  controller: {fileID: -6553493833157429361}
+--- !u!143 &-6553493833157429361
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,6 +199,18 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &359454556623227309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5129542687232109276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16b99a0cf8a63bb4abad81e6f026524e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DriverInputHandler
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0

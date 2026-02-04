@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class GrabPoint : MonoBehaviour
 {
-    public void Grab()
-    {
-        Debug.Log("Grab");
+    public void Grab(GameObject obj)
+    { 
+        //obj.transform.SetParent(transform);
+        //obj.transform.localPosition = transform.localPosition;
+        //obj.GetComponent<Rigidbody>().isKinematic = false;
     }
 }
