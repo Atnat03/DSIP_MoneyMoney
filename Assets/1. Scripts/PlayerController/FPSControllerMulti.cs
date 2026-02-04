@@ -11,6 +11,7 @@ public class FPSControllerMulti : NetworkBehaviour
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
+    [SerializeField] private CapsuleCollider capsule;
     
     [Header("Move Settings")]
     [SerializeField] float moveSpeed = 5f;
@@ -73,7 +74,6 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        // --- Input ---
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
@@ -84,18 +84,15 @@ public class FPSControllerMulti : NetworkBehaviour
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
 
-        // --- Jump ---
         if (!isInTruck && Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
-        // --- Calcul du mouvement ---
         Vector3 move = Vector3.zero;
 
         if (isInTruck && truckRb != null)
         {
-            // Mouvement relatif à l'orientation locale du joueur
             Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
             move = transform.TransformDirection(localMove);
         }
@@ -133,68 +130,72 @@ public class FPSControllerMulti : NetworkBehaviour
     private void ApplyTruckBounds()
     {
         if (truckRb == null) return;
+        if (capsule == null) return;
+
+        float halfHeight = capsule.height * 0.5f;
+        float radius = capsule.radius;
 
         Vector3 localPosition = truckRb.transform.InverseTransformPoint(transform.position);
-        
+
         Vector3 min = TruckController.instance.boundsCenter - TruckController.instance.boundsSize * 0.5f;
         Vector3 max = TruckController.instance.boundsCenter + TruckController.instance.boundsSize * 0.5f;
-        
+
         Vector3 pushForce = Vector3.zero;
         bool isOutOfBounds = false;
-        
-        if (localPosition.x < min.x)
+
+        if (localPosition.x - radius < min.x)
         {
-            localPosition.x = min.x;
+            localPosition.x = min.x + radius;
             pushForce.x = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        else if (localPosition.x > max.x)
+        else if (localPosition.x + radius > max.x)
         {
-            localPosition.x = max.x;
+            localPosition.x = max.x - radius;
             pushForce.x = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        
-        if (localPosition.y < min.y)
+
+        if (localPosition.y - halfHeight < min.y)
         {
-            localPosition.y = min.y;
+            localPosition.y = min.y + halfHeight;
             pushForce.y = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        else if (localPosition.y > max.y)
+        else if (localPosition.y + halfHeight > max.y)
         {
-            localPosition.y = max.y;
+            localPosition.y = max.y - halfHeight;
             pushForce.y = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        
-        if (localPosition.z < min.z)
+
+        if (localPosition.z - radius < min.z)
         {
-            localPosition.z = min.z;
+            localPosition.z = min.z + radius;
             pushForce.z = TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        else if (localPosition.z > max.z)
+        else if (localPosition.z + radius > max.z)
         {
-            localPosition.z = max.z;
+            localPosition.z = max.z - radius;
             pushForce.z = -TruckController.instance.boundsPushForce;
             isOutOfBounds = true;
         }
-        
+
         if (isOutOfBounds)
         {
             Vector3 correctedWorldPosition = truckRb.transform.TransformPoint(localPosition);
             transform.position = correctedWorldPosition;
-            
+
             Vector3 worldPushForce = truckRb.transform.TransformDirection(pushForce);
             rb.AddForce(worldPushForce, ForceMode.Acceleration);
-            
+
             Vector3 localVelocity = truckRb.transform.InverseTransformDirection(rb.linearVelocity);
-            
+
             if (Mathf.Abs(pushForce.x) > 0) localVelocity.x = 0;
             if (Mathf.Abs(pushForce.y) > 0) localVelocity.y = 0;
             if (Mathf.Abs(pushForce.z) > 0) localVelocity.z = 0;
-            
+
             rb.linearVelocity = truckRb.transform.TransformDirection(localVelocity);
         }
     }
