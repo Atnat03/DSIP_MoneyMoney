@@ -61,11 +61,18 @@ public class FPSControllerMulti : NetworkBehaviour
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
     }
+    
+    private bool CheckGround()
+    {
+        return Physics.Raycast(groundedPoint.position, Vector3.down, distanceToGround, groundLayer);
+    }
 
-    private void Update()
+    private Vector3 lastTruckPosition;
+
+    void Update()
     {
         if (!IsOwner) return;
-     
+             
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         
@@ -81,19 +88,7 @@ public class FPSControllerMulti : NetworkBehaviour
             Debug.Log("Jump");
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
-    }
-    
-    private bool CheckGround()
-    {
-        return Physics.Raycast(groundedPoint.position, Vector3.down, distanceToGround, groundLayer);
-    }
-
-    private Vector3 lastTruckPosition;
-
-    void FixedUpdate()
-    {
-        if (!IsOwner) return;
-
+        
         Vector3 camForward = cameraTransform.forward;
         camForward.y = 0;
         Vector3 camRight = cameraTransform.right;
