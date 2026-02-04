@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 997750652767166842}
   - component: {fileID: 3717902899553357781}
   m_Layer: 0
-  m_Name: Cube (4)
+  m_Name: createsTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -234,7 +234,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 532072020633640443}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 491711868954614516}
   - component: {fileID: 5734734861534495795}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: createsTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -421,7 +421,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 885432233106431119}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -572,7 +572,7 @@ GameObject:
   - component: {fileID: 908622625038417416}
   - component: {fileID: 1530991379943015300}
   m_Layer: 0
-  m_Name: Cube (3)
+  m_Name: createsTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -679,7 +679,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229652945138583421}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1608,7 +1608,7 @@ GameObject:
   - component: {fileID: 4018833219136203947}
   - component: {fileID: 8783200792916807421}
   m_Layer: 0
-  m_Name: Cube (2)
+  m_Name: createsTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1715,7 +1715,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3940458901135038172}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2898,7 +2898,7 @@ GameObject:
   - component: {fileID: 1937063114008661316}
   - component: {fileID: 2514322399422461682}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: createsTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3005,7 +3005,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8244515498125465274}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -3301,7 +3301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   ShowTopMostFoldoutHeaderGroup: 1
-  motorForce: 5000
+  motorForce: 3000
   breakForce: 10000
   maxSteerAngle: 25
   centerOfMass: {x: 0, y: -1.2, z: 0}
@@ -3318,7 +3318,7 @@ MonoBehaviour:
   durationBeforeReset: 2
   boundsCenter: {x: 0, y: 1, z: 0.63}
   boundsSize: {x: 2.13, y: 1, z: 12.24}
-  boundsPushForce: 100
+  boundsPushForce: 25
 --- !u!54 &9183607677445931539
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3328,7 +3328,7 @@ Rigidbody:
   m_GameObject: {fileID: 4956863376682007588}
   serializedVersion: 5
   m_Mass: 1500
-  m_LinearDamping: 0
+  m_LinearDamping: 0.1
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -3343,9 +3343,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!114 &9176422662142693800
 MonoBehaviour:
   m_ObjectHideFlags: 0
