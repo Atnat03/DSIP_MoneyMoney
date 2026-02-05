@@ -1,5 +1,3 @@
-
-
 using Shooting;
 using UnityEngine;
 using UnityEngine.Events;

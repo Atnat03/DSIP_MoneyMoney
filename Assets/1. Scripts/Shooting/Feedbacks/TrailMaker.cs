@@ -23,6 +23,5 @@ public class TrailMaker : MonoBehaviour
     private void Dispose(GameObject obj)
     {
         Destroy(obj);
-        Debug.Log("Disposed of an object");
     }
 }

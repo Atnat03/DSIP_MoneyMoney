@@ -13,7 +13,6 @@ public static class ExtensionMethods
     }
     private static IEnumerator WaitAndDo(float duration, Action callback)
     {
-        Debug.Log("Waiting " + duration + "s before action");
         for (float d = 0; d < duration; d += Time.deltaTime)
             yield return null;
         callback.Invoke();
