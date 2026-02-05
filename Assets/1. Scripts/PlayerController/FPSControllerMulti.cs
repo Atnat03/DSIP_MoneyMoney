@@ -221,7 +221,6 @@ public class FPSControllerMulti : NetworkBehaviour
         if (setParent)
         {
             Transform truckTransform = TruckController.instance.transform;
-            truckParent = truckTransform.Find("PlayerParent");
             if (truckParent == null)
             {
                 truckParent = truckTransform;
