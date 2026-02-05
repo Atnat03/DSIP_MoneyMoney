@@ -11,8 +11,8 @@ public class Interactable : MonoBehaviour
     #endregion
 
     [Header("Parameters")]
-    [SerializeField] protected KeyCode _interactKey;
-    [SerializeField] protected float _reachDistance;
+    [SerializeField] protected KeyCode _interactKey = KeyCode.E;
+    [SerializeField] protected float _reachDistance = 3f;
     [Tooltip("If enabled, this can be interacted with even if it is behind an object")]
     [SerializeField] protected bool _enableSeethrough;
 

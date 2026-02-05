@@ -14,8 +14,8 @@ public class DataFetcher
         switch (data)
         {
             case Data.None: return "";
-            case Data.AmmoCount: return Reference.GetObject<ShooterComponent>()?.AmmoCount.ToString();
-            case Data.MaxAmmoCount: return Reference.GetObject<ShooterComponent>()?.MaxAmmoCount.ToString();
+            case Data.AmmoCount: return Reference.GetObject<PlayerInterface>()?.ShooterComponent.AmmoCount.ToString();
+            case Data.MaxAmmoCount: return Reference.GetObject<PlayerInterface>()?.ShooterComponent.MaxAmmoCount.ToString();
         }
         return "";
     }

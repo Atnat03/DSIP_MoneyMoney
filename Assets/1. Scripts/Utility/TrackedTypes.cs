@@ -6,8 +6,7 @@ public static class TrackedTypes
         {
             // Add types to be tracked here
 
-            typeof(Shooting.ShooterComponent),
-            typeof(FPSController),
+            typeof(PlayerInterface),
 
             // ...
         };
