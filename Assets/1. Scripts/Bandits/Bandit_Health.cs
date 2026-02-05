@@ -10,8 +10,11 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     public float maxHealth = 100f;
 
     private NetworkVariable<float> currentHealth = new NetworkVariable<float>(
+        value: 100f,
+        readPerm: NetworkVariableReadPermission.Everyone,
         writePerm: NetworkVariableWritePermission.Server
     );
+
 
     [Header("UI")]
     public Image healthBar;
@@ -29,24 +32,24 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     {
         if (IsServer)
             currentHealth.Value = maxHealth;
-
+        
         currentHealth.OnValueChanged += OnHealthChanged;
     }
-
+    
     private void OnDestroy()
     {
         currentHealth.OnValueChanged -= OnHealthChanged;
     }
 
-    private void OnHealthChanged(float oldValue, float newValue)
+    private void OnHealthChanged(float oldVal, float newVal)
     {
         if (healthBar != null)
-            healthBar.fillAmount = newValue / maxHealth;
+            healthBar.fillAmount = newVal / maxHealth;
 
-        if (newValue <= 0f && oldValue > 0f)
+        if (newVal <= 0f)
             Die();
     }
-
+    
     private void HandleShot(BulletInfo bullet)
     {
         if (IsServer)
@@ -58,11 +61,14 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     [ServerRpc(RequireOwnership = false)]
     private void TakeDamageServerRpc(float dmg)
     {
+        print("TakeDamageServerRpc");
         ApplyDamage(dmg);
     }
 
     private void ApplyDamage(float dmg)
     {
+        print("ApplyDamage : " + currentHealth.Value);
+        
         if (currentHealth.Value <= 0f)
             return;
 
