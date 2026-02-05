@@ -119,8 +119,6 @@ public class TruckInteraction : NetworkBehaviour
     
     private void ExitTruckServerLogic(FPSControllerMulti player)
     {
-        if (!player.isInTruck) return;
-        
         ulong playerId = player.OwnerClientId;
         
         if (driverClientId.Value == playerId)

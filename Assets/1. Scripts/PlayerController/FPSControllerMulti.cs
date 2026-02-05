@@ -88,6 +88,7 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             if (!isInTruck)
             {
+                canEnterInTruck = false;
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
             }
             else if (isInTruck)
@@ -173,9 +174,9 @@ public class FPSControllerMulti : NetworkBehaviour
         isInTruck = true;
         isDriver = asDriver;
         
-        SetParentServerRpc(true);
+        transform.localPosition = spawnPosition;
         
-        transform.position = spawnPosition;
+        SetParentServerRpc(true);
 
         if (isDriver)
         {

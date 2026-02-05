@@ -21,11 +21,7 @@ namespace GameSystem
 
         #region Fields
 
-        private Type[] _trackedTypes =
-        {
-            typeof(Shooting.ShooterComponent),
-
-        };
+        private Type[] _trackedTypes = TrackedTypes.GetTypes();
         private Dictionary<Type, List<MonoBehaviour>> _elementDict;
         private Dictionary<Type, IManager> _managers;
 
