@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-public class ListenEventDoor : MonoBehaviour
+public class ListenEventDoor : Interactable
 {
     Animator animator;
     private bool isInteracting;
@@ -10,29 +9,26 @@ public class ListenEventDoor : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void OnEnable()
+    protected override void Interact(Transform playerTransform, bool enableCallbacks = true)
     {
-        Interact.OnInteract += HitInteract;
-    }
-    private void OnDisable()
-    {
-        Interact.OnInteract -= HitInteract;
+        base.Interact(playerTransform, enableCallbacks);
+        Debug.Log("Interact");
+        
+        HitInteract();
+        
     }
     
-    private void HitInteract(GameObject obj, GameObject player)
+    private void HitInteract()
     {
-        if (obj.name == gameObject.name)
+        if (isInteracting)
         {
-            if (isInteracting)
-            {
-                animator.SetBool("Open", false);
-                isInteracting = false;
-            }
-            else
-            {
-                animator.SetBool("Open", true);
-                isInteracting = true;
-            }
+            animator.SetBool("Open", false);
+            isInteracting = false;
+        }
+        else
+        {
+            animator.SetBool("Open", true);
+            isInteracting = true;
         }
     }
 }
