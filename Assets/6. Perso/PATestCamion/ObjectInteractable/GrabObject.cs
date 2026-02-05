@@ -11,8 +11,11 @@ public class GrabObject : MonoBehaviour
         Interact.OnInteract -= HitInteract;
     }
     
-    private void HitInteract(GameObject obj)
+    private void HitInteract(GameObject obj, GameObject player)
     {
-        obj.GetComponent<GrabPoint>().Grab();
+        if (obj.name == gameObject.name)
+        { 
+            obj.GetComponent<GrabPoint>().Grab(player);
+        }
     }
 }
