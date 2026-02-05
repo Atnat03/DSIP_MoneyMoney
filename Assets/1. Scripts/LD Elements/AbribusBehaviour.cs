@@ -3,7 +3,7 @@ using UnityEngine;
 public class AbribusBehaviour : MonoBehaviour
 {
     public float timeForTP;
-    private float _currentTimer;
+    [SerializeField]private float _currentTimer;
 
     public Transform playerWaiting;
 
@@ -11,6 +11,7 @@ public class AbribusBehaviour : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Debug.Log("please");
             playerWaiting = other.transform;
         }
     }

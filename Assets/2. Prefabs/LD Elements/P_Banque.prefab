@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4404282524420825871}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &708076903428116354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5445104793610089797}
+  m_Layer: 0
+  m_Name: Spawnpoint_Money (7)
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5445104793610089797
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708076903428116354}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.652, y: -0.185, z: -0.9022}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4404282524420825871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1665200954254735781
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,9 +191,13 @@ Transform:
   - {fileID: 7798338038046711890}
   - {fileID: 8333743531881674047}
   - {fileID: 5336264552513356261}
+  - {fileID: 5445104793610089797}
   - {fileID: 6127084589332282324}
+  - {fileID: 4779120633306632247}
   - {fileID: 1631869750737546495}
   - {fileID: 1603601526955534452}
+  - {fileID: 4325992611821094402}
+  - {fileID: 7484400614154095579}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2664529265210069158
@@ -180,7 +215,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2481214983981477171}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -241,8 +276,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3.9618058, y: 1, z: 2.4239595}
+  m_Center: {x: 0.8188066, y: 0, z: -0.2726445}
 --- !u!114 &7996588114750361578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,22 +291,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BankBehaviour
   moneySpawns:
-  - objectSpawned: {fileID: 1659011391954277373, guid: 724e3c0e9e0b0d2429c2db8f9ebfebfd, type: 3}
+  - objectSpawned: {fileID: 6584897066571411342, guid: 6f86ad3589a1bb349810c744bbddf854, type: 3}
     spawnPoint: {fileID: 8333743531881674047}
-    numberOfItem: 1
-  - objectSpawned: {fileID: 1659011391954277373, guid: 724e3c0e9e0b0d2429c2db8f9ebfebfd, type: 3}
+    numberOfItem: 2
+  - objectSpawned: {fileID: 3389049563541913053, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
     spawnPoint: {fileID: 5336264552513356261}
     numberOfItem: 1
-  - objectSpawned: {fileID: 1659011391954277373, guid: 724e3c0e9e0b0d2429c2db8f9ebfebfd, type: 3}
-    spawnPoint: {fileID: 1631869750737546495}
-    numberOfItem: 2
-  - objectSpawned: {fileID: 1659011391954277373, guid: 724e3c0e9e0b0d2429c2db8f9ebfebfd, type: 3}
+  - objectSpawned: {fileID: 3389049563541913053, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
     spawnPoint: {fileID: 1631869750737546495}
     numberOfItem: 1
-  - objectSpawned: {fileID: 1659011391954277373, guid: 724e3c0e9e0b0d2429c2db8f9ebfebfd, type: 3}
+  - objectSpawned: {fileID: 3389049563541913053, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
+    spawnPoint: {fileID: 1631869750737546495}
+    numberOfItem: 1
+  - objectSpawned: {fileID: 6584897066571411342, guid: 6f86ad3589a1bb349810c744bbddf854, type: 3}
     spawnPoint: {fileID: 1603601526955534452}
     numberOfItem: 1
-  moneySpawned: 0
+  - objectSpawned: {fileID: 3389049563541913053, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
+    spawnPoint: {fileID: 5445104793610089797}
+    numberOfItem: 2
+  - objectSpawned: {fileID: 3389049563541913053, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
+    spawnPoint: {fileID: 4779120633306632247}
+    numberOfItem: 2
+  - objectSpawned: {fileID: 3389049563541913053, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
+    spawnPoint: {fileID: 4325992611821094402}
+    numberOfItem: 2
+  visited: 0
+  delay: 0.2
+  spawnPlayer: {fileID: 7484400614154095579}
 --- !u!1 &2657707003100116184
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,8 +377,8 @@ Transform:
   m_GameObject: {fileID: 3536646179315431889}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.041, y: 0, z: -0.835}
-  m_LocalScale: {x: 0.13068575, y: 1.2472708, z: 0.050961968}
+  m_LocalPosition: {x: 2.041, y: 1.09481, z: -0.835}
+  m_LocalScale: {x: 0.13068575, y: 3.4369118, z: 0.050961968}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4404282524420825871}
@@ -415,3 +461,96 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &4072347903588961388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7484400614154095579}
+  m_Layer: 0
+  m_Name: SpawnPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7484400614154095579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4072347903588961388}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.206, y: -0.126, z: -0.787}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4404282524420825871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5683802317801991065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4779120633306632247}
+  m_Layer: 0
+  m_Name: Spawnpoint_Money (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4779120633306632247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5683802317801991065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.837, y: -0.169, z: -0.9561}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4404282524420825871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8048769111746444112
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4325992611821094402}
+  m_Layer: 0
+  m_Name: Spawnpoint_Money (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4325992611821094402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8048769111746444112}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.936, y: -0.126, z: -0.736}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4404282524420825871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
