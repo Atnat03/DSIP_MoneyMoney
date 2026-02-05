@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 public class FPSControllerMulti : NetworkBehaviour
 {
     [Header("References")]
-    [SerializeField] Rigidbody rb;
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
@@ -68,6 +67,8 @@ public class FPSControllerMulti : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        nearbyTruck = TruckController.instance.GetComponent<TruckInteraction>();
+
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
     }
@@ -83,13 +84,14 @@ public class FPSControllerMulti : NetworkBehaviour
         
         textGoInCamion.SetActive(canEnterInTruck);
         
-        if (Input.GetKeyDown(KeyCode.E) && canEnterInTruck)
+        if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
             if (!isInTruck)
             {
+                canEnterInTruck = false;
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
             }
-            else if (isInTruck && nearbyTruck != null)
+            else if (isInTruck)
             {
                 print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
@@ -172,28 +174,20 @@ public class FPSControllerMulti : NetworkBehaviour
         isInTruck = true;
         isDriver = asDriver;
         
+        transform.localPosition = spawnPosition;
+        
         SetParentServerRpc(true);
-        
-        transform.position = spawnPosition;
-        
+
         if (isDriver)
         {
             driverLocalPosition = TruckController.instance.driverPos.position;
-            
+
             TruckController.instance.enabled = true;
-            
+
             if (controller != null)
                 controller.enabled = false;
-            
-            rb.useGravity = false;
-            rb.isKinematic = true;
         }
-        else
-        {
-            rb.useGravity = false;
-            rb.isKinematic = true;
-        }
-        
+
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
 
@@ -216,9 +210,6 @@ public class FPSControllerMulti : NetworkBehaviour
         
         if (controller != null)
             controller.enabled = true;
-        
-        rb.isKinematic = false;
-        rb.useGravity = true;
 
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
@@ -231,7 +222,6 @@ public class FPSControllerMulti : NetworkBehaviour
         if (setParent)
         {
             Transform truckTransform = TruckController.instance.transform;
-            truckParent = truckTransform.Find("PlayerParent");
             if (truckParent == null)
             {
                 truckParent = truckTransform;
