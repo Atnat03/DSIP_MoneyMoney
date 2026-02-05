@@ -1693,70 +1693,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 394636135894971523, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 394636135894971523, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_ForwardFriction.m_Stiffness
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 394636135894971523, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046559473657121110, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046559473657121110, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_ForwardFriction.m_Stiffness
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046559473657121110, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: driverPos
-      value: 
-      objectReference: {fileID: 478080591}
-    - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: spawnPassager
-      value: 
-      objectReference: {fileID: 478080590}
-    - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: centerOfMass.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: centerOfMass.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982077410619423181, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982077410619423181, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_ForwardFriction.m_Stiffness
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982077410619423181, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4521764892006214984, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 4521764892006214984, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_ForwardFriction.m_Stiffness
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 4521764892006214984, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_SidewaysFriction.m_Stiffness
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 4956863376682007588, guid: e0a028245496f2a43b92f747745f7366, type: 3}
       propertyPath: m_Name
       value: TruckMultiPA
@@ -1805,65 +1741,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 2627938957
       objectReference: {fileID: 0}
-    - target: {fileID: 6733575963084871328, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.056
-      objectReference: {fileID: 0}
-    - target: {fileID: 8762724871031393331, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.47
-      objectReference: {fileID: 0}
-    - target: {fileID: 8762724871031393331, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 16.53
-      objectReference: {fileID: 0}
-    - target: {fileID: 9183607677445931539, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Interpolate
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 2594105874457923759, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4956863376682007588, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 478080592}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0a028245496f2a43b92f747745f7366, type: 3}
---- !u!1 &478080589 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4956863376682007588, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-  m_PrefabInstance: {fileID: 478080588}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &478080590 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6243097487441881909, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-  m_PrefabInstance: {fileID: 478080588}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &478080591 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6733575963084871328, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-  m_PrefabInstance: {fileID: 478080588}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &478080592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 478080589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd914e74d3447844c9411ac241aa0fef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TruckInteraction
-  ShowTopMostFoldoutHeaderGroup: 1
-  interactionRange: 10
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  driverPosition: {fileID: 478080591}
-  passengerSpawnPosition: {fileID: 478080590}
 --- !u!1 &623957756
 GameObject:
   m_ObjectHideFlags: 0
