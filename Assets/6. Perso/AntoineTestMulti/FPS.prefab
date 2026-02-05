@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 2643748147131639999}
   - component: {fileID: -6553493833157429361}
   - component: {fileID: 359454556623227309}
+  - component: {fileID: -8441609461997392224}
   m_Layer: 7
   m_Name: FPS
   m_TagString: Untagged
@@ -292,7 +293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
   GlobalObjectIdHash: 907023152
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 907023152
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -365,13 +366,14 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   cameraTarget: {fileID: 7738082004865093122}
   capsule: {fileID: 2971744948151488077}
-  moveSpeed: 10
+  moveSpeed: 7
   mouseSensibility: 5
   verticalLimit: {x: -80, y: 80}
   cameraSmoothFollow: 500
+  gravity: -9.81
   groundedPoint: {fileID: 818274366944525555}
-  distanceToGround: 0
-  jumpForce: 50
+  distanceToGround: 0.15
+  jumpForce: 7
   isGrounded: 0
   groundLayer:
     serializedVersion: 2
@@ -425,6 +427,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16b99a0cf8a63bb4abad81e6f026524e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DriverInputHandler
+--- !u!54 &-8441609461997392224
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5129542687232109276}
+  serializedVersion: 5
+  m_Mass: 70
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0

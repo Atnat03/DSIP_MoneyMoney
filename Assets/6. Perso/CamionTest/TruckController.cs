@@ -1,7 +1,6 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEditor;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class TruckController : NetworkBehaviour
@@ -50,7 +49,9 @@ public class TruckController : NetworkBehaviour
     public Transform spawnPassager;
 
     private TruckInteraction truckInteraction;
-
+    
+    private readonly HashSet<NetworkObject> trackedPassengers = new();
+    
     private void Awake()
     {
         instance = this;
@@ -79,7 +80,7 @@ public class TruckController : NetworkBehaviour
         
         if (truckInteraction != null && truckInteraction.HasDriver())
         {
-
+            CheckPassengersBounds();
         }
         
         HandleMotor();
@@ -87,6 +88,54 @@ public class TruckController : NetworkBehaviour
         UpdateWheels();
         CheckFall();
     }
+    
+    void CheckPassengersBounds()
+    {
+        if (!IsServer) return;
+
+        foreach (NetworkClient client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            NetworkObject playerObj = client.PlayerObject;
+            if (playerObj == null) continue;
+
+            FPSControllerMulti player = playerObj.GetComponent<FPSControllerMulti>();
+            if (player == null) continue;
+
+            // Ignore le conducteur
+            if (truckInteraction != null &&
+                truckInteraction.IsDriver(client.ClientId))
+                continue;
+
+            bool inside = !IsOutsideTruckBounds(player.transform);
+            bool alreadyParented = trackedPassengers.Contains(playerObj);
+
+            if (inside && !alreadyParented)
+            {
+                ParentPassenger(playerObj);
+            }
+            else if (!inside && alreadyParented)
+            {
+                UnparentPassenger(playerObj);
+            }
+        }
+    }
+    
+    void ParentPassenger(NetworkObject playerObj)
+    {
+        playerObj.TrySetParent(transform);
+        trackedPassengers.Add(playerObj);
+
+        Debug.Log($"Passenger {playerObj.OwnerClientId} parenté au camion");
+    }
+
+    void UnparentPassenger(NetworkObject playerObj)
+    {
+        playerObj.TrySetParent((Transform)null);
+        trackedPassengers.Remove(playerObj);
+
+        Debug.Log($"Passenger {playerObj.OwnerClientId} déparenté du camion");
+    }
+
 
 
     [ServerRpc(RequireOwnership = false)]
@@ -211,6 +260,19 @@ public class TruckController : NetworkBehaviour
 
         transform.position += Vector3.up * 2f;
         isFallen = false;
+    }
+    
+    bool IsOutsideTruckBounds(Transform playerTransform)
+    {
+        Vector3 localPos = transform.InverseTransformPoint(playerTransform.position);
+    
+        Vector3 halfSize = boundsSize * 0.5f;
+        Vector3 center = boundsCenter;
+
+        return
+            localPos.x < center.x - halfSize.x || localPos.x > center.x + halfSize.x ||
+            localPos.y < center.y - halfSize.y || localPos.y > center.y + halfSize.y ||
+            localPos.z < center.z - halfSize.z || localPos.z > center.z + halfSize.z;
     }
     
     private void OnDrawGizmos()

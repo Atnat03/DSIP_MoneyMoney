@@ -17,6 +17,7 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField, Range(0.1f, 10)] float mouseSensibility;
     [SerializeField] Vector2 verticalLimit = new Vector2(-80, 80);
     [SerializeField] float cameraSmoothFollow = 15f;
+    [SerializeField] float gravity = -9.8f;
     
     [Header("Jump Settings")]
     [SerializeField] private Transform groundedPoint;
@@ -24,6 +25,7 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField] private float jumpForce = 10;
     [SerializeField] bool isGrounded = false;
     [SerializeField] LayerMask groundLayer;
+    private float verticalVelocity;
     
     [Header("Truck Physics")]
     [SerializeField] float truckDamping = 5f;
@@ -91,7 +93,7 @@ public class FPSControllerMulti : NetworkBehaviour
                 canEnterInTruck = false;
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
             }
-            else if (isInTruck)
+            else if (isInTruck && isDriver)
             {
                 print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
@@ -137,23 +139,34 @@ public class FPSControllerMulti : NetworkBehaviour
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
 
-        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
+        if (controller.isGrounded)
         {
-            controller.Move(Vector3.up * jumpForce * Time.deltaTime);
+            if (verticalVelocity < 0)
+                verticalVelocity = -2f;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                verticalVelocity = jumpForce;
+            }
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
         }
 
         Vector3 move = Vector3.zero;
         Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        move = transform.TransformDirection(localMove) * moveSpeed * Time.deltaTime;
-
+        move = transform.TransformDirection(localMove) * moveSpeed;
+        move.y = verticalVelocity;
+        move *= 0.05f;
+        
         if (isInTruck && truckRb != null)
         {
             Vector3 truckDelta = truckRb.position - lastTruckPosition;
             lastTruckPosition = truckRb.position;
             move += truckDelta * truckFollowStrength;
         }
-
-        move -= Vector3.up * 9.81f * Time.deltaTime;
+        
         controller.Move(move);
     }
 
