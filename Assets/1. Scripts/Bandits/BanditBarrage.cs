@@ -41,8 +41,8 @@ public class BanditBarrage : MonoBehaviour
 
         // Appliquer directement la vélocité
         Vector3 vel = desiredVelocity;
-        vel.y = rb.velocity.y; // conserve gravité si nécessaire
-        rb.velocity = vel;
+        vel.y = rb.linearVelocity.y; // conserve gravité si nécessaire
+        rb.linearVelocity = vel;
 
         // Rotation vers la cible
         if (direction != Vector3.zero)

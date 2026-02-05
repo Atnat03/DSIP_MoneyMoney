@@ -63,15 +63,12 @@ public class TruckController : NetworkBehaviour
         rb.angularDamping = 1.5f;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-        
-        // Le camion n'a pas de propriétaire unique, il appartient au serveur
-        // Seul le serveur gère la physique
+
         if (!IsServer) return;
     }
 
     void Update()
     {
-        // Seul le serveur gère la physique et le reset
         if (!IsServer) 
         {
             UpdateWheelsVisual();
@@ -80,11 +77,9 @@ public class TruckController : NetworkBehaviour
         
         rb.centerOfMass = centerOfMass;
         
-        // Vérifier si quelqu'un contrôle le camion
         if (truckInteraction != null && truckInteraction.HasDriver())
         {
-            // Le camion est contrôlé par le conducteur
-            // Les inputs sont envoyés via ServerRpc depuis le conducteur
+
         }
         
         HandleMotor();
@@ -93,13 +88,10 @@ public class TruckController : NetworkBehaviour
         CheckFall();
     }
 
-    /// <summary>
-    /// Appelé par le conducteur pour envoyer ses inputs
-    /// </summary>
+
     [ServerRpc(RequireOwnership = false)]
     public void SendInputsServerRpc(float horizontal, float vertical, bool breaking, bool horn, ServerRpcParams rpcParams = default)
     {
-        // Vérifier que c'est bien le conducteur qui envoie les inputs
         if (truckInteraction != null && truckInteraction.IsDriver(rpcParams.Receive.SenderClientId))
         {
             horizontalInput = horizontal;
