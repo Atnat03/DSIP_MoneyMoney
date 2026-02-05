@@ -59,7 +59,6 @@ public class BanditTir : MonoBehaviour
                 closest = hit.transform;
             }
         }
-        Debug.Log("j'ai trouvé " + closest.name);
         return closest;
     }
 

@@ -4,12 +4,14 @@ using Unity.Netcode.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[DefaultExecutionOrder(-1)]
 public class FPSControllerMulti : NetworkBehaviour
 {
     [Header("References")]
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
+    [SerializeField] Camera myCamera;
     [SerializeField] private CapsuleCollider capsule;
     
     [Header("Move Settings")]
@@ -52,6 +54,11 @@ public class FPSControllerMulti : NetworkBehaviour
 
     public GameObject textGoInCamion;
     
+    public Camera MyCamera()
+    {
+        return myCamera;
+    }
+    
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
@@ -65,6 +72,7 @@ public class FPSControllerMulti : NetworkBehaviour
         Camera cam = camObj.AddComponent<Camera>();
         cam.fieldOfView = 60f;
         cameraTransform = camObj.transform;
+        myCamera = camObj.GetComponent<Camera>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

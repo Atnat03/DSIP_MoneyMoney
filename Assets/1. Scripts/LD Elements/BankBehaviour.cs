@@ -13,7 +13,7 @@ public class BankBehaviour : MonoBehaviour
     }
 
     public MoneySpawn[] moneySpawns;
-    public bool moneySpawned;
+    public bool visited;
     public float delay;
 
     public Transform spawnPlayer;
@@ -21,7 +21,7 @@ public class BankBehaviour : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Truck") && !moneySpawned)
+        if (other.CompareTag("Truck") && !visited)
         {
             StartCoroutine(Spawnmoney());
         }
@@ -29,7 +29,7 @@ public class BankBehaviour : MonoBehaviour
 
     public IEnumerator Spawnmoney()
     {
-        moneySpawned = true;
+        visited = true;
 
         foreach (MoneySpawn spawn in moneySpawns)
         {
