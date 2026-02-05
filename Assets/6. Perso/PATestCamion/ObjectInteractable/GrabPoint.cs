@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class GrabPoint : MonoBehaviour
 {
+    public Vector3 positionObject;
     public void Grab(GameObject player)
     { 
         transform.SetParent(player.transform);
-        transform.localPosition = player.transform.localPosition;
-        GetComponent<Rigidbody>().isKinematic = false;
+        transform.position = player.transform.position + positionObject;
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<SphereCollider>().isTrigger = true;
     }
 }

@@ -66,7 +66,7 @@ public class TruckInteraction : NetworkBehaviour
         
         ulong playerId = player.OwnerClientId;
         bool isDriver = false;
-        Vector3 targetPosition;
+        Vector3 targetPosition = passengerSpawnPosition.position;
         
         if (driverClientId.Value == ulong.MaxValue)
         {
@@ -74,12 +74,6 @@ public class TruckInteraction : NetworkBehaviour
             targetPosition = driverPosition.position;
             isDriver = true;
             Debug.Log($"Player {playerId} devient le conducteur");
-        }
-        else
-        {
-            targetPosition = passengerSpawnPosition.position;
-            isDriver = false;
-            Debug.Log($"Player {playerId} devient passager");
         }
         
         NotifyPlayerEnteredClientRpc(player.NetworkObjectId, isDriver, targetPosition);
@@ -125,8 +119,6 @@ public class TruckInteraction : NetworkBehaviour
     
     private void ExitTruckServerLogic(FPSControllerMulti player)
     {
-        if (!player.isInTruck) return;
-        
         ulong playerId = player.OwnerClientId;
         
         if (driverClientId.Value == playerId)

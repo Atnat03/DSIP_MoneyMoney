@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UI;
@@ -11,7 +12,8 @@ namespace Shooting
     public class ShooterComponent : MonoBehaviour
     {
         #region Properties
-
+        public int AmmoCount => _currentAmmo;
+        public int MaxAmmoCount => _maxAmmo;
         public float MaxDistance { get; set; } = 1000f;
         // Invoked whenever the shooter successfully shoots
         public UnityEvent OnShoot => _onShoot;
@@ -28,19 +30,13 @@ namespace Shooting
         [Header("Parameters")]
         [SerializeField] private int _maxAmmo = 10;
 
-        [Header("References")]
-        // REFACTO : Shouldn't have a reference to the UI
-        [SerializeField] private UICrosshair _crosshair;
-        [SerializeField] private LineRenderer _shotTrailPrefab;
-
         [Header("Events")]
         [SerializeField] private UnityEvent _onShoot;
         [SerializeField] private UnityEvent _onHit;
 
         // Private fields
-        private List<LineRenderer> _trails = new();
-        int _framesSinceUIUpdate = int.MaxValue/2;
         private int _currentAmmo;
+        private int _previousAmmoCount;
         private bool _enableCallbacks;
         #endregion
 
@@ -51,63 +47,37 @@ namespace Shooting
             _shooter.OnTargetHit += (target) => OnTargetHit.Invoke(target);
             _shooter.OnTargetHit += _ => OnHit.Invoke();
 
-            // REFACTO : Remove deppendencies to UI
-            ApplyFeedbacks();
+            OnShoot.AddListener(() => EventBus.Invoke("OnPlayerShoot"));
+
+            _shooter.OnShoot += MakeTrail;
 
             Reload();
         }
 
         public void Reload() => _currentAmmo = _maxAmmo;
 
-        private void ApplyFeedbacks()
-        {
-            if (_crosshair != null)
-            {
-                _shooter.OnShoot += _crosshair.SetShooting;
-                _shooter.OnShoot += () => { _framesSinceUIUpdate = 0; };
-                _shooter.OnTargetHit += _ => _crosshair.SetHit();
-                _shooter.OnTargetHit += _ => { _framesSinceUIUpdate = 0; };
-            }
-
-            _shooter.OnShoot += MakeTrail;
-            
-        }
         private void MakeTrail()
         {
-            if (_shotTrailPrefab != null)
+            if (TryGetComponent(out TrailMaker maker))
             {
-                LineRenderer trail = GameObject.Instantiate(_shotTrailPrefab);
-                trail.transform.position = Vector3.zero;
-                Vector3[] positions = new Vector3[2];
-                positions[0] = Camera.main.transform.position;
-                positions[1] = Camera.main.transform.position + Camera.main.transform.forward * MaxDistance;
-                trail.SetPositions(positions);
-                _trails.Add(trail);
+                Camera camera = Camera.main;
+                maker.Make(camera.transform.position, camera.transform.forward * MaxDistance);
             }
         }
-        private void OnDisable()
-        {
-            RemoveFeedbacks();
-        }
+      
         private void Update()
         {
-            // REFACTO : Feedbacks shouldn't be handled this way
-            _framesSinceUIUpdate++;
-            if (_framesSinceUIUpdate > 30)
-                RemoveFeedbacks();
-            
-
             HandleInputs();
+
+            CheckDirty();
         }
 
-        private void RemoveFeedbacks()
+        private void CheckDirty()
         {
-            if (_crosshair != null)
-                _crosshair.SetDefault();
-            foreach (var trail in _trails)
+            if (_previousAmmoCount != _currentAmmo)
             {
-                if (trail != null)
-                    Destroy(trail);
+                _previousAmmoCount = _currentAmmo;
+                EventBus.Invoke("AmmoCount_DirtyFlag", new DataPacket(_currentAmmo));
             }
         }
 
@@ -131,12 +101,9 @@ namespace Shooting
             bool didShoot = _shooter.TryShoot(Pos, Dir, out bullets);
             if (didShoot)
             {
-                Debug.Log("Player has shot");
                 WarnShotTargets(bullets);
                 _currentAmmo--;
             }
-            else
-                Debug.Log("Player failed to shoot");
 
             return didShoot;
         }
