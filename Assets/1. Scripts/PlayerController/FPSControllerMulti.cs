@@ -174,9 +174,9 @@ public class FPSControllerMulti : NetworkBehaviour
         isInTruck = true;
         isDriver = asDriver;
         
-        SetParentServerRpc(true);
-        
         transform.localPosition = spawnPosition;
+        
+        SetParentServerRpc(true);
 
         if (isDriver)
         {
