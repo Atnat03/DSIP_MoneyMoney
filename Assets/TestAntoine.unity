@@ -1693,6 +1693,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 394636135894971523, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_Mass
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 394636135894971523, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 394636135894971523, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046559473657121110, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_Mass
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046559473657121110, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046559473657121110, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
       propertyPath: driverPos
       value: 
@@ -1701,6 +1725,38 @@ PrefabInstance:
       propertyPath: spawnPassager
       value: 
       objectReference: {fileID: 478080590}
+    - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: centerOfMass.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: centerOfMass.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982077410619423181, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_Mass
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982077410619423181, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3982077410619423181, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521764892006214984, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_Mass
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521764892006214984, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4521764892006214984, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4956863376682007588, guid: e0a028245496f2a43b92f747745f7366, type: 3}
       propertyPath: m_Name
       value: TruckMultiPA
@@ -1761,6 +1817,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 16.53
       objectReference: {fileID: 0}
+    - target: {fileID: 9183607677445931539, guid: e0a028245496f2a43b92f747745f7366, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2594105874457923759, guid: e0a028245496f2a43b92f747745f7366, type: 3}
@@ -1798,10 +1858,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TruckInteraction
   ShowTopMostFoldoutHeaderGroup: 1
-  interactionRange: 3
+  interactionRange: 10
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   driverPosition: {fileID: 478080591}
   passengerSpawnPosition: {fileID: 478080590}
 --- !u!1 &623957756
