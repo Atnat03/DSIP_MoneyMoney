@@ -66,6 +66,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4004319054054213770}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8795354801349762094}
   m_SourcePrefab: {fileID: 100100000, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
 --- !u!1 &3389049563541913053 stripped
 GameObject:
@@ -120,3 +123,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8795354801349762094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3389049563541913053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2daeabc24d4dd41b457bd6e8e5c215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ImpactProvider

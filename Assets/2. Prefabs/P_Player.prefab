@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6921848277715266955}
   - component: {fileID: 6837889975389134471}
   - component: {fileID: 6181729137498508388}
+  - component: {fileID: 2540453895750597390}
   m_Layer: 0
   m_Name: P_Player
   m_TagString: Untagged
@@ -125,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2473738648
+  GlobalObjectIdHash: 3370903589
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -213,6 +214,32 @@ MonoBehaviour:
   FPSController: {fileID: 5283579690568248715}
   ShooterComponent: {fileID: 632150567856117366}
   GrabPoint: {fileID: 8105077609837898710}
+  HealthComponent: {fileID: 2540453895750597390}
+--- !u!114 &2540453895750597390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116780015938773511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40cbfe449c44ad44abc62b271d12cd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  _maxHealth: 100
+  _impactDamage: 1
+  _impactDamageRange: {x: 0, y: 20, z: 0, w: 20}
+  _bulletDamage: 1
+  _onDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+  _onRegeneration:
+    m_PersistentCalls:
+      m_Calls: []
+  _onDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &480847099577414623
 GameObject:
   m_ObjectHideFlags: 0

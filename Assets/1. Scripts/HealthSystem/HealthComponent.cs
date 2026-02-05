@@ -18,17 +18,17 @@ public class HealthComponent : MonoBehaviour
     [SerializeField] private float _maxHealth;
     [Space]
     [Tooltip("Specifies if objects colliding at high velocity should deal damage")]
-    [SerializeField] private bool _impactDamage;
+    [SerializeField] private bool _impactDamage = true;
     [Tooltip(
         "x : The force at which we start taking damage ; " +
         "y : The maximal force that deals damages ; " +
         "z : How much damage we take with a minimal force ; " +
         "w : How much damage we take with a maximal force"
         )]
-    [SerializeField] private Vector4 _impactDamageRange;
+    [SerializeField] private Vector4 _impactDamageRange = new Vector4(0f, 100f, 0f, 100f);
     [Space]
     [Tooltip("Specifies if bullets should deal damage")]
-    [SerializeField] private bool _bulletDamage;
+    [SerializeField] private bool _bulletDamage = true;
 
     [Header("Events")]
     [SerializeField] private UnityEvent _onDamageTaken;
@@ -40,13 +40,14 @@ public class HealthComponent : MonoBehaviour
 
     // Private fields
     Target _target; // Target component attached to this same gameobject
-    Collider _collider;
     Rigidbody _rb;
 
     float _previousHealth;
     float _health;
-    bool _enableCallbacks;
+    bool _enableCallbacks = true;
     bool _invulnerable;
+
+    LineDebugger lineDebug = new();
 
     #endregion
 
@@ -56,6 +57,7 @@ public class HealthComponent : MonoBehaviour
     {
         _bulletDamage = TrySetupTarget();
         _impactDamage = TrySetupImpact();
+        _health = _maxHealth;
     }
 
     private void Update()
@@ -63,14 +65,19 @@ public class HealthComponent : MonoBehaviour
         CheckDirty_Health();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnDrawGizmos()
     {
+
+        lineDebug.Draw();
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        Collider other = col.collider;
         if (!_impactDamage)
             return;
         if (!other.TryGetComponent(out ImpactProvider impactor))
             return;
-
-        Debug.Log("Impact detected");
 
         Vector3 inVelocity = Vector3.zero; // Velocity of the other object
         if (other.TryGetComponent(out Rigidbody rb))
@@ -84,11 +91,23 @@ public class HealthComponent : MonoBehaviour
 
         Vector3 tangent = Vector3.Cross(normal, Vector3.up).normalized;
 
-        float proj = Vector3.Dot(diff, tangent); // The only part of the impact that we care for is the one that is perpendicular to the surface
+        float proj = Vector3.Dot(diff, normal); // The only part of the impact that we care for is the one that is perpendicular to the surface
 
-        Vector3 perpendicular = diff - (tangent * proj);
+        Vector3 perpendicularForce = Vector3.Dot(diff, normal) * normal;
 
-        float force = perpendicular.magnitude; // This is actually how hard we are being hit
+        float force = perpendicularForce.magnitude; // This is actually how hard we are being hit
+
+        lineDebug.Add(col.GetContact(0).point, col.GetContact(0).point + normal * 0.5f, Color.blue);
+        lineDebug.Add(col.GetContact(0).point, col.GetContact(0).point + tangent * 0.5f, Color.red);
+        lineDebug.Add(col.GetContact(0).point, col.GetContact(0).point + Vector3.Cross(normal, tangent) * 0.5f, Color.green);
+        lineDebug.Add(col.GetContact(0).point, col.GetContact(0).point + perpendicularForce * 0.8f, Color.magenta);
+
+        // Don't take damages if the impact is to weak.
+        if (force < _impactDamageRange.x)
+            return;
+        // Don't take damages if the other object is going out of us instead of in
+        if (Vector3.Dot(perpendicularForce, normal) > 0)
+            return;
 
         force = Mathf.Clamp(force, _impactDamageRange.x, _impactDamageRange.y);
 
@@ -100,8 +119,6 @@ public class HealthComponent : MonoBehaviour
     private bool TrySetupImpact()
     {
         if (!_impactDamage)
-            return false;
-        if (!TryGetComponent(out _collider))
             return false;
         if (!TryGetComponent(out _rb))
             return false;
@@ -127,7 +144,8 @@ public class HealthComponent : MonoBehaviour
     public void Heal(float hp)
     {
         _health += hp;
-        EventBus.Invoke("LocalPlayerHeal", new DataPacket(hp));
+        if (_enableCallbacks)
+            EventBus.Invoke("LocalPlayerHeal", new DataPacket(hp));
     }
     public bool TryTakeDamage(float damage)
     {
@@ -151,7 +169,8 @@ public class HealthComponent : MonoBehaviour
     private void TakeDamage(float damage)
     {
         _health -= damage;
-        EventBus.Invoke("LocalPlayerDamage", new DataPacket(damage));
+        if (_enableCallbacks)
+            EventBus.Invoke("LocalPlayerDamage", new DataPacket(damage));
     }
 
     private bool CheckDirty_Health()
