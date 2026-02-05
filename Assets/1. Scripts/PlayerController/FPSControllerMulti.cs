@@ -4,12 +4,14 @@ using Unity.Netcode.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[DefaultExecutionOrder(-1)]
 public class FPSControllerMulti : NetworkBehaviour
 {
     [Header("References")]
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
+    [SerializeField] Camera myCamera;
     [SerializeField] private CapsuleCollider capsule;
     
     [Header("Move Settings")]
@@ -17,6 +19,7 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField, Range(0.1f, 10)] float mouseSensibility;
     [SerializeField] Vector2 verticalLimit = new Vector2(-80, 80);
     [SerializeField] float cameraSmoothFollow = 15f;
+    [SerializeField] float gravity = -9.8f;
     
     [Header("Jump Settings")]
     [SerializeField] private Transform groundedPoint;
@@ -24,6 +27,7 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField] private float jumpForce = 10;
     [SerializeField] bool isGrounded = false;
     [SerializeField] LayerMask groundLayer;
+    private float verticalVelocity;
     
     [Header("Truck Physics")]
     [SerializeField] float truckDamping = 5f;
@@ -50,6 +54,11 @@ public class FPSControllerMulti : NetworkBehaviour
 
     public GameObject textGoInCamion;
     
+    public Camera MyCamera()
+    {
+        return myCamera;
+    }
+    
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
@@ -63,6 +72,7 @@ public class FPSControllerMulti : NetworkBehaviour
         Camera cam = camObj.AddComponent<Camera>();
         cam.fieldOfView = 60f;
         cameraTransform = camObj.transform;
+        myCamera = camObj.GetComponent<Camera>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -84,6 +94,8 @@ public class FPSControllerMulti : NetworkBehaviour
         
         textGoInCamion.SetActive(canEnterInTruck);
         
+        print(controller.enabled);
+        
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
             if (!isInTruck)
@@ -91,7 +103,7 @@ public class FPSControllerMulti : NetworkBehaviour
                 canEnterInTruck = false;
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
             }
-            else if (isInTruck)
+            else if (isInTruck && isDriver)
             {
                 print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
@@ -103,6 +115,12 @@ public class FPSControllerMulti : NetworkBehaviour
             if (TruckController.instance != null)
             {
                 transform.position = TruckController.instance.driverPos.position;
+                
+                float h = Input.GetAxis("Horizontal");
+                float v = Input.GetAxis("Vertical");
+                bool brake = Input.GetKey(KeyCode.Space);
+                bool horn = Input.GetKeyDown(KeyCode.H);
+                TruckController.instance.SendInputsServerRpc(h, v, brake, horn);
             }
             
             HandleCameraInput();
@@ -132,29 +150,36 @@ public class FPSControllerMulti : NetworkBehaviour
 
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+        
+        Debug.Log(horizontalInput + " / " + verticalInput);
 
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
-
-        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
+        
+        if (controller.isGrounded)
         {
-            controller.Move(Vector3.up * jumpForce * Time.deltaTime);
+            if (verticalVelocity < 0)
+                verticalVelocity = -2f;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                verticalVelocity = jumpForce;
+            }
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
         }
 
         Vector3 move = Vector3.zero;
         Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        move = transform.TransformDirection(localMove) * moveSpeed * Time.deltaTime;
-
-        if (isInTruck && truckRb != null)
-        {
-            Vector3 truckDelta = truckRb.position - lastTruckPosition;
-            lastTruckPosition = truckRb.position;
-            move += truckDelta * truckFollowStrength;
-        }
-
-        move -= Vector3.up * 9.81f * Time.deltaTime;
-        controller.Move(move);
+        move = transform.TransformDirection(localMove) * moveSpeed;
+        move.y = verticalVelocity;
+        
+        controller.enabled = true;             
+        controller.Move(move * Time.deltaTime);
+        controller.enabled = false;
     }
 
     void LateUpdate()
@@ -232,6 +257,8 @@ public class FPSControllerMulti : NetworkBehaviour
             {
                 netObj.TrySetParent(truckParent);
             }
+            
+            controller.enabled = false;
         }
         else
         {
@@ -240,6 +267,60 @@ public class FPSControllerMulti : NetworkBehaviour
             {
                 netObj.TrySetParent((Transform)null);
             }
+            
+            controller.enabled = true;
+        }
+    }
+    
+        [ServerRpc(RequireOwnership = false)]
+    public void SetPassengerModeServerRpc(bool isPassenger, Vector3 desiredLocalPos)
+    {
+        // Le serveur peut valider si besoin (ex: vraiment dans le camion ?)
+        SetPassengerModeClientRpc(isPassenger, desiredLocalPos);
+    }
+
+    [ClientRpc]
+    private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
+    {
+        isInTruck = isPassenger;
+        isDriver = false; // sécurité
+
+        if (isPassenger)
+        {
+            // Position locale souhaitée (ex: spawnPassager)
+            if (desiredLocalPos != Vector3.zero)
+            {
+                transform.localPosition = desiredLocalPos;
+            }
+
+            if (controller != null)
+            {
+                controller.enabled = false;
+                // controller.detectCollisions = false; // optionnel, mais souvent utile
+            }
+
+            var netTransform = GetComponent<NetworkTransform>();
+            if (netTransform != null)
+            {
+                netTransform.InLocalSpace = true; // ← CRUCIAL pour smooth follow sur clients
+            }
+
+            Debug.Log("Client: Mode passager activé - CC disabled + InLocalSpace=true");
+        }
+        else
+        {
+            if (controller != null)
+            {
+                controller.enabled = true;
+            }
+
+            var netTransform = GetComponent<NetworkTransform>();
+            if (netTransform != null)
+            {
+                netTransform.InLocalSpace = false;
+            }
+
+            Debug.Log("Client: Mode passager désactivé");
         }
     }
 

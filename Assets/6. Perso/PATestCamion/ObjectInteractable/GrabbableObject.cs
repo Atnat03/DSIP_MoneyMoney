@@ -6,7 +6,7 @@ public class GrabbableObject : Interactable
     {
         base.Interact(playerTransform, enableCallbacks);
         if (Reference.TryGetObject(out PlayerInterface pi))
-            pi.GrabPoint.Grab(this.gameObject);
+            pi.GrabPoint.TryGrab(this.gameObject);
     }
 
     public override bool CanInteract(Transform playerTransform)

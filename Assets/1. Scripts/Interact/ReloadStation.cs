@@ -10,6 +10,7 @@ public class ReloadStation : Interactable
     protected override void Interact(Transform playerTransform, bool enableCallbacks = true)
     {
         base.Interact(playerTransform, enableCallbacks);
+        Debug.Log("Reload station");
 
         if (playerTransform.TryGetComponent(out ShooterComponent comp))
         {
