@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UI;
@@ -11,7 +12,8 @@ namespace Shooting
     public class ShooterComponent : MonoBehaviour
     {
         #region Properties
-
+        public int AmmoCount => _currentAmmo;
+        public int MaxAmmoCount => _maxAmmo;
         public float MaxDistance { get; set; } = 1000f;
         // Invoked whenever the shooter successfully shoots
         public UnityEvent OnShoot => _onShoot;
@@ -33,9 +35,8 @@ namespace Shooting
         [SerializeField] private UnityEvent _onHit;
 
         // Private fields
-        private List<LineRenderer> _trails = new();
-        int _framesSinceUIUpdate = int.MaxValue/2;
         private int _currentAmmo;
+        private int _previousAmmoCount;
         private bool _enableCallbacks;
         #endregion
 
@@ -47,7 +48,6 @@ namespace Shooting
             _shooter.OnTargetHit += _ => OnHit.Invoke();
 
             OnShoot.AddListener(() => EventBus.Invoke("OnPlayerShoot"));
-            OnShoot.AddListener(() => { _framesSinceUIUpdate = 0; });
 
             _shooter.OnShoot += MakeTrail;
 
@@ -68,9 +68,18 @@ namespace Shooting
         private void Update()
         {
             HandleInputs();
+
+            CheckDirty();
         }
 
-     
+        private void CheckDirty()
+        {
+            if (_previousAmmoCount != _currentAmmo)
+            {
+                _previousAmmoCount = _currentAmmo;
+                EventBus.Invoke("AmmoCount_DirtyFlag");
+            }
+        }
 
         private void HandleInputs()
         {
