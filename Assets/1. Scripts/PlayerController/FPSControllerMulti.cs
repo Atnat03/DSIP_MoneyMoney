@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 public class FPSControllerMulti : NetworkBehaviour
 {
     [Header("References")]
-    [SerializeField] Rigidbody rb;
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
@@ -177,25 +176,17 @@ public class FPSControllerMulti : NetworkBehaviour
         SetParentServerRpc(true);
         
         transform.position = spawnPosition;
-        
+
         if (isDriver)
         {
             driverLocalPosition = TruckController.instance.driverPos.position;
-            
+
             TruckController.instance.enabled = true;
-            
+
             if (controller != null)
                 controller.enabled = false;
-            
-            rb.useGravity = false;
-            rb.isKinematic = true;
         }
-        else
-        {
-            rb.useGravity = false;
-            rb.isKinematic = true;
-        }
-        
+
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
 
@@ -218,9 +209,6 @@ public class FPSControllerMulti : NetworkBehaviour
         
         if (controller != null)
             controller.enabled = true;
-        
-        rb.isKinematic = false;
-        rb.useGravity = true;
 
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
