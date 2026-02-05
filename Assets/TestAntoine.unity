@@ -1693,37 +1693,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 394636135894971523, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 482326464356188864, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046559473657121110, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3102921428755124855, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: motorForce
-      value: 3000
-      objectReference: {fileID: 0}
-    - target: {fileID: 3982077410619423181, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4521764892006214984, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_Mass
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 4956863376682007588, guid: e0a028245496f2a43b92f747745f7366, type: 3}
       propertyPath: m_Name
       value: TruckMultiPA
-      objectReference: {fileID: 0}
-    - target: {fileID: 4956863376682007588, guid: e0a028245496f2a43b92f747745f7366, type: 3}
-      propertyPath: m_TagString
-      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 5729001311705654942, guid: e0a028245496f2a43b92f747745f7366, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2717,14 +2689,6 @@ PrefabInstance:
       propertyPath: truck
       value: 
       objectReference: {fileID: 1319982319}
-    - target: {fileID: 792700703697483768, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
-      propertyPath: position
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2426944586062192942, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.8
@@ -2769,21 +2733,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bandit_Truck_Follow (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 6959080630503955993, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7180674001884962020, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1734134831
-      objectReference: {fileID: 0}
-    - target: {fileID: 7180674001884962020, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
-      propertyPath: SceneMigrationSynchronization
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7180674001884962020, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 1158135261
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5322,6 +5274,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 507619994327119759, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 792700703697483768, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: truck
       value: 
@@ -5333,6 +5289,14 @@ PrefabInstance:
     - target: {fileID: 2426944586062192942, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2426944586062192942, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2463310603494633947, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5374,6 +5338,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5253265372923994275, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 6959080630503955993, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: m_Name
       value: Bandit_Truck_Follow (2)
@@ -5381,6 +5349,10 @@ PrefabInstance:
     - target: {fileID: 6959080630503955993, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7175343954216360111, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7180674001884962020, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
       propertyPath: GlobalObjectIdHash

@@ -29,7 +29,7 @@ namespace Shooting
         IShooter _shooter = new RaycastShooter();
 
         [Header("Parameters")]
-        [SerializeField] private int _maxAmmo = 10;
+        [SerializeField] private int _maxAmmo = 100000;
 
         [Header("Events")]
         [SerializeField] private UnityEvent _onShoot;
