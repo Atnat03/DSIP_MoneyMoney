@@ -13,6 +13,7 @@ public class PlayerInterface : MonoBehaviour
     public FPSController FPSController;
     public ShooterComponent ShooterComponent;
     public GrabPoint GrabPoint;
+    public HealthComponent HealthComponent;
 
     #endregion
 }
