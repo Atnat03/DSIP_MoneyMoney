@@ -122,21 +122,35 @@ public class TruckController : NetworkBehaviour
     
     void ParentPassenger(NetworkObject playerObj)
     {
-        playerObj.TrySetParent(transform);
+        playerObj.TrySetParent(transform, true); // worldPositionStays = true pour garder la position world actuelle
+
         trackedPassengers.Add(playerObj);
+
+        var fps = playerObj.GetComponent<FPSControllerMulti>();
+        if (fps != null)
+        {
+            // Appelle un ServerRpc sur le FPSController pour que LE CLIENT PROPRIÉTAIRE mette à jour son état
+            fps.SetPassengerModeServerRpc(true, spawnPassager.localPosition);
+        }
 
         Debug.Log($"Passenger {playerObj.OwnerClientId} parenté au camion");
     }
 
     void UnparentPassenger(NetworkObject playerObj)
     {
-        playerObj.TrySetParent((Transform)null);
+        playerObj.TrySetParent((Transform)null, true);
+
         trackedPassengers.Remove(playerObj);
+
+        var fps = playerObj.GetComponent<FPSControllerMulti>();
+        if (fps != null)
+        {
+            fps.SetPassengerModeServerRpc(false, Vector3.zero); // zero = pas utilisé
+        }
 
         Debug.Log($"Passenger {playerObj.OwnerClientId} déparenté du camion");
     }
-
-
+    
 
     [ServerRpc(RequireOwnership = false)]
     public void SendInputsServerRpc(float horizontal, float vertical, bool breaking, bool horn, ServerRpcParams rpcParams = default)

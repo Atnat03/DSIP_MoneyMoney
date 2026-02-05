@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 2643748147131639999}
   - component: {fileID: -6553493833157429361}
   - component: {fileID: 359454556623227309}
-  - component: {fileID: -8441609461997392224}
+  - component: {fileID: 5075701261249157711}
   m_Layer: 7
   m_Name: FPS
   m_TagString: Untagged
@@ -365,7 +365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FPSControllerMulti
   ShowTopMostFoldoutHeaderGroup: 1
   cameraTarget: {fileID: 7738082004865093122}
-  capsule: {fileID: 2971744948151488077}
+  capsule: {fileID: 0}
   moveSpeed: 7
   mouseSensibility: 5
   verticalLimit: {x: -80, y: 80}
@@ -427,33 +427,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16b99a0cf8a63bb4abad81e6f026524e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DriverInputHandler
---- !u!54 &-8441609461997392224
-Rigidbody:
+--- !u!136 &5075701261249157711
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5129542687232109276}
-  serializedVersion: 5
-  m_Mass: 70
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_Material: {fileID: 13400000, guid: 0c7b0192aa860ed4f8b936791f7ed484, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6868865806728251795
 GameObject:
   m_ObjectHideFlags: 0
@@ -608,7 +604,6 @@ GameObject:
   - component: {fileID: 3909352973056730244}
   - component: {fileID: 9099656966727688658}
   - component: {fileID: 2826011770840567580}
-  - component: {fileID: 2971744948151488077}
   m_Layer: 7
   m_Name: BodyVisual
   m_TagString: Untagged
@@ -688,29 +683,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &2971744948151488077
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8569929788688803911}
-  m_Material: {fileID: 13400000, guid: 0c7b0192aa860ed4f8b936791f7ed484, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8636471337323196040
 GameObject:
   m_ObjectHideFlags: 0

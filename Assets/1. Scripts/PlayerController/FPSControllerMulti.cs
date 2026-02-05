@@ -86,6 +86,8 @@ public class FPSControllerMulti : NetworkBehaviour
         
         textGoInCamion.SetActive(canEnterInTruck);
         
+        print(controller.enabled);
+        
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
             if (!isInTruck)
@@ -158,16 +160,10 @@ public class FPSControllerMulti : NetworkBehaviour
         Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
         move = transform.TransformDirection(localMove) * moveSpeed;
         move.y = verticalVelocity;
-        move *= 0.05f;
         
-        if (isInTruck && truckRb != null)
-        {
-            Vector3 truckDelta = truckRb.position - lastTruckPosition;
-            lastTruckPosition = truckRb.position;
-            move += truckDelta * truckFollowStrength;
-        }
-        
-        controller.Move(move);
+        controller.enabled = true;             
+        controller.Move(move * Time.deltaTime);
+        controller.enabled = false;
     }
 
     void LateUpdate()
@@ -245,6 +241,8 @@ public class FPSControllerMulti : NetworkBehaviour
             {
                 netObj.TrySetParent(truckParent);
             }
+            
+            controller.enabled = false;
         }
         else
         {
@@ -253,6 +251,60 @@ public class FPSControllerMulti : NetworkBehaviour
             {
                 netObj.TrySetParent((Transform)null);
             }
+            
+            controller.enabled = false;
+        }
+    }
+    
+        [ServerRpc(RequireOwnership = false)]
+    public void SetPassengerModeServerRpc(bool isPassenger, Vector3 desiredLocalPos)
+    {
+        // Le serveur peut valider si besoin (ex: vraiment dans le camion ?)
+        SetPassengerModeClientRpc(isPassenger, desiredLocalPos);
+    }
+
+    [ClientRpc]
+    private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
+    {
+        isInTruck = isPassenger;
+        isDriver = false; // sécurité
+
+        if (isPassenger)
+        {
+            // Position locale souhaitée (ex: spawnPassager)
+            if (desiredLocalPos != Vector3.zero)
+            {
+                transform.localPosition = desiredLocalPos;
+            }
+
+            if (controller != null)
+            {
+                controller.enabled = false;
+                // controller.detectCollisions = false; // optionnel, mais souvent utile
+            }
+
+            var netTransform = GetComponent<NetworkTransform>();
+            if (netTransform != null)
+            {
+                netTransform.InLocalSpace = true; // ← CRUCIAL pour smooth follow sur clients
+            }
+
+            Debug.Log("Client: Mode passager activé - CC disabled + InLocalSpace=true");
+        }
+        else
+        {
+            if (controller != null)
+            {
+                controller.enabled = true;
+            }
+
+            var netTransform = GetComponent<NetworkTransform>();
+            if (netTransform != null)
+            {
+                netTransform.InLocalSpace = false;
+            }
+
+            Debug.Log("Client: Mode passager désactivé");
         }
     }
 
