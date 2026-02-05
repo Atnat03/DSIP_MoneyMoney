@@ -117,7 +117,7 @@ public class TruckInteraction : NetworkBehaviour
         }
     }
     
-    private void ExitTruckServerLogic(FPSControllerMulti player)
+    public void ExitTruckServerLogic(FPSControllerMulti player)
     {
         ulong playerId = player.OwnerClientId;
         

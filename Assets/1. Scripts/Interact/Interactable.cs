@@ -11,19 +11,19 @@ public class Interactable : MonoBehaviour
     #endregion
 
     [Header("Parameters")]
-    [SerializeField] protected KeyCode _interactKey;
-    [SerializeField] protected float _reachDistance;
+    [SerializeField] protected KeyCode _interactKey = KeyCode.E;
+    [SerializeField] protected float _reachDistance = 3f;
     [Tooltip("If enabled, this can be interacted with even if it is behind an object")]
     [SerializeField] protected bool _enableSeethrough;
 
     [Header("Events")]
-    [SerializeField] protected UnityEvent _onInteract;
-    [SerializeField] protected UnityEvent _onLookedAt;
-    [SerializeField] protected UnityEvent _onNotLookedAt;
+    [SerializeField] protected UnityEvent _onInteract; // Invoked when the object is interacted with
+    [SerializeField] protected UnityEvent _onLookedAt; // Invoked once when the player starts looking at the object
+    [SerializeField] protected UnityEvent _onNotLookedAt; // Invoked once when the player stops looking at the object
 
-    private Collider _collider;
-    private bool _wasLookedAtByPlayer;
-    private bool _isLookedAtByPlayer;
+    protected Collider _collider;
+    protected bool _wasLookedAtByPlayer; // Useful for dirty detection
+    protected bool _isLookedAtByPlayer; // Specifies if the object is looked at by the player. Should be updated in CheckIfLookedAt()
 
     protected virtual void Start()
     {
@@ -33,9 +33,13 @@ public class Interactable : MonoBehaviour
     {
         CheckIfLookedAt();
 
-        TryInteract(Reference.GetObject<FPSController>().transform);
+        TryInteract(Reference.GetObject<PlayerInterface>().transform);
     }
-
+    /// <summary>
+    /// Specifies wether or not the object is looked at by the player
+    /// </summary>
+    /// <param name="enableCallbacks">Specifies if events should be invoked when the player starts or stops looking at the object</param>
+    /// <returns></returns>
     protected virtual bool CheckIfLookedAt(bool enableCallbacks=true)
     {
         Camera cam = Camera.main;
@@ -77,9 +81,18 @@ public class Interactable : MonoBehaviour
         _wasLookedAtByPlayer = _isLookedAtByPlayer;
         return _isLookedAtByPlayer;
     }
+    /// <summary>
+    /// Specifies wether or not the player is inside the radius defined by _reachDistance
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public virtual bool IsReachable(Transform other)
         => Vector3.Distance(transform.position, other.position) <= _reachDistance;
-
+    /// <summary>
+    /// Using TryInteract, the object will try to be interacted with. Return true if it succeeds, false otherwise.
+    /// </summary>
+    /// <param name="playerTransform"></param>
+    /// <returns></returns>
     protected virtual bool TryInteract(Transform playerTransform)
     {
         if (!CanInteract(playerTransform)) return false;
@@ -90,14 +103,22 @@ public class Interactable : MonoBehaviour
         Interact(playerTransform);
         return true;
     }
-
+    /// <summary>
+    /// Specifies wether or not this object can be interacted with
+    /// </summary>
+    /// <param name="playerTransform"></param>
+    /// <returns></returns>
     public virtual bool CanInteract(Transform playerTransform)
     {
         if (!CheckIfLookedAt()) return false;
         if (!IsReachable(playerTransform)) return false;
         return true;
     }
-
+    /// <summary>
+    /// Override this methods to specify how the object should behave when interacted with
+    /// </summary>
+    /// <param name="playerTransform"></param>
+    /// <param name="enableCallbacks"></param>
     protected virtual void Interact(Transform playerTransform, bool enableCallbacks = true)
     {
         if (enableCallbacks)
