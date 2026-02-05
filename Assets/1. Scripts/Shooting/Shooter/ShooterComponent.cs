@@ -28,11 +28,6 @@ namespace Shooting
         [Header("Parameters")]
         [SerializeField] private int _maxAmmo = 10;
 
-        [Header("References")]
-        // REFACTO : Shouldn't have a reference to the UI
-        [SerializeField] private UICrosshair _crosshair;
-        [SerializeField] private LineRenderer _shotTrailPrefab;
-
         [Header("Events")]
         [SerializeField] private UnityEvent _onShoot;
         [SerializeField] private UnityEvent _onHit;
@@ -51,70 +46,31 @@ namespace Shooting
             _shooter.OnTargetHit += (target) => OnTargetHit.Invoke(target);
             _shooter.OnTargetHit += _ => OnHit.Invoke();
 
-            OnShoot.AddListener(() => GameSystem.EventBus.Invoke("OnPlayerShoot"));
+            OnShoot.AddListener(() => EventBus.Invoke("OnPlayerShoot"));
             OnShoot.AddListener(() => { _framesSinceUIUpdate = 0; });
 
-            // REFACTO : Remove deppendencies to UI
-            ApplyFeedbacks();
+            _shooter.OnShoot += MakeTrail;
 
             Reload();
         }
 
         public void Reload() => _currentAmmo = _maxAmmo;
 
-        private void ApplyFeedbacks()
-        {
-            /*
-            if (_crosshair != null)
-            {
-                _shooter.OnShoot += _crosshair.SetShooting;
-                _shooter.OnShoot += () => { _framesSinceUIUpdate = 0; };
-                _shooter.OnTargetHit += _ => _crosshair.SetHit();
-                _shooter.OnTargetHit += _ => { _framesSinceUIUpdate = 0; };
-            }
-            */
-
-            _shooter.OnShoot += MakeTrail;
-            
-        }
         private void MakeTrail()
         {
-            if (_shotTrailPrefab != null)
+            if (TryGetComponent(out TrailMaker maker))
             {
-                LineRenderer trail = GameObject.Instantiate(_shotTrailPrefab);
-                trail.transform.position = Vector3.zero;
-                Vector3[] positions = new Vector3[2];
-                positions[0] = Camera.main.transform.position;
-                positions[1] = Camera.main.transform.position + Camera.main.transform.forward * MaxDistance;
-                trail.SetPositions(positions);
-                _trails.Add(trail);
+                Camera camera = Camera.main;
+                maker.Make(camera.transform.position, camera.transform.forward * MaxDistance);
             }
         }
-        private void OnDisable()
-        {
-            RemoveFeedbacks();
-        }
+      
         private void Update()
         {
-            // REFACTO : Feedbacks shouldn't be handled this way
-            _framesSinceUIUpdate++;
-            if (_framesSinceUIUpdate > 30)
-                RemoveFeedbacks();
-            
-
             HandleInputs();
         }
 
-        private void RemoveFeedbacks()
-        {
-            if (_crosshair != null)
-                _crosshair.SetDefault();
-            foreach (var trail in _trails)
-            {
-                if (trail != null)
-                    Destroy(trail);
-            }
-        }
+     
 
         private void HandleInputs()
         {
@@ -136,12 +92,9 @@ namespace Shooting
             bool didShoot = _shooter.TryShoot(Pos, Dir, out bullets);
             if (didShoot)
             {
-                Debug.Log("Player has shot");
                 WarnShotTargets(bullets);
                 _currentAmmo--;
             }
-            else
-                Debug.Log("Player failed to shoot");
 
             return didShoot;
         }
