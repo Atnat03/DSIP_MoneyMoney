@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour, IManager
     {
         foreach (UIElement uiElement in _uiElements)
         {
-            uiElement.Bind();
+            uiElement.BindEvents();
         }
     }
 

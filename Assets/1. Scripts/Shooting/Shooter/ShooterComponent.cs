@@ -77,7 +77,7 @@ namespace Shooting
             if (_previousAmmoCount != _currentAmmo)
             {
                 _previousAmmoCount = _currentAmmo;
-                EventBus.Invoke("AmmoCount_DirtyFlag");
+                EventBus.Invoke("AmmoCount_DirtyFlag", new DataPacket(_currentAmmo));
             }
         }
 

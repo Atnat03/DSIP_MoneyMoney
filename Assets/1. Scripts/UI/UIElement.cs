@@ -7,7 +7,6 @@ using UnityEngine;
 public abstract class UIElement : MonoBehaviour
 {
     public abstract void UpdateUI();
-    public abstract List<string> GetBoundEvents();
     public abstract void Enable();
     public abstract void Disable();
 
@@ -17,13 +16,7 @@ public abstract class UIElement : MonoBehaviour
             comp.text = text.Replace(markup, replacement);
     }
 
-    public void Bind()
-    {
-        foreach (var item in GetBoundEvents())
-        {
-            EventBus.Register(item, UpdateUI);
-        }
-    }
+    public abstract void BindEvents();
 
     protected virtual string Get(Data data) => DataFetcher.GetString(data);
 }

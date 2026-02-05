@@ -33,14 +33,6 @@ public class UIShooterInfo : UIElement
         UpdateText(_maxAmmoCount, _maxAmmoCountText, Get(Data.MaxAmmoCount), _markup);
     }
 
-    public override List<string> GetBoundEvents()
-    {
-        return new List<string>()
-        {
-            "AmmoCount_DirtyFlag"
-        };
-    }
-
     public override void Enable()
     {
         _ammoCount.enabled = true;
@@ -52,7 +44,12 @@ public class UIShooterInfo : UIElement
         _maxAmmoCount.enabled = false;
     }
 
+    public override void BindEvents()
+    {
+        EventBus.Register("AmmoCount_DirtyFlag", (packet) => UpdateText(_ammoCount, _ammoCountText, packet.intValue.ToString(), _markup));
+    }
+
     #endregion
 
-    
+
 }
