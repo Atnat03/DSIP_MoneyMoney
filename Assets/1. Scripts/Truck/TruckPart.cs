@@ -48,10 +48,7 @@ public class TruckPart : MonoBehaviour
 
     private void Break()
     {
-        // Désactive la partie originale
         gameObject.SetActive(false);
-
-        // Instancie la version physiquée
         if (detachedPrefab != null)
         {
             detachedInstance = Instantiate(detachedPrefab, transform.position, transform.rotation);
@@ -59,10 +56,9 @@ public class TruckPart : MonoBehaviour
             Rigidbody rb = detachedInstance.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                // Calcul de la direction opposée au centre du camion
                 Vector3 localDir = transform.localPosition;
-                Vector3 ejectDir = new Vector3(Mathf.Sign(localDir.x), 0f, 0f).normalized; // X = droite/gauche
-                ejectDir += Vector3.up * 0.2f; // un petit peu vers le haut pour tomber visuellement
+                Vector3 ejectDir = new Vector3(Mathf.Sign(localDir.x), 0f, 0f).normalized; 
+                ejectDir += Vector3.up * 0.2f; 
                 rb.AddForce(ejectDir * (ejectForce*mult) + Vector3.up * ejectUpwardForce, ForceMode.Impulse);
             }
         }
