@@ -19,17 +19,20 @@ public class ListenEventDoor : MonoBehaviour
         Interact.OnInteract -= HitInteract;
     }
     
-    private void HitInteract(GameObject obj)
+    private void HitInteract(GameObject obj, GameObject player)
     {
-        if (isInteracting)
+        if (obj.name == gameObject.name)
         {
-            animator.SetBool("Open", false);
-            isInteracting = false;
-        }
-        else
-        {
-            animator.SetBool("Open", true);
-            isInteracting = true;
+            if (isInteracting)
+            {
+                animator.SetBool("Open", false);
+                isInteracting = false;
+            }
+            else
+            {
+                animator.SetBool("Open", true);
+                isInteracting = true;
+            }
         }
     }
 }
