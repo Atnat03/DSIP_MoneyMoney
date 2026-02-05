@@ -14,6 +14,9 @@ public class BankBehaviour : MonoBehaviour
 
     public MoneySpawn[] moneySpawns;
     public bool moneySpawned;
+    public float delay;
+
+    public Transform spawnPlayer;
     
 
     public void OnTriggerEnter(Collider other)
@@ -32,7 +35,7 @@ public class BankBehaviour : MonoBehaviour
         {
             for (int i = 0; i < spawn.numberOfItem; i++)
             {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(delay);
                 Instantiate(spawn.objectSpawned, spawn.spawnPoint.position, spawn.spawnPoint.rotation);
             }
         }
