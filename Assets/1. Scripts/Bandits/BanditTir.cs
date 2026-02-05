@@ -92,11 +92,9 @@ public class BanditTir : MonoBehaviour
 
         RaycastHit hit;
         Vector3 hitPoint;
-        Debug.Log("1");
         if (Physics.Raycast(origin, dir, out hit, detectionRadius))
         {
             hitPoint = hit.point;
-            Debug.Log("2");
             target.GetComponent<TruckPart>().TakeDamage(damage);
             // Plus tard : dégâts
             // var health = hit.collider.GetComponent<Health>();
@@ -107,9 +105,7 @@ public class BanditTir : MonoBehaviour
             hitPoint = origin + dir * detectionRadius;
         }
 
-        Debug.Log("3");
         SpawnVisualBullet(origin, hitPoint);
-        Debug.Log("4");
     }
 
     private void SpawnVisualBullet(Vector3 start, Vector3 end)

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using TMPro;
+using System.Runtime.CompilerServices;
 using UI;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 namespace Shooting
 {
@@ -18,53 +18,58 @@ namespace Shooting
         // Invoked when a target is hit, with said target as parameter
         [HideInInspector] public UnityEvent<ITarget> OnTargetHit { get; } = new();
         public UnityEvent OnHit => _onHit;
-        public bool EnableCallbacks { get => shooter.EnableCallbacks; set => shooter.EnableCallbacks = value; }
+        public bool EnableCallbacks { get => _enableCallbacks; set { _enableCallbacks = value; _shooter.EnableCallbacks = value; } }
 
         #endregion
 
         #region Fields
-        IShooter shooter = new RaycastShooter();
+        IShooter _shooter = new RaycastShooter();
 
+        [Header("Parameters")]
+        [SerializeField] private int _maxAmmo = 10;
+
+        [Header("References")]
         // REFACTO : Shouldn't have a reference to the UI
         [SerializeField] private UICrosshair _crosshair;
         [SerializeField] private LineRenderer _shotTrailPrefab;
-        private List<LineRenderer> _trails = new();
-        int framesSinceUIUpdate = int.MaxValue/2;
 
+        [Header("Events")]
         [SerializeField] private UnityEvent _onShoot;
         [SerializeField] private UnityEvent _onHit;
 
-        private int maxAmmo, currentAmmo;
-        private TextMeshProUGUI _currentAmmoText;
-        
+        // Private fields
+        private List<LineRenderer> _trails = new();
+        int _framesSinceUIUpdate = int.MaxValue/2;
+        private int _currentAmmo;
+        private bool _enableCallbacks;
         #endregion
 
         #region Methods
         private void Start()
         {
-            _crosshair = GameObject.Find("CrossHair").GetComponent<UICrosshair>();
-            _currentAmmoText = GameObject.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
-            
-            shooter.OnShoot += OnShoot.Invoke;
-            currentAmmo = maxAmmo;
-            shooter.OnTargetHit += (target) => OnTargetHit.Invoke(target);
-            shooter.OnTargetHit += _ => OnHit.Invoke();
+            _shooter.OnShoot += OnShoot.Invoke;
+            _shooter.OnTargetHit += (target) => OnTargetHit.Invoke(target);
+            _shooter.OnTargetHit += _ => OnHit.Invoke();
 
             // REFACTO : Remove deppendencies to UI
             ApplyFeedbacks();
+
+            Reload();
         }
+
+        public void Reload() => _currentAmmo = _maxAmmo;
 
         private void ApplyFeedbacks()
         {
             if (_crosshair != null)
             {
-                shooter.OnShoot += _crosshair.SetShooting;
-                shooter.OnShoot += () => { framesSinceUIUpdate = 0; };
-                shooter.OnTargetHit += _ => _crosshair.SetHit();
-                shooter.OnTargetHit += _ => { framesSinceUIUpdate = 0; };
+                _shooter.OnShoot += _crosshair.SetShooting;
+                _shooter.OnShoot += () => { _framesSinceUIUpdate = 0; };
+                _shooter.OnTargetHit += _ => _crosshair.SetHit();
+                _shooter.OnTargetHit += _ => { _framesSinceUIUpdate = 0; };
             }
 
-            shooter.OnShoot += MakeTrail;
+            _shooter.OnShoot += MakeTrail;
             
         }
         private void MakeTrail()
@@ -80,22 +85,30 @@ namespace Shooting
                 _trails.Add(trail);
             }
         }
+        private void OnDisable()
+        {
+            RemoveFeedbacks();
+        }
         private void Update()
         {
             // REFACTO : Feedbacks shouldn't be handled this way
-            framesSinceUIUpdate++;
-            if (_crosshair != null && framesSinceUIUpdate > 30)
-            {
-                _crosshair.SetDefault();
-                foreach (var trail in _trails)
-                {
-                    if (trail != null)
-                        Destroy(trail);
-                }
-            }
+            _framesSinceUIUpdate++;
+            if (_framesSinceUIUpdate > 30)
+                RemoveFeedbacks();
             
 
             HandleInputs();
+        }
+
+        private void RemoveFeedbacks()
+        {
+            if (_crosshair != null)
+                _crosshair.SetDefault();
+            foreach (var trail in _trails)
+            {
+                if (trail != null)
+                    Destroy(trail);
+            }
         }
 
         private void HandleInputs()
@@ -104,30 +117,28 @@ namespace Shooting
                 TryShoot();
         }
 
-        public void Reload()
-        {
-            currentAmmo = maxAmmo;
-            _currentAmmoText.text = currentAmmo.ToString();
-        }
-
         public bool TryShoot()
         {
+            if (_currentAmmo <= 0)
+            {
+                return false;
+            }
+
             Camera camera = Camera.main;
             Vector3 Pos = camera.transform.position;
             Vector3 Dir = camera.transform.forward;
             List<BulletInfo> bullets;
-            bool canShoot = shooter.TryShoot(Pos, Dir, out bullets);
-            if (canShoot && currentAmmo > 0)
+            bool didShoot = _shooter.TryShoot(Pos, Dir, out bullets);
+            if (didShoot)
             {
                 Debug.Log("Player has shot");
                 WarnShotTargets(bullets);
-                currentAmmo--;
-                _currentAmmoText.text = currentAmmo.ToString();
+                _currentAmmo--;
             }
             else
                 Debug.Log("Player failed to shoot");
 
-            return canShoot;
+            return didShoot;
         }
 
         /// <summary>

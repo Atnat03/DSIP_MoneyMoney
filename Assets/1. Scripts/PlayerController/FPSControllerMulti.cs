@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 public class FPSControllerMulti : NetworkBehaviour
 {
     [Header("References")]
-    [SerializeField] Rigidbody rb;
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
@@ -46,11 +45,17 @@ public class FPSControllerMulti : NetworkBehaviour
     public bool isDriver = false;
     private Vector3 driverLocalPosition;
     
+    [Header("UI")]
+    public GameObject ui;
+
+    public GameObject textGoInCamion;
+    
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
         {
             transform.GetChild(1).GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+            ui.SetActive(false);
             return;
         }
         
@@ -62,6 +67,8 @@ public class FPSControllerMulti : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        nearbyTruck = TruckController.instance.GetComponent<TruckInteraction>();
+
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
     }
@@ -69,38 +76,38 @@ public class FPSControllerMulti : NetworkBehaviour
     private Vector3 lastTruckPosition;
 
     public CharacterController controller;
+    public bool canEnterInTruck = false;
 
     void Update()
     {
         if (!IsOwner) return;
         
-        if (Input.GetKeyDown(KeyCode.E))
+        textGoInCamion.SetActive(canEnterInTruck);
+        
+        if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
-            TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
-            if (!isInTruck && Vector3.Distance(transform.position, TruckController.instance.transform.position) < 1000)
+            if (!isInTruck)
             {
+                TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
             }
-            else if (isInTruck && nearbyTruck != null)
+            else if (isInTruck)
             {
-                //nearbyTruck.TryExitTruck(this);
+                print("TryExitTruck");
+                nearbyTruck.TryExitTruck(this);
             }
         }
 
-        // Si on est conducteur, on ne bouge pas librement
         if (isDriver && isInTruck)
         {
-            // Le conducteur reste fixé à sa position
             if (TruckController.instance != null)
             {
                 transform.position = TruckController.instance.driverPos.position;
             }
             
-            // Caméra seulement
             HandleCameraInput();
             return;
         }
 
-        // Mouvement normal si on n'est pas conducteur
         if (!isInTruck || !isDriver)
         {
             HandleMovement();
@@ -158,32 +165,7 @@ public class FPSControllerMulti : NetworkBehaviour
         
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
     }
-    
-    /// <summary>
-    /// Détecte si un camion est à proximité
-    /// </summary>
-    private void DetectNearbyTruck()
-    {
-        Collider[] hits = Physics.OverlapSphere(transform.position, interactDistance, truckLayer);
-        
-        if (hits.Length > 0)
-        {
-            TruckInteraction truck = hits[0].GetComponent<TruckInteraction>();
-            if (truck != null)
-            {
-                nearbyTruck = truck;
-                // Optionnel : afficher un UI prompt "Appuyez sur E pour entrer"
-            }
-        }
-        else
-        {
-            nearbyTruck = null;
-        }
-    }
-    
-    /// <summary>
-    /// Appelé quand le joueur entre dans le camion
-    /// </summary>
+
     public void EnterTruck(bool asDriver, Vector3 spawnPosition)
     {
         print($"EnterTruck - asDriver: {asDriver}");
@@ -191,33 +173,20 @@ public class FPSControllerMulti : NetworkBehaviour
         isInTruck = true;
         isDriver = asDriver;
         
-        // Devenir enfant du camion
         SetParentServerRpc(true);
         
-        // Téléporter à la position appropriée
         transform.position = spawnPosition;
-        
+
         if (isDriver)
         {
-            // Sauvegarder la position locale du conducteur
             driverLocalPosition = TruckController.instance.driverPos.position;
-            
-            // Donner le contrôle du camion au joueur
+
             TruckController.instance.enabled = true;
-            
-            // Désactiver le controller du joueur
+
             if (controller != null)
                 controller.enabled = false;
-            
-            rb.useGravity = false;
-            rb.isKinematic = true;
         }
-        else
-        {
-            rb.useGravity = false;
-            rb.isKinematic = true;
-        }
-        
+
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
 
@@ -230,16 +199,9 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         print("ExitTruck");
         
-        // Retirer le parent
         SetParentServerRpc(false);
         
-        // Téléporter à la sortie
         transform.position = exitPosition;
-        
-        if (isDriver)
-        {
-
-        }
         
         isInTruck = false;
         isDriver = false;
@@ -247,9 +209,6 @@ public class FPSControllerMulti : NetworkBehaviour
         
         if (controller != null)
             controller.enabled = true;
-        
-        rb.isKinematic = false;
-        rb.useGravity = true;
 
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
@@ -262,7 +221,6 @@ public class FPSControllerMulti : NetworkBehaviour
         if (setParent)
         {
             Transform truckTransform = TruckController.instance.transform;
-            truckParent = truckTransform.Find("PlayerParent");
             if (truckParent == null)
             {
                 truckParent = truckTransform;
@@ -281,6 +239,22 @@ public class FPSControllerMulti : NetworkBehaviour
             {
                 netObj.TrySetParent((Transform)null);
             }
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("PorteConducteur") && !isInTruck)
+        {
+            canEnterInTruck = true;
+        }
+    }
+    
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.transform.CompareTag("PorteConducteur"))
+        {
+            canEnterInTruck = false;
         }
     }
 }
