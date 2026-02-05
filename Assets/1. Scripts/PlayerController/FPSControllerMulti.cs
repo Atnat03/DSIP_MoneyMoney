@@ -68,6 +68,8 @@ public class FPSControllerMulti : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        nearbyTruck = TruckController.instance.GetComponent<TruckInteraction>();
+
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
     }
@@ -83,13 +85,13 @@ public class FPSControllerMulti : NetworkBehaviour
         
         textGoInCamion.SetActive(canEnterInTruck);
         
-        if (Input.GetKeyDown(KeyCode.E) && canEnterInTruck)
+        if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
             if (!isInTruck)
             {
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
             }
-            else if (isInTruck && nearbyTruck != null)
+            else if (isInTruck)
             {
                 print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
