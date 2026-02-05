@@ -2813,6 +2813,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a4cf5c165892d742a862b275ae6eaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ListenEventDoor
+  _interactKey: 101
+  _reachDistance: 5
+  _enableSeethrough: 0
+  _onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  _onLookedAt:
+    m_PersistentCalls:
+      m_Calls: []
+  _onNotLookedAt:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &949249716
 Transform:
   m_ObjectHideFlags: 0
