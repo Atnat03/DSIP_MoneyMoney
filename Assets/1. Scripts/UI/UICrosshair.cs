@@ -1,3 +1,6 @@
+using GameSystem;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,6 +60,9 @@ namespace UI
             _defaultSprite = _targetImage.sprite;
             _defaultColor = _targetImage.color;
             _defaultSize = _targetImage.rectTransform.sizeDelta;
+
+            EventBus.Register("OnPlayerShoot", SetShooting);
+            EventBus.Register("OnPlayerShoot", () => WaitAndDo(0.5f, SetDefault));
         }
 
         public void SetState(CrosshairState state)
@@ -105,6 +111,12 @@ namespace UI
             _targetImage.rectTransform.sizeDelta = _disabledSize;
         }
 
+        private IEnumerator WaitAndDo(float duration, Action callback)
+        {
+            for (float d = 0; d < duration; d += Time.deltaTime)
+                yield return null;
+            callback.Invoke();
+        }
 
         #endregion
     }

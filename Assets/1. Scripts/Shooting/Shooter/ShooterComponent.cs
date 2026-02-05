@@ -51,6 +51,9 @@ namespace Shooting
             _shooter.OnTargetHit += (target) => OnTargetHit.Invoke(target);
             _shooter.OnTargetHit += _ => OnHit.Invoke();
 
+            OnShoot.AddListener(() => GameSystem.EventBus.Invoke("OnPlayerShoot"));
+            OnShoot.AddListener(() => { _framesSinceUIUpdate = 0; });
+
             // REFACTO : Remove deppendencies to UI
             ApplyFeedbacks();
 
@@ -61,6 +64,7 @@ namespace Shooting
 
         private void ApplyFeedbacks()
         {
+            /*
             if (_crosshair != null)
             {
                 _shooter.OnShoot += _crosshair.SetShooting;
@@ -68,6 +72,7 @@ namespace Shooting
                 _shooter.OnTargetHit += _ => _crosshair.SetHit();
                 _shooter.OnTargetHit += _ => { _framesSinceUIUpdate = 0; };
             }
+            */
 
             _shooter.OnShoot += MakeTrail;
             
