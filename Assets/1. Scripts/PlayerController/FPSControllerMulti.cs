@@ -169,7 +169,9 @@ public class FPSControllerMulti : NetworkBehaviour
         move = transform.TransformDirection(localMove) * moveSpeed;
         move.y = verticalVelocity;
         
+        controller.enabled = true;             
         controller.Move(move * Time.deltaTime);
+        controller.enabled = false;
     }
 
     void LateUpdate()
@@ -258,7 +260,7 @@ public class FPSControllerMulti : NetworkBehaviour
                 netObj.TrySetParent((Transform)null);
             }
             
-            controller.enabled = true;
+            controller.enabled = false;
         }
     }
     
