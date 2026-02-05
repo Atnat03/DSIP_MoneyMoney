@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 9007723052840850965}
   - component: {fileID: 5283579690568248715}
   - component: {fileID: 6149937738164625098}
-  - component: {fileID: 632150567856117366}
   - component: {fileID: 3061133955734659764}
+  - component: {fileID: 632150567856117366}
   - component: {fileID: 6921848277715266955}
   - component: {fileID: 6837889975389134471}
   - component: {fileID: 6181729137498508388}
@@ -94,25 +94,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &632150567856117366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 116780015938773511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3e01a942b46fc14581011c47a7e3adc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
-  _maxAmmo: 10
-  _onShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  _onHit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3061133955734659764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,6 +119,26 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &632150567856117366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116780015938773511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3e01a942b46fc14581011c47a7e3adc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
+  ShowTopMostFoldoutHeaderGroup: 1
+  _maxAmmo: 10
+  _onShoot:
+    m_PersistentCalls:
+      m_Calls: []
+  _onHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6921848277715266955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e163e75e31737be4a81b6195f0716d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInterface
-  FPSController: {fileID: 5283579690568248715}
+  FPSControllerMulti: {fileID: 0}
   ShooterComponent: {fileID: 632150567856117366}
   GrabPoint: {fileID: 8105077609837898710}
 --- !u!1 &480847099577414623

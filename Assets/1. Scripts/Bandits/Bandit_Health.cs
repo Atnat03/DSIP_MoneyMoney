@@ -1,45 +1,78 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using Shooting;
 
-public class Bandit_Health : MonoBehaviour, ITarget
+public class Bandit_Health : NetworkBehaviour, ITarget
 {
     [Header("Health")]
     public float maxHealth = 100f;
-    private float currentHealth;
+
+    private NetworkVariable<float> currentHealth = new NetworkVariable<float>(
+        writePerm: NetworkVariableWritePermission.Server
+    );
 
     [Header("UI")]
     public Image healthBar;
-    
+
     public Action<BulletInfo> OnShot { get; private set; }
     public Collider Collider { get; private set; }
 
     private void Awake()
     {
-        currentHealth = maxHealth;
         Collider = GetComponent<Collider>();
         OnShot = HandleShot;
     }
 
-    private void HandleShot(BulletInfo bullet)
+    public override void OnNetworkSpawn()
     {
-        TakeDamage(bullet.Damage);
+        if (IsServer)
+            currentHealth.Value = maxHealth;
+
+        currentHealth.OnValueChanged += OnHealthChanged;
     }
 
-    public void TakeDamage(float dmg)
+    private void OnDestroy()
     {
-        currentHealth -= dmg;
+        currentHealth.OnValueChanged -= OnHealthChanged;
+    }
 
+    private void OnHealthChanged(float oldValue, float newValue)
+    {
         if (healthBar != null)
-            healthBar.fillAmount = currentHealth / maxHealth;
+            healthBar.fillAmount = newValue / maxHealth;
 
-        if (currentHealth <= 0f)
+        if (newValue <= 0f && oldValue > 0f)
             Die();
+    }
+
+    private void HandleShot(BulletInfo bullet)
+    {
+        if (IsServer)
+            ApplyDamage(bullet.Damage);
+        else
+            TakeDamageServerRpc(bullet.Damage);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void TakeDamageServerRpc(float dmg)
+    {
+        ApplyDamage(dmg);
+    }
+
+    private void ApplyDamage(float dmg)
+    {
+        if (currentHealth.Value <= 0f)
+            return;
+
+        currentHealth.Value -= dmg;
+        currentHealth.Value = Mathf.Max(currentHealth.Value, 0f);
     }
 
     private void Die()
     {
-        GetComponent<BanditVehicleAI>().StopVehicle();
+        if (TryGetComponent(out BanditVehicleAI ai))
+            ai.StopVehicle();
     }
 }

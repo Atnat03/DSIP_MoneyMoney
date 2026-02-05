@@ -10,7 +10,7 @@ public class PlayerInterface : MonoBehaviour
 {
     #region Fields
 
-    public FPSController FPSController;
+    public FPSControllerMulti FPSControllerMulti;
     public ShooterComponent ShooterComponent;
     public GrabPoint GrabPoint;
     public HealthComponent HealthComponent;
