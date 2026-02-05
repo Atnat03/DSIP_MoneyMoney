@@ -15,6 +15,7 @@ public class SpawnerBandit : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("pleaaase");
         if (other.CompareTag("Truck") && !hasSpawned && !isBarrage)
         {
             hasSpawned = true;
@@ -25,7 +26,8 @@ public class SpawnerBandit : MonoBehaviour
         }
         else if(other.CompareTag("Truck") && !hasSpawned && isBarrage)
         {
-            GameObject bandit = Instantiate(prefabBandit, spawnPos.position, spawnPoint.rotation);
+            Debug.Log("wsh");
+            GameObject bandit = Instantiate(prefabBandit, spawnPos.position, spawnPos.rotation);
             bandit.GetComponent<BanditBarrage>().pointA = spawnPos;
             bandit.GetComponent<BanditBarrage>().pointB = targetPos;
         }
