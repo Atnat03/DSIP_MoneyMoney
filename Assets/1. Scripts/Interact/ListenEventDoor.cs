@@ -6,6 +6,7 @@ public class ListenEventDoor : Interactable
     private bool isInteracting;
     private void Start()
     {
+        base.Start();
         animator = GetComponent<Animator>();
     }
 
@@ -15,7 +16,6 @@ public class ListenEventDoor : Interactable
         Debug.Log("Interact");
         
         HitInteract();
-        
     }
     
     private void HitInteract()
