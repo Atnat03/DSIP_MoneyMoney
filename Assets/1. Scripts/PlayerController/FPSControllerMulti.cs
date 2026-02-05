@@ -96,18 +96,6 @@ public class FPSControllerMulti : NetworkBehaviour
         
         print(controller.enabled);
         
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-
-        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
-        
-        Debug.Log(horizontalInput + " / " + verticalInput);
-
-        yaw += mouseX;
-        pitch -= mouseY;
-        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
-        
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
             if (!isInTruck)
@@ -157,6 +145,18 @@ public class FPSControllerMulti : NetworkBehaviour
 
     void HandleMovement()
     {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+        
+        Debug.Log(horizontalInput + " / " + verticalInput);
+
+        yaw += mouseX;
+        pitch -= mouseY;
+        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+        
         if (controller.isGrounded)
         {
             if (verticalVelocity < 0)
@@ -177,9 +177,9 @@ public class FPSControllerMulti : NetworkBehaviour
         move = transform.TransformDirection(localMove) * moveSpeed;
         move.y = verticalVelocity;
         
-        //controller.enabled = true;             
+        controller.enabled = true;             
         controller.Move(move * Time.deltaTime);
-        //controller.enabled = false;
+        controller.enabled = false;
     }
 
     void LateUpdate()
