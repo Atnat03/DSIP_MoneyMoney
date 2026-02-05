@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9007723052840850965}
-  - component: {fileID: 7659866583823866374}
   - component: {fileID: 5283579690568248715}
   - component: {fileID: 6149937738164625098}
   - component: {fileID: 632150567856117366}
@@ -42,19 +41,6 @@ Transform:
   - {fileID: 8841062240107425392}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7659866583823866374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 116780015938773511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99460d9003c371940abf2d5a928e0e7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerRayCast
-  uiController: {fileID: 0}
 --- !u!114 &5283579690568248715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,8 +106,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
   _maxAmmo: 10
-  _crosshair: {fileID: 0}
-  _shotTrailPrefab: {fileID: 2751325827363714088, guid: cd3615a53bed1ba4aa1a4886c3ed22db, type: 3}
   _onShoot:
     m_PersistentCalls:
       m_Calls: []

@@ -64,9 +64,7 @@ public class Interactable : MonoBehaviour
                     _isLookedAtByPlayer = true;
                     break;
                 }
-
             }
-
         }
         if (enableCallbacks)
         {
