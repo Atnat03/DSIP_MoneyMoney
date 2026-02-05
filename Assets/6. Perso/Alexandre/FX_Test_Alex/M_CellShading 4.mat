@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_CellShading 1
+  m_Name: M_CellShading 4
   m_Shader: {fileID: -6465566751694194690, guid: 04a5d8ad51b6d8249aa3387823f5ddf4, type: 3}
   m_Parent: {fileID: -876546973899608171, guid: 04a5d8ad51b6d8249aa3387823f5ddf4, type: 3}
   m_ModifiedSerializedProperties: 0
@@ -26,15 +26,17 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Float: 0.492
-    - _Float_1: 2.04
+    - _EdgeHeight: 0.992
+    - _Float: 0.937
+    - _Float_1: 2.03
+    - _Outline: 0
     - _QueueControl: 0
-    - _Rim_Size: 0.5
+    - _Rim_Size: 0.739
     m_Colors:
-    - _Color_Base: {r: 0.36934692, g: 0.7490196, b: 0.18950199, a: 1}
-    - _Color_Highlight: {r: 1.2407511, g: 1.4980392, b: 0.3466051, a: 1}
-    - _Color_Rim_Light: {r: 0.6573807, g: 1, b: 0.3066038, a: 1}
-    - _Color_Shadow: {r: 0.09631336, g: 0.41799998, b: 0.19262674, a: 1}
+    - _Color_Base: {r: 0.18823527, g: 0.7490196, b: 0.5433986, a: 1}
+    - _Color_Highlight: {r: 0.35294116, g: 1.4980392, b: 0.40058815, a: 1}
+    - _Color_Rim_Light: {r: 0.7311321, g: 1, b: 0.8538289, a: 1}
+    - _Color_Shadow: {r: 0.09803921, g: 0.36673242, b: 0.41960785, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &8720463583840316277
