@@ -1192,7 +1192,7 @@ GameObject:
   - component: {fileID: 3697156979681399502}
   m_Layer: 14
   m_Name: Cube (12)
-  m_TagString: Untagged
+  m_TagString: Truck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6016,6 +6016,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
+      propertyPath: m_TagString
+      value: Truck
+      objectReference: {fileID: 0}
     - target: {fileID: 2277258026048394495, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -6171,7 +6175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2627938957
+  GlobalObjectIdHash: 2107306409
   InScenePlacedSourceGlobalObjectIdHash: 2107306409
   DeferredDespawnTick: 0
   Ownership: 1
