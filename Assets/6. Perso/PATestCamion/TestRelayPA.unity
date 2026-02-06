@@ -779,7 +779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawner
   ShowTopMostFoldoutHeaderGroup: 1
-  player1Prefab: {fileID: 116780015938773511, guid: 8ae2f5cd0e1d0ea42b10ab7a88d22355, type: 3}
+  player1Prefab: {fileID: 7200783157656878878, guid: 17232593a1939f0468807275ad45b30f, type: 3}
   startCam: {fileID: 269377916}
   defaultSpawnPoint: {fileID: 1681446591}
 --- !u!1 &218632790
@@ -2971,42 +2971,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a4cf5c165892d742a862b275ae6eaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ListenEventDoor
-  _interactKey: 101
-  _reachDistance: 5
-  _enableSeethrough: 0
-  _onInteract:
-    m_PersistentCalls:
-      m_Calls: []
-  _onLookedAt:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1441391190}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  _onNotLookedAt:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1441391190}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!4 &949249716
 Transform:
   m_ObjectHideFlags: 0
@@ -4873,11 +4837,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 268730018}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1441391190 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7053741937067519333, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
-  m_PrefabInstance: {fileID: 678977229}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1441391195 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4624616961086313846, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}

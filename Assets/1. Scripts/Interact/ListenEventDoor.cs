@@ -1,34 +1,49 @@
+using System;
+using Shooting;
 using UnityEngine;
 
-public class ListenEventDoor : Interactable
+public class ListenEventDoor : MonoBehaviour
 {
     Animator animator;
     private bool isInteracting;
-    private void Start()
+   private void Start()
     {
-        base.Start();
         animator = GetComponent<Animator>();
     }
 
-    protected override void Interact(Transform playerTransform, bool enableCallbacks = true)
+   /* public override void Interact(Transform playerTransform, bool enableCallbacks = true)
     {
         base.Interact(playerTransform, enableCallbacks);
         Debug.Log("Interact");
         
         HitInteract();
-    }
-    
-    private void HitInteract()
+    }*/
+
+    private void OnEnable()
     {
-        if (isInteracting)
+        Interact.OnInteract += HitInteract;
+    }
+
+    private void OnDisable()
+    {
+        Interact.OnInteract -= HitInteract;
+    }
+
+    private void HitInteract(GameObject obj,  GameObject player)
+    {
+        Debug.Log("Hit interact");
+        if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
         {
-            animator.SetBool("Open", false);
-            isInteracting = false;
-        }
-        else
-        {
-            animator.SetBool("Open", true);
-            isInteracting = true;
+            if (isInteracting)
+            {
+                animator.SetBool("Open", false);
+                isInteracting = false;
+            }
+            else
+            {
+                animator.SetBool("Open", true);
+                isInteracting = true;
+            }
         }
     }
 }
