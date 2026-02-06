@@ -1,12 +1,12 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class SpawnerBandit : NetworkBehaviour
+public class SpawnerBandit : MonoBehaviour
 {
     public Transform spawnPoint;
     public GameObject prefabBandit;
 
-    public bool hasSpawned;
+    public bool hasSpawned = false;
 
     public BanditVehicleAI.RelativePosition relativePos;
 
@@ -16,11 +16,15 @@ public class SpawnerBandit : NetworkBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (!IsServer) return;
+        if (!NetworkManager.Singleton.IsServer) return;
         
         Debug.Log("pleaaase");
+        
+        print(other.CompareTag("Truck") + " / "   + !hasSpawned + " / "   + !isBarrage);
+        
         if (other.CompareTag("Truck") && !hasSpawned && !isBarrage)
         {
+            print("spwna zoieujhiz uhiu");
             hasSpawned = true;
             GameObject bandit = Instantiate(prefabBandit, spawnPoint.position, spawnPoint.rotation);
             bandit.GetComponent<BanditVehicleAI>().truck = other.transform;
