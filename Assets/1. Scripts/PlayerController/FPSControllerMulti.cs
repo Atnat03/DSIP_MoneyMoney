@@ -1,4 +1,5 @@
 using System;
+using Shooting;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class FPSControllerMulti : NetworkBehaviour
     
     [Header("Move Settings")]
     [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float sprintSpeed = 12f;
+    private float speed;
     [SerializeField, Range(0.1f, 10)] float mouseSensibility;
     [SerializeField] Vector2 verticalLimit = new Vector2(-80, 80);
     [SerializeField] float cameraSmoothFollow = 15f;
@@ -53,6 +56,13 @@ public class FPSControllerMulti : NetworkBehaviour
     public GameObject ui;
 
     public GameObject textGoInCamion;
+    public GameObject textReload;
+    public LayerMask maskCameraPlayer;
+
+    private bool canReload = false;
+    ShooterComponent shooter;
+    
+    public GameObject meshRenderer;
     
     public Camera MyCamera()
     {
@@ -70,6 +80,7 @@ public class FPSControllerMulti : NetworkBehaviour
         
         GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
+        cam.cullingMask = maskCameraPlayer;
         cam.fieldOfView = 60f;
         cameraTransform = camObj.transform;
         myCamera = camObj.GetComponent<Camera>();
@@ -81,6 +92,10 @@ public class FPSControllerMulti : NetworkBehaviour
 
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
+        
+        speed = moveSpeed;
+        
+        shooter = gameObject.GetComponent<ShooterComponent>();
     }
 
     private Vector3 lastTruckPosition;
@@ -93,8 +108,15 @@ public class FPSControllerMulti : NetworkBehaviour
         if (!IsOwner) return;
         
         textGoInCamion.SetActive(canEnterInTruck);
+        textReload.SetActive(canReload);
         
-        print(controller.enabled);
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = sprintSpeed;
+        }else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = moveSpeed;
+        }
         
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
@@ -108,6 +130,15 @@ public class FPSControllerMulti : NetworkBehaviour
                 print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
             }
+        }
+
+        canReload = CheckCanReload();
+
+        if (Input.GetKeyUp(KeyCode.E) && canReload)
+        {
+            print("Reload");
+            shooter.Reload();
+            canReload = false;
         }
 
         if (isDriver && isInTruck)
@@ -133,6 +164,11 @@ public class FPSControllerMulti : NetworkBehaviour
         }
     }
 
+    bool CheckCanReload()
+    {
+        return Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload;
+    }
+    
     void HandleCameraInput()
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
@@ -174,7 +210,7 @@ public class FPSControllerMulti : NetworkBehaviour
 
         Vector3 move = Vector3.zero;
         Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        move = transform.TransformDirection(localMove) * moveSpeed;
+        move = transform.TransformDirection(localMove) * speed;
         move.y = verticalVelocity;
         
         controller.enabled = true;             
