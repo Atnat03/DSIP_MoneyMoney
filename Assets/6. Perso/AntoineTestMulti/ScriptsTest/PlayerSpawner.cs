@@ -12,6 +12,14 @@ public class PlayerSpawner : NetworkBehaviour
     private void Start()
     {
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+
+        if (IsServer)
+        {
+            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+            {
+                OnClientConnected(client.ClientId);
+            }
+        }
     }
 
     private void OnDisable()
@@ -19,6 +27,7 @@ public class PlayerSpawner : NetworkBehaviour
         if (NetworkManager.Singleton != null)
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
+    
 
     private void OnClientConnected(ulong clientId)
     {

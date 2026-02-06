@@ -195,8 +195,6 @@ public class FPSControllerMulti : NetworkBehaviour
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
         
-        Debug.Log(horizontalInput + " / " + verticalInput);
-
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
