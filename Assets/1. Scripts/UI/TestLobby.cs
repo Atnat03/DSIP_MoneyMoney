@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class TestLobby : MonoBehaviour
 {
+    /*
     private Lobby hostLobby;
     private float heartbeatTimer;
     
@@ -66,7 +67,7 @@ public class TestLobby : MonoBehaviour
 
             foreach (Lobby lobby in queryResponse.Results)
             {
-                Debug.lo
+                
             }
         }
         catch (Exception e)
@@ -74,4 +75,5 @@ public class TestLobby : MonoBehaviour
             Debug.Log(e);
         }
     }
+    */
 }

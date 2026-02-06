@@ -31,9 +31,9 @@ public class Interactable : MonoBehaviour
     }
     protected virtual void Update()
     {
-        CheckIfLookedAt();
+        //CheckIfLookedAt();
 
-        TryInteract(Reference.GetObject<PlayerInterface>().transform);
+        //TryInteract(Reference.GetObject<PlayerInterface>().transform);
     }
     
     protected virtual bool CheckIfLookedAt(bool enableCallbacks=true)
@@ -115,7 +115,7 @@ public class Interactable : MonoBehaviour
     /// </summary>
     /// <param name="playerTransform"></param>
     /// <param name="enableCallbacks"></param>
-    protected virtual void Interact(Transform playerTransform, bool enableCallbacks = true)
+    public virtual void Interact(Transform playerTransform, bool enableCallbacks = true)
     {
         if (enableCallbacks)
             _onInteract.Invoke();
