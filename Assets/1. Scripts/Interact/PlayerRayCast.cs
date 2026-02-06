@@ -18,6 +18,7 @@ public class PlayerRayCast : NetworkBehaviour
     {
         uiController = VariableManager.instance.uiController;
         circleCD = VariableManager.instance.circleCD;
+        materialVisual.transform.parent = GetComponent<FPSControllerMulti>().MyCamera().transform;
     }
 
     private void Update()
@@ -35,7 +36,12 @@ public class PlayerRayCast : NetworkBehaviour
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.distance < 5f)
             {
-                uiController?.OnInteract();
+                if (!hit.collider.CompareTag("TruckPart") || 
+                    (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial))
+                {
+                    uiController?.OnInteract();
+                }
+                
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     if (hit.collider.CompareTag("TruckPart") && hasMaterial)
@@ -49,7 +55,7 @@ public class PlayerRayCast : NetworkBehaviour
                     {
                         TakeMaterial();
                     }
-                    else
+                    else if(!hit.collider.CompareTag("TruckPart"))
                     {
                         Interact.RayInteract(hit.collider.gameObject, gameObject);
                     }
@@ -80,5 +86,6 @@ public class PlayerRayCast : NetworkBehaviour
         }
         Interact.RayInteract(truck, gameObject);
         GetComponent<FPSControllerMulti>().isFreeze = false;
+        TakeMaterial();
     }
 }

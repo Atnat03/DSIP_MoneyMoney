@@ -42,6 +42,7 @@ public class GrabPoint : NetworkBehaviour
     private void OnInteractGrab(GameObject obj, GameObject player)
     {
         if (obj.GetComponent<ListenEventDoor>() != null) return;
+        if (!obj.CompareTag("Grabbable")) return;
 
         NetworkObject netObj = obj.GetComponent<NetworkObject>();
         if (netObj != null)
