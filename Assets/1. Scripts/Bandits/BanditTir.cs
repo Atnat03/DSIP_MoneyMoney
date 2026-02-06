@@ -54,12 +54,16 @@ public class BanditTir : MonoBehaviour
         {
             if (hit.CompareTag("TruckPart"))
             {
-                float dist = (hit.transform.position - transform.position).sqrMagnitude;
-                if (dist < minDist)
+                if (!hit.GetComponent<TruckPart>().isBroke)
                 {
-                    minDist = dist;
-                    closest = hit.transform;
+                    float dist = (hit.transform.position - transform.position).sqrMagnitude;
+                    if (dist < minDist)
+                    {
+                        minDist = dist;
+                        closest = hit.transform;
+                    }
                 }
+                
             }
         }
            

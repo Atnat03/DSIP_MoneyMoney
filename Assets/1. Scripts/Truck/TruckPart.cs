@@ -92,6 +92,8 @@ public class TruckPart : MonoBehaviour
             }
         }
 
+        isBroke = true;
+
         UpdateBreakPartServerRpc();      
     }
 
@@ -124,6 +126,7 @@ public class TruckPart : MonoBehaviour
     
     public void Repair()
     {
+        isBroke = false;
         currentHealth = maxHealth;
 
         // Supprime la partie tombée
