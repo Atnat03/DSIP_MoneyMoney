@@ -36,12 +36,13 @@ public class GrabPoint : MonoBehaviour
     {
         if (!CanGrab()) return;
         Grab(other);
+        Debug.Log("Hit interact");
     }
     private void Grab(GameObject other)
     { 
-        other.transform.SetParent(transform);
-        other.transform.localPosition = transform.localPosition;
-        other.transform.localRotation = transform.localRotation;
+        transform.SetParent(other.transform);
+        transform.localPosition = other.transform.localPosition;
+        transform.localRotation = other.transform.localRotation;
 
         _heldItem = other;
 
