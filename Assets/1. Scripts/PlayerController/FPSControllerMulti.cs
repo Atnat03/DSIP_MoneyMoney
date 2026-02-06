@@ -11,7 +11,7 @@ public class FPSControllerMulti : NetworkBehaviour
     [Header("References")]
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
-    Transform cameraTransform;
+    [SerializeField] Transform cameraTransform;
     [SerializeField] Camera myCamera;
     [SerializeField] private CapsuleCollider capsule;
     
@@ -74,7 +74,6 @@ public class FPSControllerMulti : NetworkBehaviour
         if (!IsOwner)
         {
             Color r = Random.ColorHSV();
-
             
             foreach (Transform child in meshRenderer.transform)
             {
@@ -82,16 +81,20 @@ public class FPSControllerMulti : NetworkBehaviour
                 child.gameObject.layer = LayerMask.NameToLayer("Default");
             }
             
+            myCamera.gameObject.SetActive(false);
+            
             ui.SetActive(false);
             return;
         }
         
-        GameObject camObj = new GameObject("Camera of " +  gameObject.name);
+        /* GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
         cam.cullingMask = maskCameraPlayer;
         cam.fieldOfView = 60f;
         cameraTransform = camObj.transform;
-        myCamera = camObj.GetComponent<Camera>();
+        myCamera = camObj.GetComponent<Camera>();*/
+       
+       myCamera.cullingMask = maskCameraPlayer;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

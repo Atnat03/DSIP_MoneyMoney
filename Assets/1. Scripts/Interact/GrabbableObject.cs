@@ -1,22 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class GrabbableObject : MonoBehaviour
+[RequireComponent(typeof(NetworkObject))]
+public class GrabbableObject : NetworkBehaviour
 {
-    /*public override void Interact(Transform playerTransform, bool enableCallbacks = true)
-    {
-        base.Interact(playerTransform, enableCallbacks);
-        if (Reference.TryGetObject(out PlayerInterface pi))
-            pi.GrabPoint.TryGrab(this.gameObject);
-    }
-
-    public override bool CanInteract(Transform playerTransform)
-    {
-        return
-            base.CanInteract(playerTransform) &&
-            Reference.TryGetObject(out PlayerInterface pi) &&
-            pi.GrabPoint.IsFree;
-    }*/
-    
     private void OnEnable()
     {
         Interact.OnInteract += HitInteract;
@@ -27,13 +14,14 @@ public class GrabbableObject : MonoBehaviour
         Interact.OnInteract -= HitInteract;
     }
 
-    private void HitInteract(GameObject obj,  GameObject player)
+    private void HitInteract(GameObject obj, GameObject player)
     {
+        if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
 
-        if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
+        var grabPoint = player.GetComponent<GrabPoint>();
+        if (grabPoint != null)
         {
-            player.GetComponent<GrabPoint>().TryGrab(obj);
+            grabPoint.TryGrab(GetComponent<NetworkObject>());
         }
     }
-    
 }
