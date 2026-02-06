@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class TruckPart : MonoBehaviour
@@ -15,7 +16,7 @@ public class TruckPart : MonoBehaviour
     [SerializeField] private bool startDestroyed = false;
     #endregion
 
-    private float currentHealth;
+    [SerializeField]private float currentHealth;
     private GameObject detachedInstance;
 
     public float mult;
@@ -71,11 +72,14 @@ public class TruckPart : MonoBehaviour
 
     private void Break()
     {
-        gameObject.SetActive(false);
+        if (!NetworkManager.Singleton.IsServer)
+            return;
+        
         if (detachedPrefab != null)
         {
             detachedInstance = Instantiate(detachedPrefab, transform.position, transform.rotation);
-
+            detachedInstance.GetComponent<NetworkObject>().Spawn();
+            
             Rigidbody rb = detachedInstance.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -85,8 +89,23 @@ public class TruckPart : MonoBehaviour
                 rb.AddForce(ejectDir * (ejectForce*mult) + Vector3.up * ejectUpwardForce, ForceMode.Impulse);
             }
         }
+
+        UpdateBreakPartServerRpc();      
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdateBreakPartServerRpc()
+    {
+        UpdateBreakPartClientRpc();
+    }
+
+    [ClientRpc]
+    private void UpdateBreakPartClientRpc()
+    {
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<BoxCollider>().isTrigger = true;
+    }
+    
     #endregion
 
     #region Repair
@@ -103,8 +122,6 @@ public class TruckPart : MonoBehaviour
     
     public void Repair()
     {
-        // Réactive la partie originale
-        gameObject.SetActive(true);
         currentHealth = maxHealth;
 
         // Supprime la partie tombée
@@ -112,6 +129,21 @@ public class TruckPart : MonoBehaviour
         {
             Destroy(detachedInstance);
         }
+
+        UpdateBreakPartServerRpcRepair();
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdateBreakPartServerRpcRepair()
+    {
+        UpdateBreakPartClientRpcPart();
+    }
+
+    [ClientRpc]
+    private void UpdateBreakPartClientRpcPart()
+    {
+        GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<BoxCollider>().isTrigger = false;
     }
     
     #endregion

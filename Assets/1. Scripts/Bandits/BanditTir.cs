@@ -52,7 +52,7 @@ public class BanditTir : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Truckpart"))
+            if (hit.CompareTag("TruckPart"))
             {
                 float dist = (hit.transform.position - transform.position).sqrMagnitude;
                 if (dist < minDist)

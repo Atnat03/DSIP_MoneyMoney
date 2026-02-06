@@ -1227,6 +1227,71 @@ Transform:
   - {fileID: 180598812}
   m_Father: {fileID: 421485684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &39545141
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 792700703697483768, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: truck
+      value: 
+      objectReference: {fileID: 212973542}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 37.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0000011824504
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.79120183
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.6115552
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -75.404
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720923380287564076, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6959080630503955993, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: m_Name
+      value: Bandit_Truck_Follow
+      objectReference: {fileID: 0}
+    - target: {fileID: 7180674001884962020, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2269068743
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
 --- !u!1 &42679318
 GameObject:
   m_ObjectHideFlags: 0
@@ -8128,6 +8193,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 82370327}
+    - target: {fileID: 273017799732646993, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 334092209497957104, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -8135,6 +8204,14 @@ PrefabInstance:
     - target: {fileID: 334092209497957104, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_VersionIndex
       value: 3064
+      objectReference: {fileID: 0}
+    - target: {fileID: 526421661050865103, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 676695415513477027, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 821136496092967551, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Enabled
@@ -8154,7 +8231,11 @@ PrefabInstance:
       objectReference: {fileID: 1360145566}
     - target: {fileID: 1251186677019146801, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1251186677019146801, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 1273259388933601467, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8176,9 +8257,25 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1822210239}
+    - target: {fileID: 1442747482169177422, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1443322300772033175, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1443322300772033175, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 1462440709381851206, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1472825177011344492, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1600204611330604326, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8202,11 +8299,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1648259169087694823, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648259169087694823, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 1745782550134491942, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1745782550134491942, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818022681077581676, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2048456948912783205, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2202710066118622215, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_CullingMask.m_Bits
@@ -8234,7 +8347,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2575421124489975320, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2575421124489975320, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 2778612556505356751, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8248,6 +8365,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 765997867}
+    - target: {fileID: 2893466075220657347, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2973708849526800757, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2988990552927588362, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -8264,13 +8389,33 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1958460920}
+    - target: {fileID: 3223911424772587815, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3235586565980549815, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235586565980549815, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 3286876487687014734, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3374001085311870634, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3550771160433887780, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550771160433887780, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 3611901051215093149, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8310,7 +8455,11 @@ PrefabInstance:
       objectReference: {fileID: 1831033343}
     - target: {fileID: 3924711167145928420, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3924711167145928420, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 3953980900343616050, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8344,21 +8493,45 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 5.5337
       objectReference: {fileID: 0}
+    - target: {fileID: 4263708084492499640, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4331870373918169784, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4331870373918169784, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 4372183193565589018, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4600888612786709268, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4600888612786709268, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 4604616592794094245, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4604616592794094245, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 4775644122552492518, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776705341947751030, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4821672301824232220, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8366,7 +8539,11 @@ PrefabInstance:
       objectReference: {fileID: 1272896942}
     - target: {fileID: 4877270861841198748, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4877270861841198748, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 4894120311161043728, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8380,6 +8557,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 122168316}
+    - target: {fileID: 4950251400591730614, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4956863376682007588, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Name
       value: TruckBlockOut
@@ -8406,7 +8587,23 @@ PrefabInstance:
       objectReference: {fileID: 2057538204}
     - target: {fileID: 5342978976564143618, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5342978976564143618, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 5346261663111916724, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377305912363610399, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5620555237104887022, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5729001311705654942, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8458,7 +8655,11 @@ PrefabInstance:
       objectReference: {fileID: 1092331122}
     - target: {fileID: 6125382730234313117, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6125382730234313117, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 6157207764495526042, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_IsActive
@@ -8482,7 +8683,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6218965309648098937, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6218965309648098937, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 6263957485246598580, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8494,7 +8699,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6560766654403775186, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6560766654403775186, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 6773209005363547120, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6869338218570291035, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
@@ -8510,7 +8723,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6903548728308067875, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6903548728308067875, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 7016991362821623752, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
@@ -8518,7 +8735,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080409194326969848, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080409194326969848, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 7185263035802478791, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8526,7 +8747,11 @@ PrefabInstance:
       objectReference: {fileID: 1900697371}
     - target: {fileID: 7246949763582101455, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246949763582101455, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 7299292108327021043, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8544,9 +8769,17 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 4.3966
       objectReference: {fileID: 0}
+    - target: {fileID: 7435030796820350614, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7444333135347987494, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7444333135347987494, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 7468408213815315030, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8558,11 +8791,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7906033546216396067, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7906033546216396067, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 7944271345969609789, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7944271345969609789, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 7977069010796790660, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7983290886956306026, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8574,7 +8819,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7991564819977519745, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7991564819977519745, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 7999926920805000867, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8586,15 +8835,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8074938618412030439, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074938618412030439, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 8175879000732718758, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8175879000732718758, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 8276484116138133551, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8276484116138133551, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
       objectReference: {fileID: 0}
     - target: {fileID: 8377522858251240661, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Mesh
@@ -8618,7 +8879,27 @@ PrefabInstance:
       objectReference: {fileID: 126497468}
     - target: {fileID: 8687862505098412343, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: m_Layer
-      value: 16
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8687862505098412343, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: m_TagString
+      value: TruckPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762889617146790806, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8923315543698365814, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8997478249327083540, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9053371655837339477, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: startDestroyed
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -75285,3 +75566,4 @@ SceneRoots:
   - {fileID: 212973541}
   - {fileID: 1652280567}
   - {fileID: 1769357924}
+  - {fileID: 39545141}
