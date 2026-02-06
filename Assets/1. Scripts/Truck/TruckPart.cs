@@ -44,10 +44,8 @@ public class TruckPart : NetworkBehaviour
         
         Interact.OnInteract += HitInteract;
         
-        // S'abonner aux changements de isBroke pour mettre à jour visuellement
         isBroke.OnValueChanged += OnBrokeStateChanged;
         
-        // Initialiser l'état visuel
         UpdateVisuals();
     }
 
@@ -73,7 +71,6 @@ public class TruckPart : NetworkBehaviour
 
     public void TakeDamage(float amount)
     {
-        // Appeler le ServerRpc pour gérer les dégâts
         TakeDamageServerRpc(amount);
     }
 
