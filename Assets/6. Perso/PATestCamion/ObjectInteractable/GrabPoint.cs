@@ -6,6 +6,8 @@ public class GrabPoint : MonoBehaviour
 {
 
     #region Properties
+    
+    public enum HandState {Free, Grab }
     public bool IsFree => _heldItem == null;
     public bool IsNotFree => _heldItem != null;
     public GameObject HeldItem => _heldItem;
@@ -103,6 +105,6 @@ public class GrabPoint : MonoBehaviour
     public bool CanThrow()
         => IsNotFree;
     public bool CanGrab()
-        => IsFree;
+        => HandState.Free == HandState.Free;
     #endregion
 }
