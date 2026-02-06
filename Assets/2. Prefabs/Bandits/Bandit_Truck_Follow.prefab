@@ -1005,7 +1005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1158135261
+  GlobalObjectIdHash: 2269068743
   InScenePlacedSourceGlobalObjectIdHash: 1158135261
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1197,7 +1197,6 @@ GameObject:
   - component: {fileID: 8434589997821328377}
   - component: {fileID: 190399315537617311}
   - component: {fileID: 3482198906709756664}
-  - component: {fileID: 1762349340168198005}
   m_Layer: 15
   m_Name: Turret_base
   m_TagString: Untagged
@@ -1290,7 +1289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154ca578d258914eb15e2218a75014f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BanditTir
-  ShowTopMostFoldoutHeaderGroup: 1
   turretGun: {fileID: 8100457542360563936}
   firePoint: {fileID: 2178149800737986530}
   rotationSpeed: 8
@@ -1303,31 +1301,6 @@ MonoBehaviour:
   bulletVisualPrefab: {fileID: 8243927357346351360, guid: ec397038f9f592141a17b50b21bb8ecc, type: 3}
   bulletVisualSpeed: 120
   damage: 10
---- !u!114 &1762349340168198005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7934255063006774804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 0
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &8639841333092637422
 GameObject:
   m_ObjectHideFlags: 0

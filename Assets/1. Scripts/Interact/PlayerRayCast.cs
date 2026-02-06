@@ -16,7 +16,7 @@ public class PlayerRayCast : NetworkBehaviour
     {
         if (!IsOwner) return;
         
-        if(GetComponent<FPSControllerMulti>().MyCamera() != null)
+        if(GetComponent<FPSControllerMulti>().MyCamera() == null)
             return;
         
         RaycastHit hit;
