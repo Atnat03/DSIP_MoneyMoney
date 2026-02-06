@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-public class PlayerRayCast : FPSControllerMulti
+public class PlayerRayCast : MonoBehaviour
 {
     public UIController uiController;
-
+//
     private void Start()
     {
         uiController = GameObject.Find("Canvas UI")?.GetComponent<UIController>();
@@ -13,7 +13,7 @@ public class PlayerRayCast : FPSControllerMulti
     private void Update()
     {
         RaycastHit hit;
-        Ray ray = new Ray(transform.position, MyCamera().transform.forward);
+        Ray ray = new Ray(transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward);
         Debug.DrawRay(transform.position, gameObject.transform.forward, Color.green);
         
         if (Physics.Raycast(ray, out hit))
