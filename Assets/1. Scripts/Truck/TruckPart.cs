@@ -29,6 +29,19 @@ public class TruckPart : MonoBehaviour
         if (startDestroyed)
             Break();
     }
+    
+    private void OnEnable()
+    {
+        Interact.OnInteract += HitInteract;
+    }
+
+    private void OnDisable()
+    {
+        Interact.OnInteract -= HitInteract;
+    }
+    
+    
+    
 
     #region Damage
 
@@ -78,6 +91,16 @@ public class TruckPart : MonoBehaviour
 
     #region Repair
 
+    private void HitInteract(GameObject obj,  GameObject player)
+    {
+        Debug.Log("Hit interact");
+        if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
+        {
+            Repair();
+        }
+    }
+    
+    
     public void Repair()
     {
         // Réactive la partie originale
@@ -90,6 +113,6 @@ public class TruckPart : MonoBehaviour
             Destroy(detachedInstance);
         }
     }
-
+    
     #endregion
 }
