@@ -9,10 +9,10 @@ using UnityEngine;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 
-public class TestRelay : MonoBehaviour
+public class Relay : MonoBehaviour
 {
     public static string LastJoinCode;
-    public static TestRelay instance;
+    public static Relay instance;
     private bool isSigningIn = false;
     public float timerToError = 20;
 

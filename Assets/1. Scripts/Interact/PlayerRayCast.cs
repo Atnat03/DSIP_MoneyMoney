@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerRayCast : MonoBehaviour
+public class PlayerRayCast : FPSControllerMulti
 {
     public UIController uiController;
 
@@ -13,7 +13,7 @@ public class PlayerRayCast : MonoBehaviour
     private void Update()
     {
         RaycastHit hit;
-        Ray ray = new Ray(transform.position, gameObject.transform.forward);
+        Ray ray = new Ray(transform.position, MyCamera().transform.forward);
         Debug.DrawRay(transform.position, gameObject.transform.forward, Color.green);
         
         if (Physics.Raycast(ray, out hit))
