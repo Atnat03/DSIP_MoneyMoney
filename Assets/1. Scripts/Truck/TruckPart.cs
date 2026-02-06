@@ -23,6 +23,8 @@ public class TruckPart : MonoBehaviour
 
     public bool lifeMode;
 
+    public bool isBroke;
+
     private void Start()
     {
         currentHealth = maxHealth;
