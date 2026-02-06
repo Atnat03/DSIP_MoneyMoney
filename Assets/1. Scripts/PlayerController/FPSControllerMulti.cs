@@ -132,6 +132,8 @@ public class FPSControllerMulti : NetworkBehaviour
             }
         }
 
+        canReload = CheckCanReload();
+
         if (Input.GetKeyUp(KeyCode.E) && canReload)
         {
             print("Reload");
@@ -162,6 +164,11 @@ public class FPSControllerMulti : NetworkBehaviour
         }
     }
 
+    bool CheckCanReload()
+    {
+        return Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload;
+    }
+    
     void HandleCameraInput()
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
@@ -359,11 +366,6 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             canEnterInTruck = true;
         }
-        
-        if (other.transform.CompareTag("ReloadStation"))
-        {
-            canReload = true;
-        }
     }
     
     public void OnTriggerExit(Collider other)
@@ -371,11 +373,6 @@ public class FPSControllerMulti : NetworkBehaviour
         if (other.transform.CompareTag("PorteConducteur"))
         {
             canEnterInTruck = false;
-        }
-        
-        if (other.transform.CompareTag("ReloadStation"))
-        {
-            canReload = false;
         }
     }
 }

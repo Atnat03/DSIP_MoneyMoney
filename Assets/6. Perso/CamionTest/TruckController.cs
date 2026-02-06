@@ -51,6 +51,9 @@ public class TruckController : NetworkBehaviour
     private TruckInteraction truckInteraction;
     
     private readonly HashSet<NetworkObject> trackedPassengers = new();
+
+    public Transform reload;
+    public float raduisToReload = 2f;
     
     private void Awake()
     {
@@ -298,5 +301,8 @@ public class TruckController : NetworkBehaviour
         Gizmos.matrix = Matrix4x4.TRS(worldCenter, transform.rotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, boundsSize);
         Gizmos.matrix = oldMatrix;
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(reload.position, raduisToReload);
     }
 }
