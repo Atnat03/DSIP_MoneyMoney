@@ -368,7 +368,7 @@ public class FPSControllerMulti : NetworkBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.transform.CompareTag("PorteConducteur") && !isInTruck)
+        if (other.transform.CompareTag("PorteConducteur") && !isInTruck && TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false)
         {
             canEnterInTruck = true;
         }
