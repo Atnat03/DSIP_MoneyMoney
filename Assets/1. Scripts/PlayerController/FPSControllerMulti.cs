@@ -1,4 +1,5 @@
 using System;
+using Shooting;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class FPSControllerMulti : NetworkBehaviour
     
     [Header("Move Settings")]
     [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float sprintSpeed = 12f;
+    private float speed;
     [SerializeField, Range(0.1f, 10)] float mouseSensibility;
     [SerializeField] Vector2 verticalLimit = new Vector2(-80, 80);
     [SerializeField] float cameraSmoothFollow = 15f;
@@ -54,6 +57,9 @@ public class FPSControllerMulti : NetworkBehaviour
 
     public GameObject textGoInCamion;
     public LayerMask maskCameraPlayer;
+
+    private bool canReload = false;
+    ShooterComponent shooter;
     
     public Camera MyCamera()
     {
@@ -83,6 +89,10 @@ public class FPSControllerMulti : NetworkBehaviour
 
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
+        
+        speed = moveSpeed;
+        
+        shooter = gameObject.GetComponent<ShooterComponent>();
     }
 
     private Vector3 lastTruckPosition;
@@ -97,6 +107,14 @@ public class FPSControllerMulti : NetworkBehaviour
         textGoInCamion.SetActive(canEnterInTruck);
         
         print(controller.enabled);
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = sprintSpeed;
+        }else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = moveSpeed;
+        }
         
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
         {
@@ -110,6 +128,12 @@ public class FPSControllerMulti : NetworkBehaviour
                 print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
             }
+        }
+
+        if (Input.GetKeyUp(KeyCode.E) && canReload)
+        {
+            shooter.Reload();
+            canReload = false;
         }
 
         if (isDriver && isInTruck)
@@ -176,7 +200,7 @@ public class FPSControllerMulti : NetworkBehaviour
 
         Vector3 move = Vector3.zero;
         Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        move = transform.TransformDirection(localMove) * moveSpeed;
+        move = transform.TransformDirection(localMove) * speed;
         move.y = verticalVelocity;
         
         controller.enabled = true;             
@@ -332,6 +356,11 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             canEnterInTruck = true;
         }
+        
+        if (other.transform.CompareTag("ReloadStation"))
+        {
+            canReload = false;
+        }
     }
     
     public void OnTriggerExit(Collider other)
@@ -339,6 +368,11 @@ public class FPSControllerMulti : NetworkBehaviour
         if (other.transform.CompareTag("PorteConducteur"))
         {
             canEnterInTruck = false;
+        }
+        
+        if (other.transform.CompareTag("ReloadStation"))
+        {
+            canReload = false;
         }
     }
 }
