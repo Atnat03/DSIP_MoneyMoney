@@ -53,6 +53,7 @@ public class FPSControllerMulti : NetworkBehaviour
     public GameObject ui;
 
     public GameObject textGoInCamion;
+    public LayerMask maskCameraPlayer;
     
     public Camera MyCamera()
     {
@@ -70,6 +71,7 @@ public class FPSControllerMulti : NetworkBehaviour
         
         GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
+        cam.cullingMask = maskCameraPlayer;
         cam.fieldOfView = 60f;
         cameraTransform = camObj.transform;
         myCamera = camObj.GetComponent<Camera>();

@@ -146,7 +146,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2899147332134596010}
-  - component: {fileID: 7018278878171929393}
   m_Layer: 5
   m_Name: AmmoCount
   m_TagString: Untagged
@@ -175,23 +174,6 @@ RectTransform:
   m_AnchoredPosition: {x: -50, y: 50}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 1, y: 0}
---- !u!114 &7018278878171929393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 680446222835427465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a43095873da06bb429192afcc3491250, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIShooterInfo
-  _markup: XX
-  _ammoCount: {fileID: 8399851883660890824}
-  _ammoCountText: 'Ammo : XX'
-  _maxAmmoCount: {fileID: 4817887473565681834}
-  _maxAmmoCountText: / XX
 --- !u!1 &1260665804959917281
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +833,7 @@ MonoBehaviour:
   FPSControllerMulti: {fileID: 5307100726240828314}
   ShooterComponent: {fileID: 3666952883803456061}
   GrabPoint: {fileID: 3972338088994594654}
+  HealthComponent: {fileID: 0}
 --- !u!114 &5307100726240828314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -889,6 +872,9 @@ MonoBehaviour:
   isDriver: 0
   ui: {fileID: 4497872479382743780}
   textGoInCamion: {fileID: 670986296484009593}
+  maskCameraPlayer:
+    serializedVersion: 2
+    m_Bits: 254935
   controller: {fileID: 6002100493801107169}
   canEnterInTruck: 0
 --- !u!136 &2076102677452798421
