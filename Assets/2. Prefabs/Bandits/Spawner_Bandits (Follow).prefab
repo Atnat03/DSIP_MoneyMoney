@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 2308993927212530474}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -9.577}
+  m_LocalPosition: {x: -0.73, y: 0, z: -1.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 7387080331772909286}
   - component: {fileID: 3370597531089713641}
   - component: {fileID: 7987580231246659773}
+  - component: {fileID: 1307024902982205217}
   - component: {fileID: 7068726638302716598}
   m_Layer: 0
   m_Name: Spawner_Bandits (Follow)
@@ -143,8 +144,33 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 6.5745797, y: 11.8766775, z: 14.747881}
+  m_Center: {x: -26.39104, y: 5.438339, z: -6.8739405}
+--- !u!114 &1307024902982205217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4858050442001451275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 4169801880
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &7068726638302716598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,10 +183,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4798672651c845f4f80dfb22ac455864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerBandit
+  ShowTopMostFoldoutHeaderGroup: 1
   spawnPoint: {fileID: 8030024271000991117}
   prefabBandit: {fileID: 6959080630503955993, guid: a95e9b7d8f7a6b1409cbf59fa2e00115, type: 3}
   hasSpawned: 0
-  relativePos: 1
+  relativePos: 0
   isBarrage: 0
   spawnPos: {fileID: 0}
   targetPos: {fileID: 0}
