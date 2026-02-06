@@ -26,10 +26,10 @@ public class ui_Test : MonoBehaviour
     {
         try
         {
-            await TestRelay.instance.CreateRelay();
+            await Relay.instance.CreateRelay();
             
             joinCodeText.gameObject.SetActive(true);
-            joinCodeText.text = TestRelay.LastJoinCode;
+            joinCodeText.text = Relay.LastJoinCode;
             
         }
         catch (Exception e)
@@ -49,7 +49,7 @@ public class ui_Test : MonoBehaviour
                 return;
             }
             Debug.Log("Bouton Client cliqué, appel à JoinRelay...");
-            await TestRelay.instance.JoinRelay(joinCode);
+            await Relay.instance.JoinRelay(joinCode);
             Debug.Log("JoinRelay terminé (succès ou échec ? Vérifie les logs ci-dessus).");
         }
         catch (Exception e)
