@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2345542552980305420}
   - component: {fileID: 3541981121415009480}
-  - component: {fileID: 2309782260397855675}
+  - component: {fileID: 4368100999051294575}
   m_Layer: 0
   m_Name: P_ReloadStation
   m_TagString: ReloadStation
@@ -168,57 +168,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &2309782260397855675
-MonoBehaviour:
+--- !u!54 &4368100999051294575
+Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6770843772758168170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11fc88278a656ca4ba0b345e92ef88aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ReloadStation
-  _interactKey: 101
-  _reachDistance: 4
-  _enableSeethrough: 0
-  _onInteract:
-    m_PersistentCalls:
-      m_Calls: []
-  _onLookedAt:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6448667061914663347}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  _onNotLookedAt:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6448667061914663347}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _onReload:
-    m_PersistentCalls:
-      m_Calls: []
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &4079602027263431894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -320,11 +296,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
---- !u!1 &6448667061914663347 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7053741937067519333, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
-  m_PrefabInstance: {fileID: 4079602027263431894}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8696548678733382048 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4624616961086313846, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}

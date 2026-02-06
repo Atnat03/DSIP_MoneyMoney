@@ -56,10 +56,13 @@ public class FPSControllerMulti : NetworkBehaviour
     public GameObject ui;
 
     public GameObject textGoInCamion;
+    public GameObject textReload;
     public LayerMask maskCameraPlayer;
 
     private bool canReload = false;
     ShooterComponent shooter;
+    
+    public GameObject meshRenderer;
     
     public Camera MyCamera()
     {
@@ -105,9 +108,8 @@ public class FPSControllerMulti : NetworkBehaviour
         if (!IsOwner) return;
         
         textGoInCamion.SetActive(canEnterInTruck);
+        textReload.SetActive(canReload);
         
-        print(controller.enabled);
-
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed = sprintSpeed;
@@ -132,6 +134,7 @@ public class FPSControllerMulti : NetworkBehaviour
 
         if (Input.GetKeyUp(KeyCode.E) && canReload)
         {
+            print("Reload");
             shooter.Reload();
             canReload = false;
         }
@@ -359,7 +362,7 @@ public class FPSControllerMulti : NetworkBehaviour
         
         if (other.transform.CompareTag("ReloadStation"))
         {
-            canReload = false;
+            canReload = true;
         }
     }
     
