@@ -32,8 +32,7 @@ public class GrabbableObject : MonoBehaviour
 
         if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
         {
-
-            gameObject.GetComponent<GrabPoint>().TryGrab(player);
+            player.GetComponent<GrabPoint>().TryGrab(obj);
         }
     }
     
