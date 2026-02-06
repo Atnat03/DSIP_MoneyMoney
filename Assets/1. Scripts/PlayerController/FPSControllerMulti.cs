@@ -78,8 +78,6 @@ public class FPSControllerMulti : NetworkBehaviour
             return;
         }
         
-        meshRenderer.gameObject.SetActive(false);
-        
         GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
         cam.cullingMask = maskCameraPlayer;
