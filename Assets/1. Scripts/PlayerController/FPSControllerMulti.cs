@@ -73,10 +73,12 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         if (!IsOwner)
         {
-            transform.GetChild(1).GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
+            //transform.GetChild(1).GetComponent<MeshRenderer>().material.color = Random.ColorHSV();
             ui.SetActive(false);
             return;
         }
+        
+        meshRenderer.gameObject.SetActive(false);
         
         GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
