@@ -94,12 +94,6 @@ public class TruckPart : MonoBehaviour
 
         isBroke = true;
 
-        UpdateBreakPartServerRpc();      
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void UpdateBreakPartServerRpc()
-    {
         UpdateBreakPartClientRpc();
     }
 
