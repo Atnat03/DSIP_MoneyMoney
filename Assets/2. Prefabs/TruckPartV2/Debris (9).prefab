@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 857470417288647235}
   - component: {fileID: 6869609188086269809}
   - component: {fileID: -9199731556564991683}
-  - component: {fileID: -4277402333150962131}
+  - component: {fileID: -177557146693375530}
   m_Layer: 17
   m_Name: Debris (9)
   m_TagString: Untagged
@@ -126,16 +126,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719d1eee2d44fe041bfeebcd6393672e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TruckPart
+  ShowTopMostFoldoutHeaderGroup: 1
   maxHealth: 50
   detachedPrefab: {fileID: 1296893049900858096, guid: f15a4b767984b02468e47dda4c5d7a54, type: 3}
   ejectForce: 5
   ejectUpwardForce: 2
   startDestroyed: 0
-  currentHealth: 0
   mult: 1
   lifeMode: 0
-  isBroke: 0
---- !u!114 &-4277402333150962131
+  isBroke:
+    m_InternalValue: 0
+--- !u!114 &-177557146693375530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
