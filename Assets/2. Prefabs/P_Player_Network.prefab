@@ -728,8 +728,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6716381766532528946}
-  - component: {fileID: 3169066338042641253}
   - component: {fileID: 5943665473993415608}
+  - component: {fileID: 3169066338042641253}
   - component: {fileID: 3666952883803456061}
   - component: {fileID: 6267907623663290062}
   - component: {fileID: 5910051533844452653}
@@ -764,19 +764,6 @@ Transform:
   - {fileID: 4696590037447686293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3169066338042641253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200783157656878878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99460d9003c371940abf2d5a928e0e7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerRayCast
-  uiController: {fileID: 0}
 --- !u!114 &5943665473993415608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -802,6 +789,22 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &3169066338042641253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200783157656878878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99460d9003c371940abf2d5a928e0e7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRayCast
+  ShowTopMostFoldoutHeaderGroup: 1
+  uiController: {fileID: 0}
+  durationRepair: 3
+  circleCD: {fileID: 0}
 --- !u!114 &3666952883803456061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -944,6 +947,7 @@ MonoBehaviour:
   meshRenderer: {fileID: 2067222194839518774}
   controller: {fileID: 6002100493801107169}
   canEnterInTruck: 0
+  isFreeze: 0
 --- !u!136 &2076102677452798421
 CapsuleCollider:
   m_ObjectHideFlags: 0

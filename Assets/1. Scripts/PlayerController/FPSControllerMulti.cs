@@ -176,52 +176,60 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         return Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload;
     }
+
+    public bool isFreeze;
     
     void HandleCameraInput()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+        if (!isFreeze)
+        {
+            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
+            float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
 
-        yaw += mouseX;
-        pitch -= mouseY;
-        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+            yaw += mouseX;
+            pitch -= mouseY;
+            pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+        }
     }
 
     void HandleMovement()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-
-        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
-        
-        yaw += mouseX;
-        pitch -= mouseY;
-        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
-        
-        if (controller.isGrounded)
+        if (!isFreeze)
         {
-            if (verticalVelocity < 0)
-                verticalVelocity = -2f;
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
+            float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+
+            yaw += mouseX;
+            pitch -= mouseY;
+            pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+
+            if (controller.isGrounded)
             {
-                verticalVelocity = jumpForce;
-            }
-        }
-        else
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
+                if (verticalVelocity < 0)
+                    verticalVelocity = -2f;
 
-        Vector3 move = Vector3.zero;
-        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        move = transform.TransformDirection(localMove) * speed;
-        move.y = verticalVelocity;
-        
-        controller.enabled = true;             
-        controller.Move(move * Time.deltaTime);
-        controller.enabled = false;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    verticalVelocity = jumpForce;
+                }
+            }
+            else
+            {
+                verticalVelocity += gravity * Time.deltaTime;
+            }
+
+            Vector3 move = Vector3.zero;
+            Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+            move = transform.TransformDirection(localMove) * speed;
+            move.y = verticalVelocity;
+
+            controller.enabled = true;
+            controller.Move(move * Time.deltaTime);
+            controller.enabled = false;
+        }
     }
 
     void LateUpdate()
