@@ -20,6 +20,8 @@ public class TruckPart : MonoBehaviour
 
     public float mult;
 
+    public bool lifeMode;
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -32,14 +34,22 @@ public class TruckPart : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        if (currentHealth <= 0) return;
-
-        currentHealth -= amount;
-
-        if (currentHealth <= 0)
+        if (!lifeMode)
         {
-            Break();
+            if (currentHealth <= 0) return;
+
+            currentHealth -= amount;
+
+            if (currentHealth <= 0)
+            {
+                Break();
+            }
         }
+        else
+        {
+            TruckLife.instance.HandleShot(amount);
+        }
+       
     }
 
     #endregion

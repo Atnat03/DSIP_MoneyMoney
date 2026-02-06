@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Shooting;
 
-public class Bandit_Health : NetworkBehaviour, ITarget
+public class TruckLife : NetworkBehaviour
 {
     [Header("Health")]
     public float maxHealth = 100f;
+
+    public static TruckLife instance;
 
     private NetworkVariable<float> currentHealth = new NetworkVariable<float>(
         value: 100f,
@@ -19,13 +21,13 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     [Header("UI")]
     public Image healthBar;
 
-    public Action<BulletInfo> OnShot { get; private set; }
+
     public Collider Collider { get; private set; }
 
     private void Awake()
     {
         Collider = GetComponent<Collider>();
-        OnShot = HandleShot;
+        instance = this;
     }
 
     public override void OnNetworkSpawn()
@@ -50,12 +52,12 @@ public class Bandit_Health : NetworkBehaviour, ITarget
             Die();
     }
     
-    private void HandleShot(BulletInfo bullet)
+    public void HandleShot(float dmg)
     {
         if (IsServer)
-            ApplyDamage(bullet.Damage);
+            ApplyDamage(dmg);
         else
-            TakeDamageServerRpc(bullet.Damage);
+            TakeDamageServerRpc(dmg);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -79,7 +81,6 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     private void Die()
     {
         if (TryGetComponent(out BanditVehicleAI ai))
-            Destroy(ai.gameObject);    
-        //ai.StopVehicle();
+            ai.StopVehicle();
     }
 }
