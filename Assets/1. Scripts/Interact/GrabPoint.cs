@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,16 +9,15 @@ public class GrabPoint : MonoBehaviour
     #region Properties
     
     public enum HandState {Free, Grab }
-    public bool IsFree => _heldItem == null;
-    public bool IsNotFree => _heldItem != null;
-    public GameObject HeldItem => _heldItem;
-
+    private HandState handState;
+    private HandState freeHandState = HandState.Free;
+    private HandState grabHandState = HandState.Grab;
 
     #endregion
 
     #region Fields
     [SerializeField] private KeyCode _throw = KeyCode.Mouse1;
-    [SerializeField] private float _throwStrength = 1f;
+    [SerializeField] private float _throwStrength = 1000f;
 
     [SerializeField] private UnityEvent _onGrab;
     [SerializeField] private UnityEvent _onThrow;
@@ -27,8 +27,9 @@ public class GrabPoint : MonoBehaviour
 
     #endregion
 
+    
     #region Methods
-
+    
     private void Update()
     {
         TryThrow();
@@ -42,9 +43,9 @@ public class GrabPoint : MonoBehaviour
     }
     private void Grab(GameObject other)
     { 
-        transform.SetParent(other.transform);
-        transform.localPosition = other.transform.localPosition;
-        transform.localRotation = other.transform.localRotation;
+        other.transform.SetParent(transform);
+        other.transform.localPosition = new Vector3(0, 0, 0);
+        other.transform.localRotation = new Quaternion(0, 0, 0, 0);
 
         _heldItem = other;
 
@@ -55,6 +56,7 @@ public class GrabPoint : MonoBehaviour
 
         if (_enableCallbacks)
             _onGrab.Invoke();
+        handState = HandState.Grab;
     }
 
     public bool TryThrow()
@@ -83,28 +85,50 @@ public class GrabPoint : MonoBehaviour
 
     private void Throw()
     {
-        Vector3 direction = Camera.main.transform.forward;
+        if(GetComponent<FPSControllerMulti>().MyCamera() == null)
+            return;
+        
+        Vector3 direction = GetComponent<FPSControllerMulti>().MyCamera().transform.forward;
         float force = _throwStrength;
 
         _heldItem.transform.SetParent(null);
+        _heldItem.transform.position += direction * 0.2f;
 
+        if (_heldItem.TryGetComponent(out SphereCollider sc))
+            sc.isTrigger = false;
         if (_heldItem.TryGetComponent(out Rigidbody rb))
         {
             rb.isKinematic = false;
-            rb.AddForce(direction * force, ForceMode.VelocityChange);
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.AddForce(direction * force, ForceMode.Impulse);
         }
-        if (_heldItem.TryGetComponent(out SphereCollider sc))
-            sc.isTrigger = false;
+
 
         _heldItem = null;
 
         if (_enableCallbacks)
             _onGrab.Invoke();
+        handState = HandState.Free;
     }
 
     public bool CanThrow()
-        => IsNotFree;
+    {
+        if(handState == grabHandState)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     public bool CanGrab()
-        => HandState.Free == HandState.Free;
+    {
+        if(handState == freeHandState)
+        {
+            return true;
+        }
+        return false;
+    }
     #endregion
 }

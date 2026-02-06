@@ -110,7 +110,6 @@ public class TruckPart : MonoBehaviour
 
     private void HitInteract(GameObject obj,  GameObject player)
     {
-        Debug.Log("Hit interact");
         if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
         {
             Repair();
