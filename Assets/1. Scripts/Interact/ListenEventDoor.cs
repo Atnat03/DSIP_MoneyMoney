@@ -1,23 +1,22 @@
-using System;
-using Shooting;
+using Unity.Netcode;
 using UnityEngine;
+using Shooting;
+using Unity.Netcode.Components;
 
-public class ListenEventDoor : MonoBehaviour
+public class ListenEventDoor : NetworkBehaviour
 {
-    Animator animator;
-    private bool isInteracting;
-   private void Start()
+    private Animator animator;
+    private NetworkAnimator networkAnimator;
+    
+    private NetworkVariable<bool> isOpen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    private void Start()
     {
         animator = GetComponent<Animator>();
-    }
+        networkAnimator = GetComponent<NetworkAnimator>();
 
-   /* public override void Interact(Transform playerTransform, bool enableCallbacks = true)
-    {
-        base.Interact(playerTransform, enableCallbacks);
-        Debug.Log("Interact");
-        
-        HitInteract();
-    }*/
+        isOpen.OnValueChanged += OnDoorStateChanged;
+    }
 
     private void OnEnable()
     {
@@ -27,23 +26,36 @@ public class ListenEventDoor : MonoBehaviour
     private void OnDisable()
     {
         Interact.OnInteract -= HitInteract;
+        isOpen.OnValueChanged -= OnDoorStateChanged;
     }
 
-    private void HitInteract(GameObject obj,  GameObject player)
+    private void HitInteract(GameObject obj, GameObject player)
     {
-        Debug.Log("Hit interact");
-        if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
+        if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
+
+        if (IsServer)
         {
-            if (isInteracting)
-            {
-                animator.SetBool("Open", false);
-                isInteracting = false;
-            }
-            else
-            {
-                animator.SetBool("Open", true);
-                isInteracting = true;
-            }
+            ToggleDoor();
         }
+        else
+        {
+            ToggleDoorServerRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ToggleDoorServerRpc()
+    {
+        ToggleDoor();
+    }
+
+    private void ToggleDoor()
+    {
+        isOpen.Value = !isOpen.Value;
+    }
+
+    private void OnDoorStateChanged(bool previousValue, bool newValue)
+    {
+        animator.SetBool("Open", newValue);
     }
 }

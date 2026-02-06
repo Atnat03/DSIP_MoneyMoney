@@ -79,7 +79,10 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     private void Die()
     {
         if (TryGetComponent(out BanditVehicleAI ai))
-            Destroy(ai.gameObject);    
+        {
+            GetComponent<NetworkObject>().Despawn();
+            Destroy(ai.gameObject);
+        }
         //ai.StopVehicle();
     }
 }
