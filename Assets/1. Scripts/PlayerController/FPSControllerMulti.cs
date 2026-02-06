@@ -4,12 +4,14 @@ using Unity.Netcode.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[DefaultExecutionOrder(-1)]
 public class FPSControllerMulti : NetworkBehaviour
 {
     [Header("References")]
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
     Transform cameraTransform;
+    [SerializeField] Camera myCamera;
     [SerializeField] private CapsuleCollider capsule;
     
     [Header("Move Settings")]
@@ -51,6 +53,12 @@ public class FPSControllerMulti : NetworkBehaviour
     public GameObject ui;
 
     public GameObject textGoInCamion;
+    public LayerMask maskCameraPlayer;
+    
+    public Camera MyCamera()
+    {
+        return myCamera;
+    }
     
     public override void OnNetworkSpawn()
     {
@@ -63,8 +71,10 @@ public class FPSControllerMulti : NetworkBehaviour
         
         GameObject camObj = new GameObject("Camera of " +  gameObject.name);
         Camera cam = camObj.AddComponent<Camera>();
+        cam.cullingMask = maskCameraPlayer;
         cam.fieldOfView = 60f;
         cameraTransform = camObj.transform;
+        myCamera = camObj.GetComponent<Camera>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -107,6 +117,12 @@ public class FPSControllerMulti : NetworkBehaviour
             if (TruckController.instance != null)
             {
                 transform.position = TruckController.instance.driverPos.position;
+                
+                float h = Input.GetAxis("Horizontal");
+                float v = Input.GetAxis("Vertical");
+                bool brake = Input.GetKey(KeyCode.Space);
+                bool horn = Input.GetKeyDown(KeyCode.H);
+                TruckController.instance.SendInputsServerRpc(h, v, brake, horn);
             }
             
             HandleCameraInput();
@@ -136,11 +152,13 @@ public class FPSControllerMulti : NetworkBehaviour
 
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+        
+        Debug.Log(horizontalInput + " / " + verticalInput);
 
         yaw += mouseX;
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
-
+        
         if (controller.isGrounded)
         {
             if (verticalVelocity < 0)
@@ -252,7 +270,7 @@ public class FPSControllerMulti : NetworkBehaviour
                 netObj.TrySetParent((Transform)null);
             }
             
-            controller.enabled = false;
+            controller.enabled = true;
         }
     }
     

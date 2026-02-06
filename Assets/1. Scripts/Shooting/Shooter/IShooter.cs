@@ -12,5 +12,4 @@ namespace Shooting
         public Action<ITarget> OnTargetHit { get; set; }
         public bool TryShoot(Vector3 Pos, Vector3 Dir, out List<BulletInfo> bulletInfos);
     }
-
 }

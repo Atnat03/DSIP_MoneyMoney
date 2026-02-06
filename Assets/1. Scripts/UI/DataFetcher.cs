@@ -5,6 +5,8 @@ public enum Data
     None,
     AmmoCount,
     MaxAmmoCount,
+    CurrentHealth,
+    MaxHealth,
 }
 
 public class DataFetcher
@@ -16,6 +18,7 @@ public class DataFetcher
             case Data.None: return "";
             case Data.AmmoCount: return Reference.GetObject<PlayerInterface>()?.ShooterComponent.AmmoCount.ToString();
             case Data.MaxAmmoCount: return Reference.GetObject<PlayerInterface>()?.ShooterComponent.MaxAmmoCount.ToString();
+            case Data.MaxHealth: return Reference.GetObject<PlayerInterface>()?.HealthComponent.MaxHealth.ToString();
         }
         return "";
     }

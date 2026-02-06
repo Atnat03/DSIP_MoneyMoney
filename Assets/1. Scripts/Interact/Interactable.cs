@@ -31,15 +31,11 @@ public class Interactable : MonoBehaviour
     }
     protected virtual void Update()
     {
-        CheckIfLookedAt();
+        //CheckIfLookedAt();
 
-        TryInteract(Reference.GetObject<PlayerInterface>().transform);
+        //TryInteract(Reference.GetObject<PlayerInterface>().transform);
     }
-    /// <summary>
-    /// Specifies wether or not the object is looked at by the player
-    /// </summary>
-    /// <param name="enableCallbacks">Specifies if events should be invoked when the player starts or stops looking at the object</param>
-    /// <returns></returns>
+    
     protected virtual bool CheckIfLookedAt(bool enableCallbacks=true)
     {
         Camera cam = Camera.main;
@@ -110,7 +106,7 @@ public class Interactable : MonoBehaviour
     /// <returns></returns>
     public virtual bool CanInteract(Transform playerTransform)
     {
-        if (!CheckIfLookedAt()) return false;
+        //if (!CheckIfLookedAt()) return false;
         if (!IsReachable(playerTransform)) return false;
         return true;
     }

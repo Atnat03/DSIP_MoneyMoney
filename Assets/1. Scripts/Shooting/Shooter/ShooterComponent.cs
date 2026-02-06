@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UI;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
@@ -9,7 +10,7 @@ using UnityEngine.Rendering;
 namespace Shooting
 {
 
-    public class ShooterComponent : MonoBehaviour
+    public class ShooterComponent : NetworkBehaviour
     {
         #region Properties
         public int AmmoCount => _currentAmmo;
@@ -28,7 +29,7 @@ namespace Shooting
         IShooter _shooter = new RaycastShooter();
 
         [Header("Parameters")]
-        [SerializeField] private int _maxAmmo = 10;
+        [SerializeField] private int _maxAmmo = 100000;
 
         [Header("Events")]
         [SerializeField] private UnityEvent _onShoot;
@@ -38,20 +39,25 @@ namespace Shooting
         private int _currentAmmo;
         private int _previousAmmoCount;
         private bool _enableCallbacks;
+        private Camera _playerCamera;
         #endregion
 
         #region Methods
-        private void Start()
+        public override void OnNetworkSpawn()
         {
+            if (!IsOwner) return;
+            
             _shooter.OnShoot += OnShoot.Invoke;
             _shooter.OnTargetHit += (target) => OnTargetHit.Invoke(target);
             _shooter.OnTargetHit += _ => OnHit.Invoke();
 
             OnShoot.AddListener(() => EventBus.Invoke("OnPlayerShoot"));
-
+            
             _shooter.OnShoot += MakeTrail;
-
+            
             Reload();
+            
+            print(_currentAmmo);
         }
 
         public void Reload() => _currentAmmo = _maxAmmo;
@@ -60,13 +66,16 @@ namespace Shooting
         {
             if (TryGetComponent(out TrailMaker maker))
             {
-                Camera camera = Camera.main;
+                Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
+                
                 maker.Make(camera.transform.position, camera.transform.forward * MaxDistance);
             }
         }
       
         private void Update()
         {
+            if (!IsOwner) return;
+            
             HandleInputs();
 
             CheckDirty();
@@ -94,7 +103,8 @@ namespace Shooting
                 return false;
             }
 
-            Camera camera = Camera.main;
+            Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
+            
             Vector3 Pos = camera.transform.position;
             Vector3 Dir = camera.transform.forward;
             List<BulletInfo> bullets;
@@ -137,5 +147,4 @@ namespace Shooting
         }
         #endregion
     }
-
 }

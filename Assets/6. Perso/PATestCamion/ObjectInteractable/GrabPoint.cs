@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,7 +32,12 @@ public class GrabPoint : MonoBehaviour
         TryThrow();
     }
 
-    public void Grab(GameObject other)
+    public void TryGrab(GameObject other)
+    {
+        if (!CanGrab()) return;
+        Grab(other);
+    }
+    private void Grab(GameObject other)
     { 
         other.transform.SetParent(transform);
         other.transform.localPosition = transform.localPosition;
@@ -52,11 +58,26 @@ public class GrabPoint : MonoBehaviour
     {
         if (!CanThrow()) return false;
 
-        if (!Input.GetKey(_throw)) return false;
+        if (!Input.GetKeyDown(_throw)) return false;
 
         Throw();
         return true;
     }
+
+    /// <summary>
+    /// Scans the children objects to find a grabbable object.
+    /// If one is found, it is considered as owned by this grabpoint.
+    /// Otherwise, the grabpoint considers itself empty
+    /// </summary>
+    private void DetectHeldObject()
+    {
+        var comp = GetComponentInChildren<GrabbableObject>();
+        if (comp != null)
+            _heldItem = comp.gameObject;
+        else
+            _heldItem = null;
+    }
+
     private void Throw()
     {
         Vector3 direction = Camera.main.transform.forward;
@@ -79,8 +100,8 @@ public class GrabPoint : MonoBehaviour
     }
 
     public bool CanThrow()
-    {
-        return IsNotFree;
-    }
+        => IsNotFree;
+    public bool CanGrab()
+        => IsFree;
     #endregion
 }

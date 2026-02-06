@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3354500684193182291}
   - component: {fileID: 3177613996813504923}
   - component: {fileID: 7749465097073272698}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: Blanc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 7810745672519913357}
   - component: {fileID: 32004259476804744}
   - component: {fileID: 1438867974091604824}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: Fond
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,6 @@ GameObject:
   - component: {fileID: 6784337852270672780}
   - component: {fileID: 7037470177869387809}
   - component: {fileID: 6772127082776913307}
-  - component: {fileID: 2832084935472073894}
   m_Layer: 15
   m_Name: Manche
   m_TagString: Untagged
@@ -421,27 +420,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2832084935472073894
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473993854159958187}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3664017778846668908
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +521,6 @@ GameObject:
   - component: {fileID: 8815382567515907461}
   - component: {fileID: 8049284251029377391}
   - component: {fileID: 5793201857428298017}
-  - component: {fileID: 122593901992355889}
   m_Layer: 15
   m_Name: Canon
   m_TagString: Untagged
@@ -624,27 +601,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &122593901992355889
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4336288754653471804}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5036673161382384221
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +704,7 @@ GameObject:
   - component: {fileID: 4648692631921372384}
   - component: {fileID: 6398510990421697452}
   - component: {fileID: 582672426505465266}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -865,7 +821,6 @@ GameObject:
   - component: {fileID: 2753348775928284163}
   - component: {fileID: 8240671209533660325}
   - component: {fileID: 6041357897508628186}
-  - component: {fileID: 4989355625841415031}
   m_Layer: 15
   m_Name: Base
   m_TagString: Untagged
@@ -945,27 +900,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4989355625841415031
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5805772378199954352}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6959080630503955993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,7 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BanditVehicleAI
   truck: {fileID: 0}
-  position: 0
+  position: 1
   sideDistance: 8
   frontBackDistance: 20
   maxSpeedFar: 40
@@ -1030,11 +964,8 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 8192
-  vehicleMask:
-    serializedVersion: 2
-    m_Bits: 16640
   obstacleCheckDistance: 15
-  vehicleAvoidRadius: 10
+  obstacleAvoidStrength: 5
   groundRayDistance: 5
   stopDeceleration: 5
   driftIntensity: 1
@@ -1056,7 +987,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1074,14 +1005,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1158135261
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 1734134831
+  InScenePlacedSourceGlobalObjectIdHash: 1158135261
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
@@ -1145,6 +1076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877fbd9089fb0974b947aaea1bac51f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bandit_Health
+  ShowTopMostFoldoutHeaderGroup: 1
   maxHealth: 20
   healthBar: {fileID: 4189391593949609610}
 --- !u!1 &7175343954216360111
@@ -1158,7 +1090,7 @@ GameObject:
   - component: {fileID: 8819913283507397799}
   - component: {fileID: 4166019630135598642}
   - component: {fileID: 4189391593949609610}
-  m_Layer: 5
+  m_Layer: 15
   m_Name: Rouge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1264,7 +1196,6 @@ GameObject:
   - component: {fileID: 8100457542360563936}
   - component: {fileID: 8434589997821328377}
   - component: {fileID: 190399315537617311}
-  - component: {fileID: 2952781941758208349}
   - component: {fileID: 3482198906709756664}
   m_Layer: 15
   m_Name: Turret_base
@@ -1346,27 +1277,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2952781941758208349
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7934255063006774804}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3482198906709756664
 MonoBehaviour:
   m_ObjectHideFlags: 0
