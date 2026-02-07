@@ -1,9 +1,12 @@
 using System;
+using System.Numerics;
 using Shooting;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
+using Vector2 = UnityEngine.Vector2;
 
 [DefaultExecutionOrder(-1)]
 public class FPSControllerMulti : NetworkBehaviour
@@ -31,7 +34,14 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField] bool isGrounded = false;
     [SerializeField] LayerMask groundLayer;
     private float verticalVelocity;
-    
+
+    [Header("Headbob Settings")]
+    [SerializeField, Range(0, 0.2f)] float _amplitude = 0.05f;
+    [SerializeField, Range(0, 30)] float frequency = 10f;
+    [SerializeField] private Vector3 startPos;
+    [SerializeField, Range(0, 2f)] float sprintAmplitudeMultiplier = 1.5f;
+    [SerializeField, Range(0, 2f)] float sprintFrequencyMultiplier = 1.5f;
+
     [Header("Truck Physics")]
     [SerializeField] float truckDamping = 5f;
     
@@ -86,15 +96,9 @@ public class FPSControllerMulti : NetworkBehaviour
             ui.SetActive(false);
             return;
         }
-        
-        /* GameObject camObj = new GameObject("Camera of " +  gameObject.name);
-        Camera cam = camObj.AddComponent<Camera>();
-        cam.cullingMask = maskCameraPlayer;
-        cam.fieldOfView = 60f;
-        cameraTransform = camObj.transform;
-        myCamera = camObj.GetComponent<Camera>();*/
-       
+               
        myCamera.cullingMask = maskCameraPlayer;
+       startPos = cameraTransform.localPosition;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -195,6 +199,32 @@ public class FPSControllerMulti : NetworkBehaviour
         }
     }
 
+    private void HandleHeadbob()
+    {
+        if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
+        {
+            cameraTransform.localPosition = Vector3.Lerp(
+                cameraTransform.localPosition,
+                startPos,
+                Time.deltaTime
+            );
+            return;
+        }
+
+        // Sprint ?
+        bool isSprinting = Input.GetKey(KeyCode.LeftShift);
+
+        float amp = _amplitude * (isSprinting ? sprintAmplitudeMultiplier : 1f);
+        float freq = frequency * (isSprinting ? sprintFrequencyMultiplier : 1f);
+
+        Vector3 bobOffset;
+        bobOffset.y = Mathf.Sin(Time.time * freq) * amp;
+        bobOffset.x = Mathf.Cos(Time.time * freq * 0.5f) * amp * 2f;
+        bobOffset.z = 0f;
+
+        cameraTransform.localPosition = startPos + bobOffset;
+    }
+
     void HandleMovement()
     {
         if (!isFreeze)
@@ -239,10 +269,13 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         if (!IsOwner) return;
         
-        transform.rotation = Quaternion.Euler(0, yaw, 0);
-        cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
+        transform.rotation = UnityEngine.Quaternion.Euler(0, yaw, 0);
+        cameraTransform.rotation = UnityEngine.Quaternion.Euler(pitch, yaw, 0);
         
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
+    
+        if(!isInTruck || !isDriver)
+            HandleHeadbob();
     }
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition)
