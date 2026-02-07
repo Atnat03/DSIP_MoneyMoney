@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(NetworkObject))]
 public class GrabbableObject : NetworkBehaviour
 {
+    public NetworkVariable<bool> IsGrabbed = new NetworkVariable<bool>(false);
+
     private void OnEnable()
     {
         Interact.OnInteract += HitInteract;

@@ -83,6 +83,12 @@ public class GrabPoint : NetworkBehaviour
     {
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var itemNetObj)) return;
 
+        if (itemNetObj.TryGetComponent<GrabbableObject>(out var grabbable))
+        {
+            if (grabbable.IsGrabbed.Value)
+                return;
+        }
+
         ulong ownerClientId = rpcParams.Receive.SenderClientId;
         GrabItem(itemNetObj, ownerClientId);
     }
@@ -90,6 +96,11 @@ public class GrabPoint : NetworkBehaviour
     private void GrabItem(NetworkObject itemNetObj, ulong ownerClientId)
     {
         if (itemNetObj == null) return;
+
+        if (itemNetObj.TryGetComponent<GrabbableObject>(out var grabbable))
+        {
+            grabbable.IsGrabbed.Value = true;
+        }
 
         // Transfert ownership (utile même en server auth)
         if (itemNetObj.OwnerClientId != ownerClientId)
@@ -187,6 +198,11 @@ public class GrabPoint : NetworkBehaviour
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.AddForce(throwDirection * _throwStrength, ForceMode.Impulse);
+        }
+
+        if (item.TryGetComponent<GrabbableObject>(out var grabbable))
+        {
+            grabbable.IsGrabbed.Value = false;
         }
 
         if (item.TryGetComponent<Collider>(out var col)) col.isTrigger = false;
