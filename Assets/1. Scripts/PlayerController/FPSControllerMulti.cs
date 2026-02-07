@@ -231,8 +231,20 @@ public class FPSControllerMulti : NetworkBehaviour
                 float h = Input.GetAxis("Horizontal");
                 float v = Input.GetAxis("Vertical");
                 bool brake = Input.GetKey(KeyCode.Space);
-                bool horn = Input.GetKeyDown(KeyCode.H);
-                TruckController.instance.SendInputsServerRpc(h, v, brake, horn);
+                TruckController.instance.SendInputsServerRpc(h, v, brake);
+            }
+
+            if (Input.GetButtonDown("Fire2"))
+            {
+                RaycastHit hit;
+                Vector3 origin = MyCamera().transform.position;
+                Vector3 direction = MyCamera().transform.forward;
+                
+                if (Physics.Raycast(origin, direction, out hit, 5f))
+                {
+                    if(hit.collider.CompareTag("Klaxon"))
+                        TruckController.instance.PlayHornClientRpc();
+                }
             }
             
             HandleCameraInput();

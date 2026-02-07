@@ -16,9 +16,8 @@ public class Helicopter : MonoBehaviour, IVehicule
     [SerializeField] public bool isDead = false;
     
     private void Update()
-    {
-        if(!isDead)
-            rotor.transform.Rotate(Vector3.up, rotorRotateSpeed * Time.deltaTime);
+    { 
+        rotor.transform.Rotate(Vector3.up, rotorRotateSpeed * Time.deltaTime);
     }
 
     public void Die()

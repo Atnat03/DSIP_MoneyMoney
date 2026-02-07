@@ -57,6 +57,8 @@ public class TruckController : NetworkBehaviour
 
     public Transform reload;
     public float raduisToReload = 2f;
+
+    public Transform steeringWheel;
     
     private void Awake()
     {
@@ -160,7 +162,7 @@ public class TruckController : NetworkBehaviour
         var fps = playerObj.GetComponent<FPSControllerMulti>();
         if (fps != null)
         {
-            fps.SetPassengerModeServerRpc(false, Vector3.zero); // zero = pas utilisé
+            fps.SetPassengerModeServerRpc(false, Vector3.zero);
         }
 
         Debug.Log($"Passenger {playerObj.OwnerClientId} déparenté du camion");
@@ -168,32 +170,20 @@ public class TruckController : NetworkBehaviour
     
 
     [ServerRpc(RequireOwnership = false)]
-    public void SendInputsServerRpc(float horizontal, float vertical, bool breaking, bool horn, ServerRpcParams rpcParams = default)
+    public void SendInputsServerRpc(float horizontal, float vertical, bool breaking, ServerRpcParams rpcParams = default)
     {
         if (truckInteraction != null && truckInteraction.IsDriver(rpcParams.Receive.SenderClientId))
         {
             horizontalInput = horizontal;
             verticalInput = vertical;
             isBreaking = breaking;
-            
-            if (horn)
-            {
-                PlayHornClientRpc();
-            }
         }
     }
 
     [ClientRpc]
-    void PlayHornClientRpc()
+    public void PlayHornClientRpc()
     {
         GetComponent<AudioSource>().PlayOneShot(klaxon);
-    }
-
-    public void GetInput()
-    {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
-        isBreaking = Input.GetKey(KeyCode.Space);
     }
 
     void HandleMotor()
@@ -218,6 +208,7 @@ public class TruckController : NetworkBehaviour
     void HandleSteering()
     {
         currentSteerAngle = maxSteerAngle * horizontalInput;
+        steeringWheel.localRotation = Quaternion.Euler(0, 0, -currentSteerAngle);
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
     }
