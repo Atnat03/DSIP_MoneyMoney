@@ -24328,6 +24328,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
   m_PrefabInstance: {fileID: 574824793}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &574824795 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
+  m_PrefabInstance: {fileID: 574824793}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &574824796 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
@@ -27402,6 +27407,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Helicopter
   rotor: {fileID: 574824794}
   rotorRotateSpeed: 500
+  helicopter: {fileID: 574824795}
+  isDead: 0
 --- !u!1 &674375900
 GameObject:
   m_ObjectHideFlags: 0

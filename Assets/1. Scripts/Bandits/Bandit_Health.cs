@@ -15,7 +15,6 @@ public class Bandit_Health : NetworkBehaviour, ITarget
         writePerm: NetworkVariableWritePermission.Server
     );
 
-
     [Header("UI")]
     public Image healthBar;
 
@@ -78,11 +77,6 @@ public class Bandit_Health : NetworkBehaviour, ITarget
 
     private void Die()
     {
-        if (TryGetComponent(out BanditVehicleAI ai))
-        {
-            GetComponent<NetworkObject>().Despawn();
-            Destroy(ai.gameObject);
-        }
-        //ai.StopVehicle();
+        GetComponent<IVehicule>().Die();
     }
 }
