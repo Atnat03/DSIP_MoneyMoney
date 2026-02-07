@@ -78,6 +78,9 @@ public class FPSControllerMulti : NetworkBehaviour
     public bool isSitting = false;
     private Transform sittingPos;
     
+    [Header("Reset Truck")]
+    public KeyCode resetTruckKey = KeyCode.C;
+    
     public Camera MyCamera()
     {
         return myCamera;
@@ -148,6 +151,15 @@ public class FPSControllerMulti : NetworkBehaviour
             {
                 print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
+            }
+        }
+
+        if (TruckController.instance.isFallen.Value)
+        {
+            if (Input.GetKeyDown(resetTruckKey))
+            {
+                print("KEY RESET");
+                TruckController.instance.AddValueToReset();
             }
         }
 
