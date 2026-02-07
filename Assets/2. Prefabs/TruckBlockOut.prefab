@@ -741,6 +741,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &518853078814250343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7901696997711536647}
+  m_Layer: 0
+  m_Name: SittingPos (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7901696997711536647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518853078814250343}
+  serializedVersion: 2
+  m_LocalRotation: {x: -1.11022296e-17, y: -0.0000004768371, z: 5.293955e-24, w: -1}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7408225137058805423}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &529311887482810068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,7 +1611,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4568
+  m_VersionIndex: 4589
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1813,9 +1844,11 @@ GameObject:
   - component: {fileID: 5003392970065439434}
   - component: {fileID: 740371849319026903}
   - component: {fileID: 103921502526351184}
+  - component: {fileID: 5039984757033610257}
+  - component: {fileID: 3485649448330407148}
   m_Layer: 0
   m_Name: Chair
-  m_TagString: Untagged
+  m_TagString: Chairs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1832,7 +1865,8 @@ Transform:
   m_LocalPosition: {x: 0.1765796, y: -0.24606973, z: 6.6293325}
   m_LocalScale: {x: 0.6309967, y: 0.63099664, z: 0.6309967}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1959664522685996358}
   m_Father: {fileID: 9220810406275990115}
   m_LocalEulerAnglesHint: {x: 0, y: 0.209, z: 0}
 --- !u!114 &6263957485246598580
@@ -2204,7 +2238,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2480
+  m_VersionIndex: 2501
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2290,6 +2324,40 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900532834454080246}
   m_Mesh: {fileID: 0}
+--- !u!65 &5039984757033610257
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900532834454080246}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9948971, y: 1.7015929, z: 1.0299246}
+  m_Center: {x: -0.07807113, y: 0.73496115, z: -0.0985656}
+--- !u!114 &3485649448330407148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900532834454080246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c2f7361ca54054d9dd6c2cb5b7030c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chair
+  sittingPos: {fileID: 1959664522685996358}
 --- !u!1 &929595177078623647
 GameObject:
   m_ObjectHideFlags: 0
@@ -3971,7 +4039,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3858
+  m_VersionIndex: 3879
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -5554,7 +5622,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3858
+  m_VersionIndex: 3879
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6079,9 +6147,11 @@ GameObject:
   - component: {fileID: 3494955329562093991}
   - component: {fileID: 6909111765815244623}
   - component: {fileID: 3913062972771388533}
+  - component: {fileID: 8269219806327710920}
+  - component: {fileID: 3167068353197915456}
   m_Layer: 0
   m_Name: Chair
-  m_TagString: Untagged
+  m_TagString: Chairs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6098,7 +6168,8 @@ Transform:
   m_LocalPosition: {x: 0.7958575, y: -0.561568, z: 7.787211}
   m_LocalScale: {x: 0.63099664, y: 0.63099664, z: 0.63099664}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3917678930102848396}
   m_Father: {fileID: 9220810406275990115}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1627125150860081216
@@ -6470,7 +6541,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2480
+  m_VersionIndex: 2501
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6556,6 +6627,40 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1628118382708041051}
   m_Mesh: {fileID: 0}
+--- !u!65 &8269219806327710920
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628118382708041051}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9948971, y: 1.7015929, z: 1.0299246}
+  m_Center: {x: -0.078070655, y: 0.73496115, z: -0.0985662}
+--- !u!114 &3167068353197915456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628118382708041051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c2f7361ca54054d9dd6c2cb5b7030c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chair
+  sittingPos: {fileID: 3917678930102848396}
 --- !u!1 &1655433973110997348
 GameObject:
   m_ObjectHideFlags: 0
@@ -9364,7 +9469,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3753
+  m_VersionIndex: 3774
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -10017,7 +10122,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4568
+  m_VersionIndex: 4589
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11263,7 +11368,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4506
+  m_VersionIndex: 4527
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11843,7 +11948,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2436
+  m_VersionIndex: 2457
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13241,7 +13346,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3858
+  m_VersionIndex: 3879
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13753,7 +13858,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2480
+  m_VersionIndex: 2501
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15122,8 +15227,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8715242, y: 1, z: 1.3052278}
-  m_Center: {x: 0.43576482, y: 0, z: -0.15261415}
+  m_Size: {x: 2.390529, y: 1, z: 1.0810537}
+  m_Center: {x: 0.69527054, y: 0, z: -0.26470104}
 --- !u!1 &3805129855992549635
 GameObject:
   m_ObjectHideFlags: 0
@@ -15798,7 +15903,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3136
+  m_VersionIndex: 3157
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -16121,9 +16226,11 @@ GameObject:
   - component: {fileID: 1828907678445580122}
   - component: {fileID: 496459238035863447}
   - component: {fileID: 7299292108327021043}
+  - component: {fileID: 5589104052404641052}
+  - component: {fileID: 8248998802926170064}
   m_Layer: 0
   m_Name: Chair
-  m_TagString: Untagged
+  m_TagString: Chairs
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16140,7 +16247,8 @@ Transform:
   m_LocalPosition: {x: 1.1281655, y: -0.24606973, z: 6.613239}
   m_LocalScale: {x: 0.63099664, y: 0.63099664, z: 0.63099664}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7901696997711536647}
   m_Father: {fileID: 9220810406275990115}
   m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
 --- !u!114 &2506829448492247987
@@ -16512,7 +16620,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2480
+  m_VersionIndex: 2501
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -16598,6 +16706,40 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4223480435297108016}
   m_Mesh: {fileID: 0}
+--- !u!65 &5589104052404641052
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4223480435297108016}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9948971, y: 1.7015929, z: 1.0299246}
+  m_Center: {x: -0.07807018, y: 0.73496115, z: -0.09856584}
+--- !u!114 &8248998802926170064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4223480435297108016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c2f7361ca54054d9dd6c2cb5b7030c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chair
+  sittingPos: {fileID: 7901696997711536647}
 --- !u!1 &4278991332850774437
 GameObject:
   m_ObjectHideFlags: 0
@@ -18601,6 +18743,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5243137017292017506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3917678930102848396}
+  m_Layer: 0
+  m_Name: SittingPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3917678930102848396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5243137017292017506}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1491067749100925173}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5450697607799203485
 GameObject:
   m_ObjectHideFlags: 0
@@ -19763,7 +19936,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3858
+  m_VersionIndex: 3879
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -20558,7 +20731,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2436
+  m_VersionIndex: 2457
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -21097,6 +21270,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5910651279591103472
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1959664522685996358}
+  m_Layer: 0
+  m_Name: SittingPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1959664522685996358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910651279591103472}
+  serializedVersion: 2
+  m_LocalRotation: {x: 1.1102211e-17, y: -0.0018269379, z: 2.0283086e-20, w: 0.99999833}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8801294790794228742}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5920261438785513990
 GameObject:
   m_ObjectHideFlags: 0
@@ -23876,7 +24080,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3136
+  m_VersionIndex: 3157
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -27421,7 +27625,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3753
+  m_VersionIndex: 3774
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -28410,7 +28614,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4506
+  m_VersionIndex: 4527
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -30547,7 +30751,11 @@ MonoBehaviour:
   backLeftWheelTransform: {fileID: 8214220906270806690}
   backRightWheelTransform: {fileID: 1228145939206484373}
   klaxon: {fileID: 8300000, guid: 2782aa2298f2b5949b5010f3d4f5fc9c, type: 3}
-  durationBeforeReset: 2
+  targetValueToReset:
+    m_InternalValue: 10
+  isFallen:
+    m_InternalValue: 0
+  jaugeMashing: {fileID: 0}
   boundsCenter: {x: 0, y: 1.5, z: 0.5}
   boundsSize: {x: 5, y: 7, z: 15.25}
   boundsPushForce: 0
@@ -30766,6 +30974,7 @@ MonoBehaviour:
     m_InternalValue: 18446744073709551615
   hasDriver:
     m_InternalValue: 0
+  door: {fileID: 1805618312319924657}
 --- !u!65 &1027535162118051535
 BoxCollider:
   m_ObjectHideFlags: 0

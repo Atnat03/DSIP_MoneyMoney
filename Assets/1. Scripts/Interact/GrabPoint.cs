@@ -44,7 +44,6 @@ public class GrabPoint : NetworkBehaviour
     private void OnInteractGrab(GameObject obj, GameObject player)
     {
         if (!IsOwner) return;
-        if (!obj.CompareTag("Grabbable")) return;
 
         NetworkObject netObj = obj.GetComponent<NetworkObject>();
         if (netObj != null)
@@ -83,6 +82,9 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<GrabbableObject>(out var g) && g.IsGrabbed.Value)
             return;
 
+        if (item.gameObject.CompareTag("Material") || item.GetComponent<ListenEventDoor>())
+            return;
+
         item.ChangeOwnership(rpc.Receive.SenderClientId);
 
         if (item.TryGetComponent<Rigidbody>(out var rb))
@@ -108,6 +110,8 @@ public class GrabPoint : NetworkBehaviour
             return;
 
         if (NetworkManager.Singleton.LocalClientId != ownerId) return;
+
+        GetComponent<FPSControllerMulti>().hasSomethingInHand = true;
 
         _heldItem = item;
         handState = HandState.Grab;
@@ -161,6 +165,9 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.OwnerClientId != rpc.Receive.SenderClientId)
             return;
+        
+        if (item.gameObject.CompareTag("Material"))
+            return;
 
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
@@ -184,6 +191,8 @@ public class GrabPoint : NetworkBehaviour
     private void ReleaseClientRpc(ulong ownerId)
     {
         if (NetworkManager.Singleton.LocalClientId != ownerId) return;
+
+        GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
 
         _heldItem = null;
         handState = HandState.Free;

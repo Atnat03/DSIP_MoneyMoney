@@ -14,6 +14,9 @@ public class PlayerRayCast : NetworkBehaviour
 
     public bool hasMaterial;
     public GameObject materialVisual;
+
+    public float hitDistance = 2f;
+    
     private void Start()
     {
         uiController = VariableManager.instance.uiController;
@@ -34,7 +37,7 @@ public class PlayerRayCast : NetworkBehaviour
         
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.distance < 5f)
+            if ((hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.distance < hitDistance))
             {
                 if (!hit.collider.CompareTag("TruckPart") || 
                     (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial))
@@ -71,6 +74,7 @@ public class PlayerRayCast : NetworkBehaviour
     public void TakeMaterial()
     {
         hasMaterial = !hasMaterial;
+        GetComponent<FPSControllerMulti>().hasSomethingInHand = hasMaterial;
         materialVisual.SetActive(hasMaterial);
     }
 

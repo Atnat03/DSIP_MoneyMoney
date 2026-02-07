@@ -85,10 +85,17 @@ public class FPSControllerMulti : NetworkBehaviour
     [Header("Gun Visual")] 
     public GameObject gunOwner;
     public GameObject gunOther;
+    public bool hasSomethingInHand = false;
     
     public Camera MyCamera()
     {
         return myCamera;
+    }
+
+    public void SetVisibleGun()
+    {
+        gunOther.SetActive(hasSomethingInHand);
+        gunOwner.SetActive(!hasSomethingInHand);
     }
     
     public override void OnNetworkSpawn()
@@ -150,6 +157,8 @@ public class FPSControllerMulti : NetworkBehaviour
         
         textGoInCamion.SetActive(canEnterInTruck);
         textReload.SetActive(canReload);
+
+        SetVisibleGun();
         
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {

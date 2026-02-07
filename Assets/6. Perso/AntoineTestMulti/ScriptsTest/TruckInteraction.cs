@@ -166,6 +166,6 @@ public class TruckInteraction : NetworkBehaviour
 
     private void Update()
     {
-        door.SetActive(hasDriver.Value);
+        door.SetActive(!hasDriver.Value);
     }
 }

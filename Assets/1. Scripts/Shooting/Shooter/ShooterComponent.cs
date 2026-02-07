@@ -63,6 +63,9 @@ namespace Shooting
 
         private void MakeTrail()
         {
+            if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
+                return;
+            
             Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
             Vector3 startPos = _instantPos.position;
             Vector3 dir = camera.transform.forward * MaxDistance;

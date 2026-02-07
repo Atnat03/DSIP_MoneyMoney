@@ -32,7 +32,7 @@ public class ListenEventDoor : NetworkBehaviour
     private void HitInteract(GameObject obj, GameObject player)
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
-
+        
         if (IsServer)
         {
             ToggleDoor();
