@@ -22,7 +22,7 @@ public class BanditVehicleAI : MonoBehaviour
     [Header("Esquive des obstacles")]
     public LayerMask obstacleMask;
     public float obstacleCheckDistance = 10f;
-    public float obstacleAvoidStrength = 5f; // Intensité de l'évitement
+    public float obstacleAvoidStrength = 5f;
 
     [Header("Ground Following")]
     public float groundRayDistance = 5f;

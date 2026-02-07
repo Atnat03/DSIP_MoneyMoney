@@ -73,6 +73,10 @@ public class FPSControllerMulti : NetworkBehaviour
     ShooterComponent shooter;
     
     public GameObject meshRenderer;
+
+    public bool canSit = false;
+    public bool isSitting = false;
+    private Transform sittingPos;
     
     public Camera MyCamera()
     {
@@ -96,9 +100,9 @@ public class FPSControllerMulti : NetworkBehaviour
             ui.SetActive(false);
             return;
         }
-               
-       myCamera.cullingMask = maskCameraPlayer;
-       startPos = cameraTransform.localPosition;
+        
+        myCamera.cullingMask = maskCameraPlayer;
+        startPos = cameraTransform.localPosition;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -149,11 +153,33 @@ public class FPSControllerMulti : NetworkBehaviour
 
         canReload = CheckCanReload();
 
-        if (Input.GetKeyUp(KeyCode.E) && canReload)
+        if (Input.GetKeyUp(KeyCode.E))
         {
-            print("Reload");
-            shooter.Reload();
-            canReload = false;
+            if(canReload)
+            {
+                print("Reload");
+                shooter.Reload();
+                canReload = false;
+            }
+
+            if (TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false)
+                return;
+            
+            canSit = CheckRaycast();
+            
+            if (isSitting)
+            {
+                sittingPos = null;
+                isSitting = false;
+            }
+            
+            if (canSit)
+            {
+                print("can sit : " + canSit);
+                
+                isSitting = true;
+                canSit = false;
+            }
         }
 
         if (isDriver && isInTruck)
@@ -173,10 +199,43 @@ public class FPSControllerMulti : NetworkBehaviour
             return;
         }
 
+        if (isSitting && sittingPos != null)
+        {
+            transform.position = sittingPos.position;
+                
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+            
+            HandleCameraInput();
+            return;
+        }
+
         if (!isInTruck || !isDriver)
         {
             HandleMovement();
         }
+    }
+
+    private bool CheckRaycast()
+    {
+        RaycastHit hit;
+        Vector3 origin = MyCamera().transform.position;
+        Vector3 direction = MyCamera().transform.forward;
+        
+        print("CheckRaycast");
+        
+        if (Physics.Raycast(origin, direction, out hit, 5f))
+        {
+            Debug.DrawLine(origin, hit.point, Color.cyan);
+            
+            if (hit.collider.CompareTag("Chairs"))
+            {
+                sittingPos = hit.collider.GetComponent<Chair>().sittingPos;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     bool CheckCanReload()
@@ -369,26 +428,19 @@ public class FPSControllerMulti : NetworkBehaviour
     private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
     {
         isInTruck = isPassenger;
-        isDriver = false; // sécurité
+        isDriver = false;
 
         if (isPassenger)
         {
-            // Position locale souhaitée (ex: spawnPassager)
-            if (desiredLocalPos != Vector3.zero)
-            {
-                transform.localPosition = desiredLocalPos;
-            }
-
             if (controller != null)
             {
                 controller.enabled = false;
-                // controller.detectCollisions = false; // optionnel, mais souvent utile
             }
 
             var netTransform = GetComponent<NetworkTransform>();
             if (netTransform != null)
             {
-                netTransform.InLocalSpace = true; // ← CRUCIAL pour smooth follow sur clients
+                netTransform.InLocalSpace = true; 
             }
 
             Debug.Log("Client: Mode passager activé - CC disabled + InLocalSpace=true");

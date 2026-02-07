@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class TruckInteraction : NetworkBehaviour
     );
     
     private TruckController truckController;
+
+    public GameObject door;
     
     private void Awake()
     {
@@ -159,5 +162,10 @@ public class TruckInteraction : NetworkBehaviour
     public bool HasDriver()
     {
         return driverClientId.Value != ulong.MaxValue;
+    }
+
+    private void Update()
+    {
+        door.SetActive(hasDriver.Value);
     }
 }

@@ -887,7 +887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3557140025
+  GlobalObjectIdHash: 4055741435
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1044,11 +1044,11 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
-  _amplitude: 0.1
-  frequency: 15
+  _amplitude: 0.05
+  frequency: 10
   startPos: {x: 0, y: 0, z: 0}
-  sprintAmplitudeMultiplier: 1.5
-  sprintFrequencyMultiplier: 1.5
+  sprintAmplitudeMultiplier: 1.75
+  sprintFrequencyMultiplier: 1.75
   truckDamping: 5
   isInTruck: 0
   interactDistance: 100
@@ -1064,6 +1064,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 254935
   meshRenderer: {fileID: 2067222194839518774}
+  canSit: 0
+  isSitting: 0
   controller: {fileID: 6002100493801107169}
   canEnterInTruck: 0
   isFreeze: 0
