@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 using Unity.Services.Core;
@@ -12,10 +13,7 @@ using Unity.Services.Relay.Models;
 
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-
-#if UNITY_EDITOR
-using UnityEditor.Multiplayer;
-#endif
+using Random = UnityEngine.Random;
 
 public class AutoJoinedLobby : MonoBehaviour
 {
@@ -23,7 +21,11 @@ public class AutoJoinedLobby : MonoBehaviour
 
     private Lobby lobby;
     public int maxPlayers = 4;
-    private bool isBusy = false;
+
+    public TMP_InputField inputName;
+    public string LocalPlayerName { get; private set; }
+
+    public GameObject StartCanva;
 
     private void Awake()
     {
@@ -37,19 +39,30 @@ public class AutoJoinedLobby : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private async void Start()
+    public void Join()
+    {
+        if(inputName.text != "")
+            LocalPlayerName = inputName.text;
+        else
+            LocalPlayerName = "Player " +  Random.Range(0, 99);
+        
+        EnterGame();
+    }
+
+    private async void EnterGame()
     {
         if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
+        {
+            Debug.LogWarning("NetworkManager already started!");
             return;
-
+        }
+    
         await InitializeServices();
-
-        await Task.Delay(100);
-
-        Debug.Log("⏱ Checking for existing lobby…");
         await TryJoinOrCreateLobby();
     }
 
+
+    // ========================= INIT =========================
 
     private async Task InitializeServices()
     {
@@ -63,37 +76,48 @@ public class AutoJoinedLobby : MonoBehaviour
         }
     }
 
+    // ========================= LOBBY =========================
+
     private async Task TryJoinOrCreateLobby()
     {
-        var options = new QueryLobbiesOptions
-        {
-            Count = 1,
-            Filters = new List<QueryFilter>
-            {
-                new QueryFilter(
-                    QueryFilter.FieldOptions.AvailableSlots,
-                    "0",
-                    QueryFilter.OpOptions.GT
-                )
-            }
-        };
-
-        QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(options);
-
+        QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(
+            new QueryLobbiesOptions { Count = 1 }
+        );
+        
         if (response.Results.Count > 0)
         {
+            // ⚠️ Client rejoint un lobby existant
             lobby = response.Results[0];
-            await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id);
+    
+            await LobbyService.Instance.JoinLobbyByIdAsync(
+                lobby.Id,
+                new JoinLobbyByIdOptions
+                {
+                    Player = new Player
+                    {
+                        Data = new Dictionary<string, PlayerDataObject>
+                        {
+                            { "Name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, LocalPlayerName) }
+                        }
+                    }
+                }
+            );
+
+            // Recharger le lobby complet
+            lobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
 
             string relayCode = lobby.Data["RelayCode"].Value;
-            Debug.Log("Lobby trouvé → Join Relay: " + relayCode);
+
+            Debug.Log($"🔵 Client rejoint Lobby | RelayCode: {relayCode} | Name: {LocalPlayerName}");
 
             await JoinRelay(relayCode);
         }
         else
         {
+            // ⚠️ Aucun lobby trouvé → on crée le host
             await CreateLobbyAndHost();
         }
+
     }
 
     // ========================= HOST =========================
@@ -105,21 +129,38 @@ public class AutoJoinedLobby : MonoBehaviour
 
         var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
         utp.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "dtls"));
-
+        
         lobby = await LobbyService.Instance.CreateLobbyAsync(
             "AutoLobby",
             maxPlayers,
             new CreateLobbyOptions
             {
+                Player = new Player
+                {
+                    Data = new Dictionary<string, PlayerDataObject>
+                    {
+                        {
+                            "Name",
+                            new PlayerDataObject(
+                                PlayerDataObject.VisibilityOptions.Public,
+                                LocalPlayerName
+                            )
+                        }
+                    }
+                },
                 Data = new Dictionary<string, DataObject>
                 {
-                    { "RelayCode", new DataObject(DataObject.VisibilityOptions.Public, relayCode) }
+                    {
+                        "RelayCode",
+                        new DataObject(DataObject.VisibilityOptions.Public, relayCode)
+                    }
                 }
             }
         );
 
         NetworkManager.Singleton.StartHost();
-        Debug.Log("🟢 Host démarré | RelayCode: " + relayCode);
+        Debug.Log("🟢 Host démarré | RelayCode: " + relayCode + " | Name: " + LocalPlayerName);
+        StartCanva.SetActive(false);
     }
 
     // ========================= CLIENT =========================
@@ -132,9 +173,10 @@ public class AutoJoinedLobby : MonoBehaviour
         utp.SetRelayServerData(AllocationUtils.ToRelayServerData(joinAllocation, "dtls"));
 
         NetworkManager.Singleton.StartClient();
-        Debug.Log("🔵 Client StartClient()");
+        Debug.Log("🔵 Client démarré | Name: " + LocalPlayerName);
+        StartCanva.SetActive(false);
     }
-
+    
     private async void OnDestroy()
     {
         if (lobby != null && lobby.HostId == AuthenticationService.Instance.PlayerId)
@@ -143,4 +185,3 @@ public class AutoJoinedLobby : MonoBehaviour
         }
     }
 }
-
