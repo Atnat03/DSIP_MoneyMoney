@@ -153,7 +153,7 @@ public class FPSControllerMulti : NetworkBehaviour
 
         canReload = CheckCanReload();
 
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.E) && !isDriver)
         {
             if(canReload)
             {

@@ -2,6 +2,7 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GrabPoint : NetworkBehaviour
 {
@@ -10,238 +11,204 @@ public class GrabPoint : NetworkBehaviour
 
     [Header("Grab Settings")]
     [SerializeField] private KeyCode _throw = KeyCode.Mouse1;
-    [SerializeField] private float _throwStrength = 10f;
     [SerializeField] private float holdDistance = 2f;
+
+    [Header("Throw Charge")]
+    [SerializeField] private float _maxChargeTime = 1.5f;
+    [SerializeField] private float _minThrowStrength = 2f;
+    [SerializeField] private float _maxThrowStrength = 10f;
+    [SerializeField] private Image throwJauge;
 
     [Header("Events")]
     [SerializeField] private UnityEvent _onGrab;
     [SerializeField] private UnityEvent _onThrow;
+
+    private float _chargeTimer;
+    private bool _isCharging;
 
     private NetworkObject _heldItem;
     private Transform _camera;
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
-        {
-            _camera = GetComponent<FPSControllerMulti>()?.MyCamera()?.transform;
-            if (_camera == null) Debug.LogError("GrabPoint: Camera not found!");
-        }
+        if (!IsOwner) return;
+
+        _camera = GetComponent<FPSControllerMulti>()?.MyCamera()?.transform;
+        if (_camera == null)
+            Debug.LogError("GrabPoint: Camera not found!");
     }
 
-    private void OnEnable()
-    {
-        Interact.OnInteract += OnInteractGrab;
-    }
-
-    private void OnDisable()
-    {
-        Interact.OnInteract -= OnInteractGrab;
-    }
+    private void OnEnable() => Interact.OnInteract += OnInteractGrab;
+    private void OnDisable() => Interact.OnInteract -= OnInteractGrab;
 
     private void OnInteractGrab(GameObject obj, GameObject player)
     {
-        if (obj.GetComponent<ListenEventDoor>() != null) return;
+        if (!IsOwner) return;
         if (!obj.CompareTag("Grabbable")) return;
 
         NetworkObject netObj = obj.GetComponent<NetworkObject>();
         if (netObj != null)
-        {
             TryGrab(netObj);
-        }
-        else
-        {
-            Debug.LogWarning($"{obj.name} has no NetworkObject!");
-        }
     }
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         if (_heldItem != null && handState == HandState.Grab && _camera != null)
         {
-            Vector3 targetPos = _camera.position + _camera.forward * holdDistance;
-            Quaternion targetRot = _camera.rotation;
+            Vector3 pos = _camera.position + _camera.forward * holdDistance;
+            Quaternion rot = _camera.rotation;
 
-            // Envoi au serveur (unreliable pour perf, appelé souvent)
-            UpdateHeldPositionServerRpc(_heldItem.NetworkObjectId, targetPos, targetRot);
+            UpdateHeldPositionServerRpc(_heldItem.NetworkObjectId, pos, rot);
         }
 
-        TryThrow();
+        HandleThrowInput();
     }
 
-    #region Grab Logic
-    public void TryGrab(NetworkObject itemNetObj)
-    {
-        if (!CanGrab() || itemNetObj == null) return;
+    #region GRAB
 
-        // TOUJOURS RPC pour uniformité (fonctionne pour host aussi)
-        GrabServerRpc(itemNetObj.NetworkObjectId);
+    public void TryGrab(NetworkObject item)
+    {
+        if (handState != HandState.Free) return;
+        GrabServerRpc(item.NetworkObjectId);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void GrabServerRpc(ulong itemId, ServerRpcParams rpcParams = default)
+    private void GrabServerRpc(ulong itemId, ServerRpcParams rpc = default)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var itemNetObj)) return;
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
 
-        if (itemNetObj.TryGetComponent<GrabbableObject>(out var grabbable))
-        {
-            if (grabbable.IsGrabbed.Value)
-                return;
-        }
+        if (item.TryGetComponent<GrabbableObject>(out var g) && g.IsGrabbed.Value)
+            return;
 
-        ulong ownerClientId = rpcParams.Receive.SenderClientId;
-        GrabItem(itemNetObj, ownerClientId);
-    }
+        item.ChangeOwnership(rpc.Receive.SenderClientId);
 
-    private void GrabItem(NetworkObject itemNetObj, ulong ownerClientId)
-    {
-        if (itemNetObj == null) return;
-
-        if (itemNetObj.TryGetComponent<GrabbableObject>(out var grabbable))
-        {
-            grabbable.IsGrabbed.Value = true;
-        }
-
-        // Transfert ownership (utile même en server auth)
-        if (itemNetObj.OwnerClientId != ownerClientId)
-        {
-            itemNetObj.ChangeOwnership(ownerClientId);
-            Debug.Log($"Ownership of {itemNetObj.name} given to client {ownerClientId}");
-        }
-
-        // Set kinematic sur serveur
-        if (itemNetObj.TryGetComponent<Rigidbody>(out var rb))
+        if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.isKinematic = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
-        if (itemNetObj.TryGetComponent<Collider>(out var col)) col.isTrigger = true;
 
-        // Confirmation au owner SEULEMENT (set _heldItem local)
-        ConfirmGrabClientRpc(itemNetObj.NetworkObjectId, new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { ownerClientId } }
-        });
+        if (item.TryGetComponent<Collider>(out var col))
+            col.isTrigger = true;
 
-        // Informe les AUTRES (set kinematic local)
-        ulong[] otherClients = NetworkManager.Singleton.ConnectedClientsIds
-            .Where(id => id != ownerClientId).ToArray();
-        GrabClientRpc(itemNetObj.NetworkObjectId, new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams { TargetClientIds = otherClients }
-        });
+        if (item.TryGetComponent<GrabbableObject>(out var grab))
+            grab.IsGrabbed.Value = true;
+
+        ConfirmGrabClientRpc(itemId, rpc.Receive.SenderClientId);
     }
 
     [ClientRpc]
-    private void ConfirmGrabClientRpc(ulong itemId, ClientRpcParams rpcParams = default)
+    private void ConfirmGrabClientRpc(ulong itemId, ulong ownerId)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var itemNetObj)) return;
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
 
-        _heldItem = itemNetObj;
+        if (NetworkManager.Singleton.LocalClientId != ownerId) return;
+
+        _heldItem = item;
         handState = HandState.Grab;
 
-        // Set kinematic local (sécurité)
-        if (itemNetObj.TryGetComponent<Rigidbody>(out var rb)) rb.isKinematic = true;
-        if (itemNetObj.TryGetComponent<Collider>(out var col)) col.isTrigger = true;
-
         _onGrab?.Invoke();
-        Debug.Log($"Local client now holds {_heldItem.name}");
     }
 
-    [ClientRpc]
-    private void GrabClientRpc(ulong itemId, ClientRpcParams rpcParams = default)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var itemNetObj)) return;
-
-        // Set kinematic local pour non-owners
-        if (itemNetObj.TryGetComponent<Rigidbody>(out var rb)) rb.isKinematic = true;
-        if (itemNetObj.TryGetComponent<Collider>(out var col)) col.isTrigger = true;
-
-        Debug.Log($"Client sees {itemNetObj.name} grabbed by someone else");
-    }
     #endregion
 
-    #region Throw Logic
-    private void TryThrow()
-    {
-        if (!CanThrow() || !Input.GetKeyDown(_throw)) return;
+    #region THROW
 
-        // TOUJOURS RPC (uniforme)
-        if (_heldItem == null) return;
-        ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward);
+    private void HandleThrowInput()
+    {
+        throwJauge.transform.parent.gameObject.SetActive(_isCharging);
+
+        if (handState != HandState.Grab || _heldItem == null) return;
+
+        if (Input.GetKeyDown(_throw))
+        {
+            _isCharging = true;
+            _chargeTimer = 0f;
+        }
+
+        if (Input.GetKey(_throw))
+        {
+            _chargeTimer += Time.deltaTime;
+            _chargeTimer = Mathf.Clamp(_chargeTimer, 0, _maxChargeTime);
+
+            throwJauge.fillAmount = _chargeTimer / _maxChargeTime;
+        }
+
+        if (Input.GetKeyUp(_throw))
+        {
+            _isCharging = false;
+
+            float ratio = _chargeTimer / _maxChargeTime;
+            float force = Mathf.Lerp(_minThrowStrength, _maxThrowStrength, ratio);
+
+            ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
+
+            _chargeTimer = 0;
+            throwJauge.fillAmount = 0;
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ThrowServerRpc(ulong itemId, Vector3 throwDirection, ServerRpcParams rpcParams = default)
+    private void ThrowServerRpc(ulong itemId, Vector3 direction, float force, ServerRpcParams rpc = default)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var itemNetObj)) return;
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
 
-        // Anti-triche : vérifie que sender == owner
-        if (itemNetObj.OwnerClientId != rpcParams.Receive.SenderClientId) return;
+        if (item.OwnerClientId != rpc.Receive.SenderClientId)
+            return;
 
-        ThrowItem(itemNetObj, throwDirection);
-
-        // Confirmation au thrower SEULEMENT
-        ulong throwerClientId = rpcParams.Receive.SenderClientId;
-        ConfirmReleaseClientRpc(itemNetObj.NetworkObjectId, new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { throwerClientId } }
-        });
-    }
-
-    private void ThrowItem(NetworkObject item, Vector3 throwDirection)
-    {
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.isKinematic = false;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            rb.AddForce(throwDirection * _throwStrength, ForceMode.Impulse);
+
+            rb.AddForce(direction.normalized * force, ForceMode.Impulse);
         }
 
-        if (item.TryGetComponent<GrabbableObject>(out var grabbable))
-        {
-            grabbable.IsGrabbed.Value = false;
-        }
+        if (item.TryGetComponent<Collider>(out var col))
+            col.isTrigger = false;
 
-        if (item.TryGetComponent<Collider>(out var col)) col.isTrigger = false;
+        if (item.TryGetComponent<GrabbableObject>(out var g))
+            g.IsGrabbed.Value = false;
+
+        ReleaseClientRpc(rpc.Receive.SenderClientId);
     }
 
     [ClientRpc]
-    private void ConfirmReleaseClientRpc(ulong itemId, ClientRpcParams rpcParams = default)
+    private void ReleaseClientRpc(ulong ownerId)
     {
+        if (NetworkManager.Singleton.LocalClientId != ownerId) return;
+
         _heldItem = null;
         handState = HandState.Free;
         _onThrow?.Invoke();
-        Debug.Log("Item thrown/released");
     }
+
     #endregion
 
-    #region Position Sync (Server Authoritative)
+    #region HOLD POSITION
+
     [ServerRpc(Delivery = RpcDelivery.Unreliable, RequireOwnership = false)]
-    private void UpdateHeldPositionServerRpc(ulong itemId, Vector3 position, Quaternion rotation, ServerRpcParams rpcParams = default)
+    private void UpdateHeldPositionServerRpc(ulong itemId, Vector3 pos, Quaternion rot, ServerRpcParams rpc = default)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var itemNetObj)) return;
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
 
-        // Anti-triche
-        if (itemNetObj.OwnerClientId != rpcParams.Receive.SenderClientId) return;
+        if (item.OwnerClientId != rpc.Receive.SenderClientId)
+            return;
 
-        // Applique sur serveur (NT propagera)
-        if (itemNetObj.TryGetComponent<Rigidbody>(out var rb))
+        if (item.TryGetComponent<Rigidbody>(out var rb))
         {
-            rb.position = position;
-            rb.rotation = rotation;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-        else
-        {
-            itemNetObj.transform.SetPositionAndRotation(position, rotation);
+            rb.position = pos;
+            rb.rotation = rot;
         }
     }
-    #endregion
 
-    public bool CanGrab() => handState == HandState.Free;
-    public bool CanThrow() => handState == HandState.Grab;
+    #endregion
 }
