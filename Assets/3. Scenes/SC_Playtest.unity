@@ -45943,6 +45943,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4073047558361901861, guid: c4465c6688e918c4c92985c82f7a5154, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7062357299957275442, guid: c4465c6688e918c4c92985c82f7a5154, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -46027,8 +46031,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_UI
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 4203608139691880992, guid: c4465c6688e918c4c92985c82f7a5154, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 6590993529522215267, guid: c4465c6688e918c4c92985c82f7a5154, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7062357299957275442, guid: c4465c6688e918c4c92985c82f7a5154, type: 3}
       insertIndex: -1
@@ -77534,6 +77540,7 @@ SceneRoots:
   - {fileID: 1213638092}
   - {fileID: 1315017746}
   - {fileID: 1681446591}
+  - {fileID: 1622764394}
   - {fileID: 391491725}
   - {fileID: 539382615}
   - {fileID: 2036920350}
@@ -77542,4 +77549,3 @@ SceneRoots:
   - {fileID: 1769357924}
   - {fileID: 1414399695}
   - {fileID: 1641407077}
-  - {fileID: 1622764394}
