@@ -17059,7 +17059,7 @@ MonoBehaviour:
   firePoint: {fileID: 1203585585}
   rotationSpeed: 8
   gunElevationSpeed: 8
-  detectionRadius: 20
+  detectionRadius: 30
   targetLayer:
     serializedVersion: 2
     m_Bits: 66048
@@ -27232,7 +27232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &673403782
 Transform:
   m_ObjectHideFlags: 0
@@ -27289,7 +27289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Bandit_Health
   ShowTopMostFoldoutHeaderGroup: 1
   maxHealth: 20
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 661343394}
 --- !u!114 &673403785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27401,7 +27401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Helicopter
   rotor: {fileID: 574824794}
-  rotorRotateSpeed: 5
+  rotorRotateSpeed: 500
 --- !u!1 &674375900
 GameObject:
   m_ObjectHideFlags: 0
@@ -70727,7 +70727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4feac0db0f83d6d47a8b832c150d4b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LookAtRotation
-  target: {fileID: 0}
+  target: {fileID: 212973542}
   onlyY: 1
 --- !u!114 &1957249790
 MonoBehaviour:

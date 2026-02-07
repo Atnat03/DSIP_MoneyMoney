@@ -69,6 +69,11 @@ public class PlayerRayCast : NetworkBehaviour
                 uiController?.OnStopInteract();
             }
         }
+
+        if (Input.GetButtonDown("Fire2") && hasMaterial && !GetComponent<FPSControllerMulti>().isFreeze)
+        {
+            TakeMaterial();
+        }
     }
 
     public void TakeMaterial()
