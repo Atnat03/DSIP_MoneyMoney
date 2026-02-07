@@ -40,6 +40,7 @@ namespace Shooting
         private int _previousAmmoCount;
         private bool _enableCallbacks;
         private Camera _playerCamera;
+        [SerializeField] private Transform _instantPos;
         #endregion
 
         #region Methods
@@ -56,21 +57,37 @@ namespace Shooting
             _shooter.OnShoot += MakeTrail;
             
             Reload();
-            
-            print(_currentAmmo);
         }
 
         public void Reload() => _currentAmmo = _maxAmmo;
 
         private void MakeTrail()
         {
-            if (TryGetComponent(out TrailMaker maker))
+            Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
+            Vector3 startPos = _instantPos.position;
+            Vector3 dir = camera.transform.forward * MaxDistance;
+
+            if (IsOwner)
             {
-                Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
-                
-                maker.Make(camera.transform.position, camera.transform.forward * MaxDistance);
+                ShootTrailServerRpc(startPos, dir);
             }
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void ShootTrailServerRpc(Vector3 start, Vector3 direction)
+        {
+            ShootTrailClientRpc(start, direction);
+        }
+
+        [ClientRpc]
+        private void ShootTrailClientRpc(Vector3 start, Vector3 direction)
+        {
+            if (TryGetComponent(out TrailMaker maker))
+            {
+                maker.Make(start, direction);
+            }
+        }
+
       
         private void Update()
         {

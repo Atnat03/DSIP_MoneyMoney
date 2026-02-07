@@ -4,6 +4,7 @@ using Shooting;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
@@ -80,6 +81,10 @@ public class FPSControllerMulti : NetworkBehaviour
     
     [Header("Reset Truck")]
     public KeyCode resetTruckKey = KeyCode.C;
+
+    [Header("Gun Visual")] 
+    public GameObject gunOwner;
+    public GameObject gunOther;
     
     public Camera MyCamera()
     {
@@ -92,6 +97,8 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             Color r = Random.ColorHSV();
             
+            meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            
             foreach (Transform child in meshRenderer.transform)
             {
                 child.GetComponent<MeshRenderer>().material.color = r;
@@ -100,9 +107,21 @@ public class FPSControllerMulti : NetworkBehaviour
             
             myCamera.gameObject.SetActive(false);
             
+            gunOther.gameObject.layer = LayerMask.NameToLayer("Owner");
+            gunOwner.gameObject.layer = LayerMask.NameToLayer("Default");
+            
             ui.SetActive(false);
             return;
         }
+
+        gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
+
+        foreach (Transform t in gunOther.transform)
+        {
+            t.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
+        
+        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");  
         
         myCamera.cullingMask = maskCameraPlayer;
         startPos = cameraTransform.localPosition;
