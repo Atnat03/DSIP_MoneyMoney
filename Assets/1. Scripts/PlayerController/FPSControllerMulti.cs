@@ -432,10 +432,9 @@ public class FPSControllerMulti : NetworkBehaviour
         }
 
         if (IsOwner) {
-            // Snap immédiat en local (sécurité)
             Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
             transform.localPosition = targetSeat.localPosition;
-            transform.localRotation = Quaternion.identity;  // ou targetSeat.localRotation
+            transform.localRotation = Quaternion.identity;
         }
     }
     
