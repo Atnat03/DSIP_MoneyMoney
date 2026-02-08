@@ -1216,7 +1216,7 @@ GameObject:
   - component: {fileID: -8397553320606875098}
   - component: {fileID: 5322193334059012131}
   - component: {fileID: 2398918594270566074}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: P_Player_Network
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1433,7 +1433,7 @@ MonoBehaviour:
   textReload: {fileID: 3358380753252068401}
   maskCameraPlayer:
     serializedVersion: 2
-    m_Bits: 517079
+    m_Bits: 3662807
   meshRenderer: {fileID: 5864126240025211517}
   canSit: 0
   isSitting: 0
@@ -1608,7 +1608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b40cbfe449c44ad44abc62b271d12cd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
-  _maxHealth: 100
+  _maxHealth: 5000
   _impactDamage: 0
   _impactDamageRange: {x: 0, y: 0, z: 0, w: 0}
   _bulletDamage: 0
@@ -1621,6 +1621,8 @@ MonoBehaviour:
   _onDeath:
     m_PersistentCalls:
       m_Calls: []
+  healthBar: {fileID: 0}
+  _health: 5000
 --- !u!1 &7658033872997971598
 GameObject:
   m_ObjectHideFlags: 0
