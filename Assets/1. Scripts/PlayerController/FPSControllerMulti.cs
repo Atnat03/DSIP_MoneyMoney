@@ -217,7 +217,6 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             if(canReload)
             {
-                print("Reload");
                 shooter.StartToReload();
                 canReload = false;
             }
@@ -323,7 +322,18 @@ public class FPSControllerMulti : NetworkBehaviour
 
     bool CheckCanReload()
     {
-        return Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload;
+        RaycastHit hit;
+        bool final = false;
+
+        if (Physics.Raycast(MyCamera().transform.position, MyCamera().transform.forward, out hit, 5f))
+        {
+            if (hit.collider.CompareTag("ReloadStation"))
+            {
+                final = true;
+            }
+        }
+        
+        return (Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload) && final;
     }
 
     public bool isFreeze;

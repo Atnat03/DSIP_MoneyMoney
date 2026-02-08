@@ -2007,7 +2007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
   ShowTopMostFoldoutHeaderGroup: 1
-  _maxAmmo: 10
+  _maxAmmo: 100
   _onShoot:
     m_PersistentCalls:
       m_Calls: []
@@ -2015,7 +2015,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _instantPos: {fileID: 1959629027819541335}
-  reloadingTime: 2
+  reloadingTime: 1
+  maxDistance: 1000
 --- !u!114 &6267907623663290062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2074,8 +2075,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a299b02483f6784292ef2c41d7257db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrailMaker
-  _prefab: {fileID: 2751325827363714088, guid: cd3615a53bed1ba4aa1a4886c3ed22db, type: 3}
-  _duration: 0.5
+  _prefab: {fileID: 6974429492466223894, guid: b1892e4d633cdae4895667ff50e21560, type: 3}
+  _duration: 0.1
+  _speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.75076926
+      value: 0.22695974
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &1252422010119750778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2265,6 +2299,12 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   controllerScript: {fileID: 5307100726240828314}
   nameText: {fileID: 1751480116020007111}
+  playerRenderer: {fileID: 6525268964718179983}
+  emoteKey: 9
+  EmoteParent: {fileID: 9119604756531350115}
+  emoteImage: {fileID: 7148161306538845652}
+  timeEmoteVisible: 3
+  emoteManager: {fileID: 2175508658130524692}
   PlayerName:
     m_InternalValue:
       utf8LengthInBytes: 0
@@ -2300,18 +2340,11 @@ MonoBehaviour:
         byte0027: 0
         byte0028: 0
         byte0029: 0
-  playerRenderer: {fileID: 6525268964718179983}
   colorPlayer:
     m_InternalValue: {r: 0, g: 0, b: 0, a: 0}
-  emoteKey: 9
-  EmoteParent: {fileID: 9119604756531350115}
-  emoteImage: {fileID: 7148161306538845652}
-  timeEmoteVisible: 3
-  isEmoting:
-    m_InternalValue: 0
-  emoteManager: {fileID: 2175508658130524692}
   currentEmoteIndex:
     m_InternalValue: 0
+  localSelectedEmoteIndex: 0
 --- !u!1 &7658033872997971598
 GameObject:
   m_ObjectHideFlags: 0
