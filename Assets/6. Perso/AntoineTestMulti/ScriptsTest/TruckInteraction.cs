@@ -71,8 +71,6 @@ public class TruckInteraction : NetworkBehaviour
     
     private void EnterTruckServerLogic(FPSControllerMulti player)
     {
-        if (player.isInTruck) return; 
-        
         ulong playerId = player.OwnerClientId;
         bool isDriver = false;
         Vector3 targetPosition = passengerSpawnPosition.position;

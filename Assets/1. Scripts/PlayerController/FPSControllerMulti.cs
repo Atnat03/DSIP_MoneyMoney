@@ -186,14 +186,18 @@ public class FPSControllerMulti : NetworkBehaviour
         
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck || isInTruck))
         {
-            if (!isInTruck)
+            if (isInTruck && isDriver)
+            {
+                nearbyTruck.TryExitTruck(this);
+            }
+            else if (isInTruck && !isDriver)
+            {
+                TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
+            }
+            else if (!isInTruck && canEnterInTruck)
             {
                 canEnterInTruck = false;
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
-            }
-            else if (isInTruck && isDriver)
-            {
-                nearbyTruck.TryExitTruck(this);
             }
         }
 
@@ -241,8 +245,6 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             if (TruckController.instance != null)
             {
-                transform.position = TruckController.instance.driverPos.position;
-                
                 float h = Input.GetAxis("Horizontal");
                 float v = Input.GetAxis("Vertical");
                 bool brake = Input.GetKey(KeyCode.Space);
@@ -419,18 +421,7 @@ public class FPSControllerMulti : NetworkBehaviour
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition)
     {
-        print($"EnterTruck - asDriver: {asDriver}");
-    
         isInTruck = true;
-    
-        transform.localPosition = spawnPosition;
-    
-        SetParentServerRpc(true);
-
-        if (asDriver)
-        {
-            driverLocalPosition = TruckController.instance.driverPos.position;
-        }
 
         if (controller != null)
             controller.enabled = false;
@@ -438,10 +429,27 @@ public class FPSControllerMulti : NetworkBehaviour
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
 
+        SetParentServerRpc(true);
+
+        if (asDriver)
+        {
+            driverLocalPosition = TruckController.instance.driverPos.localPosition;
+            if (IsOwner)
+            {
+                transform.localPosition = driverLocalPosition;
+            }
+        }
+        else
+        {
+            if (IsOwner)
+                transform.localPosition = TruckController.instance.spawnPassager.localPosition;
+        }
+
         NetworkTransform netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null)
             netTransform.InLocalSpace = true;
     }
+
     
     public void ExitTruck(Vector3 exitPosition)
     {
@@ -454,10 +462,6 @@ public class FPSControllerMulti : NetworkBehaviour
         
         if (controller != null)
             controller.enabled = true;
-
-        NetworkTransform netTransform = GetComponent<NetworkTransform>();
-        if (netTransform != null)
-            netTransform.InLocalSpace = false;
     }
 
     [ServerRpc(RequireOwnership = false)]
