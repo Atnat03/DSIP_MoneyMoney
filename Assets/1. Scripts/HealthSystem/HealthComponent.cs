@@ -2,6 +2,7 @@
 using Shooting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class HealthComponent : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class HealthComponent : MonoBehaviour
     [SerializeField] private UnityEvent _onRegeneration;
     [SerializeField] private UnityEvent _onDeath;
 
-
+    public Image healthBar;
 
 
     // Private fields
@@ -44,7 +45,7 @@ public class HealthComponent : MonoBehaviour
     Rigidbody _rb;
 
     float _previousHealth;
-    float _health;
+    [SerializeField]float _health;
     bool _enableCallbacks;
     bool _invulnerable;
 
@@ -56,6 +57,7 @@ public class HealthComponent : MonoBehaviour
     {
         _bulletDamage = TrySetupTarget();
         _impactDamage = TrySetupImpact();
+        healthBar = VariableManager.instance.healthBar;
     }
 
     private void Update()
@@ -127,6 +129,7 @@ public class HealthComponent : MonoBehaviour
     public void Heal(float hp)
     {
         _health += hp;
+        healthBar.fillAmount =  _health / _maxHealth;
         EventBus.Invoke("LocalPlayerHeal", new DataPacket(hp));
     }
     public bool TryTakeDamage(float damage)
@@ -151,6 +154,7 @@ public class HealthComponent : MonoBehaviour
     private void TakeDamage(float damage)
     {
         _health -= damage;
+        healthBar.fillAmount =  _health / _maxHealth;
         EventBus.Invoke("LocalPlayerDamage", new DataPacket(damage));
     }
 

@@ -5,7 +5,7 @@ public class BanditTir : MonoBehaviour
     #region Inspector
 
     [Header("References")]
-    [SerializeField] private Transform turretGun;     // X rotation
+    [SerializeField] private Transform turretGun;
     [SerializeField] private Transform firePoint;
 
     [Header("Rotation")]
@@ -14,7 +14,12 @@ public class BanditTir : MonoBehaviour
 
     [Header("Detection")]
     [SerializeField] private float detectionRadius = 60f;
-    [SerializeField] private LayerMask targetLayer;   // Layer "Partie"
+    [SerializeField] private LayerMask truckPartLayer;
+    [SerializeField] private LayerMask playerLayer;
+
+    [Header("Raycast Masks (VERY IMPORTANT)")]
+    [SerializeField] private LayerMask visibilityMask; // murs + player
+    [SerializeField] private LayerMask shootMask;      // murs + player + truckpart
 
     [Header("Shooting")]
     [SerializeField] private float fireRate = 0.5f;
@@ -22,30 +27,85 @@ public class BanditTir : MonoBehaviour
     [SerializeField] private float bulletVisualSpeed = 120f;
 
     public float damage;
+    public bool isRight;
 
     #endregion
 
     private float nextFireTime;
+    public BanditVehicleAI banditAI;
+
+    private void Start()
+    {
+        if (banditAI.position == BanditVehicleAI.RelativePosition.Right)
+            isRight = true;
+    }
 
     private void Update()
     {
         if (Time.time < nextFireTime) return;
 
-        Transform target = FindClosestTarget();
+        Transform target = ChooseTarget();
         if (target == null) return;
 
         AimAt(target);
-
         Shoot(target);
 
         nextFireTime = Time.time + fireRate;
     }
 
-    #region Targeting
+    #region Target Selection
 
-    private Transform FindClosestTarget()
+    private Transform ChooseTarget()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, targetLayer);
+        bool canShootPlayer =
+            (isRight && TruckLife.instance.canShootPlayerRight) ||
+            (!isRight && TruckLife.instance.canShootPlayerLeft);
+        print(canShootPlayer + " ouaiiiii");
+
+        if (canShootPlayer)
+        {
+            Transform visiblePlayer = FindClosestVisiblePlayer();
+            if (visiblePlayer != null)
+            {
+                Debug.Log("visible player ?");
+                return visiblePlayer;
+            }
+               
+        }
+
+        return FindClosestTruckPart();
+    }
+
+    private Transform FindClosestVisiblePlayer()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, playerLayer);
+
+        Transform closest = null;
+        float minDist = Mathf.Infinity;
+
+        foreach (var hit in hits)
+        {
+            Debug.Log("jai trouvé qqn ?");
+            HealthComponent health = hit.GetComponent<HealthComponent>();
+            if (health.Invulnerable) continue;
+
+            Debug.Log("test vision");
+            if (!HasLineOfSight(hit.transform)) continue;
+
+            float dist = (hit.transform.position - transform.position).sqrMagnitude;
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = hit.transform;
+            }
+        }
+        Debug.Log("closest j'ai trouvé");
+        return closest;
+    }
+
+    private Transform FindClosestTruckPart()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, truckPartLayer);
 
         Transform closest = null;
         float minDist = Mathf.Infinity;
@@ -54,20 +114,35 @@ public class BanditTir : MonoBehaviour
         {
             if (hit.CompareTag("TruckPart"))
             {
-                if (!hit.GetComponent<TruckPart>().isBroke.Value)
+                TruckPart part = hit.GetComponent<TruckPart>();
+                if (part.isBroke.Value) continue;
+
+                float dist = (hit.transform.position - transform.position).sqrMagnitude;
+                if (dist < minDist)
                 {
-                    float dist = (hit.transform.position - transform.position).sqrMagnitude;
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                        closest = hit.transform;
-                    }
+                    minDist = dist;
+                    closest = hit.transform;
                 }
-                
             }
         }
-           
+
         return closest;
+    }
+
+    private bool HasLineOfSight(Transform target)
+    {
+        Vector3 origin = firePoint.position;
+        Vector3 dir = (target.position - origin).normalized;
+
+        RaycastHit hit;
+        if (Physics.Raycast(origin, dir, out hit, detectionRadius, visibilityMask, QueryTriggerInteraction.Ignore))
+        {
+            Debug.Log("visible");
+            return hit.transform == target;
+        }
+
+        Debug.Log("obstrué " + hit.collider.name);
+        return false;
     }
 
     #endregion
@@ -78,12 +153,10 @@ public class BanditTir : MonoBehaviour
     {
         Vector3 dir = target.position - firePoint.position;
 
-        // Rotation Y (base)
         Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);
         Quaternion baseRot = Quaternion.LookRotation(flatDir);
         transform.rotation = Quaternion.Slerp(transform.rotation, baseRot, rotationSpeed * Time.deltaTime);
 
-        // Rotation X (gun)
         Quaternion gunRot = Quaternion.LookRotation(dir);
         turretGun.rotation = Quaternion.Slerp(turretGun.rotation, gunRot, gunElevationSpeed * Time.deltaTime);
     }
@@ -98,18 +171,20 @@ public class BanditTir : MonoBehaviour
         Vector3 dir = (target.position - origin).normalized;
 
         RaycastHit hit;
-        Vector3 hitPoint;
-        if (Physics.Raycast(origin, dir, out hit, detectionRadius))
+        Vector3 hitPoint = origin + dir * detectionRadius;
+
+        if (Physics.Raycast(origin, dir, out hit, detectionRadius, shootMask, QueryTriggerInteraction.Ignore))
         {
             hitPoint = hit.point;
-            target.GetComponent<TruckPart>().TakeDamage(damage);
-            // Plus tard : dégâts
-            // var health = hit.collider.GetComponent<Health>();
-            // if (health) health.TakeDamage(10);
-        }
-        else
-        {
-            hitPoint = origin + dir * detectionRadius;
+
+            if (hit.collider.CompareTag("Player"))
+            {
+                hit.collider.GetComponent<HealthComponent>().TryTakeDamage(damage);
+            }
+            else if (hit.collider.CompareTag("TruckPart"))
+            {
+                hit.collider.GetComponent<TruckPart>().TakeDamage(damage);
+            }
         }
 
         SpawnVisualBullet(origin, hitPoint);

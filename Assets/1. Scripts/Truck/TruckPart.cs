@@ -90,10 +90,6 @@ public class TruckPart : NetworkBehaviour
                 BreakOnServer();
             }
         }
-        else
-        {
-            TruckLife.instance.HandleShot(amount);
-        }
     }
 
     #endregion
@@ -119,13 +115,15 @@ public class TruckPart : NetworkBehaviour
             if (rb != null)
             {
                 Vector3 localDir = transform.localPosition;
-                Vector3 ejectDir = new Vector3(Mathf.Sign(localDir.x), 0f, 0f).normalized; 
+                Vector3 ejectDir = new Vector3(0f,0f,-Mathf.Sign(localDir.z)).normalized; 
                 ejectDir += Vector3.up * 0.2f; 
                 rb.AddForce(ejectDir * (ejectForce * mult) + Vector3.up * ejectUpwardForce, ForceMode.Impulse);
+                rb.AddTorque(30,0,0);
             }
         }
 
         isBroke.Value = true;
+        TruckLife.instance.DetermineIfShootable();
     }
     
     #endregion
