@@ -102,15 +102,13 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         if (!IsOwner)
         {
-            Color r = Random.ColorHSV();
-            
             meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
             
-           /* foreach (Transform child in meshRenderer.transform)
+           foreach (Transform child in meshRenderer.transform)
             {
-                child.GetComponent<MeshRenderer>().material.color = r;
+                child.GetComponent<MeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
                 child.gameObject.layer = LayerMask.NameToLayer("Default");
-            }*/
+            }
             
             myCamera.gameObject.SetActive(false);
             
