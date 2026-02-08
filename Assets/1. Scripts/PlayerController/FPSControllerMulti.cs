@@ -184,7 +184,7 @@ public class FPSControllerMulti : NetworkBehaviour
             speed = moveSpeed;
         }
         
-        if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
+        if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck || isInTruck))
         {
             if (!isInTruck)
             {
@@ -193,7 +193,6 @@ public class FPSControllerMulti : NetworkBehaviour
             }
             else if (isInTruck && isDriver)
             {
-                print("TryExitTruck");
                 nearbyTruck.TryExitTruck(this);
             }
         }
@@ -447,8 +446,6 @@ public class FPSControllerMulti : NetworkBehaviour
     public void ExitTruck(Vector3 exitPosition)
     {
         print("ExitTruck");
-        
-        SetParentServerRpc(false);
         
         transform.position = exitPosition;
         
