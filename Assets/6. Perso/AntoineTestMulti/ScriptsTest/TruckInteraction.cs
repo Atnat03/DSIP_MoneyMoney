@@ -69,33 +69,49 @@ public class TruckInteraction : NetworkBehaviour
         }
     }
     
-    private void EnterTruckServerLogic(FPSControllerMulti player)
-    {
+    private void EnterTruckServerLogic(FPSControllerMulti player) {
         ulong playerId = player.OwnerClientId;
         bool isDriver = false;
-        Vector3 targetPosition = passengerSpawnPosition.position;
-        
-        if (driverClientId.Value == ulong.MaxValue)
-        {
+        Vector3 targetLocalPos = passengerSpawnPosition.localPosition;
+
+        if (driverClientId.Value == ulong.MaxValue) {
             driverClientId.Value = playerId;
             hasDriver.Value = true;
-            targetPosition = driverPosition.position;
+            targetLocalPos = driverPosition.localPosition; 
             isDriver = true;
             Debug.Log($"Player {playerId} devient le conducteur");
         }
-        
-        NotifyPlayerEnteredClientRpc(player.NetworkObjectId, isDriver, targetPosition);
+
+        NetworkObject playerNet = player.NetworkObject;
+
+        // Vérifie si déjà parenté au camion
+        bool alreadyParented = player.transform.parent == transform;
+
+        if (!alreadyParented) {
+            // Cas "de l'extérieur" : position monde + parent (comme avant)
+            player.transform.position = driverPosition.position;  // ou passengerSpawnPosition.position si !isDriver
+            player.transform.rotation = driverPosition.rotation;
+            playerNet.TrySetParent(transform, true);
+        } else {
+            // Cas "de l'intérieur" : déjà enfant → force localPosition directement
+            player.transform.localPosition = targetLocalPos;
+            player.transform.localRotation = Quaternion.identity;  // ou driverPosition.localRotation si besoin d'aligner
+            // Pas besoin de re-parenter
+        }
+
+        // Optionnel : force une synchro propre (selon version Netcode)
+        // var nt = player.GetComponent<NetworkTransform>();
+        // if (nt != null) nt.Teleport(player.transform.position, player.transform.rotation, player.transform.localScale);
+
+        NotifyPlayerEnteredClientRpc(player.NetworkObjectId, isDriver);
     }
     
     [ClientRpc]
-    private void NotifyPlayerEnteredClientRpc(ulong playerNetworkObjectId, bool isDriver, Vector3 spawnPosition)
-    {
-        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerNetworkObjectId, out NetworkObject playerNetObj))
-        {
+    private void NotifyPlayerEnteredClientRpc(ulong playerNetworkObjectId, bool isDriver) {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerNetworkObjectId, out NetworkObject playerNetObj)) {
             FPSControllerMulti player = playerNetObj.GetComponent<FPSControllerMulti>();
-            if (player != null && player.IsOwner)
-            {
-                player.EnterTruck(isDriver, spawnPosition);
+            if (player != null && player.IsOwner) {
+                player.EnterTruck(isDriver, Vector3.zero);  
             }
         }
     }

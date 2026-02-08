@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
@@ -419,37 +420,24 @@ public class FPSControllerMulti : NetworkBehaviour
             HandleHeadbob();
     }
 
-    public void EnterTruck(bool asDriver, Vector3 spawnPosition)
-    {
+    public void EnterTruck(bool asDriver, Vector3 spawnPosition) {
         isInTruck = true;
-
-        if (controller != null)
-            controller.enabled = false;
-
+        if (controller != null) controller.enabled = false;
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
 
-        SetParentServerRpc(true);
-
-        if (asDriver)
-        {
-            driverLocalPosition = TruckController.instance.driverPos.localPosition;
-            if (IsOwner)
-            {
-                transform.localPosition = driverLocalPosition;
-            }
-        }
-        else
-        {
-            if (IsOwner)
-                transform.localPosition = TruckController.instance.spawnPassager.localPosition;
-        }
-
-        NetworkTransform netTransform = GetComponent<NetworkTransform>();
-        if (netTransform != null)
+        var netTransform = GetComponent<NetworkTransform>();
+        if (netTransform != null) {
             netTransform.InLocalSpace = true;
-    }
+        }
 
+        if (IsOwner) {
+            // Snap immédiat en local (sécurité)
+            Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
+            transform.localPosition = targetSeat.localPosition;
+            transform.localRotation = Quaternion.identity;  // ou targetSeat.localRotation
+        }
+    }
     
     public void ExitTruck(Vector3 exitPosition)
     {
