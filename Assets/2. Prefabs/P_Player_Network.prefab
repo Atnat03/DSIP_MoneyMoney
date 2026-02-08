@@ -1593,6 +1593,9 @@ MonoBehaviour:
         byte0027: 0
         byte0028: 0
         byte0029: 0
+  playerRenderer: {fileID: 6525268964718179983}
+  colorPlayer:
+    m_InternalValue: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &7658033872997971598
 GameObject:
   m_ObjectHideFlags: 0
@@ -2244,6 +2247,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: -4783713570328844907, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
       propertyPath: m_Name
       value: SM_Player_01
@@ -2256,6 +2263,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4688486687549206810, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5491932042642760939, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -1376419348210125738, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2272,6 +2287,11 @@ Transform:
 --- !u!1 &2067222194839518774 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
+  m_PrefabInstance: {fileID: 1184823232507364199}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6525268964718179983 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3819263595496917528, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
   m_PrefabInstance: {fileID: 1184823232507364199}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7793188505120914819 stripped

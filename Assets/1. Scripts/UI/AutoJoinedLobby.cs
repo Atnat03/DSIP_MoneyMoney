@@ -24,6 +24,8 @@ public class AutoJoinedLobby : MonoBehaviour
 
     public TMP_InputField inputName;
     public string LocalPlayerName { get; private set; }
+    public Color LocalPlayerColor { get; set; }
+    public Color[] colorsList;
 
     public GameObject StartCanva;
 
@@ -34,6 +36,8 @@ public class AutoJoinedLobby : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        LocalPlayerColor = colorsList[0];
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
@@ -47,6 +51,11 @@ public class AutoJoinedLobby : MonoBehaviour
             LocalPlayerName = "Player " +  Random.Range(0, 99);
         
         EnterGame();
+    }
+
+    public void ChangeColor(int colorIndex)
+    {
+        LocalPlayerColor = colorsList[colorIndex];
     }
 
     private async void EnterGame()
@@ -86,7 +95,6 @@ public class AutoJoinedLobby : MonoBehaviour
         
         if (response.Results.Count > 0)
         {
-            // ⚠️ Client rejoint un lobby existant
             lobby = response.Results[0];
     
             await LobbyService.Instance.JoinLobbyByIdAsync(
@@ -103,7 +111,6 @@ public class AutoJoinedLobby : MonoBehaviour
                 }
             );
 
-            // Recharger le lobby complet
             lobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
 
             string relayCode = lobby.Data["RelayCode"].Value;
@@ -114,7 +121,6 @@ public class AutoJoinedLobby : MonoBehaviour
         }
         else
         {
-            // ⚠️ Aucun lobby trouvé → on crée le host
             await CreateLobbyAndHost();
         }
 

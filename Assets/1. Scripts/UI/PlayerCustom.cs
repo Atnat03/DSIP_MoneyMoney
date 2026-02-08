@@ -13,11 +13,14 @@ public class PlayerCustom : NetworkBehaviour
             NetworkVariableReadPermission.Everyone,
             NetworkVariableWritePermission.Server
         );
-
+    
+    public MeshRenderer playerRenderer;
+    public NetworkVariable<Color> colorPlayer = new NetworkVariable<Color>();
 
     public override void OnNetworkSpawn()
     {
         PlayerName.OnValueChanged += OnNameChanged;
+        colorPlayer.OnValueChanged += OnColorChanged;
 
         OnNameChanged("", PlayerName.Value);
 
@@ -25,9 +28,16 @@ public class PlayerCustom : NetworkBehaviour
         {
             string name = AutoJoinedLobby.Instance.LocalPlayerName;
             SubmitNameServerRpc(name);
+            
+            Color localColor = AutoJoinedLobby.Instance.LocalPlayerColor;
+            SubmitColorServerRpc(localColor);
         }
     }
 
+    private void OnColorChanged(Color previousValue, Color newValue)
+    {
+        playerRenderer.GetComponent<MeshRenderer>().material.color = newValue;
+    }
 
     private void OnNameChanged(FixedString32Bytes oldName, FixedString32Bytes newName)
     {
@@ -35,11 +45,16 @@ public class PlayerCustom : NetworkBehaviour
             nameText.text = newName.ToString();
     }
 
-
     [ServerRpc]
     void SubmitNameServerRpc(string name)
     {
         PlayerName.Value = name;
+    }
+    
+    [ServerRpc]
+    void SubmitColorServerRpc(Color color)
+    {
+        colorPlayer.Value = color;
     }
 
 }

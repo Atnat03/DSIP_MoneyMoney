@@ -106,11 +106,11 @@ public class FPSControllerMulti : NetworkBehaviour
             
             meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
             
-            foreach (Transform child in meshRenderer.transform)
+           /* foreach (Transform child in meshRenderer.transform)
             {
                 child.GetComponent<MeshRenderer>().material.color = r;
                 child.gameObject.layer = LayerMask.NameToLayer("Default");
-            }
+            }*/
             
             myCamera.gameObject.SetActive(false);
             
