@@ -52,13 +52,21 @@ public class BanditTir : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            float dist = (hit.transform.position - transform.position).sqrMagnitude;
-            if (dist < minDist)
+            if (hit.CompareTag("TruckPart"))
             {
-                minDist = dist;
-                closest = hit.transform;
+                if (!hit.GetComponent<TruckPart>().isBroke.Value)
+                {
+                    float dist = (hit.transform.position - transform.position).sqrMagnitude;
+                    if (dist < minDist)
+                    {
+                        minDist = dist;
+                        closest = hit.transform;
+                    }
+                }
+                
             }
         }
+           
         return closest;
     }
 

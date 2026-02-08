@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 public class BankBehaviour : MonoBehaviour
@@ -29,6 +30,9 @@ public class BankBehaviour : MonoBehaviour
 
     public IEnumerator Spawnmoney()
     {
+        if (!NetworkManager.Singleton.IsServer)
+            yield break;
+            
         visited = true;
 
         foreach (MoneySpawn spawn in moneySpawns)
@@ -36,7 +40,10 @@ public class BankBehaviour : MonoBehaviour
             for (int i = 0; i < spawn.numberOfItem; i++)
             {
                 yield return new WaitForSeconds(delay);
-                Instantiate(spawn.objectSpawned, spawn.spawnPoint.position, spawn.spawnPoint.rotation);
+                GameObject g = Instantiate(spawn.objectSpawned, spawn.spawnPoint.position, spawn.spawnPoint.rotation);
+                NetworkObject network = g.GetComponent<NetworkObject>();
+                if(network != null)
+                    network.Spawn();
             }
         }
     }

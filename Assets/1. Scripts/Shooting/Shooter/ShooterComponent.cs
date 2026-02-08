@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UI;
@@ -6,6 +7,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 namespace Shooting
 {
@@ -40,6 +42,8 @@ namespace Shooting
         private int _previousAmmoCount;
         private bool _enableCallbacks;
         private Camera _playerCamera;
+        [SerializeField] private Transform _instantPos;
+        [SerializeField] private float reloadingTime = 2f;
         #endregion
 
         #region Methods
@@ -56,21 +60,60 @@ namespace Shooting
             _shooter.OnShoot += MakeTrail;
             
             Reload();
-            
-            print(_currentAmmo);
         }
 
         public void Reload() => _currentAmmo = _maxAmmo;
 
+        public void StartToReload()
+        {
+            StartCoroutine(Reloading());
+        }
+        
+        public IEnumerator Reloading()
+        {
+            GetComponent<FPSControllerMulti>().isFreeze = true;
+            Image circleCD = VariableManager.instance.circleCD;
+            float count = reloadingTime;
+            while (count > 0)
+            {
+                count -= Time.deltaTime;
+                yield return null;
+                circleCD.fillAmount =  count / reloadingTime;
+            }
+            GetComponent<FPSControllerMulti>().isFreeze = false;
+            Reload();
+        }
+
         private void MakeTrail()
+        {
+            if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
+                return;
+            
+            Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
+            Vector3 startPos = _instantPos.position;
+            Vector3 dir = camera.transform.forward * MaxDistance;
+
+            if (IsOwner)
+            {
+                ShootTrailServerRpc(startPos, dir);
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void ShootTrailServerRpc(Vector3 start, Vector3 direction)
+        {
+            ShootTrailClientRpc(start, direction);
+        }
+
+        [ClientRpc]
+        private void ShootTrailClientRpc(Vector3 start, Vector3 direction)
         {
             if (TryGetComponent(out TrailMaker maker))
             {
-                Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
-                
-                maker.Make(camera.transform.position, camera.transform.forward * MaxDistance);
+                maker.Make(start, direction);
             }
         }
+
       
         private void Update()
         {

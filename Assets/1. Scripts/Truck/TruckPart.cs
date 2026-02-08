@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class TruckPart : MonoBehaviour
+public class TruckPart : NetworkBehaviour
 {
     #region Inspector
     [Header("Health")]
@@ -15,81 +16,149 @@ public class TruckPart : MonoBehaviour
     [SerializeField] private bool startDestroyed = false;
     #endregion
 
-    private float currentHealth;
-    private GameObject detachedInstance;
+    public NetworkVariable<float> currentHealth = new NetworkVariable<float>(
+        value: 100f,
+        readPerm: NetworkVariableReadPermission.Everyone,
+        writePerm: NetworkVariableWritePermission.Server
+    );
+    
+    private NetworkVariable<ulong> detachedInstanceId = new NetworkVariable<ulong>(
+        value: 0,
+        readPerm: NetworkVariableReadPermission.Everyone,
+        writePerm: NetworkVariableWritePermission.Server
+    );
 
     public float mult;
-
     public bool lifeMode;
-
-    private void Start()
+    
+    public NetworkVariable<bool> isBroke = new NetworkVariable<bool>(
+        value: false,
+        readPerm: NetworkVariableReadPermission.Everyone,
+        writePerm: NetworkVariableWritePermission.Server
+    );
+    
+    public override void OnNetworkSpawn()
     {
-        currentHealth = maxHealth;
+        if (IsServer)
+            currentHealth.Value = maxHealth;
+        
+        Interact.OnInteract += HitInteract;
+        
+        isBroke.OnValueChanged += OnBrokeStateChanged;
+        
+        UpdateVisuals();
+    }
 
-        if (startDestroyed)
-            Break();
+    private void OnDisable()
+    {
+        Interact.OnInteract -= HitInteract;
+        if (isBroke != null)
+            isBroke.OnValueChanged -= OnBrokeStateChanged;
+    }
+
+    private void OnBrokeStateChanged(bool previousValue, bool newValue)
+    {
+        UpdateVisuals();
+    }
+
+    private void UpdateVisuals()
+    {
+        GetComponent<MeshRenderer>().enabled = !isBroke.Value;
+        GetComponent<BoxCollider>().isTrigger = isBroke.Value;
     }
 
     #region Damage
 
     public void TakeDamage(float amount)
     {
+        TakeDamageServerRpc(amount);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void TakeDamageServerRpc(float amount)
+    {
+        print("Take Dmg (Server)");
+        
         if (!lifeMode)
         {
-            if (currentHealth <= 0) return;
+            if (currentHealth.Value <= 0) return;
 
-            currentHealth -= amount;
+            currentHealth.Value -= amount;
 
-            if (currentHealth <= 0)
+            if (currentHealth.Value <= 0)
             {
-                Break();
+                BreakOnServer();
             }
         }
         else
         {
             TruckLife.instance.HandleShot(amount);
         }
-       
     }
 
     #endregion
 
     #region Break / Detach
 
-    private void Break()
+    private void BreakOnServer()
     {
-        gameObject.SetActive(false);
+        if (!IsServer) return;
+        
+        print("break (Server)");
+        
         if (detachedPrefab != null)
         {
-            detachedInstance = Instantiate(detachedPrefab, transform.position, transform.rotation);
-
+            GameObject detachedInstance = Instantiate(detachedPrefab, transform.position, transform.rotation);
+            NetworkObject netObj = detachedInstance.GetComponent<NetworkObject>();
+            netObj.Spawn();
+            
+            // Stocker l'ID pour pouvoir le détruire plus tard
+            detachedInstanceId.Value = netObj.NetworkObjectId;
+            
             Rigidbody rb = detachedInstance.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 Vector3 localDir = transform.localPosition;
                 Vector3 ejectDir = new Vector3(Mathf.Sign(localDir.x), 0f, 0f).normalized; 
                 ejectDir += Vector3.up * 0.2f; 
-                rb.AddForce(ejectDir * (ejectForce*mult) + Vector3.up * ejectUpwardForce, ForceMode.Impulse);
+                rb.AddForce(ejectDir * (ejectForce * mult) + Vector3.up * ejectUpwardForce, ForceMode.Impulse);
             }
         }
-    }
 
+        isBroke.Value = true;
+    }
+    
     #endregion
 
     #region Repair
 
-    public void Repair()
+    private void HitInteract(GameObject obj, GameObject player)
     {
-        // Réactive la partie originale
-        gameObject.SetActive(true);
-        currentHealth = maxHealth;
-
-        // Supprime la partie tombée
-        if (detachedInstance != null)
+        if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
         {
-            Destroy(detachedInstance);
+            RepairServerRpc();
         }
     }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void RepairServerRpc()
+    {
+        if (!IsServer) return;
+        
+        isBroke.Value = false;
+        currentHealth.Value = maxHealth;
 
+        // Supprime la partie tombée
+        if (detachedInstanceId.Value != 0)
+        {
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(detachedInstanceId.Value, out NetworkObject netObj))
+            {
+                netObj.Despawn();
+                Destroy(netObj.gameObject);
+            }
+            detachedInstanceId.Value = 0;
+        }
+    }
+    
     #endregion
 }

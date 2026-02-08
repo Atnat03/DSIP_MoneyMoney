@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,13 +13,21 @@ public class TruckInteraction : NetworkBehaviour
     [SerializeField] private Transform passengerSpawnPosition;
     [SerializeField] private Transform exitPosition;
     
-    private NetworkVariable<ulong> driverClientId = new NetworkVariable<ulong>(
+    public NetworkVariable<ulong> driverClientId = new NetworkVariable<ulong>(
         ulong.MaxValue, 
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
+    public NetworkVariable<bool> hasDriver = new NetworkVariable<bool>(
+        false, 
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
     
     private TruckController truckController;
+
+    public GameObject door;
     
     private void Awake()
     {
@@ -71,6 +80,7 @@ public class TruckInteraction : NetworkBehaviour
         if (driverClientId.Value == ulong.MaxValue)
         {
             driverClientId.Value = playerId;
+            hasDriver.Value = true;
             targetPosition = driverPosition.position;
             isDriver = true;
             Debug.Log($"Player {playerId} devient le conducteur");
@@ -124,6 +134,7 @@ public class TruckInteraction : NetworkBehaviour
         if (driverClientId.Value == playerId)
         {
             driverClientId.Value = ulong.MaxValue;
+            hasDriver.Value = false;
             Debug.Log($"Player {playerId} n'est plus conducteur");
         }
         
@@ -151,5 +162,10 @@ public class TruckInteraction : NetworkBehaviour
     public bool HasDriver()
     {
         return driverClientId.Value != ulong.MaxValue;
+    }
+
+    private void Update()
+    {
+        door.SetActive(!hasDriver.Value);
     }
 }

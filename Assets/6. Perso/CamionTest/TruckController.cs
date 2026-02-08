@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TruckController : NetworkBehaviour
 {
@@ -25,6 +26,12 @@ public class TruckController : NetworkBehaviour
     public Transform backLeftWheelTransform;
     public Transform backRightWheelTransform;
 
+    public GameObject backLights;
+    public NetworkVariable<bool> BackLightOn = new NetworkVariable<bool>();
+
+    public GameObject frontLights;
+    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>();
+    public MeshRenderer lightsButtons;
     
     float horizontalInput;
     float verticalInput;
@@ -36,9 +43,11 @@ public class TruckController : NetworkBehaviour
 
     public AudioClip klaxon;
     
-    public float durationBeforeReset = 2f;
     private float t = 0f;
-    private bool isFallen = false;
+    [SerializeField, Tooltip("Value pour 1 joueur, qui sera multiplier par le nombre de joueuur")] 
+    private NetworkVariable<float> targetValueToReset = new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);    private NetworkVariable<float> currentValueToResetNet = new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<bool> isFallen = new(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] private Image jaugeMashing;
     
     [Header("Truck Bounds")]
     [SerializeField] public Vector3 boundsCenter = Vector3.zero; 
@@ -54,11 +63,15 @@ public class TruckController : NetworkBehaviour
 
     public Transform reload;
     public float raduisToReload = 2f;
+
+    public Transform steeringWheel;
     
     private void Awake()
     {
         instance = this;
         truckInteraction = GetComponent<TruckInteraction>();
+        
+        jaugeMashing.transform.parent.gameObject.SetActive(false);
     }
 
     public override void OnNetworkSpawn()
@@ -68,7 +81,20 @@ public class TruckController : NetworkBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-        if (!IsServer) return;
+        currentValueToResetNet.OnValueChanged += OnCurrentValueChanged;
+        isFallen.OnValueChanged += OnIsFallenChanged;
+        BackLightOn.OnValueChanged += OnBackLightsChanged;
+        FrontLightOn.OnValueChanged += OnFrontLigthChanged;
+
+        UpdateJauge();    
+    }
+
+    private void OnDestroy()
+    {
+        currentValueToResetNet.OnValueChanged -= OnCurrentValueChanged;
+        isFallen.OnValueChanged -= OnIsFallenChanged;
+        BackLightOn.OnValueChanged -= OnBackLightsChanged;
+        FrontLightOn.OnValueChanged -= OnFrontLigthChanged;
     }
 
     void Update()
@@ -92,6 +118,18 @@ public class TruckController : NetworkBehaviour
         CheckFall();
     }
     
+    private void OnBackLightsChanged(bool previousValue, bool newValue)
+    {
+        backLights.SetActive(newValue);
+    }
+    
+    private void OnFrontLigthChanged(bool previousValue, bool newValue)
+    {
+        frontLights.SetActive(newValue);
+        
+        lightsButtons.material.color = frontLights.activeSelf ? Color.yellow : Color.gray;
+    }
+    
     void CheckPassengersBounds()
     {
         if (!IsServer) return;
@@ -104,7 +142,6 @@ public class TruckController : NetworkBehaviour
             FPSControllerMulti player = playerObj.GetComponent<FPSControllerMulti>();
             if (player == null) continue;
 
-            // Ignore le conducteur
             if (truckInteraction != null &&
                 truckInteraction.IsDriver(client.ClientId))
                 continue;
@@ -125,14 +162,13 @@ public class TruckController : NetworkBehaviour
     
     void ParentPassenger(NetworkObject playerObj)
     {
-        playerObj.TrySetParent(transform, true); // worldPositionStays = true pour garder la position world actuelle
+        playerObj.TrySetParent(transform, true);
 
         trackedPassengers.Add(playerObj);
 
         var fps = playerObj.GetComponent<FPSControllerMulti>();
         if (fps != null)
         {
-            // Appelle un ServerRpc sur le FPSController pour que LE CLIENT PROPRIÉTAIRE mette à jour son état
             fps.SetPassengerModeServerRpc(true, spawnPassager.localPosition);
         }
 
@@ -148,7 +184,7 @@ public class TruckController : NetworkBehaviour
         var fps = playerObj.GetComponent<FPSControllerMulti>();
         if (fps != null)
         {
-            fps.SetPassengerModeServerRpc(false, Vector3.zero); // zero = pas utilisé
+            fps.SetPassengerModeServerRpc(false, Vector3.zero);
         }
 
         Debug.Log($"Passenger {playerObj.OwnerClientId} déparenté du camion");
@@ -156,32 +192,21 @@ public class TruckController : NetworkBehaviour
     
 
     [ServerRpc(RequireOwnership = false)]
-    public void SendInputsServerRpc(float horizontal, float vertical, bool breaking, bool horn, ServerRpcParams rpcParams = default)
+    public void SendInputsServerRpc(float horizontal, float vertical, bool breaking, ServerRpcParams rpcParams = default)
     {
         if (truckInteraction != null && truckInteraction.IsDriver(rpcParams.Receive.SenderClientId))
         {
             horizontalInput = horizontal;
             verticalInput = vertical;
             isBreaking = breaking;
-            
-            if (horn)
-            {
-                PlayHornClientRpc();
-            }
+            BackLightOn.Value = breaking;
         }
     }
 
     [ClientRpc]
-    void PlayHornClientRpc()
+    public void PlayHornClientRpc()
     {
         GetComponent<AudioSource>().PlayOneShot(klaxon);
-    }
-
-    public void GetInput()
-    {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
-        isBreaking = Input.GetKey(KeyCode.Space);
     }
 
     void HandleMotor()
@@ -206,6 +231,7 @@ public class TruckController : NetworkBehaviour
     void HandleSteering()
     {
         currentSteerAngle = maxSteerAngle * horizontalInput;
+        steeringWheel.localRotation = Quaternion.Euler(0, 0, -currentSteerAngle);
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
     }
@@ -229,36 +255,70 @@ public class TruckController : NetworkBehaviour
     
     private void UpdateWheelsVisual()
     {
-        // Clients non-serveur mettent juste à jour les visuels
         UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
         UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);
         UpdateSingleWheel(backLeftWheelCollider, backLeftWheelTransform);
         UpdateSingleWheel(backRightWheelCollider, backRightWheelTransform);
     }
 
+    private bool multiply = false;
+    
     private void CheckFall()
     {
         Vector3 rot = transform.rotation.eulerAngles;
-
         float x = NormalizeAngle(rot.x);
         float z = NormalizeAngle(rot.z);
 
-        if (!isFallen && (Mathf.Abs(x) > 75f || Mathf.Abs(z) > 75f))
+        if (!isFallen.Value && (Mathf.Abs(x) > 75f || Mathf.Abs(z) > 75f))
         {
             Debug.Log("Camion tombé");
-            isFallen = true;
-            t = durationBeforeReset;
+            isFallen.Value = true;
         }
 
-        if (isFallen)
+        if (isFallen.Value)
         {
-            t -= Time.deltaTime;
-
-            if (t <= 0f)
+            jaugeMashing.transform.parent.gameObject.SetActive(true);
+            
+            if(!multiply)
             {
-                ResetTruck();
+                targetValueToReset.Value *= NetworkManager.Singleton.ConnectedClientsList.Count;
+                multiply = true;
+            }
+
+            if (currentValueToResetNet.Value >= targetValueToReset.Value)
+            {
+                ResetTruckServerRpc();
             }
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void AddValueToResetServerRpc()
+    {
+        currentValueToResetNet.Value++;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ResetTruckServerRpc()
+    {
+        Vector3 rot = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
+        transform.position += Vector3.up * 2f;
+        
+        jaugeMashing.transform.parent.gameObject.SetActive(false);
+
+        currentValueToResetNet.Value = 0f;
+        isFallen.Value = false;
+
+        multiply = false;
+    }
+
+    public void AddValueToReset()
+    {
+        if (IsServer)
+            currentValueToResetNet.Value++;
+        else
+            AddValueToResetServerRpc();
     }
 
     float NormalizeAngle(float angle)
@@ -266,17 +326,6 @@ public class TruckController : NetworkBehaviour
         if (angle > 180f)
             angle -= 360f;
         return angle;
-    }
-
-    void ResetTruck()
-    {
-        Debug.Log("Camion redressé");
-
-        Vector3 rot = transform.rotation.eulerAngles;
-        transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
-
-        transform.position += Vector3.up * 2f;
-        isFallen = false;
     }
     
     bool IsOutsideTruckBounds(Transform playerTransform)
@@ -290,6 +339,28 @@ public class TruckController : NetworkBehaviour
             localPos.x < center.x - halfSize.x || localPos.x > center.x + halfSize.x ||
             localPos.y < center.y - halfSize.y || localPos.y > center.y + halfSize.y ||
             localPos.z < center.z - halfSize.z || localPos.z > center.z + halfSize.z;
+    }
+    
+    private void OnCurrentValueChanged(float oldValue, float newValue)
+    {
+        UpdateJauge();
+    }
+
+    private void OnIsFallenChanged(bool oldValue, bool newValue)
+    {
+        UpdateJauge();
+    }
+
+    private void UpdateJauge()
+    {
+        if (jaugeMashing == null) return;
+
+        jaugeMashing.transform.parent.gameObject.SetActive(isFallen.Value);
+
+        if (isFallen.Value && targetValueToReset.Value > 0f)
+            jaugeMashing.fillAmount = Mathf.Clamp01(currentValueToResetNet.Value / targetValueToReset.Value);
+        else
+            jaugeMashing.fillAmount = 0f;
     }
     
     private void OnDrawGizmos()

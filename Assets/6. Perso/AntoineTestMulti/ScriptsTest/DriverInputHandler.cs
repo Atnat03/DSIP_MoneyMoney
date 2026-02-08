@@ -28,6 +28,6 @@ public class DriverInputHandler : MonoBehaviour
         bool breaking = Input.GetKey(KeyCode.Space);
         bool horn = Input.GetKeyDown(KeyCode.K);
 
-        truckController.SendInputsServerRpc(horizontal, vertical, breaking, horn);
+        truckController.SendInputsServerRpc(horizontal, vertical, breaking);
     }
 }

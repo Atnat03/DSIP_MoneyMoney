@@ -1,9 +1,13 @@
 using System;
+using System.Numerics;
 using Shooting;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
+using Vector2 = UnityEngine.Vector2;
 
 [DefaultExecutionOrder(-1)]
 public class FPSControllerMulti : NetworkBehaviour
@@ -11,7 +15,7 @@ public class FPSControllerMulti : NetworkBehaviour
     [Header("References")]
     private Rigidbody truckRb;
     [SerializeField] Transform cameraTarget;
-    Transform cameraTransform;
+    [SerializeField] Transform cameraTransform;
     [SerializeField] Camera myCamera;
     [SerializeField] private CapsuleCollider capsule;
     
@@ -31,7 +35,14 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField] bool isGrounded = false;
     [SerializeField] LayerMask groundLayer;
     private float verticalVelocity;
-    
+
+    [Header("Headbob Settings")]
+    [SerializeField, Range(0, 0.2f)] float _amplitude = 0.05f;
+    [SerializeField, Range(0, 30)] float frequency = 10f;
+    [SerializeField] private Vector3 startPos;
+    [SerializeField, Range(0, 2f)] float sprintAmplitudeMultiplier = 1.5f;
+    [SerializeField, Range(0, 2f)] float sprintFrequencyMultiplier = 1.5f;
+
     [Header("Truck Physics")]
     [SerializeField] float truckDamping = 5f;
     
@@ -63,10 +74,28 @@ public class FPSControllerMulti : NetworkBehaviour
     ShooterComponent shooter;
     
     public GameObject meshRenderer;
+
+    public bool canSit = false;
+    public bool isSitting = false;
+    private Transform sittingPos;
+    
+    [Header("Reset Truck")]
+    public KeyCode resetTruckKey = KeyCode.C;
+
+    [Header("Gun Visual")] 
+    public GameObject gunOwner;
+    public GameObject gunOther;
+    public bool hasSomethingInHand = false;
     
     public Camera MyCamera()
     {
         return myCamera;
+    }
+
+    public void SetVisibleGun()
+    {
+        gunOther.SetActive(hasSomethingInHand);
+        gunOwner.SetActive(!hasSomethingInHand);
     }
     
     public override void OnNetworkSpawn()
@@ -74,24 +103,35 @@ public class FPSControllerMulti : NetworkBehaviour
         if (!IsOwner)
         {
             Color r = Random.ColorHSV();
-
             
-            foreach (Transform child in meshRenderer.transform)
+            meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            
+           /* foreach (Transform child in meshRenderer.transform)
             {
                 child.GetComponent<MeshRenderer>().material.color = r;
                 child.gameObject.layer = LayerMask.NameToLayer("Default");
-            }
+            }*/
+            
+            myCamera.gameObject.SetActive(false);
+            
+            gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
+            SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
             
             ui.SetActive(false);
             return;
         }
+
+        gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
+
+        foreach (Transform t in gunOther.transform)
+        {
+            t.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
         
-        GameObject camObj = new GameObject("Camera of " +  gameObject.name);
-        Camera cam = camObj.AddComponent<Camera>();
-        cam.cullingMask = maskCameraPlayer;
-        cam.fieldOfView = 60f;
-        cameraTransform = camObj.transform;
-        myCamera = camObj.GetComponent<Camera>();
+        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");  
+        
+        myCamera.cullingMask = maskCameraPlayer;
+        startPos = cameraTransform.localPosition;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -105,6 +145,16 @@ public class FPSControllerMulti : NetworkBehaviour
         
         shooter = gameObject.GetComponent<ShooterComponent>();
     }
+    
+    void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
+    }
 
     private Vector3 lastTruckPosition;
 
@@ -117,6 +167,8 @@ public class FPSControllerMulti : NetworkBehaviour
         
         textGoInCamion.SetActive(canEnterInTruck);
         textReload.SetActive(canReload);
+
+        SetVisibleGun();
         
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -140,13 +192,44 @@ public class FPSControllerMulti : NetworkBehaviour
             }
         }
 
+        if (TruckController.instance.isFallen.Value)
+        {
+            if (Input.GetKeyDown(resetTruckKey))
+            {
+                print("KEY RESET");
+                TruckController.instance.AddValueToReset();
+            }
+        }
+
         canReload = CheckCanReload();
 
-        if (Input.GetKeyUp(KeyCode.E) && canReload)
+        if (Input.GetKeyUp(KeyCode.E) && !isDriver)
         {
-            print("Reload");
-            shooter.Reload();
-            canReload = false;
+            if(canReload)
+            {
+                print("Reload");
+                shooter.StartToReload();
+                canReload = false;
+            }
+
+            if (TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false)
+                return;
+            
+            canSit = CheckRaycast();
+            
+            if (isSitting)
+            {
+                sittingPos = null;
+                isSitting = false;
+            }
+            
+            if (canSit)
+            {
+                print("can sit : " + canSit);
+                
+                isSitting = true;
+                canSit = false;
+            }
         }
 
         if (isDriver && isInTruck)
@@ -158,9 +241,45 @@ public class FPSControllerMulti : NetworkBehaviour
                 float h = Input.GetAxis("Horizontal");
                 float v = Input.GetAxis("Vertical");
                 bool brake = Input.GetKey(KeyCode.Space);
-                bool horn = Input.GetKeyDown(KeyCode.H);
-                TruckController.instance.SendInputsServerRpc(h, v, brake, horn);
+                TruckController.instance.SendInputsServerRpc(h, v, brake);
             }
+
+            if (Input.GetButtonDown("Fire2"))
+            {
+                RaycastHit hit;
+                Vector3 origin = MyCamera().transform.position;
+                Vector3 direction = MyCamera().transform.forward;
+                
+                if (Physics.Raycast(origin, direction, out hit, 5f))
+                {
+                    if (hit.collider.CompareTag("Klaxon"))
+                    {
+                        TruckController.instance.PlayHornClientRpc();
+                    }
+
+                    if (hit.collider.CompareTag("RadioButton"))
+                    {
+                        print("Appuis sur radio button");
+                        Radio.instance.CheckButton(hit.collider.gameObject);
+                    }
+                    
+                    if (hit.collider.CompareTag("Phares"))
+                    {
+                        TruckController.instance.FrontLightOn.Value = !TruckController.instance.FrontLightOn.Value;
+                    }
+                }
+            }
+            
+            HandleCameraInput();
+            return;
+        }
+
+        if (isSitting && sittingPos != null)
+        {
+            transform.position = sittingPos.position;
+                
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
             
             HandleCameraInput();
             return;
@@ -172,68 +291,125 @@ public class FPSControllerMulti : NetworkBehaviour
         }
     }
 
+    private bool CheckRaycast()
+    {
+        RaycastHit hit;
+        Vector3 origin = MyCamera().transform.position;
+        Vector3 direction = MyCamera().transform.forward;
+        
+        print("CheckRaycast");
+        
+        if (Physics.Raycast(origin, direction, out hit, 5f))
+        {
+            Debug.DrawLine(origin, hit.point, Color.cyan);
+            
+            if (hit.collider.CompareTag("Chairs"))
+            {
+                sittingPos = hit.collider.GetComponent<Chair>().sittingPos;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     bool CheckCanReload()
     {
         return Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload;
     }
+
+    public bool isFreeze;
     
     void HandleCameraInput()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+        if (!isFreeze)
+        {
+            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
+            float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
 
-        yaw += mouseX;
-        pitch -= mouseY;
-        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+            yaw += mouseX;
+            pitch -= mouseY;
+            pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+        }
+    }
+
+    private void HandleHeadbob()
+    {
+        if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
+        {
+            cameraTransform.localPosition = Vector3.Lerp(
+                cameraTransform.localPosition,
+                startPos,
+                Time.deltaTime
+            );
+            return;
+        }
+
+        // Sprint ?
+        bool isSprinting = Input.GetKey(KeyCode.LeftShift);
+
+        float amp = _amplitude * (isSprinting ? sprintAmplitudeMultiplier : 1f);
+        float freq = frequency * (isSprinting ? sprintFrequencyMultiplier : 1f);
+
+        Vector3 bobOffset;
+        bobOffset.y = Mathf.Sin(Time.time * freq) * amp;
+        bobOffset.x = Mathf.Cos(Time.time * freq * 0.5f) * amp * 2f;
+        bobOffset.z = 0f;
+
+        cameraTransform.localPosition = startPos + bobOffset;
     }
 
     void HandleMovement()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-
-        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
-        
-        Debug.Log(horizontalInput + " / " + verticalInput);
-
-        yaw += mouseX;
-        pitch -= mouseY;
-        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
-        
-        if (controller.isGrounded)
+        if (!isFreeze)
         {
-            if (verticalVelocity < 0)
-                verticalVelocity = -2f;
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
+            float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+
+            yaw += mouseX;
+            pitch -= mouseY;
+            pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+
+            if (controller.isGrounded)
             {
-                verticalVelocity = jumpForce;
-            }
-        }
-        else
-        {
-            verticalVelocity += gravity * Time.deltaTime;
-        }
+                if (verticalVelocity < 0)
+                    verticalVelocity = -2f;
 
-        Vector3 move = Vector3.zero;
-        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        move = transform.TransformDirection(localMove) * speed;
-        move.y = verticalVelocity;
-        
-        controller.enabled = true;             
-        controller.Move(move * Time.deltaTime);
-        controller.enabled = false;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    verticalVelocity = jumpForce;
+                }
+            }
+            else
+            {
+                verticalVelocity += gravity * Time.deltaTime;
+            }
+
+            Vector3 move = Vector3.zero;
+            Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+            move = transform.TransformDirection(localMove) * speed;
+            move.y = verticalVelocity;
+
+            controller.enabled = true;
+            controller.Move(move * Time.deltaTime);
+            controller.enabled = false;
+        }
     }
 
     void LateUpdate()
     {
         if (!IsOwner) return;
         
-        transform.rotation = Quaternion.Euler(0, yaw, 0);
-        cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
+        transform.rotation = UnityEngine.Quaternion.Euler(0, yaw, 0);
+        cameraTransform.rotation = UnityEngine.Quaternion.Euler(pitch, yaw, 0);
         
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
+    
+        if(!isInTruck || !isDriver)
+            HandleHeadbob();
     }
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition)
@@ -327,26 +503,19 @@ public class FPSControllerMulti : NetworkBehaviour
     private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
     {
         isInTruck = isPassenger;
-        isDriver = false; // sécurité
+        isDriver = false;
 
         if (isPassenger)
         {
-            // Position locale souhaitée (ex: spawnPassager)
-            if (desiredLocalPos != Vector3.zero)
-            {
-                transform.localPosition = desiredLocalPos;
-            }
-
             if (controller != null)
             {
                 controller.enabled = false;
-                // controller.detectCollisions = false; // optionnel, mais souvent utile
             }
 
             var netTransform = GetComponent<NetworkTransform>();
             if (netTransform != null)
             {
-                netTransform.InLocalSpace = true; // ← CRUCIAL pour smooth follow sur clients
+                netTransform.InLocalSpace = true; 
             }
 
             Debug.Log("Client: Mode passager activé - CC disabled + InLocalSpace=true");
@@ -370,7 +539,10 @@ public class FPSControllerMulti : NetworkBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.transform.CompareTag("PorteConducteur") && !isInTruck)
+        if (other.transform.CompareTag("PorteConducteur") && 
+            !isInTruck && 
+            TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false &&
+            !hasSomethingInHand)
         {
             canEnterInTruck = true;
         }
