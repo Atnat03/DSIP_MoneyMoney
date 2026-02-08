@@ -55,7 +55,7 @@ public class AutoJoinedLobby : MonoBehaviour
             LocalPlayerName = "Player " +  Random.Range(0, 99);
         
         ConnectingTXT.SetActive(true);
-        ConnectingTXT.SetActive(false);
+        ElementsToConnect.SetActive(false);
         
         EnterGame();
     }
