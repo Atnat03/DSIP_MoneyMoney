@@ -1922,7 +1922,8 @@ GameObject:
   - component: {fileID: 6002100493801107169}
   - component: {fileID: -8397553320606875098}
   - component: {fileID: 5322193334059012131}
-  m_Layer: 0
+  - component: {fileID: 5225601816550349719}
+  m_Layer: 7
   m_Name: P_Player_Network
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -2345,6 +2346,33 @@ MonoBehaviour:
   currentEmoteIndex:
     m_InternalValue: 0
   localSelectedEmoteIndex: 0
+--- !u!114 &5225601816550349719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200783157656878878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40cbfe449c44ad44abc62b271d12cd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  _maxHealth: 2000
+  _impactDamage: 0
+  _impactDamageRange: {x: 0, y: 0, z: 0, w: 0}
+  _bulletDamage: 0
+  _onDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+  _onRegeneration:
+    m_PersistentCalls:
+      m_Calls: []
+  _onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  healthBar: {fileID: 0}
+  _health: 0
 --- !u!1 &7658033872997971598
 GameObject:
   m_ObjectHideFlags: 0
