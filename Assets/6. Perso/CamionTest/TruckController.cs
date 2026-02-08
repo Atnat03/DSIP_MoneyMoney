@@ -26,6 +26,12 @@ public class TruckController : NetworkBehaviour
     public Transform backLeftWheelTransform;
     public Transform backRightWheelTransform;
 
+    public GameObject backLights;
+    public NetworkVariable<bool> BackLightOn = new NetworkVariable<bool>();
+
+    public GameObject frontLights;
+    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>();
+    public MeshRenderer lightsButtons;
     
     float horizontalInput;
     float verticalInput;
@@ -77,14 +83,18 @@ public class TruckController : NetworkBehaviour
 
         currentValueToResetNet.OnValueChanged += OnCurrentValueChanged;
         isFallen.OnValueChanged += OnIsFallenChanged;
+        BackLightOn.OnValueChanged += OnBackLightsChanged;
+        FrontLightOn.OnValueChanged += OnFrontLigthChanged;
 
         UpdateJauge();    
     }
-    
+
     private void OnDestroy()
     {
         currentValueToResetNet.OnValueChanged -= OnCurrentValueChanged;
         isFallen.OnValueChanged -= OnIsFallenChanged;
+        BackLightOn.OnValueChanged -= OnBackLightsChanged;
+        FrontLightOn.OnValueChanged -= OnFrontLigthChanged;
     }
 
     void Update()
@@ -106,6 +116,18 @@ public class TruckController : NetworkBehaviour
         HandleSteering();
         UpdateWheels();
         CheckFall();
+    }
+    
+    private void OnBackLightsChanged(bool previousValue, bool newValue)
+    {
+        backLights.SetActive(newValue);
+    }
+    
+    private void OnFrontLigthChanged(bool previousValue, bool newValue)
+    {
+        frontLights.SetActive(newValue);
+        
+        lightsButtons.material.color = frontLights.activeSelf ? Color.yellow : Color.gray;
     }
     
     void CheckPassengersBounds()
@@ -177,6 +199,7 @@ public class TruckController : NetworkBehaviour
             horizontalInput = horizontal;
             verticalInput = vertical;
             isBreaking = breaking;
+            BackLightOn.Value = breaking;
         }
     }
 

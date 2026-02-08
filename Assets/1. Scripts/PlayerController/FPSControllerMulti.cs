@@ -262,6 +262,11 @@ public class FPSControllerMulti : NetworkBehaviour
                         print("Appuis sur radio button");
                         Radio.instance.CheckButton(hit.collider.gameObject);
                     }
+                    
+                    if (hit.collider.CompareTag("Phares"))
+                    {
+                        TruckController.instance.FrontLightOn.Value = !TruckController.instance.FrontLightOn.Value;
+                    }
                 }
             }
             
