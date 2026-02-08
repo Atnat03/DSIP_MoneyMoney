@@ -1,7 +1,8 @@
 using Shooting;
+using Unity.Netcode;
 using UnityEngine;
 
-public class BanditVehicleAI : MonoBehaviour
+public class BanditVehicleAI : MonoBehaviour, IVehicule
 {
     public enum RelativePosition { Left, Right, Front, Back }
 
@@ -183,4 +184,9 @@ public class BanditVehicleAI : MonoBehaviour
 
     #endregion
 
+    public void Die()
+    {
+        GetComponent<NetworkObject>().Despawn();
+        Destroy(gameObject);
+    }
 }
