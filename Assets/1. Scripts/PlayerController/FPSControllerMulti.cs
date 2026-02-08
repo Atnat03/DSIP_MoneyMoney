@@ -60,7 +60,18 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField, Range(0, 1f)] float truckFollowStrength = 0.5f;
     
     private TruckInteraction nearbyTruck;
-    public bool isDriver = false;
+    public bool isDriver
+    {
+        get
+        {
+            if (!IsOwner || TruckController.instance == null) return false;
+        
+            var truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
+            if (truckInteraction == null) return false;
+        
+            return truckInteraction.driverClientId.Value == OwnerClientId && isInTruck;
+        }
+    }    
     private Vector3 driverLocalPosition;
     
     [Header("UI")]
@@ -410,23 +421,20 @@ public class FPSControllerMulti : NetworkBehaviour
     public void EnterTruck(bool asDriver, Vector3 spawnPosition)
     {
         print($"EnterTruck - asDriver: {asDriver}");
-        
+    
         isInTruck = true;
-        isDriver = asDriver;
-        
+    
         transform.localPosition = spawnPosition;
-        
+    
         SetParentServerRpc(true);
 
-        if (isDriver)
+        if (asDriver)
         {
             driverLocalPosition = TruckController.instance.driverPos.position;
-
-            TruckController.instance.enabled = true;
-
-            if (controller != null)
-                controller.enabled = false;
         }
+
+        if (controller != null)
+            controller.enabled = false;
 
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
@@ -445,7 +453,6 @@ public class FPSControllerMulti : NetworkBehaviour
         transform.position = exitPosition;
         
         isInTruck = false;
-        isDriver = false;
         truckRb = null;
         
         if (controller != null)
@@ -498,7 +505,6 @@ public class FPSControllerMulti : NetworkBehaviour
     private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
     {
         isInTruck = isPassenger;
-        isDriver = false;
 
         if (isPassenger)
         {
