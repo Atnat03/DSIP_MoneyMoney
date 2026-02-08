@@ -10,27 +10,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20.774
+      value: -1.6907969
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.58
+      value: 1.031
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.301
+      value: -0.75927633
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -73,6 +73,10 @@ PrefabInstance:
       value: P_IngotPilePhysic
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_TagString
       value: Treasure
       objectReference: {fileID: 0}
@@ -89,6 +93,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5597386582666458715}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5841652894909971893}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6335569832160450534}
   m_SourcePrefab: {fileID: 100100000, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
 --- !u!1 &6584897066571411342 stripped
 GameObject:
@@ -124,7 +134,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6584897066571411342}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -155,16 +165,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 0
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 2933779557
+  InScenePlacedSourceGlobalObjectIdHash: 2933779557
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &5841652894909971893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6584897066571411342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 0
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.1
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.1
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 0
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 1
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
+--- !u!114 &6335569832160450534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6584897066571411342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab37ee5c4618dea47bebbda58db7c0a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GrabbableObject
+  ShowTopMostFoldoutHeaderGroup: 1
+  IsGrabbed:
+    m_InternalValue: 0

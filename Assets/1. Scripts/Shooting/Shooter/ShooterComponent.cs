@@ -141,6 +141,9 @@ namespace Shooting
 
         public bool TryShoot()
         {
+            if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
+                return false;
+            
             if (_currentAmmo <= 0)
             {
                 return false;
