@@ -135,6 +135,9 @@ public class TruckInteraction : NetworkBehaviour
         {
             driverClientId.Value = ulong.MaxValue;
             hasDriver.Value = false;
+            
+            truckController.ResetDriverInputs();
+            
             Debug.Log($"Player {playerId} n'est plus conducteur");
         }
         

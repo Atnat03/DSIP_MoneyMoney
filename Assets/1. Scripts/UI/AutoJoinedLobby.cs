@@ -28,6 +28,8 @@ public class AutoJoinedLobby : MonoBehaviour
     public Color[] colorsList;
 
     public GameObject StartCanva;
+    public GameObject ConnectingTXT;
+    public GameObject ElementsToConnect;
 
     private void Awake()
     {
@@ -38,6 +40,8 @@ public class AutoJoinedLobby : MonoBehaviour
         }
 
         LocalPlayerColor = colorsList[0];
+        
+        ConnectingTXT.SetActive(false);
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
@@ -49,6 +53,9 @@ public class AutoJoinedLobby : MonoBehaviour
             LocalPlayerName = inputName.text;
         else
             LocalPlayerName = "Player " +  Random.Range(0, 99);
+        
+        ConnectingTXT.SetActive(true);
+        ElementsToConnect.SetActive(false);
         
         EnterGame();
     }

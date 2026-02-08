@@ -105,15 +105,22 @@ public class TruckController : NetworkBehaviour
             return;
         }
         
+        CheckPassengersBounds();
+    
         rb.centerOfMass = centerOfMass;
-        
+    
         if (truckInteraction != null && truckInteraction.HasDriver())
         {
-            CheckPassengersBounds();
+            HandleMotor();
+            HandleSteering();
         }
-        
-        HandleMotor();
-        HandleSteering();
+        else
+        {
+            horizontalInput = 0f;
+            verticalInput = 0f;
+            isBreaking = false;
+        }
+    
         UpdateWheels();
         CheckFall();
     }
@@ -141,10 +148,6 @@ public class TruckController : NetworkBehaviour
 
             FPSControllerMulti player = playerObj.GetComponent<FPSControllerMulti>();
             if (player == null) continue;
-
-            if (truckInteraction != null &&
-                truckInteraction.IsDriver(client.ClientId))
-                continue;
 
             bool inside = !IsOutsideTruckBounds(player.transform);
             bool alreadyParented = trackedPassengers.Contains(playerObj);
@@ -361,6 +364,14 @@ public class TruckController : NetworkBehaviour
             jaugeMashing.fillAmount = Mathf.Clamp01(currentValueToResetNet.Value / targetValueToReset.Value);
         else
             jaugeMashing.fillAmount = 0f;
+    }
+    
+    public void ResetDriverInputs()
+    {
+        horizontalInput = 0f;
+        verticalInput = 0f;
+        isBreaking = false;
+        BackLightOn.Value = false;
     }
     
     private void OnDrawGizmos()

@@ -1218,7 +1218,7 @@ GameObject:
   - component: {fileID: 2398918594270566074}
   m_Layer: 0
   m_Name: P_Player_Network
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1428,14 +1428,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16384
   truckFollowStrength: 1
-  isDriver: 0
   ui: {fileID: 4497872479382743780}
   textGoInCamion: {fileID: 670986296484009593}
   textReload: {fileID: 3358380753252068401}
   maskCameraPlayer:
     serializedVersion: 2
     m_Bits: 517079
-  meshRenderer: {fileID: 2067222194839518774}
+  meshRenderer: {fileID: 5864126240025211517}
   canSit: 0
   isSitting: 0
   resetTruckKey: 99
@@ -2277,6 +2276,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -3819263595496917528, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2638f0eba705d8f4f9e7281e6a914fe9, type: 2}
     - target: {fileID: 919132149155446097, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
       propertyPath: m_Name
       value: SM_Player_01
@@ -2310,9 +2313,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
   m_PrefabInstance: {fileID: 1184823232507364199}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2067222194839518774 stripped
+--- !u!1 &5864126240025211517 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4688486687549206810, guid: 1ede03773c73fbe4fa09cd633adb41b5, type: 3}
   m_PrefabInstance: {fileID: 1184823232507364199}
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &6525268964718179983 stripped

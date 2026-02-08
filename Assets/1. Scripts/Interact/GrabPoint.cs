@@ -53,7 +53,7 @@ public class GrabPoint : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-
+        
         if (_heldItem != null && handState == HandState.Grab && _camera != null)
         {
             Vector3 pos = _camera.position + _camera.forward * holdDistance;
