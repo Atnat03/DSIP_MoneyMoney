@@ -8,7 +8,7 @@ public class VariableManager : MonoBehaviour
     
     
     public static VariableManager instance;
-    
+    public Image healthBar;
     
     void Start()
     {

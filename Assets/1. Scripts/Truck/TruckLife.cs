@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,81 +7,45 @@ using Shooting;
 
 public class TruckLife : NetworkBehaviour
 {
-    [Header("Health")]
-    public float maxHealth = 100f;
-
     public static TruckLife instance;
+    
+    public List<TruckPart> truckpartsRight = new List<TruckPart>();
+    public List<TruckPart> truckpartsLeft = new List<TruckPart>();
 
-    private NetworkVariable<float> currentHealth = new NetworkVariable<float>(
-        value: 100f,
-        readPerm: NetworkVariableReadPermission.Everyone,
-        writePerm: NetworkVariableWritePermission.Server
-    );
+    public bool canShootPlayerLeft, canShootPlayerRight;
+    [SerializeField] private int partToShootPlayer;
 
-
-    [Header("UI")]
-    public Image healthBar;
-
-
-    public Collider Collider { get; private set; }
-
-    private void Awake()
+    void Awake()
     {
-        Collider = GetComponent<Collider>();
         instance = this;
     }
 
-    public override void OnNetworkSpawn()
+    public void DetermineIfShootable()
     {
-        if (IsServer)
-            currentHealth.Value = maxHealth;
+        canShootPlayerLeft = false;
+        canShootPlayerRight = false;
+        int count = 0;
+        foreach (TruckPart part in truckpartsLeft)
+        {
+            if (part.isBroke.Value)
+            {
+                count++;
+            }
+        }
+        if (count >= partToShootPlayer) canShootPlayerLeft = true;
         
-        currentHealth.OnValueChanged += OnHealthChanged;
-    }
-    
-    private void OnDestroy()
-    {
-        currentHealth.OnValueChanged -= OnHealthChanged;
+        count = 0;
+        foreach (TruckPart part in truckpartsRight)
+        {
+            if (part.isBroke.Value)
+            {
+                count++;
+            }
+        }
+
+        if (count >= partToShootPlayer) canShootPlayerRight = true;
     }
 
-    private void OnHealthChanged(float oldVal, float newVal)
-    {
-        if (healthBar != null)
-            healthBar.fillAmount = newVal / maxHealth;
 
-        if (newVal <= 0f)
-            Die();
-    }
-    
-    public void HandleShot(float dmg)
-    {
-        if (IsServer)
-            ApplyDamage(dmg);
-        else
-            TakeDamageServerRpc(dmg);
-    }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void TakeDamageServerRpc(float dmg)
-    {
-        print("TakeDamageServerRpc");
-        ApplyDamage(dmg);
-    }
-
-    private void ApplyDamage(float dmg)
-    {
-        print("ApplyDamage : " + currentHealth.Value);
-        
-        if (currentHealth.Value <= 0f)
-            return;
-
-        currentHealth.Value -= dmg;
-        currentHealth.Value = Mathf.Max(currentHealth.Value, 0f);
-    }
-
-    private void Die()
-    {
-        if (TryGetComponent(out BanditVehicleAI ai))
-            ai.StopVehicle();
-    }
 }
