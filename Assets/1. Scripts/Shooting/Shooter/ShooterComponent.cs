@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UI;
@@ -6,6 +7,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 namespace Shooting
 {
@@ -41,6 +43,7 @@ namespace Shooting
         private bool _enableCallbacks;
         private Camera _playerCamera;
         [SerializeField] private Transform _instantPos;
+        [SerializeField] private float reloadingTime = 2f;
         #endregion
 
         #region Methods
@@ -60,6 +63,26 @@ namespace Shooting
         }
 
         public void Reload() => _currentAmmo = _maxAmmo;
+
+        public void StartToReload()
+        {
+            StartCoroutine(Reloading());
+        }
+        
+        public IEnumerator Reloading()
+        {
+            GetComponent<FPSControllerMulti>().isFreeze = true;
+            Image circleCD = VariableManager.instance.circleCD;
+            float count = reloadingTime;
+            while (count > 0)
+            {
+                count -= Time.deltaTime;
+                yield return null;
+                circleCD.fillAmount =  count / reloadingTime;
+            }
+            GetComponent<FPSControllerMulti>().isFreeze = false;
+            Reload();
+        }
 
         private void MakeTrail()
         {

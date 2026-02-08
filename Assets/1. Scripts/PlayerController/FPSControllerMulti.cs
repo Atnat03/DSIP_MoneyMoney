@@ -114,8 +114,8 @@ public class FPSControllerMulti : NetworkBehaviour
             
             myCamera.gameObject.SetActive(false);
             
-            gunOther.gameObject.layer = LayerMask.NameToLayer("Owner");
-            gunOwner.gameObject.layer = LayerMask.NameToLayer("Default");
+            gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
+            SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
             
             ui.SetActive(false);
             return;
@@ -144,6 +144,16 @@ public class FPSControllerMulti : NetworkBehaviour
         speed = moveSpeed;
         
         shooter = gameObject.GetComponent<ShooterComponent>();
+    }
+    
+    void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
     }
 
     private Vector3 lastTruckPosition;
@@ -198,7 +208,7 @@ public class FPSControllerMulti : NetworkBehaviour
             if(canReload)
             {
                 print("Reload");
-                shooter.Reload();
+                shooter.StartToReload();
                 canReload = false;
             }
 
@@ -242,8 +252,16 @@ public class FPSControllerMulti : NetworkBehaviour
                 
                 if (Physics.Raycast(origin, direction, out hit, 5f))
                 {
-                    if(hit.collider.CompareTag("Klaxon"))
+                    if (hit.collider.CompareTag("Klaxon"))
+                    {
                         TruckController.instance.PlayHornClientRpc();
+                    }
+
+                    if (hit.collider.CompareTag("RadioButton"))
+                    {
+                        print("Appuis sur radio button");
+                        Radio.instance.CheckButton(hit.collider.gameObject);
+                    }
                 }
             }
             
