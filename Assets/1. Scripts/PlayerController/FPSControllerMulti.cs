@@ -191,7 +191,7 @@ public class FPSControllerMulti : NetworkBehaviour
             {
                 nearbyTruck.TryExitTruck(this);
             }
-            else if (isInTruck && !isDriver)
+            else if (isInTruck && !isDriver && canEnterInTruck)
             {
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
             }
