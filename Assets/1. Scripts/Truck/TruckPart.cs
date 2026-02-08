@@ -90,10 +90,6 @@ public class TruckPart : NetworkBehaviour
                 BreakOnServer();
             }
         }
-        else
-        {
-            TruckLife.instance.HandleShot(amount);
-        }
     }
 
     #endregion
@@ -126,6 +122,7 @@ public class TruckPart : NetworkBehaviour
         }
 
         isBroke.Value = true;
+        TruckLife.instance.DetermineIfShootable();
     }
     
     #endregion

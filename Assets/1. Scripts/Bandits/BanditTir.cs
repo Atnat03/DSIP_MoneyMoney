@@ -23,6 +23,9 @@ public class BanditTir : MonoBehaviour
 
     public float damage;
 
+    public bool isRight;
+    public bool isShootingPlayer;
+
     #endregion
 
     private float nextFireTime;
@@ -31,7 +34,17 @@ public class BanditTir : MonoBehaviour
     {
         if (Time.time < nextFireTime) return;
 
-        Transform target = FindClosestTarget();
+        Transform target;
+        
+        if ((isRight && TruckLife.instance.canShootPlayerRight) || (!isRight && TruckLife.instance.canShootPlayerLeft))
+        {
+            target = FindClosestTargetPlayer();
+        }
+        else
+        {
+            target = FindClosestTargetTruck();
+        }
+       
         if (target == null) return;
 
         AimAt(target);
@@ -43,7 +56,7 @@ public class BanditTir : MonoBehaviour
 
     #region Targeting
 
-    private Transform FindClosestTarget()
+    private Transform FindClosestTargetTruck()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, targetLayer);
 
@@ -57,16 +70,31 @@ public class BanditTir : MonoBehaviour
                 if (!hit.GetComponent<TruckPart>().isBroke.Value)
                 {
                     float dist = (hit.transform.position - transform.position).sqrMagnitude;
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                        closest = hit.transform;
-                    }
+                    if (dist < minDist) { minDist = dist; closest = hit.transform; }
                 }
-                
             }
         }
-           
+        return closest;
+    }
+    
+    private Transform FindClosestTargetPlayer()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, targetLayer);
+
+        Transform closest = null;
+        float minDist = Mathf.Infinity;
+
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Player"))
+            {
+                if (!hit.GetComponent<HealthComponent>().Invulnerable)
+                {
+                    float dist = (hit.transform.position - transform.position).sqrMagnitude;
+                    if (dist < minDist) { minDist = dist; closest = hit.transform; }
+                }
+            }
+        }
         return closest;
     }
 
@@ -102,10 +130,8 @@ public class BanditTir : MonoBehaviour
         if (Physics.Raycast(origin, dir, out hit, detectionRadius))
         {
             hitPoint = hit.point;
-            target.GetComponent<TruckPart>().TakeDamage(damage);
-            // Plus tard : dégâts
-            // var health = hit.collider.GetComponent<Health>();
-            // if (health) health.TakeDamage(10);
+            if(!isShootingPlayer) target.GetComponent<TruckPart>().TakeDamage(damage);
+            else target.GetComponent<HealthComponent>().TryTakeDamage(damage);
         }
         else
         {
