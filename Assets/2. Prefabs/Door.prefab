@@ -121,6 +121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3402730742051907424}
+  - component: {fileID: -5409766693583512461}
   - component: {fileID: 564438433040441928}
   - component: {fileID: 4776118875338470593}
   - component: {fileID: 4909103234327330767}
@@ -149,6 +150,31 @@ Transform:
   - {fileID: 5747272970705494447}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5409766693583512461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4475587754284304134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3078434342
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &564438433040441928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,42 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a4cf5c165892d742a862b275ae6eaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ListenEventDoor
-  _interactKey: 101
-  _reachDistance: 5
-  _enableSeethrough: 0
-  _onInteract:
-    m_PersistentCalls:
-      m_Calls: []
-  _onLookedAt:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7929842948768684476}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  _onNotLookedAt:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7929842948768684476}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!95 &4776118875338470593
 Animator:
   serializedVersion: 7
@@ -520,10 +511,5 @@ PrefabInstance:
 --- !u!224 &5747272970705494447 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4624616961086313846, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
-  m_PrefabInstance: {fileID: 1148306642607092953}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7929842948768684476 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7053741937067519333, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
   m_PrefabInstance: {fileID: 1148306642607092953}
   m_PrefabAsset: {fileID: 0}

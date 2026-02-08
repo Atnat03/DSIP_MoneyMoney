@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
@@ -60,7 +61,18 @@ public class FPSControllerMulti : NetworkBehaviour
     [SerializeField, Range(0, 1f)] float truckFollowStrength = 0.5f;
     
     private TruckInteraction nearbyTruck;
-    public bool isDriver = false;
+    public bool isDriver
+    {
+        get
+        {
+            if (!IsOwner || TruckController.instance == null) return false;
+        
+            var truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
+            if (truckInteraction == null) return false;
+        
+            return truckInteraction.driverClientId.Value == OwnerClientId && isInTruck;
+        }
+    }    
     private Vector3 driverLocalPosition;
     
     [Header("UI")]
@@ -102,15 +114,10 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         if (!IsOwner)
         {
-            Color r = Random.ColorHSV();
-            
             meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
             
-           /* foreach (Transform child in meshRenderer.transform)
-            {
-                child.GetComponent<MeshRenderer>().material.color = r;
-                child.gameObject.layer = LayerMask.NameToLayer("Default");
-            }*/
+            meshRenderer.GetComponent<MeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
             
             myCamera.gameObject.SetActive(false);
             
@@ -178,17 +185,20 @@ public class FPSControllerMulti : NetworkBehaviour
             speed = moveSpeed;
         }
         
-        if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck ||isInTruck))
+        if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck || isInTruck))
         {
-            if (!isInTruck)
+            if (isInTruck && isDriver)
+            {
+                nearbyTruck.TryExitTruck(this);
+            }
+            else if (isInTruck && !isDriver)
+            {
+                TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
+            }
+            else if (!isInTruck && canEnterInTruck)
             {
                 canEnterInTruck = false;
                 TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
-            }
-            else if (isInTruck && isDriver)
-            {
-                print("TryExitTruck");
-                nearbyTruck.TryExitTruck(this);
             }
         }
 
@@ -207,7 +217,6 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             if(canReload)
             {
-                print("Reload");
                 shooter.StartToReload();
                 canReload = false;
             }
@@ -236,8 +245,6 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             if (TruckController.instance != null)
             {
-                transform.position = TruckController.instance.driverPos.position;
-                
                 float h = Input.GetAxis("Horizontal");
                 float v = Input.GetAxis("Vertical");
                 bool brake = Input.GetKey(KeyCode.Space);
@@ -315,7 +322,18 @@ public class FPSControllerMulti : NetworkBehaviour
 
     bool CheckCanReload()
     {
-        return Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload;
+        RaycastHit hit;
+        bool final = false;
+
+        if (Physics.Raycast(MyCamera().transform.position, MyCamera().transform.forward, out hit, 5f))
+        {
+            if (hit.collider.CompareTag("ReloadStation"))
+            {
+                final = true;
+            }
+        }
+        
+        return (Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload) && final;
     }
 
     public bool isFreeze;
@@ -412,53 +430,35 @@ public class FPSControllerMulti : NetworkBehaviour
             HandleHeadbob();
     }
 
-    public void EnterTruck(bool asDriver, Vector3 spawnPosition)
-    {
-        print($"EnterTruck - asDriver: {asDriver}");
-        
+    public void EnterTruck(bool asDriver, Vector3 spawnPosition) {
         isInTruck = true;
-        isDriver = asDriver;
-        
-        transform.localPosition = spawnPosition;
-        
-        SetParentServerRpc(true);
-
-        if (isDriver)
-        {
-            driverLocalPosition = TruckController.instance.driverPos.position;
-
-            TruckController.instance.enabled = true;
-
-            if (controller != null)
-                controller.enabled = false;
-        }
-
+        if (controller != null) controller.enabled = false;
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
 
-        NetworkTransform netTransform = GetComponent<NetworkTransform>();
-        if (netTransform != null)
+        var netTransform = GetComponent<NetworkTransform>();
+        if (netTransform != null) {
             netTransform.InLocalSpace = true;
+        }
+
+        if (IsOwner) {
+            Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
+            transform.localPosition = targetSeat.localPosition;
+            transform.localRotation = Quaternion.identity;
+        }
     }
     
     public void ExitTruck(Vector3 exitPosition)
     {
         print("ExitTruck");
         
-        SetParentServerRpc(false);
-        
         transform.position = exitPosition;
         
         isInTruck = false;
-        isDriver = false;
         truckRb = null;
         
         if (controller != null)
             controller.enabled = true;
-
-        NetworkTransform netTransform = GetComponent<NetworkTransform>();
-        if (netTransform != null)
-            netTransform.InLocalSpace = false;
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -503,7 +503,6 @@ public class FPSControllerMulti : NetworkBehaviour
     private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
     {
         isInTruck = isPassenger;
-        isDriver = false;
 
         if (isPassenger)
         {

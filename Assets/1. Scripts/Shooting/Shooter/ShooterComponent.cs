@@ -17,7 +17,7 @@ namespace Shooting
         #region Properties
         public int AmmoCount => _currentAmmo;
         public int MaxAmmoCount => _maxAmmo;
-        public float MaxDistance { get; set; } = 1000f;
+        public float MaxDistance => maxDistance;
         // Invoked whenever the shooter successfully shoots
         public UnityEvent OnShoot => _onShoot;
         // Invoked when a target is hit, with said target as parameter
@@ -44,6 +44,7 @@ namespace Shooting
         private Camera _playerCamera;
         [SerializeField] private Transform _instantPos;
         [SerializeField] private float reloadingTime = 2f;
+        [SerializeField] private float maxDistance = 100f;
         #endregion
 
         #region Methods
@@ -88,32 +89,31 @@ namespace Shooting
         {
             if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
                 return;
-            
+
             Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
             Vector3 startPos = _instantPos.position;
-            Vector3 dir = camera.transform.forward * MaxDistance;
+            Vector3 endPos = startPos + camera.transform.forward * MaxDistance;
 
             if (IsOwner)
             {
-                ShootTrailServerRpc(startPos, dir);
+                ShootTrailServerRpc(startPos, endPos);
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void ShootTrailServerRpc(Vector3 start, Vector3 direction)
+        private void ShootTrailServerRpc(Vector3 start, Vector3 end)
         {
-            ShootTrailClientRpc(start, direction);
+            ShootTrailClientRpc(start, end);
         }
 
         [ClientRpc]
-        private void ShootTrailClientRpc(Vector3 start, Vector3 direction)
+        private void ShootTrailClientRpc(Vector3 start, Vector3 end)
         {
             if (TryGetComponent(out TrailMaker maker))
             {
-                maker.Make(start, direction);
+                maker.Make(start, end, GetComponent<PlayerCustom>().colorPlayer.Value);
             }
         }
-
       
         private void Update()
         {
@@ -141,6 +141,9 @@ namespace Shooting
 
         public bool TryShoot()
         {
+            if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
+                return false;
+            
             if (_currentAmmo <= 0)
             {
                 return false;
