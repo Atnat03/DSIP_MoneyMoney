@@ -16927,14 +16927,19 @@ MonoBehaviour:
   buttonPlay: {fileID: 705188494}
   buttonPrevious: {fileID: 2081515161}
   buttonNext: {fileID: 2144402661}
-  isPlaying: 0
-  currentClipPlaying: 0
+  audioSource: {fileID: 395674575}
   clipsList:
   - {fileID: 8300000, guid: cb7aa0be3836a534d8ce85ad8c336273, type: 3}
   - {fileID: 8300000, guid: 60c737d4145de7d45906eaa3726a26b2, type: 3}
   - {fileID: 8300000, guid: 92aa0bc14c6f930459727f733d856925, type: 3}
   clipWhenPlay: {fileID: 8300000, guid: 4c8458afdf8c53343908ac29be9d4702, type: 3}
-  audioSource: {fileID: 395674575}
+  radioDelay: 0.2
+  IsPlaying:
+    m_InternalValue: 0
+  CurrentClip:
+    m_InternalValue: 0
+  StartTime:
+    m_InternalValue: 0
 --- !u!82 &395674575
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16957,9 +16962,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -16967,23 +16972,32 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
+      time: 0.1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -10.0039835
+      outSlope: -10.0039835
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      time: 0.2
+      value: 0.5
+      inSlope: -2.5009959
+      outSlope: -2.5009959
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9968872
+      value: 0
+      inSlope: -0.2995334
+      outSlope: -0.2995334
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.23138432
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -16992,7 +17006,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -17007,7 +17021,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0

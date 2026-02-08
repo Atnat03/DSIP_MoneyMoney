@@ -19,8 +19,8 @@ public class Radio : NetworkBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] clipsList;
     [SerializeField] private AudioClip clipWhenPlay;
+    [SerializeField] private float radioDelay = 0.2f;
 
-    // === NETWORK VARIABLES ===
     public NetworkVariable<bool> IsPlaying = new(false);
     public NetworkVariable<int> CurrentClip = new(0);
     public NetworkVariable<double> StartTime = new(0);
@@ -36,11 +36,7 @@ public class Radio : NetworkBehaviour
         IsPlaying.OnValueChanged -= OnPlayChanged;
         CurrentClip.OnValueChanged -= OnClipChanged;
     }
-
-    // =========================
-    // ====== UI BUTTONS =======
-    // =========================
-
+    
     public void CheckButton(GameObject button)
     {
         if (button == buttonPlay)
@@ -86,15 +82,18 @@ public class Radio : NetworkBehaviour
         if (newValue)
         {
             audioSource.PlayOneShot(clipWhenPlay, 0.25f);
-            PlaySynced();
             buttonPlay.GetComponent<MeshRenderer>().material.color = Color.green;
+
+            Invoke(nameof(PlaySynced), radioDelay);
         }
         else
         {
             audioSource.Stop();
+            audioSource.PlayOneShot(clipWhenPlay, 0.25f);
             buttonPlay.GetComponent<MeshRenderer>().material.color = Color.red;
         }
     }
+
 
     void OnClipChanged(int oldValue, int newValue)
     {
@@ -114,4 +113,5 @@ public class Radio : NetworkBehaviour
         audioSource.time = (float)(elapsed % audioSource.clip.length);
         audioSource.Play();
     }
+
 }
