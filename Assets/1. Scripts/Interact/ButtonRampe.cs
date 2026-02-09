@@ -29,6 +29,8 @@ public class ButtonRampe : NetworkBehaviour, IInteractible
 
     public void TouchButtonRampe(GameObject obj, GameObject player)
     {
+        if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
+        
         if (NetworkManager.Singleton.IsServer)
         {
             ToggleRampe();
