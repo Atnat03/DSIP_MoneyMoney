@@ -8,8 +8,8 @@ public class BanditSpawnManager : MonoBehaviour
     public float timeUntilBanditBarrage;
     
     
-    [SerializeField]private float _timeUntilBanditFollow;
-    [SerializeField]private float _timeUntilBanditBarrage;
+    public float _timeUntilBanditFollow;
+    public float _timeUntilBanditBarrage;
 
     public Vector3 detectionRadius;
     public LayerMask spawnPointLayer;
@@ -17,6 +17,9 @@ public class BanditSpawnManager : MonoBehaviour
     public Transform boxCenter;
     
     public GameObject banditFollowPrefab;
+    public GameObject truck;
+    
+    public 
 
 
     void Awake()
@@ -28,12 +31,19 @@ public class BanditSpawnManager : MonoBehaviour
 
     public void Update()
     {
-        //_timeUntilBanditBarrage -= Time.deltaTime;
-        _timeUntilBanditFollow -= Time.deltaTime;
+        if (_timeUntilBanditBarrage > 0)
+        {
+            _timeUntilBanditBarrage -= Time.deltaTime;
+            if (_timeUntilBanditFollow <= 0) { _timeUntilBanditFollow = timeUntilBanditFollow; SpawnBanditFollow(); }
+        }
 
-        if (_timeUntilBanditFollow <= 0) { _timeUntilBanditFollow = timeUntilBanditFollow; SpawnBanditFollow(); }
+        if (_timeUntilBanditFollow > 0)
+        {
+            _timeUntilBanditFollow -= Time.deltaTime;
+            if (_timeUntilBanditBarrage <= 0) { SpawnBanditBarrage(); }
+        }
         
-        if (_timeUntilBanditBarrage <= 0) { _timeUntilBanditBarrage = timeUntilBanditBarrage; SpawnBanditBarrage(); }
+        
     }
 
 
@@ -44,10 +54,8 @@ public class BanditSpawnManager : MonoBehaviour
         Transform closest = null;
         float minDist = Mathf.Infinity;
         
-        Debug.Log("on appelle la fonction");
         foreach (var hit in hits)
         {
-            Debug.Log("au moins un ? ");
             float dist = (hit.transform.position - transform.position).sqrMagnitude;
             if (dist < minDist)
             {
@@ -58,13 +66,22 @@ public class BanditSpawnManager : MonoBehaviour
 
         if (closest != null)
         {
-            Instantiate(banditFollowPrefab, closest.position, Quaternion.identity);
+            GameObject bandit = Instantiate(banditFollowPrefab, closest.position, Quaternion.identity);
+            
+            bandit.GetComponent<BanditVehicleAI>().truck = truck.transform;
+            bandit.GetComponent<BanditVehicleAI>().lookAtTarget.target = truck.transform;
+            
+            int rdm = Random.Range(0, 2);
+            bool goRight = (rdm == 0);      
+            bandit.GetComponent<BanditVehicleAI>().goRight = goRight;
         }
     }
 
+    public bool hasToSpawnBarrage;
+
     public void SpawnBanditBarrage()
     {
-        
+        hasToSpawnBarrage = true;
     }
     
     private void OnDrawGizmosSelected()
