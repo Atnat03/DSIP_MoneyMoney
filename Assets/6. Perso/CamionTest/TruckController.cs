@@ -67,9 +67,16 @@ public class TruckController : NetworkBehaviour
 
     public Transform steeringWheel;
     
+    [Header("Quand il se prend un mur")]
+    [SerializeField] float velocityToTriggerShake = 25f;
+    [SerializeField] float cameraShakeDuration = 0.25f;
+    [SerializeField] float cameraShakeMagnitude = 0.1f;
+    
+    
     private void Awake()
     {
         instance = this;
+
         truckInteraction = GetComponent<TruckInteraction>();
         
         jaugeMashing.transform.parent.gameObject.SetActive(false);
@@ -109,7 +116,7 @@ public class TruckController : NetworkBehaviour
         CheckPassengersBounds();
     
         rb.centerOfMass = centerOfMass;
-    
+        
         if (truckInteraction != null && truckInteraction.HasDriver())
         {
             HandleMotor();
@@ -125,7 +132,36 @@ public class TruckController : NetworkBehaviour
         UpdateWheels();
         CheckFall();
     }
+
+    [ClientRpc]
+    private void TriggerCameraShakeClientRpc()
+    {
+        if (NetworkManager.Singleton.LocalClient == null) return;
+
+        NetworkObject playerObject = NetworkManager.Singleton.LocalClient.PlayerObject;
+        if (playerObject == null) return;
+
+        FPSControllerMulti fps = playerObject.GetComponent<FPSControllerMulti>();
+        if (fps == null || !fps.isInTruck) return;
+
+        CameraShake cameraShake = fps.MyCamera().GetComponent<CameraShake>();
+        if (cameraShake != null)
+        {
+            cameraShake.TriggerShake(cameraShakeDuration, cameraShakeMagnitude);
+        }
+    }
+
+
     
+    public void CheckVelecityToApplyShake()
+    {
+        if (rb.linearVelocity.magnitude > velocityToTriggerShake)
+        {
+            print("ca shake");
+            TriggerCameraShakeClientRpc();
+        }
+    }
+
     private void OnBackLightsChanged(bool previousValue, bool newValue)
     {
         backLights.SetActive(newValue);

@@ -46,22 +46,6 @@ public class PlayerRayCast : NetworkBehaviour
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
             {
-                if ((!hit.collider.CompareTag("TruckPart") || 
-                    (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial)))
-                {
-                    if(hit.collider.CompareTag("Sangles"))
-                    {
-                        if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
-                            return;
-                    }
-                        
-                    if (hit.collider.TryGetComponent<IInteractible>(out var interactible))
-                    {
-                        uiController?.OnInteract();
-                        uiController?.SetText(interactible.InteractionName);
-                    }
-                }
-
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     if (hit.collider.CompareTag("TruckPart") && hasMaterial)
@@ -77,7 +61,25 @@ public class PlayerRayCast : NetworkBehaviour
                     }
                     else if(!hit.collider.CompareTag("TruckPart"))
                     {
-                        Interact.RayInteract(hit.collider.gameObject, gameObject, RepearInteractionName);
+                        IInteractible i = hit.collider.GetComponent<IInteractible>();
+                        
+                        Interact.RayInteract(hit.collider.gameObject, gameObject, i != null ? i.InteractionName : RepearInteractionName);
+                    }
+                }
+                else
+                if ((!hit.collider.CompareTag("TruckPart") || 
+                    (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial)))
+                {
+                    if(hit.collider.CompareTag("Sangles"))
+                    {
+                        if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
+                            return;
+                    }
+                        
+                    if (hit.collider.TryGetComponent<IInteractible>(out var interactible))
+                    {
+                        uiController?.OnInteract();
+                        uiController?.SetText(interactible.InteractionName);
                     }
                 }
             }

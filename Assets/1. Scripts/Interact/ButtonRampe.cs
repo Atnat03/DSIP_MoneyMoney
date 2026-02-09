@@ -7,12 +7,12 @@ public class ButtonRampe : NetworkBehaviour, IInteractible
     {
         get { return isOpenRampe.Value ? interactionSortirName : interactionRentreName ; }
         set { }
-    }
+    }   
 
     public string interactionSortirName;
     public string interactionRentreName;
     
-    private NetworkVariable<bool> isOpenRampe = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> isOpenRampe = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public Animator rampeAnimator;
 
     public override void OnNetworkSpawn()
