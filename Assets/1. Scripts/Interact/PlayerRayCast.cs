@@ -49,11 +49,17 @@ public class PlayerRayCast : NetworkBehaviour
                 if ((!hit.collider.CompareTag("TruckPart") || 
                     (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial)))
                 {
-                    if(hit.collider.CompareTag("Sangles") && !GetComponent<GrabPoint>().IsSacInHand())
-                        return;
-                    
-                    uiController?.OnInteract();
-                    uiController?.SetText(hit.collider.GetComponent<IInteractible>().InteractionName);
+                    if(hit.collider.CompareTag("Sangles"))
+                    {
+                        if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
+                            return;
+                    }
+                        
+                    if (hit.collider.TryGetComponent<IInteractible>(out var interactible))
+                    {
+                        uiController?.OnInteract();
+                        uiController?.SetText(interactible.InteractionName);
+                    }
                 }
 
                 if (Input.GetKeyDown(KeyCode.E))

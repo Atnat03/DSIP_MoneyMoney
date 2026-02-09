@@ -2183,6 +2183,7 @@ MonoBehaviour:
   gunOwner: {fileID: 593918438289769875}
   gunOther: {fileID: 5353508986755915922}
   hasSomethingInHand: 0
+  ladderClimbSpeed: 3
   controller: {fileID: 6002100493801107169}
   canEnterInTruck: 0
 --- !u!114 &2094199091246566129
@@ -2230,7 +2231,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &6002100493801107169
@@ -2277,7 +2278,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 16384
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0

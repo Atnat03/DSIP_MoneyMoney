@@ -108,7 +108,8 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.TryGetComponent<Collider>(out var col))
         {
-            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
+            if(IsSacInHand())
+                col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
             col.isTrigger = true;
         }
 
