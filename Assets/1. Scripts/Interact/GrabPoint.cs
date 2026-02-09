@@ -73,6 +73,7 @@ public class GrabPoint : NetworkBehaviour
 
     public bool IsSacInHand()
     {
+        if (_heldItem == null) return false;
         return _heldItem.GetComponent<GrabbableObject>().type == GrabType.Sac;
     }
 
