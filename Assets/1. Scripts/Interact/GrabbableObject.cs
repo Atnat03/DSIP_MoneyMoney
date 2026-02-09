@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(NetworkObject))]
-public class GrabbableObject : NetworkBehaviour
+public class GrabbableObject : NetworkBehaviour, IGrabbable
 {
     public NetworkVariable<bool> IsGrabbed = new NetworkVariable<bool>(false);
 
@@ -19,7 +19,7 @@ public class GrabbableObject : NetworkBehaviour
     private void HitInteract(GameObject obj, GameObject player)
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
-
+    
         var grabPoint = player.GetComponent<GrabPoint>();
         if (grabPoint != null)
         {
@@ -27,3 +27,6 @@ public class GrabbableObject : NetworkBehaviour
         }
     }
 }
+
+public interface IGrabbable
+{ }
