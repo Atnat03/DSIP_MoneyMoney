@@ -70,7 +70,7 @@ public class PlayerRayCast : NetworkBehaviour
             }
         }
 
-        if (Input.GetButtonDown("Fire2") && hasMaterial && !GetComponent<FPSControllerMulti>().isFreeze)
+        if (Input.GetButtonDown("Fire2") && hasMaterial && !GetComponent<FPSControllerMulti>().IsFreeze)
         {
             TakeMaterial();
         }
@@ -85,7 +85,7 @@ public class PlayerRayCast : NetworkBehaviour
 
     public IEnumerator RepairPart(GameObject truck)
     {
-        GetComponent<FPSControllerMulti>().isFreeze = true;
+        GetComponent<FPSControllerMulti>().StartFreeze();
         float count = durationRepair;
         while (count > 0)
         {
@@ -94,7 +94,7 @@ public class PlayerRayCast : NetworkBehaviour
             circleCD.fillAmount =  count / durationRepair;
         }
         Interact.RayInteract(truck, gameObject);
-        GetComponent<FPSControllerMulti>().isFreeze = false;
+        GetComponent<FPSControllerMulti>().StopFreeze();
         TakeMaterial();
     }
 }

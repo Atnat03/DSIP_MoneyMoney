@@ -72,7 +72,7 @@ namespace Shooting
         
         public IEnumerator Reloading()
         {
-            GetComponent<FPSControllerMulti>().isFreeze = true;
+            GetComponent<FPSControllerMulti>().StartFreeze();
             Image circleCD = VariableManager.instance.circleCD;
             float count = reloadingTime;
             while (count > 0)
@@ -81,7 +81,7 @@ namespace Shooting
                 yield return null;
                 circleCD.fillAmount =  count / reloadingTime;
             }
-            GetComponent<FPSControllerMulti>().isFreeze = false;
+            GetComponent<FPSControllerMulti>().StopFreeze();
             Reload();
         }
 

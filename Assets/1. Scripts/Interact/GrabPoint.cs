@@ -44,6 +44,12 @@ public class GrabPoint : NetworkBehaviour
     private void OnInteractGrab(GameObject obj, GameObject player)
     {
         if (!IsOwner) return;
+        
+        if (obj.GetComponent<IGrabbable>() == null)
+            return;
+        
+        if(player.GetComponent<FPSControllerMulti>().isDriver)
+            return;
 
         NetworkObject netObj = obj.GetComponent<NetworkObject>();
         if (netObj != null)

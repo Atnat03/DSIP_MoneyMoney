@@ -261,7 +261,14 @@ public class FPSControllerMulti : NetworkBehaviour
                 {
                     if (hit.collider.CompareTag("Klaxon"))
                     {
-                        TruckController.instance.PlayHornClientRpc();
+                        if (IsServer)
+                        {
+                            TruckController.instance.GetComponent<AudioSource>().PlayOneShot(TruckController.instance.klaxon);
+                        }
+                        else
+                        {
+                            TruckController.instance.PlayHornClientRpc();
+                        }
                     }
 
                     if (hit.collider.CompareTag("RadioButton"))
@@ -336,7 +343,19 @@ public class FPSControllerMulti : NetworkBehaviour
         return (Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload) && final;
     }
 
-    public bool isFreeze;
+    private bool isFreeze;
+    public bool IsFreeze => isFreeze;
+    private Vector3 freezeCameraPos;
+    
+    public void StartFreeze()
+    {
+        isFreeze = true;
+    }
+
+    public void StopFreeze()
+    {
+        isFreeze = false;
+    }
     
     void HandleCameraInput()
     {
@@ -348,6 +367,10 @@ public class FPSControllerMulti : NetworkBehaviour
             yaw += mouseX;
             pitch -= mouseY;
             pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
+        }
+        else
+        {
+            
         }
     }
 
@@ -420,6 +443,7 @@ public class FPSControllerMulti : NetworkBehaviour
     void LateUpdate()
     {
         if (!IsOwner) return;
+        if (isFreeze) return;
         
         transform.rotation = UnityEngine.Quaternion.Euler(0, yaw, 0);
         cameraTransform.rotation = UnityEngine.Quaternion.Euler(pitch, yaw, 0);

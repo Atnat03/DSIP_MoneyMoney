@@ -99,7 +99,7 @@ public class PlayerCustom : NetworkBehaviour
 
         if (Input.GetKeyDown(emoteKey))
         {
-            controllerScript.isFreeze = true;
+            controllerScript.StartFreeze();
             emoteManager.gameObject.SetActive(true);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -107,7 +107,7 @@ public class PlayerCustom : NetworkBehaviour
 
         if (Input.GetKeyUp(emoteKey))
         {
-            controllerScript.isFreeze = false;
+            controllerScript.StopFreeze();
 
             int finalEmoteIndex = localSelectedEmoteIndex;
 
