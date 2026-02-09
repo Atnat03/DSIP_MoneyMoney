@@ -2,20 +2,21 @@ using Unity.Netcode;
 using UnityEngine;
 using Shooting;
 using Unity.Netcode.Components;
+using UnityEngine.Serialization;
 
-public class ListenEventDoor : NetworkBehaviour
+public class ListenEventDoor : NetworkBehaviour, IInteractible
 {
     private Animator animator;
     private NetworkAnimator networkAnimator;
     
-    private NetworkVariable<bool> isOpen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> isOpenDoor = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         networkAnimator = GetComponent<NetworkAnimator>();
 
-        isOpen.OnValueChanged += OnDoorStateChanged;
+        isOpenDoor.OnValueChanged += OnDoorStateChanged;
     }
 
     private void OnEnable()
@@ -26,7 +27,7 @@ public class ListenEventDoor : NetworkBehaviour
     private void OnDisable()
     {
         Interact.OnInteract -= HitInteract;
-        isOpen.OnValueChanged -= OnDoorStateChanged;
+        isOpenDoor.OnValueChanged -= OnDoorStateChanged;
     }
 
     private void HitInteract(GameObject obj, GameObject player)
@@ -51,11 +52,19 @@ public class ListenEventDoor : NetworkBehaviour
 
     private void ToggleDoor()
     {
-        isOpen.Value = !isOpen.Value;
+        isOpenDoor.Value = !isOpenDoor.Value;
     }
 
     private void OnDoorStateChanged(bool previousValue, bool newValue)
     {
         animator.SetBool("Open", newValue);
     }
+
+    public string InteractionName
+    {
+        get { return interactionName; }
+        set { interactionName = value; }
+    }
+
+    public string interactionName;
 }

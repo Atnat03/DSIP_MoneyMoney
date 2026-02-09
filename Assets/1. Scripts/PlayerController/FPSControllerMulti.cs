@@ -11,7 +11,7 @@ using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
 [DefaultExecutionOrder(-1)]
-public class FPSControllerMulti : NetworkBehaviour
+public class FPSControllerMulti : NetworkBehaviour, IParentable
 {
     [Header("References")]
     private Rigidbody truckRb;
@@ -73,6 +73,7 @@ public class FPSControllerMulti : NetworkBehaviour
             return truckInteraction.driverClientId.Value == OwnerClientId && isInTruck;
         }
     }    
+    
     private Vector3 driverLocalPosition;
     
     [Header("UI")]
@@ -103,6 +104,10 @@ public class FPSControllerMulti : NetworkBehaviour
     {
         return myCamera;
     }
+
+    [Header("Ladder Settings")]
+    [SerializeField] private float ladderClimbSpeed = 3f;
+    private bool isOnLadder = false;
 
     public void SetVisibleGun()
     {
@@ -175,7 +180,11 @@ public class FPSControllerMulti : NetworkBehaviour
         textGoInCamion.SetActive(canEnterInTruck);
         textReload.SetActive(canReload);
 
+        isInTruck = transform.parent == TruckController.instance.transform;
+        
         SetVisibleGun();
+        
+        capsule.enabled = !isDriver;
         
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -261,14 +270,7 @@ public class FPSControllerMulti : NetworkBehaviour
                 {
                     if (hit.collider.CompareTag("Klaxon"))
                     {
-                        if (IsServer)
-                        {
-                            TruckController.instance.GetComponent<AudioSource>().PlayOneShot(TruckController.instance.klaxon);
-                        }
-                        else
-                        {
-                            TruckController.instance.PlayHornClientRpc();
-                        }
+                        TruckController.instance.PlayHornServerRpc();
                     }
 
                     if (hit.collider.CompareTag("RadioButton"))
@@ -368,14 +370,12 @@ public class FPSControllerMulti : NetworkBehaviour
             pitch -= mouseY;
             pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
         }
-        else
-        {
-            
-        }
     }
 
     private void HandleHeadbob()
     {
+        if (isOnLadder) return;
+        
         if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
         {
             cameraTransform.localPosition = Vector3.Lerp(
@@ -414,25 +414,34 @@ public class FPSControllerMulti : NetworkBehaviour
             pitch -= mouseY;
             pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
 
-            if (controller.isGrounded)
+            Vector3 move = Vector3.zero;
+            
+            if (isOnLadder)
             {
-                if (verticalVelocity < 0)
-                    verticalVelocity = -2f;
+                Vector3 climb = new Vector3(horizontalInput, verticalInput, 0f);
+                move = transform.TransformDirection(climb) * ladderClimbSpeed;
 
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    verticalVelocity = jumpForce;
-                }
+                verticalVelocity = 0f;
             }
             else
             {
-                verticalVelocity += gravity * Time.deltaTime;
-            }
+                if (controller.isGrounded)
+                {
+                    if (verticalVelocity < 0)
+                        verticalVelocity = -2f;
 
-            Vector3 move = Vector3.zero;
-            Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-            move = transform.TransformDirection(localMove) * speed;
-            move.y = verticalVelocity;
+                    if (Input.GetKeyDown(KeyCode.Space) && !isOnLadder)
+                        verticalVelocity = jumpForce;
+                }
+                else
+                {
+                    verticalVelocity += gravity * Time.deltaTime;
+                }
+
+                Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+                move = transform.TransformDirection(localMove) * speed;
+                move.y = verticalVelocity;
+            }
 
             controller.enabled = true;
             controller.Move(move * Time.deltaTime);
@@ -454,12 +463,12 @@ public class FPSControllerMulti : NetworkBehaviour
             HandleHeadbob();
     }
 
-    public void EnterTruck(bool asDriver, Vector3 spawnPosition) {
-        isInTruck = true;
+    public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
+    {
         if (controller != null) controller.enabled = false;
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
-
+        
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {
             netTransform.InLocalSpace = true;
@@ -478,7 +487,6 @@ public class FPSControllerMulti : NetworkBehaviour
         
         transform.position = exitPosition;
         
-        isInTruck = false;
         truckRb = null;
         
         if (controller != null)
@@ -563,11 +571,16 @@ public class FPSControllerMulti : NetworkBehaviour
     public void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("PorteConducteur") && 
-            !isInTruck && 
             TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false &&
             !hasSomethingInHand)
         {
             canEnterInTruck = true;
+        }
+
+        if (other.CompareTag("Echelle"))
+        {
+            isOnLadder = true;
+            verticalVelocity = 0f;        
         }
     }
     
@@ -577,5 +590,32 @@ public class FPSControllerMulti : NetworkBehaviour
         {
             canEnterInTruck = false;
         }
+        
+        if (other.CompareTag("Echelle"))
+        {
+            isOnLadder = false;
+        }
     }
+
+    public Transform Transform => transform;
+    public NetworkObject NetworkObject => GetComponent<NetworkObject>();
+    
+    public void OnParented(Transform parent)
+    {
+        SetPassengerModeServerRpc(true, parent.InverseTransformPoint(transform.position));
+    }
+
+    public void OnUnparented()
+    {
+        SetPassengerModeServerRpc(false, Vector3.zero);
+    }
+}
+
+public interface IParentable
+{
+    Transform Transform { get; }
+    NetworkObject NetworkObject { get; }
+
+    void OnParented(Transform parent);
+    void OnUnparented();
 }

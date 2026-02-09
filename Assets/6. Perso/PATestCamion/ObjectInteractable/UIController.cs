@@ -1,15 +1,23 @@
+using TMPro;
 using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-    public GameObject uiPause;
+    public TextMeshProUGUI uiPause;
+    public GameObject uitextParent;
+    
     public void OnInteract()
     {
-        uiPause.SetActive(true);
+        uitextParent.gameObject.SetActive(true);
     }
 
     public void OnStopInteract()
     {
-        uiPause.SetActive(false);
+        uitextParent.gameObject.SetActive(false);
+    }
+
+    public void SetText(string newText)
+    {
+        uiPause.text = newText;
     }
 }

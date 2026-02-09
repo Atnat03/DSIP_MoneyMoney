@@ -914,6 +914,7 @@ GameObject:
   - component: {fileID: 7180674001884962020}
   - component: {fileID: 2281370101811331839}
   - component: {fileID: 7475640001014927665}
+  - component: {fileID: 6988800169906220}
   m_Layer: 15
   m_Name: Bandit_Truck_Follow
   m_TagString: Untagged
@@ -954,23 +955,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BanditVehicleAI
   truck: {fileID: 0}
-  position: 1
-  sideDistance: 8
-  frontBackDistance: 20
-  maxSpeedFar: 40
-  turnSpeed: 1
-  acceleration: 10
+  flankPosition: 0
+  flankDistance: 8
+  forwardOffset: 5
+  avoidTruckRadius: 5
+  maxSpeed: 50
+  acceleration: 15
+  deceleration: 10
+  updateDestinationInterval: 0.2
   stoppingDistance: 2
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 8192
-  obstacleCheckDistance: 15
-  obstacleAvoidStrength: 5
-  groundRayDistance: 5
-  stopDeceleration: 5
-  driftIntensity: 1
-  currentSpeed: 0
-  isStopping: 0
+  driftSlowdown: 3
+  goRight: 0
   lookAtTarget: {fileID: 582672426505465266}
 --- !u!65 &2426944586062192942
 BoxCollider:
@@ -1005,7 +1000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1782731183
+  GlobalObjectIdHash: 2661722037
   InScenePlacedSourceGlobalObjectIdHash: 1158135261
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1079,6 +1074,28 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   maxHealth: 20
   healthBar: {fileID: 4189391593949609610}
+--- !u!195 &6988800169906220
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6959080630503955993}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 6.2
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &7175343954216360111
 GameObject:
   m_ObjectHideFlags: 0

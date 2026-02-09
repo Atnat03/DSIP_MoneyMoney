@@ -5,6 +5,11 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
+public interface IInteractible
+{
+    public string InteractionName { get; set; }
+}
+
 public class PlayerRayCast : NetworkBehaviour
 {
     public UIController uiController;
@@ -16,6 +21,8 @@ public class PlayerRayCast : NetworkBehaviour
     public GameObject materialVisual;
 
     public float hitDistance = 2f;
+
+    public string RepearInteractionName = "Réparer";
     
     private void Start()
     {
@@ -34,17 +41,27 @@ public class PlayerRayCast : NetworkBehaviour
         RaycastHit hit;
         Ray ray = new Ray(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward);
         Debug.DrawRay(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward, Color.green);
-        
-        if (Physics.Raycast(ray, out hit))
+        int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
+        if (Physics.Raycast(ray, out hit, hitDistance,layerMask))
         {
-            if ((hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.distance < hitDistance))
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
             {
-                if (!hit.collider.CompareTag("TruckPart") || 
-                    (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial))
+                if ((!hit.collider.CompareTag("TruckPart") || 
+                    (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial)))
                 {
-                    uiController?.OnInteract();
+                    if(hit.collider.CompareTag("Sangles"))
+                    {
+                        if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
+                            return;
+                    }
+                        
+                    if (hit.collider.TryGetComponent<IInteractible>(out var interactible))
+                    {
+                        uiController?.OnInteract();
+                        uiController?.SetText(interactible.InteractionName);
+                    }
                 }
-                
+
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     if (hit.collider.CompareTag("TruckPart") && hasMaterial)
@@ -60,14 +77,14 @@ public class PlayerRayCast : NetworkBehaviour
                     }
                     else if(!hit.collider.CompareTag("TruckPart"))
                     {
-                        Interact.RayInteract(hit.collider.gameObject, gameObject);
+                        Interact.RayInteract(hit.collider.gameObject, gameObject, RepearInteractionName);
                     }
                 }
             }
-            else
-            {
-                uiController?.OnStopInteract();
-            }
+        }
+        else
+        {
+            uiController?.OnStopInteract();
         }
 
         if (Input.GetButtonDown("Fire2") && hasMaterial && !GetComponent<FPSControllerMulti>().IsFreeze)
@@ -93,7 +110,7 @@ public class PlayerRayCast : NetworkBehaviour
             yield return null;
             circleCD.fillAmount =  count / durationRepair;
         }
-        Interact.RayInteract(truck, gameObject);
+        Interact.RayInteract(truck, gameObject, RepearInteractionName);
         GetComponent<FPSControllerMulti>().StopFreeze();
         TakeMaterial();
     }
