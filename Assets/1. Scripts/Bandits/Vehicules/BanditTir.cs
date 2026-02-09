@@ -33,9 +33,7 @@ public class BanditTir : MonoBehaviour
 
     private float nextFireTime;
     public BanditVehicleAI banditAI;
-
     
-
     private void Start()
     {
         isRight = banditAI.goRight;
@@ -61,14 +59,12 @@ public class BanditTir : MonoBehaviour
         bool canShootPlayer =
             (isRight && TruckLife.instance.canShootPlayerRight) ||
             (!isRight && TruckLife.instance.canShootPlayerLeft);
-        print(canShootPlayer + " ouaiiiii");
 
         if (canShootPlayer)
         {
             Transform visiblePlayer = FindClosestVisiblePlayer();
             if (visiblePlayer != null)
             {
-                Debug.Log("visible player ?");
                 return visiblePlayer;
             }
                
@@ -86,11 +82,9 @@ public class BanditTir : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            Debug.Log("jai trouvé qqn ?");
             HealthComponent health = hit.GetComponent<HealthComponent>();
             if (health.Invulnerable) continue;
 
-            Debug.Log("test vision");
             if (!HasLineOfSight(hit.transform)) continue;
 
             float dist = (hit.transform.position - transform.position).sqrMagnitude;
@@ -100,7 +94,6 @@ public class BanditTir : MonoBehaviour
                 closest = hit.transform;
             }
         }
-        Debug.Log("closest j'ai trouvé");
         return closest;
     }
 
@@ -138,11 +131,9 @@ public class BanditTir : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(origin, dir, out hit, detectionRadius, visibilityMask, QueryTriggerInteraction.Ignore))
         {
-            Debug.Log("visible");
             return hit.transform == target;
         }
-
-        Debug.Log("obstrué " + hit.collider.name);
+        
         return false;
     }
 
