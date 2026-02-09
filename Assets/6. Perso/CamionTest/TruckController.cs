@@ -132,30 +132,32 @@ public class TruckController : NetworkBehaviour
         CheckFall();
     }
 
-    private void TriggerCameraShake()
+    [ClientRpc]
+    private void TriggerCameraShakeClientRpc()
     {
-        foreach (var client in NetworkManager.Singleton.ConnectedClients.Values)
+        if (NetworkManager.Singleton.LocalClient == null) return;
+
+        var playerObject = NetworkManager.Singleton.LocalClient.PlayerObject;
+        if (playerObject == null) return;
+
+        var fps = playerObject.GetComponent<FPSControllerMulti>();
+        if (fps == null || !fps.isInTruck) return;
+
+        var cameraShake = fps.MyCamera().GetComponent<CameraShake>();
+        if (cameraShake != null)
         {
-            NetworkObject player = client.PlayerObject;
-
-            if (player == null) continue;
-            if (!player.GetComponent<FPSControllerMulti>().isInTruck)
-                return;
-
-            CameraShake cameraShake = player.GetComponent<FPSControllerMulti>().MyCamera().GetComponent<CameraShake>();
-            if (cameraShake != null)
-            {
-                cameraShake.TriggerShake(cameraShakeDuration, cameraShakeMagnitude);
-            }
+            cameraShake.TriggerShake(cameraShakeDuration, cameraShakeMagnitude);
         }
     }
+
+
     
     public void CheckVelecityToApplyShake()
     {
         if (rb.linearVelocity.magnitude > velocityToTriggerShake)
         {
             print("ca shake");
-            TriggerCameraShake();
+            TriggerCameraShakeClientRpc();
         }
     }
 

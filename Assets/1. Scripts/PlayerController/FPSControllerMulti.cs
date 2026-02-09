@@ -432,8 +432,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (isFreeze) return;
         if (MyCamera().GetComponent<CameraShake>().shaking) return;
         
-        transform.rotation = UnityEngine.Quaternion.Euler(0, yaw, 0);
-        cameraTransform.rotation = UnityEngine.Quaternion.Euler(pitch, yaw, 0);
+        transform.rotation = Quaternion.Euler(0, yaw, 0);
+        cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
         
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
     

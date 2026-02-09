@@ -8429,6 +8429,18 @@ PrefabInstance:
       propertyPath: jaugeMashing
       value: 
       objectReference: {fileID: 1167189023}
+    - target: {fileID: 3102921428755124855, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: cameraShakeDuration
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3102921428755124855, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: cameraShakeMagnitude
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3102921428755124855, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
+      propertyPath: velocityToTriggerShake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3167068353197915456, guid: 6e27be332a68b3d4e88a0094f49c6ab7, type: 3}
       propertyPath: interactionName
       value: S'assoir
