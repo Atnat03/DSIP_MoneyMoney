@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -137,61 +138,62 @@ public class TruckController : NetworkBehaviour
         lightsButtons.material.color = frontLights.activeSelf ? Color.yellow : Color.gray;
     }
     
+    private readonly HashSet<NetworkObject> trackedParentables = new();
+    
     void CheckPassengersBounds()
     {
         if (!IsServer) return;
 
-        foreach (NetworkClient client in NetworkManager.Singleton.ConnectedClientsList)
+        IParentable[] parentables = FindObjectsOfType<MonoBehaviour>(true)
+            .OfType<IParentable>()
+            .ToArray();
+
+        foreach (IParentable parentable in parentables)
         {
-            NetworkObject playerObj = client.PlayerObject;
-            if (playerObj == null) continue;
+            NetworkObject netObj = parentable.NetworkObject;
+            if (netObj == null) continue;
 
-            FPSControllerMulti player = playerObj.GetComponent<FPSControllerMulti>();
-            if (player == null) continue;
+            Transform t = parentable.Transform;
 
-            bool inside = !IsOutsideTruckBounds(player.transform);
-            bool alreadyParented = trackedPassengers.Contains(playerObj);
+            bool inside = !IsOutsideTruckBounds(t);
+            bool alreadyParented = trackedParentables.Contains(netObj);
 
             if (inside && !alreadyParented)
             {
-                ParentPassenger(playerObj);
+                ParentObject(parentable);
             }
             else if (!inside && alreadyParented)
             {
-                UnparentPassenger(playerObj);
+                UnparentObject(parentable);
             }
         }
     }
+
     
-    void ParentPassenger(NetworkObject playerObj)
+    void ParentObject(IParentable parentable)
     {
-        playerObj.TrySetParent(transform, true);
+        NetworkObject netObj = parentable.NetworkObject;
 
-        trackedPassengers.Add(playerObj);
+        netObj.TrySetParent(transform, true);
+        trackedParentables.Add(netObj);
 
-        var fps = playerObj.GetComponent<FPSControllerMulti>();
-        if (fps != null)
-        {
-            fps.SetPassengerModeServerRpc(true, spawnPassager.localPosition);
-        }
+        parentable.OnParented(transform);
 
-        Debug.Log($"Passenger {playerObj.OwnerClientId} parenté au camion");
+        Debug.Log($"{netObj.name} parenté au camion");
     }
 
-    void UnparentPassenger(NetworkObject playerObj)
+    void UnparentObject(IParentable parentable)
     {
-        playerObj.TrySetParent((Transform)null, true);
+        NetworkObject netObj = parentable.NetworkObject;
 
-        trackedPassengers.Remove(playerObj);
+        netObj.TrySetParent((Transform)null, true);
+        trackedParentables.Remove(netObj);
 
-        var fps = playerObj.GetComponent<FPSControllerMulti>();
-        if (fps != null)
-        {
-            fps.SetPassengerModeServerRpc(false, Vector3.zero);
-        }
+        parentable.OnUnparented();
 
-        Debug.Log($"Passenger {playerObj.OwnerClientId} déparenté du camion");
+        Debug.Log($"{netObj.name} déparenté du camion");
     }
+
     
 
     [ServerRpc(RequireOwnership = false)]
@@ -206,11 +208,18 @@ public class TruckController : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void PlayHornServerRpc()
+    {
+        PlayHornClientRpc();
+    }
+
     [ClientRpc]
-    public void PlayHornClientRpc()
+    private void PlayHornClientRpc()
     {
         GetComponent<AudioSource>().PlayOneShot(klaxon);
     }
+
 
     void HandleMotor()
     {
