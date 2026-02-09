@@ -1,25 +1,26 @@
-
+using System;
 using Shooting;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class HealthComponent : MonoBehaviour
+public class HealthComponent : NetworkBehaviour
 {
     #region Properties
-    public float Health => _health;
-    public float MaxHealth => _maxHealth; 
+    public float Health => _health.Value;
+    public float MaxHealth => _maxHealth;
     public bool Invulnerable { get => _invulnerable; set => _invulnerable = value; }
-
-
     #endregion
 
     #region Fields
     [Header("Parameters")]
     [SerializeField] private float _maxHealth;
+
     [Space]
     [Tooltip("Specifies if objects colliding at high velocity should deal damage")]
     [SerializeField] private bool _impactDamage;
+
     [Tooltip(
         "x : The force at which we start taking damage ; " +
         "y : The maximal force that deals damages ; " +
@@ -27,6 +28,7 @@ public class HealthComponent : MonoBehaviour
         "w : How much damage we take with a maximal force"
         )]
     [SerializeField] private Vector4 _impactDamageRange;
+
     [Space]
     [Tooltip("Specifies if bullets should deal damage")]
     [SerializeField] private bool _bulletDamage;
@@ -38,105 +40,60 @@ public class HealthComponent : MonoBehaviour
 
     public Image healthBar;
 
-
     // Private fields
     Target _target; // Target component attached to this same gameobject
     Collider _collider;
     Rigidbody _rb;
 
-    float _previousHealth;
-    [SerializeField]float _health;
-    bool _enableCallbacks;
+    private NetworkVariable<float> _health = new NetworkVariable<float>();
     bool _invulnerable;
-
     #endregion
 
-
     #region Methods
+
     private void Start()
     {
         _bulletDamage = TrySetupTarget();
         _impactDamage = TrySetupImpact();
         healthBar = VariableManager.instance.healthBar;
+
+        if (IsServer)
+            _health.Value = _maxHealth;
+
+        _health.OnValueChanged += OnHealthChanged;
     }
 
-    private void Update()
+    private void OnHealthChanged(float previous, float current)
     {
-        CheckDirty_Health();
+        // Update UI only for local player
+        if (IsOwner && healthBar != null)
+            healthBar.fillAmount = current / _maxHealth;
+
+        // Invoke events
+        if (current > previous) _onRegeneration.Invoke();
+        else if (current < previous) _onDamageTaken.Invoke();
+
+        if (current <= 0f && IsServer)
+        {
+            GetComponent<KnockOut>()?.KOServerRpc();
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Heal(float amount)
     {
-        if (!_impactDamage)
-            return;
-        if (!other.TryGetComponent(out ImpactProvider impactor))
-            return;
+        if (!IsServer) return;
 
-        Debug.Log("Impact detected");
-
-        Vector3 inVelocity = Vector3.zero; // Velocity of the other object
-        if (other.TryGetComponent(out Rigidbody rb))
-            inVelocity = rb.linearVelocity;
-
-        Vector3 outVelocity = _rb.linearVelocity; // Velocity of this object
-        
-        Vector3 diff = inVelocity - outVelocity; // Force of the impact
-
-        Vector3 normal = (other.transform.position - transform.position).normalized; // Direction from this object towards the other. Inaccurate but simple (assumes both objects are spheres).
-
-        Vector3 tangent = Vector3.Cross(normal, Vector3.up).normalized;
-
-        float proj = Vector3.Dot(diff, tangent); // The only part of the impact that we care for is the one that is perpendicular to the surface
-
-        Vector3 perpendicular = diff - (tangent * proj);
-
-        float force = perpendicular.magnitude; // This is actually how hard we are being hit
-
-        force = Mathf.Clamp(force, _impactDamageRange.x, _impactDamageRange.y);
-
-        float damage = Mathf.Lerp(_impactDamageRange.z, _impactDamageRange.w, Mathf.InverseLerp(_impactDamageRange.x, _impactDamageRange.y, force));
-
-        TakeDamage(damage);
+        _health.Value = Mathf.Min(_health.Value + amount, _maxHealth);
+        EventBus.Invoke("LocalPlayerHeal", new DataPacket(amount));
     }
 
-    private bool TrySetupImpact()
-    {
-        if (!_impactDamage)
-            return false;
-        if (!TryGetComponent(out _collider))
-            return false;
-        if (!TryGetComponent(out _rb))
-            return false;
+    public void Heal() => Heal(_maxHealth);
 
-        return true;
-    }
-
-    private bool TrySetupTarget()
-    {
-        if (!_bulletDamage)
-            return false;
-
-        if (!TryGetComponent(out _target))
-            return false;
-
-        _target.OnShot += TakeBulletDamage;
-        return true;
-    }
-    public void Heal()
-    {
-        Heal(_maxHealth);
-    }
-    public void Heal(float hp)
-    {
-        _health += hp;
-        healthBar.fillAmount =  _health / _maxHealth;
-        EventBus.Invoke("LocalPlayerHeal", new DataPacket(hp));
-    }
     public bool TryTakeDamage(float damage)
     {
         if (!CanTakeDamage()) return false;
 
-        TakeDamage(damage);
+        TakeDamageServerRpc(damage);
         return true;
     }
 
@@ -144,39 +101,64 @@ public class HealthComponent : MonoBehaviour
     {
         if (!CanTakeDamage()) return false;
 
-        TakeBulletDamage(bulletInfo);
+        TakeDamageServerRpc(bulletInfo.Damage);
         return true;
     }
+
     public bool CanTakeDamage() => !_invulnerable;
 
-    private void TakeBulletDamage(BulletInfo bulletInfo) => TakeDamage(bulletInfo.Damage);
-
-    private void TakeDamage(float damage)
+    private bool TrySetupImpact()
     {
-        _health -= damage;
-        healthBar.fillAmount =  _health / _maxHealth;
+        if (!_impactDamage) return false;
+        if (!TryGetComponent(out _collider)) return false;
+        if (!TryGetComponent(out _rb)) return false;
+
+        return true;
+    }
+
+    private bool TrySetupTarget()
+    {
+        if (!_bulletDamage) return false;
+        if (!TryGetComponent(out _target)) return false;
+
+        _target.OnShot += TakeBulletDamage;
+        return true;
+    }
+
+    private void TakeBulletDamage(BulletInfo bulletInfo) => TryTakeDamage(bulletInfo.Damage);
+
+    [ServerRpc(RequireOwnership = false)]
+    private void TakeDamageServerRpc(float damage)
+    {
+        _health.Value = Mathf.Max(_health.Value - damage, 0f);
         EventBus.Invoke("LocalPlayerDamage", new DataPacket(damage));
     }
 
-    private bool CheckDirty_Health()
+    private void OnTriggerEnter(Collider other)
     {
-        if (_health != _previousHealth)
-        {
-            if (_enableCallbacks)
-            {
-                if (_health > _previousHealth)
-                    _onRegeneration.Invoke();
-                else if (_health < _previousHealth)
-                    _onDamageTaken.Invoke();
-                if (_health <= 0f)
-                    _onDeath.Invoke();
-                EventBus.Invoke("Health_DirtyFlag", new DataPacket(_health));
-            }
+        if (!_impactDamage) return;
+        if (!other.TryGetComponent(out ImpactProvider impactor)) return;
 
-            _previousHealth = _health;
-            return true;
-        }
-        return false;
+        Vector3 inVelocity = Vector3.zero;
+        if (other.TryGetComponent(out Rigidbody rb)) inVelocity = rb.linearVelocity;
+
+        Vector3 diff = inVelocity - _rb.linearVelocity;
+        Vector3 normal = (other.transform.position - transform.position).normalized;
+        Vector3 tangent = Vector3.Cross(normal, Vector3.up).normalized;
+        Vector3 perpendicular = diff - (tangent * Vector3.Dot(diff, tangent));
+        float force = Mathf.Clamp(perpendicular.magnitude, _impactDamageRange.x, _impactDamageRange.y);
+        float damage = Mathf.Lerp(_impactDamageRange.z, _impactDamageRange.w, Mathf.InverseLerp(_impactDamageRange.x, _impactDamageRange.y, force));
+
+        TryTakeDamage(damage);
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Damage"))
+        {
+            TryTakeDamage(10);
+        }
+    }
+
     #endregion
 }

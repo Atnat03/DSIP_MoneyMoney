@@ -24,6 +24,8 @@ public class PlayerRayCast : NetworkBehaviour
 
     public string RepearInteractionName = "Réparer";
     
+    private KnockOut targetKO;
+    
     private void Start()
     {
         uiController = VariableManager.instance.uiController;
@@ -44,6 +46,38 @@ public class PlayerRayCast : NetworkBehaviour
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
         if (Physics.Raycast(ray, out hit, hitDistance,layerMask))
         {
+            //Réanimer
+            if (hit.collider.TryGetComponent<KnockOut>(out KnockOut ko))
+            {
+                targetKO = ko;
+
+                if (ko.isKnockedOut.Value)
+                {
+                    uiController?.OnInteract();
+                    uiController?.SetText("Réanimer");
+
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        targetKO.StartMateReviveServerRpc(NetworkManager.Singleton.LocalClientId);
+                    }
+                    else
+                    {
+                        targetKO.StopMateReviveServerRpc();
+                    }
+                }
+                else
+                {
+                    targetKO = null;
+                    uiController?.OnStopInteract();
+                }
+            }
+            else
+            {
+                targetKO = null;
+                uiController?.OnStopInteract();
+            }
+            
+            //Le reste
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
             {
                 if (Input.GetKeyDown(KeyCode.E))
