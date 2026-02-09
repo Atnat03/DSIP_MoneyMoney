@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2623406057664483614}
   - component: {fileID: 189311186842769525}
   - component: {fileID: 2227000951669796019}
+  - component: {fileID: 3079713612038202068}
   m_Layer: 15
   m_Name: SmallTruck_Tyre_B_R
   m_TagString: Untagged
@@ -90,6 +91,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3079713612038202068
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125529353236995441}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3785663486498820152, guid: 18f8e86ff64cc4054a2ccb5e21513224, type: 3}
 --- !u!1 &1167862905310384874
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,6 +163,8 @@ GameObject:
   - component: {fileID: 5934013122662371145}
   - component: {fileID: 4934142105949008283}
   - component: {fileID: 164358262787095612}
+  - component: {fileID: 6781572698358878886}
+  - component: {fileID: 4790729012829990619}
   m_Layer: 15
   m_Name: Bandit_Truck_Barrage
   m_TagString: Untagged
@@ -180,7 +205,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 3.157391, y: 2.9771087, z: 8.022377}
   m_Center: {x: 0.02171874, y: 1.5018567, z: 0.1954689}
@@ -269,9 +294,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BanditBarrage
   pointA: {fileID: 0}
   pointB: {fileID: 0}
-  maxSpeed: 80
-  acceleration: 30
-  rotationSpeed: 10
+  moveSpeed: 50
+  rotationSpeed: 120
+  arrivalDistance: 10
 --- !u!54 &164358262787095612
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -280,9 +305,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2272291960386097672}
   serializedVersion: 5
-  m_Mass: 50
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 1000
+  m_LinearDamping: 0.5
+  m_AngularDamping: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -299,6 +324,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!195 &6781572698358878886
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2272291960386097672}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 3
+  m_Speed: 20
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!208 &4790729012829990619
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2272291960386097672}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &3254012700741879298
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +373,7 @@ GameObject:
   - component: {fileID: 2108271959640549136}
   - component: {fileID: 3824107203192017355}
   - component: {fileID: 629180344167303184}
+  - component: {fileID: 7810688851357406522}
   m_Layer: 15
   m_Name: SmallTruck_Tyre_F_R
   m_TagString: Untagged
@@ -389,6 +453,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7810688851357406522
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3254012700741879298}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8240864111111222041, guid: 18f8e86ff64cc4054a2ccb5e21513224, type: 3}
 --- !u!1 &3668539406616258386
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +486,7 @@ GameObject:
   - component: {fileID: 3865372606218052875}
   - component: {fileID: 2747058975749679347}
   - component: {fileID: 7733186269185422572}
+  - component: {fileID: 2291230648840747109}
   m_Layer: 15
   m_Name: SmallTruck
   m_TagString: Untagged
@@ -479,6 +566,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2291230648840747109
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3668539406616258386}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6992190608685096500, guid: 18f8e86ff64cc4054a2ccb5e21513224, type: 3}
 --- !u!1 &6224130566319205322
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,6 +599,7 @@ GameObject:
   - component: {fileID: 1508759005352163572}
   - component: {fileID: 572899576640186158}
   - component: {fileID: 4070111050244675532}
+  - component: {fileID: 7015998681262274229}
   m_Layer: 15
   m_Name: SmallTruck_Tyre_B_L
   m_TagString: Untagged
@@ -569,6 +679,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7015998681262274229
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6224130566319205322}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7777818795920475908, guid: 18f8e86ff64cc4054a2ccb5e21513224, type: 3}
 --- !u!1 &8689315430793301967
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,6 +712,7 @@ GameObject:
   - component: {fileID: 624861263141115920}
   - component: {fileID: 6522435759068732267}
   - component: {fileID: 3369866519798516590}
+  - component: {fileID: 2205956081566309}
   m_Layer: 15
   m_Name: SmallTruck_Tyre_F_L
   m_TagString: Untagged
@@ -659,3 +792,25 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2205956081566309
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8689315430793301967}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 974028199952966499, guid: 18f8e86ff64cc4054a2ccb5e21513224, type: 3}
