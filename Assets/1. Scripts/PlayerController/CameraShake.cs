@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
+    public bool shaking = false;
+    
     public void TriggerShake(float duration, float magnitude)
     {
         StartCoroutine(Shake(duration, magnitude));
@@ -10,7 +12,9 @@ public class CameraShake : MonoBehaviour
 
     IEnumerator Shake(float duration, float magnitude)
     {
-        Vector3 originalPosition = transform.parent.localPosition;
+        shaking = true;
+        
+        Vector3 originalPosition = transform.localPosition;
 
         float elasped= 0;
 
@@ -19,13 +23,15 @@ public class CameraShake : MonoBehaviour
             float x = Random.Range(-1f, 1f) * magnitude;
             float y = Random.Range(-1f, 1f) * magnitude;
             
-            transform.parent.localPosition = new Vector3(x, y, originalPosition.z);
+            transform.localPosition = new Vector3(x, y, originalPosition.z);
             
             elasped += Time.deltaTime;
             
             yield return null;
         }
         
-        transform.parent.localPosition = originalPosition;
+        transform.localPosition = originalPosition;
+
+        shaking = false;
     }
 }

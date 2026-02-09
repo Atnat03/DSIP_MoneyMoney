@@ -14,27 +14,34 @@ public class Chair : MonoBehaviour, IInteractible
     {
         Interact.OnInteract -= HitInteract;
     }
-    
+
     private void HitInteract(GameObject obj, GameObject player)
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
-        
+
         FPSControllerMulti fps = player.GetComponent<FPSControllerMulti>();
 
         if (fps.isSitting)
         {
             fps.StandUp();
+            isSit = false;
         }
         else
         {
             fps.Sit(sittingPos);
+            isSit = true;
         }
     }
 
+    private bool isSit = false;
+
     public string InteractionName
     {
-        get { return interactionName; }
-        set { interactionName = value; }
+        get { return isSit ? interactionDeboutName : interactionAssoirName; }
+        set { }
     }
 
-    public string interactionName;}
+    public string interactionAssoirName;
+    public string interactionDeboutName;
+    
+}
