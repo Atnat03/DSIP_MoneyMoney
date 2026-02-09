@@ -105,6 +105,10 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         return myCamera;
     }
 
+    [Header("Ladder Settings")]
+    [SerializeField] private float ladderClimbSpeed = 3f;
+    private bool isOnLadder = false;
+
     public void SetVisibleGun()
     {
         gunOther.SetActive(hasSomethingInHand);
@@ -372,6 +376,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     private void HandleHeadbob()
     {
+        if (isOnLadder) return;
+        
         if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
         {
             cameraTransform.localPosition = Vector3.Lerp(
@@ -410,25 +416,34 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             pitch -= mouseY;
             pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
 
-            if (controller.isGrounded)
+            Vector3 move = Vector3.zero;
+            
+            if (isOnLadder)
             {
-                if (verticalVelocity < 0)
-                    verticalVelocity = -2f;
+                Vector3 climb = new Vector3(horizontalInput, verticalInput, 0f);
+                move = transform.TransformDirection(climb) * ladderClimbSpeed;
 
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    verticalVelocity = jumpForce;
-                }
+                verticalVelocity = 0f;
             }
             else
             {
-                verticalVelocity += gravity * Time.deltaTime;
-            }
+                if (controller.isGrounded)
+                {
+                    if (verticalVelocity < 0)
+                        verticalVelocity = -2f;
 
-            Vector3 move = Vector3.zero;
-            Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-            move = transform.TransformDirection(localMove) * speed;
-            move.y = verticalVelocity;
+                    if (Input.GetKeyDown(KeyCode.Space) && !isOnLadder)
+                        verticalVelocity = jumpForce;
+                }
+                else
+                {
+                    verticalVelocity += gravity * Time.deltaTime;
+                }
+
+                Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+                move = transform.TransformDirection(localMove) * speed;
+                move.y = verticalVelocity;
+            }
 
             controller.enabled = true;
             controller.Move(move * Time.deltaTime);
@@ -455,6 +470,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (controller != null) controller.enabled = false;
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
+        
+        capsule.enabled = false;
 
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {
@@ -475,6 +492,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         transform.position = exitPosition;
         
         truckRb = null;
+        
+        capsule.enabled = true;
         
         if (controller != null)
             controller.enabled = true;
@@ -563,6 +582,12 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             canEnterInTruck = true;
         }
+
+        if (other.CompareTag("Echelle"))
+        {
+            isOnLadder = true;
+            verticalVelocity = 0f;        
+        }
     }
     
     public void OnTriggerExit(Collider other)
@@ -570,6 +595,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (other.transform.CompareTag("PorteConducteur"))
         {
             canEnterInTruck = false;
+        }
+        
+        if (other.CompareTag("Echelle"))
+        {
+            isOnLadder = false;
         }
     }
 
