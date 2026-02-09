@@ -184,6 +184,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         SetVisibleGun();
         
+        capsule.enabled = !isDriver;
+        
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed = sprintSpeed;
@@ -368,10 +370,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             pitch -= mouseY;
             pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
         }
-        else
-        {
-            
-        }
     }
 
     private void HandleHeadbob()
@@ -471,8 +469,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
         
-        capsule.enabled = false;
-
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {
             netTransform.InLocalSpace = true;
@@ -492,8 +488,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         transform.position = exitPosition;
         
         truckRb = null;
-        
-        capsule.enabled = true;
         
         if (controller != null)
             controller.enabled = true;
