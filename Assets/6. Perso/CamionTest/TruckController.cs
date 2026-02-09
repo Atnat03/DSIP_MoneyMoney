@@ -30,7 +30,7 @@ public class TruckController : NetworkBehaviour
     public NetworkVariable<bool> BackLightOn = new NetworkVariable<bool>();
 
     public GameObject frontLights;
-    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>();
+    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     public MeshRenderer lightsButtons;
     
     float horizontalInput;

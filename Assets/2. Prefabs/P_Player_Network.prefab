@@ -1990,11 +1990,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRayCast
   ShowTopMostFoldoutHeaderGroup: 1
   uiController: {fileID: 0}
-  durationRepair: 3
+  durationRepair: 1
   circleCD: {fileID: 0}
   hasMaterial: 0
   materialVisual: {fileID: 8219632236736230469}
-  hitDistance: 2
+  hitDistance: 3
 --- !u!114 &3666952883803456061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2008,7 +2008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooting.ShooterComponent
   ShowTopMostFoldoutHeaderGroup: 1
-  _maxAmmo: 100
+  _maxAmmo: 50
   _onShoot:
     m_PersistentCalls:
       m_Calls: []
@@ -2202,7 +2202,7 @@ MonoBehaviour:
   holdDistance: 2
   _maxChargeTime: 1.5
   _minThrowStrength: 2
-  _maxThrowStrength: 10
+  _maxThrowStrength: 20
   throwJauge: {fileID: 3742478140714004104}
   _onGrab:
     m_PersistentCalls:

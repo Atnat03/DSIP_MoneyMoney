@@ -97,7 +97,6 @@ public class PlayerCustom : NetworkBehaviour
         if (!IsOwner) return;
         if (isEmoting) return;
 
-        // Ouvrir le menu emotes
         if (Input.GetKeyDown(emoteKey))
         {
             controllerScript.isFreeze = true;
@@ -106,17 +105,17 @@ public class PlayerCustom : NetworkBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
 
-        // Relâchement : lancer l'emote sélectionnée
         if (Input.GetKeyUp(emoteKey))
         {
             controllerScript.isFreeze = false;
 
             int finalEmoteIndex = localSelectedEmoteIndex;
 
-            // Hide menu
             emoteManager.gameObject.SetActive(false);
+            
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
 
-            // Submit emote au serveur pour synchronisation
             SubmitEmoteServerRpc(finalEmoteIndex);
         }
     }
