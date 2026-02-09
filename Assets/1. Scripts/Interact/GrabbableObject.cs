@@ -1,10 +1,14 @@
 using Unity.Netcode;
 using UnityEngine;
 
+public enum GrabType {Sac, Lingots}
+
 [RequireComponent(typeof(NetworkObject))]
-public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable
+public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInteractible
 {
     public NetworkVariable<bool> IsGrabbed = new(false);
+
+    public GrabType type;
 
     public Transform Transform => transform;
     public NetworkObject NetworkObject => GetComponent<NetworkObject>();
@@ -39,6 +43,14 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable
     {
         Debug.Log($"{name} déparenté du camion");
     }
+
+    public string InteractionName
+    {
+        get { return interactionName; }
+        set { interactionName = value; }
+    }
+
+    public string interactionName;
 }
 
 

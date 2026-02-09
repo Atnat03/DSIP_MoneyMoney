@@ -71,6 +71,11 @@ public class GrabPoint : NetworkBehaviour
         HandleThrowInput();
     }
 
+    public bool IsSacInHand()
+    {
+        return _heldItem.GetComponent<GrabbableObject>().type == GrabType.Sac;
+    }
+
     #region GRAB
 
     public void TryGrab(NetworkObject item)
@@ -101,7 +106,10 @@ public class GrabPoint : NetworkBehaviour
         }
 
         if (item.TryGetComponent<Collider>(out var col))
+        {
+            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
             col.isTrigger = true;
+        }
 
         if (item.TryGetComponent<GrabbableObject>(out var grab))
             grab.IsGrabbed.Value = true;
@@ -163,6 +171,12 @@ public class GrabPoint : NetworkBehaviour
         }
     }
 
+    public void Throw()
+    {
+        Debug.Log("Slow Throw");
+        ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, _minThrowStrength);
+    }
+
     [ServerRpc(RequireOwnership = false)]
     private void ThrowServerRpc(ulong itemId, Vector3 direction, float force, ServerRpcParams rpc = default)
     {
@@ -185,7 +199,10 @@ public class GrabPoint : NetworkBehaviour
         }
 
         if (item.TryGetComponent<Collider>(out var col))
+        {
+            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
             col.isTrigger = false;
+        }
 
         if (item.TryGetComponent<GrabbableObject>(out var g))
             g.IsGrabbed.Value = false;
@@ -226,4 +243,9 @@ public class GrabPoint : NetworkBehaviour
     }
 
     #endregion
+
+    public GameObject GetCurrentObjectInHand()
+    {
+        return _heldItem.gameObject;
+    }
 }
