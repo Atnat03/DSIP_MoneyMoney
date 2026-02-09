@@ -76,6 +76,7 @@ public class TruckController : NetworkBehaviour
     private void Awake()
     {
         instance = this;
+
         truckInteraction = GetComponent<TruckInteraction>();
         
         jaugeMashing.transform.parent.gameObject.SetActive(false);
@@ -137,13 +138,13 @@ public class TruckController : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClient == null) return;
 
-        var playerObject = NetworkManager.Singleton.LocalClient.PlayerObject;
+        NetworkObject playerObject = NetworkManager.Singleton.LocalClient.PlayerObject;
         if (playerObject == null) return;
 
-        var fps = playerObject.GetComponent<FPSControllerMulti>();
+        FPSControllerMulti fps = playerObject.GetComponent<FPSControllerMulti>();
         if (fps == null || !fps.isInTruck) return;
 
-        var cameraShake = fps.MyCamera().GetComponent<CameraShake>();
+        CameraShake cameraShake = fps.MyCamera().GetComponent<CameraShake>();
         if (cameraShake != null)
         {
             cameraShake.TriggerShake(cameraShakeDuration, cameraShakeMagnitude);

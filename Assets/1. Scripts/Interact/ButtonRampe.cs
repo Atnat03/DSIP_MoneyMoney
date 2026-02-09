@@ -7,7 +7,7 @@ public class ButtonRampe : NetworkBehaviour, IInteractible
     {
         get { return isOpenRampe.Value ? interactionSortirName : interactionRentreName ; }
         set { }
-    }
+    }   
 
     public string interactionSortirName;
     public string interactionRentreName;
