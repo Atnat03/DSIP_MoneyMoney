@@ -73,6 +73,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             return truckInteraction.driverClientId.Value == OwnerClientId && isInTruck;
         }
     }    
+    
     private Vector3 driverLocalPosition;
     
     [Header("UI")]
@@ -175,6 +176,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         textGoInCamion.SetActive(canEnterInTruck);
         textReload.SetActive(canReload);
 
+        isInTruck = transform.parent == TruckController.instance.transform;
+        
         SetVisibleGun();
         
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -447,8 +450,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             HandleHeadbob();
     }
 
-    public void EnterTruck(bool asDriver, Vector3 spawnPosition) {
-        isInTruck = true;
+    public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
+    {
         if (controller != null) controller.enabled = false;
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
@@ -471,7 +474,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         transform.position = exitPosition;
         
-        isInTruck = false;
         truckRb = null;
         
         if (controller != null)
@@ -556,7 +558,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("PorteConducteur") && 
-            !isInTruck && 
             TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false &&
             !hasSomethingInHand)
         {
