@@ -9,14 +9,14 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
     private Animator animator;
     private NetworkAnimator networkAnimator;
     
-    private NetworkVariable<bool> isOpen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> isOpenDoor = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         networkAnimator = GetComponent<NetworkAnimator>();
 
-        isOpen.OnValueChanged += OnDoorStateChanged;
+        isOpenDoor.OnValueChanged += OnDoorStateChanged;
     }
 
     private void OnEnable()
@@ -27,7 +27,7 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
     private void OnDisable()
     {
         Interact.OnInteract -= HitInteract;
-        isOpen.OnValueChanged -= OnDoorStateChanged;
+        isOpenDoor.OnValueChanged -= OnDoorStateChanged;
     }
 
     private void HitInteract(GameObject obj, GameObject player)
@@ -52,7 +52,7 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
 
     private void ToggleDoor()
     {
-        isOpen.Value = !isOpen.Value;
+        isOpenDoor.Value = !isOpenDoor.Value;
     }
 
     private void OnDoorStateChanged(bool previousValue, bool newValue)

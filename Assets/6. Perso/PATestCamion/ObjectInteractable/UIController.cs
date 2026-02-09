@@ -4,14 +4,16 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     public TextMeshProUGUI uiPause;
+    public GameObject uitextParent;
+    
     public void OnInteract()
     {
-        uiPause.transform.parent.gameObject.SetActive(true);
+        uitextParent.gameObject.SetActive(true);
     }
 
     public void OnStopInteract()
     {
-        uiPause.transform.parent.gameObject.SetActive(false);
+        uitextParent.gameObject.SetActive(false);
     }
 
     public void SetText(string newText)
