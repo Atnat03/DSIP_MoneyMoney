@@ -12,7 +12,7 @@ public class ButtonRampe : NetworkBehaviour, IInteractible
     public string interactionSortirName;
     public string interactionRentreName;
     
-    private NetworkVariable<bool> isOpenRampe = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> isOpenRampe = new NetworkVariable<bool>(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public Animator rampeAnimator;
 
     public override void OnNetworkSpawn()
@@ -29,13 +29,8 @@ public class ButtonRampe : NetworkBehaviour, IInteractible
 
     public void TouchButtonRampe(GameObject obj, GameObject player)
     {
-        print("TouchButtonRampe");
-        
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
         
-        
-        print("TouchButtonRampe OKKKKKKKK");
-
         if (NetworkManager.Singleton.IsServer)
         {
             ToggleRampe();

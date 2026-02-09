@@ -232,22 +232,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
             if (TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false)
                 return;
-            
-            canSit = CheckRaycast();
-            
-            if (isSitting)
-            {
-                sittingPos = null;
-                isSitting = false;
-            }
-            
-            if (canSit)
-            {
-                print("can sit : " + canSit);
-                
-                isSitting = true;
-                canSit = false;
-            }
         }
 
         if (isDriver && isInTruck)
@@ -307,26 +291,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
     }
 
-    private bool CheckRaycast()
+    public void Sit(Transform sitPos)
     {
-        RaycastHit hit;
-        Vector3 origin = MyCamera().transform.position;
-        Vector3 direction = MyCamera().transform.forward;
-        
-        print("CheckRaycast");
-        
-        if (Physics.Raycast(origin, direction, out hit, 5f))
-        {
-            Debug.DrawLine(origin, hit.point, Color.cyan);
-            
-            if (hit.collider.CompareTag("Chairs"))
-            {
-                sittingPos = hit.collider.GetComponent<Chair>().sittingPos;
-                return true;
-            }
-        }
+        isSitting = true;
+        canSit = false;
+        sittingPos = sitPos;
+        capsule.enabled = false;
+    }
 
-        return false;
+    public void StandUp()
+    {
+        sittingPos = null;
+        isSitting = false;
+        capsule.enabled = true;
     }
 
     bool CheckCanReload()

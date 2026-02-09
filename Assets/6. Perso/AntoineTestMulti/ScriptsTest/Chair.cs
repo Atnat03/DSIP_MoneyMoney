@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Chair : MonoBehaviour
+public class Chair : MonoBehaviour, IInteractible
 {
     public Transform sittingPos;
 
@@ -19,6 +19,22 @@ public class Chair : MonoBehaviour
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
         
-        //Sit
+        FPSControllerMulti fps = player.GetComponent<FPSControllerMulti>();
+
+        if (fps.isSitting)
+        {
+            fps.StandUp();
+        }
+        else
+        {
+            fps.Sit(sittingPos);
+        }
     }
-}
+
+    public string InteractionName
+    {
+        get { return interactionName; }
+        set { interactionName = value; }
+    }
+
+    public string interactionName;}
