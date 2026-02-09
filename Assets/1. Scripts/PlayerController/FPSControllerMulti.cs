@@ -11,7 +11,7 @@ using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
 [DefaultExecutionOrder(-1)]
-public class FPSControllerMulti : NetworkBehaviour
+public class FPSControllerMulti : NetworkBehaviour, IParentable
 {
     [Header("References")]
     private Rigidbody truckRb;
@@ -73,6 +73,7 @@ public class FPSControllerMulti : NetworkBehaviour
             return truckInteraction.driverClientId.Value == OwnerClientId && isInTruck;
         }
     }    
+    
     private Vector3 driverLocalPosition;
     
     [Header("UI")]
@@ -175,6 +176,8 @@ public class FPSControllerMulti : NetworkBehaviour
         textGoInCamion.SetActive(canEnterInTruck);
         textReload.SetActive(canReload);
 
+        isInTruck = transform.parent == TruckController.instance.transform;
+        
         SetVisibleGun();
         
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -261,14 +264,7 @@ public class FPSControllerMulti : NetworkBehaviour
                 {
                     if (hit.collider.CompareTag("Klaxon"))
                     {
-                        if (IsServer)
-                        {
-                            TruckController.instance.GetComponent<AudioSource>().PlayOneShot(TruckController.instance.klaxon);
-                        }
-                        else
-                        {
-                            TruckController.instance.PlayHornClientRpc();
-                        }
+                        TruckController.instance.PlayHornServerRpc();
                     }
 
                     if (hit.collider.CompareTag("RadioButton"))
@@ -454,8 +450,8 @@ public class FPSControllerMulti : NetworkBehaviour
             HandleHeadbob();
     }
 
-    public void EnterTruck(bool asDriver, Vector3 spawnPosition) {
-        isInTruck = true;
+    public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
+    {
         if (controller != null) controller.enabled = false;
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
@@ -478,7 +474,6 @@ public class FPSControllerMulti : NetworkBehaviour
         
         transform.position = exitPosition;
         
-        isInTruck = false;
         truckRb = null;
         
         if (controller != null)
@@ -563,7 +558,6 @@ public class FPSControllerMulti : NetworkBehaviour
     public void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("PorteConducteur") && 
-            !isInTruck && 
             TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false &&
             !hasSomethingInHand)
         {
@@ -578,4 +572,26 @@ public class FPSControllerMulti : NetworkBehaviour
             canEnterInTruck = false;
         }
     }
+
+    public Transform Transform => transform;
+    public NetworkObject NetworkObject => GetComponent<NetworkObject>();
+    
+    public void OnParented(Transform parent)
+    {
+        SetPassengerModeServerRpc(true, parent.InverseTransformPoint(transform.position));
+    }
+
+    public void OnUnparented()
+    {
+        SetPassengerModeServerRpc(false, Vector3.zero);
+    }
+}
+
+public interface IParentable
+{
+    Transform Transform { get; }
+    NetworkObject NetworkObject { get; }
+
+    void OnParented(Transform parent);
+    void OnUnparented();
 }

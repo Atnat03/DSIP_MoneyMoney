@@ -15,6 +15,7 @@ public class Interactable : MonoBehaviour
     [SerializeField] protected float _reachDistance = 3f;
     [Tooltip("If enabled, this can be interacted with even if it is behind an object")]
     [SerializeField] protected bool _enableSeethrough;
+    [SerializeField] public string NameInteraction;
 
     [Header("Events")]
     [SerializeField] protected UnityEvent _onInteract; // Invoked when the object is interacted with

@@ -1,192 +1,189 @@
-using Shooting;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class BanditVehicleAI : MonoBehaviour, IVehicule
 {
-    public enum RelativePosition { Left, Right, Front, Back }
+    public enum FlankPosition { Left, Right }
 
-    [Header("Références")]
+    [Header("Target")]
     public Transform truck;
-    public RelativePosition position;
-
-    [Header("Distances visée avec le camion")]
-    public float sideDistance = 8f;
-    public float frontBackDistance = 20f;
-
-    [Header("Mouvement Stats")]
-    public float maxSpeedFar = 25f;
-    public float turnSpeed = 3f;
-    public float acceleration = 5f;
+    public FlankPosition flankPosition = FlankPosition.Left;
+    
+    [Header("Positioning")]
+    [Tooltip("Distance latérale par rapport au camion")]
+    public float flankDistance = 8f;
+    [Tooltip("Décalage vers l'avant (pour pas être pile à côté)")]
+    public float forwardOffset = 5f;
+    [Tooltip("Distance min pour éviter collision avec camion")]
+    public float avoidTruckRadius = 5f;
+    
+    [Header("Speed Settings")]
+    public float maxSpeed = 25f;
+    public float acceleration = 8f;
+    public float deceleration = 10f;
+    
+    [Header("NavMesh Settings")]
+    public float updateDestinationInterval = 0.2f;
     public float stoppingDistance = 2f;
 
-    [Header("Esquive des obstacles")]
-    public LayerMask obstacleMask;
-    public float obstacleCheckDistance = 10f;
-    public float obstacleAvoidStrength = 5f;
+    [Header("Stop Behavior")]
+    public float driftSlowdown = 3f;
 
-    [Header("Ground Following")]
-    public float groundRayDistance = 5f;
+    private NavMeshAgent agent;
+    private bool isStopping = false;
+    private float nextUpdateTime = 0f;
+    private Vector3 currentVelocity;
 
-    [Header("Arrêt stylé")]
-    public float stopDeceleration = 5f;
-    public float driftIntensity = 1f;
-
-    public float currentSpeed;
-    public bool isStopping = false;
-
+    public bool goRight;
     public LookAtTarget lookAtTarget;
+    
+    public float currentSpeed => agent != null ? agent.velocity.magnitude : 0f;
+
+    void Start()
+    {
+        SetupNavMeshAgent();
+    }
+
+    void SetupNavMeshAgent()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        
+        // Configuration NavMesh
+        agent.speed = maxSpeed;
+        agent.acceleration = acceleration;
+        agent.angularSpeed = 120f; // Vitesse de rotation
+        agent.stoppingDistance = stoppingDistance;
+        agent.autoBraking = true;
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        //agent.radius = 2f; // Ajuste selon taille véhicule
+        agent.height = 2f;
+    }
 
     void Update()
     {
-        if (truck == null) return;
+        if (truck == null || agent == null) return;
 
         if (isStopping)
         {
-            StopVehicleMovement();
+            StopVehicle();
             return;
         }
 
-        Rigidbody truckRb = truck.GetComponent<Rigidbody>();
-        float truckSpeed = truckRb != null ? truckRb.linearVelocity.magnitude : 0f;
-
-        // === Target point
-        Vector3 targetPoint = GetTargetPoint();
-        Vector3 toTarget = targetPoint - transform.position;
-
-        // === Final direction
-        Vector3 finalDir = toTarget;
-        finalDir.y = 0f;
-        if (finalDir.sqrMagnitude > 0.001f) finalDir.Normalize();
-
-        // === Obstacle avoidance
-        finalDir = AvoidObstacles(finalDir);
-
-        // === Rotation
-        if (finalDir.sqrMagnitude > 0.001f)
+        // Update destination périodiquement (pas chaque frame = perfs)
+        if (Time.time >= nextUpdateTime)
         {
-            Quaternion lookRot = Quaternion.LookRotation(finalDir);
-            Vector3 euler = lookRot.eulerAngles;
-            euler.x = 0f;
-            euler.z = 0f;
-            lookRot = Quaternion.Euler(euler);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, turnSpeed * Time.deltaTime);
+            UpdateDestination();
+            nextUpdateTime = Time.time + updateDestinationInterval;
         }
 
-        // === Speed management
-        float distance = toTarget.magnitude;
-        float desiredMaxSpeed = distance < 10f ? truckSpeed : maxSpeedFar;
-        float desiredSpeed = Mathf.Clamp(distance / stoppingDistance * desiredMaxSpeed, 0.5f, desiredMaxSpeed);
-        currentSpeed = Mathf.Lerp(currentSpeed, desiredSpeed, acceleration * Time.deltaTime);
-
-        // === Safe Move
-        float moveDistance = currentSpeed * Time.deltaTime;
-        Vector3 moveDir = finalDir;
-
-        RaycastHit moveHit;
-        if (Physics.Raycast(transform.position + Vector3.up, moveDir, out moveHit, moveDistance, obstacleMask))
-        {
-            moveDistance = Mathf.Max(0f, moveHit.distance - 0.1f);
-        }
-
-        transform.position += moveDir * moveDistance;
-
-        // === Ground follow
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, groundRayDistance))
-        {
-            Vector3 pos = transform.position;
-            pos.y = hit.point.y;
-            transform.position = pos;
-        }
+        // Ajuster vitesse dynamiquement selon distance
+        AdjustSpeed();
     }
 
-    Vector3 GetTargetPoint()
+    void UpdateDestination()
     {
-        switch (position)
+        Vector3 targetPos = CalculateFlankPosition();
+        
+        // Vérifier qu'on est pas trop proche du camion
+        if (IsTooCloseToTruck(targetPos))
         {
-            case RelativePosition.Left:
-                return truck.position - truck.right * sideDistance + truck.forward * (sideDistance / 2);
-            case RelativePosition.Right:
-                return truck.position + truck.right * sideDistance + truck.forward * (sideDistance / 2);
-            case RelativePosition.Front:
-                return truck.position + truck.forward * frontBackDistance;
-            case RelativePosition.Back:
-                return truck.position - truck.forward * frontBackDistance;
+            targetPos = PushAwayFromTruck(targetPos);
         }
-        return truck.position;
+
+        agent.SetDestination(targetPos);
+    }
+
+    Vector3 CalculateFlankPosition()
+    {
+        // Position sur le flanc
+        Vector3 rightDir = truck.right;
+        float sideMultiplier = flankPosition == FlankPosition.Left ? -1f : 1f;
+        
+        Vector3 flankOffset = rightDir * (flankDistance * sideMultiplier);
+        Vector3 forwardOffsetVec = truck.forward * forwardOffset;
+        
+        return truck.position + flankOffset + forwardOffsetVec;
+    }
+
+    bool IsTooCloseToTruck(Vector3 position)
+    {
+        float distanceToTruck = Vector3.Distance(position, truck.position);
+        return distanceToTruck < avoidTruckRadius;
+    }
+
+    Vector3 PushAwayFromTruck(Vector3 position)
+    {
+        // Repousser la position pour éviter collision
+        Vector3 dirAwayFromTruck = (position - truck.position).normalized;
+        return truck.position + dirAwayFromTruck * avoidTruckRadius;
+    }
+
+    void AdjustSpeed()
+    {
+        // Ralentir si proche de la destination
+        float distanceToTarget = Vector3.Distance(transform.position, agent.destination);
+        
+        Rigidbody truckRb = truck.GetComponent<Rigidbody>();
+        float truckSpeed = truckRb != null ? truckRb.linearVelocity.magnitude : maxSpeed;
+
+        // Adapter vitesse : ralentir près du point, matcher vitesse camion sinon
+        if (distanceToTarget < 10f)
+        {
+            agent.speed = Mathf.Lerp(agent.speed, truckSpeed * 0.9f, Time.deltaTime * deceleration);
+        }
+        else
+        {
+            agent.speed = Mathf.Lerp(agent.speed, maxSpeed, Time.deltaTime * acceleration);
+        }
     }
 
     #region Stop Vehicle
 
     public void StopVehicle()
     {
-        isStopping = true;
-    }
-
-    void StopVehicleMovement()
-    {
-        if (currentSpeed > 0.01f)
+        if (!isStopping)
         {
-            currentSpeed = Mathf.Lerp(currentSpeed, 0f, stopDeceleration * Time.deltaTime);
-
-            Vector3 drift = new Vector3(
-                Random.Range(-driftIntensity, driftIntensity),
-                0f,
-                Random.Range(-driftIntensity, driftIntensity));
-
-            transform.position += transform.forward * currentSpeed * Time.deltaTime + drift * Time.deltaTime;
-            transform.Rotate(0f, Random.Range(-driftIntensity, driftIntensity) * Time.deltaTime * 10f, 0f);
-        }
-        else
-        {
-            currentSpeed = 0f;
+            isStopping = true;
+            agent.isStopped = true;
         }
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, groundRayDistance))
+        // Drift/glisse progressif
+        if (agent.velocity.magnitude > 0.1f)
         {
-            Vector3 pos = transform.position;
-            pos.y = hit.point.y;
-            transform.position = pos;
+            currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, driftSlowdown * Time.deltaTime);
+            agent.velocity = currentVelocity;
         }
-    }
-
-    #endregion
-
-    #region Obstacle Avoidance
-
-    Vector3 AvoidObstacles(Vector3 desiredDirection)
-    {
-        Vector3 avoidance = Vector3.zero;
-        float rayLength = obstacleCheckDistance;
-        int rays = 5; // nombre de rayons en éventail devant le véhicule
-        float angleSpread = 60f; // angle total en degrés pour l'éventail
-
-        for (int i = 0; i < rays; i++)
-        {
-            float angle = -angleSpread / 2 + (angleSpread / (rays - 1)) * i;
-            Vector3 rayDir = Quaternion.Euler(0f, angle, 0f) * transform.forward;
-
-            if (Physics.Raycast(transform.position + Vector3.up, rayDir, out RaycastHit hit, rayLength, obstacleMask))
-            {
-                // Plus l'obstacle est proche, plus la force d'évitement est forte
-                float avoidStrength = (rayLength - hit.distance) / rayLength;
-                avoidance -= rayDir * avoidStrength;
-            }
-        }
-
-        Vector3 finalDir = desiredDirection + avoidance * obstacleAvoidStrength;
-        finalDir.y = 0f;
-        if (finalDir.sqrMagnitude > 0.001f) finalDir.Normalize();
-        return finalDir;
     }
 
     #endregion
 
     public void Die()
     {
-        GetComponent<NetworkObject>().Despawn();
+        if (TryGetComponent<NetworkObject>(out var netObj))
+        {
+            netObj.Despawn();
+        }
         Destroy(gameObject);
+    }
+
+    // Debug visuel
+    void OnDrawGizmosSelected()
+    {
+        if (truck == null) return;
+
+        // Position cible
+        Vector3 targetPos = CalculateFlankPosition();
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(targetPos, 1f);
+
+        // Zone d'évitement camion
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(truck.position, avoidTruckRadius);
+
+        // Ligne vers cible
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, targetPos);
     }
 }

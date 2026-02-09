@@ -2,8 +2,9 @@ using Unity.Netcode;
 using UnityEngine;
 using Shooting;
 using Unity.Netcode.Components;
+using UnityEngine.Serialization;
 
-public class ListenEventDoor : NetworkBehaviour
+public class ListenEventDoor : NetworkBehaviour, IInteractible
 {
     private Animator animator;
     private NetworkAnimator networkAnimator;
@@ -58,4 +59,12 @@ public class ListenEventDoor : NetworkBehaviour
     {
         animator.SetBool("Open", newValue);
     }
+
+    public string InteractionName
+    {
+        get { return interactionName; }
+        set { interactionName = value; }
+    }
+
+    public string interactionName;
 }
