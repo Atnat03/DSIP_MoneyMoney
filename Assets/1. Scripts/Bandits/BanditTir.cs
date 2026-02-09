@@ -34,10 +34,11 @@ public class BanditTir : MonoBehaviour
     private float nextFireTime;
     public BanditVehicleAI banditAI;
 
+    
+
     private void Start()
     {
-        if (banditAI.position == BanditVehicleAI.RelativePosition.Right)
-            isRight = true;
+        isRight = banditAI.goRight;
     }
 
     private void Update()

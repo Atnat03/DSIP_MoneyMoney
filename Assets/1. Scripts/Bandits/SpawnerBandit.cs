@@ -8,7 +8,7 @@ public class SpawnerBandit : MonoBehaviour
 
     public bool hasSpawned = false;
 
-    public BanditVehicleAI.RelativePosition relativePos;
+    public bool goRight;
 
     [Header ("Barrage")]
     public bool isBarrage;
@@ -29,7 +29,7 @@ public class SpawnerBandit : MonoBehaviour
             GameObject bandit = Instantiate(prefabBandit, spawnPoint.position, spawnPoint.rotation);
             bandit.GetComponent<BanditVehicleAI>().truck = other.transform;
             bandit.GetComponent<BanditVehicleAI>().lookAtTarget.target = other.transform;
-            bandit.GetComponent<BanditVehicleAI>().position = relativePos;
+            bandit.GetComponent<BanditVehicleAI>().goRight = goRight;
             
             bandit.GetComponent<NetworkObject>().Spawn();
         }
