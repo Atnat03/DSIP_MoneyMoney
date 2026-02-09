@@ -11,7 +11,7 @@ using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
 [DefaultExecutionOrder(-1)]
-public class FPSControllerMulti : NetworkBehaviour
+public class FPSControllerMulti : NetworkBehaviour, IParentable
 {
     [Header("References")]
     private Rigidbody truckRb;
@@ -261,14 +261,7 @@ public class FPSControllerMulti : NetworkBehaviour
                 {
                     if (hit.collider.CompareTag("Klaxon"))
                     {
-                        if (IsServer)
-                        {
-                            TruckController.instance.GetComponent<AudioSource>().PlayOneShot(TruckController.instance.klaxon);
-                        }
-                        else
-                        {
-                            TruckController.instance.PlayHornClientRpc();
-                        }
+                        TruckController.instance.PlayHornServerRpc();
                     }
 
                     if (hit.collider.CompareTag("RadioButton"))
@@ -578,4 +571,26 @@ public class FPSControllerMulti : NetworkBehaviour
             canEnterInTruck = false;
         }
     }
+
+    public Transform Transform => transform;
+    public NetworkObject NetworkObject => GetComponent<NetworkObject>();
+    
+    public void OnParented(Transform parent)
+    {
+        SetPassengerModeServerRpc(true, parent.InverseTransformPoint(transform.position));
+    }
+
+    public void OnUnparented()
+    {
+        SetPassengerModeServerRpc(false, Vector3.zero);
+    }
+}
+
+public interface IParentable
+{
+    Transform Transform { get; }
+    NetworkObject NetworkObject { get; }
+
+    void OnParented(Transform parent);
+    void OnUnparented();
 }
