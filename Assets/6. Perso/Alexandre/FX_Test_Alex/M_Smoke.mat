@@ -26,15 +26,22 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Attenuation: 2.04
-    - _EdgeHeight: 0
+    - _Alpha_clip: -0.5
+    - _Attenuation: 1.85
+    - _EdgeHeight: 0.223
     - _Noise_intensity: 20
     - _QueueControl: 0
-    - _Smoothstep: 1
+    - _Size_Iner: 2.27
+    - _Size_noise: 3
+    - _Smoothstep: 1.5
     m_Colors:
-    - _Color: {r: 0.504, g: 0.504, b: 0.504, a: 1}
-    - _Color_1: {r: 0.30200002, g: 0.30200002, b: 0.30200002, a: 1}
-    - _Color_2: {r: 1.0592737, g: 1.0592737, b: 1.0592737, a: 1}
+    - _Color: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+    - _Color_1: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
+    - _Color_2: {r: 0.184, g: 0.184, b: 0.184, a: 1}
+    - _Color_Inner: {r: 0.45, g: 0.45, b: 0.45, a: 1}
+    - _Color_Outer: {r: 0.35, g: 0.35, b: 0.35, a: 1}
+    - _Color_shadow: {r: 0.25, g: 0.25, b: 0.25, a: 1}
+    - _Out_Max: {r: -1.42, g: 1.21, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2189148091368628013
