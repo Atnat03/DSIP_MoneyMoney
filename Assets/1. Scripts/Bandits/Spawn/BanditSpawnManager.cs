@@ -32,9 +32,9 @@ public class BanditSpawnManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        _timeUntilBanditFollow.Value = timeUntilBanditFollow[bankVisited-1];
+        _timeUntilBanditFollow.Value = timeUntilBanditFollow[bankVisited-1]/3;
         _timeUntilBanditBarrage.Value = timeUntilBanditBarrage[bankVisited-1];
-        _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1];
+        _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1]/2;
         
         _timeUntilBanditFollow.OnValueChanged += OnTimeUntilBFChaned;
         _timeUntilBanditBarrage.OnValueChanged += OnTimeUntilBBChaned;
@@ -64,7 +64,7 @@ public class BanditSpawnManager : MonoBehaviour
         if (!NetworkManager.Singleton.IsServer)
             return;
 
-        if (truck.GetComponent<Rigidbody>().linearVelocity.sqrMagnitude > 3)
+        if (truck.GetComponent<Rigidbody>().linearVelocity.sqrMagnitude < 3)
             return;
         
         if (_timeUntilBanditBarrage.Value > 0) { _timeUntilBanditBarrage.Value-= Time.deltaTime; }
