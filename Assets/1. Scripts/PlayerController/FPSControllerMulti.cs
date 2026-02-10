@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = System.Object;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -18,7 +19,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField] Transform cameraTarget;
     [SerializeField] Transform cameraTransform;
     [SerializeField] Camera myCamera;
-    [SerializeField] private CapsuleCollider capsule;
+    [SerializeField] CapsuleCollider capsuleCollider;
     
     [Header("Move Settings")]
     [SerializeField] float moveSpeed = 5f;
@@ -49,8 +50,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     float yaw;
     float pitch;
-    float horizontalInput;
-    private float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
     
     public bool isInTruck = false;
     private Transform truckParent;
@@ -61,6 +62,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField, Range(0, 1f)] float truckFollowStrength = 0.5f;
     
     private TruckInteraction nearbyTruck;
+    
     public bool isDriver
     {
         get
@@ -104,9 +106,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         return myCamera;
     }
-
-    public float MiniVelocityToTakeDamageFromThune = 8;
-
+    
     [Header("Ladder Settings")]
     [SerializeField] private float ladderClimbSpeed = 3f;
     private bool isOnLadder = false;
@@ -128,9 +128,12 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
             
-            meshRenderer.GetComponent<MeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
-            meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
-            
+            meshRenderer.transform.GetChild(2).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            meshRenderer.transform.GetChild(3).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            meshRenderer.transform.GetChild(2).gameObject.layer = LayerMask.NameToLayer("Default");
+            meshRenderer.transform.GetChild(3).gameObject.layer = LayerMask.NameToLayer("Default");
+            meshRenderer.transform.GetChild(3).transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("Default");
+
             myCamera.gameObject.SetActive(false);
             
             gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
@@ -147,7 +150,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             t.gameObject.layer = LayerMask.NameToLayer("Default");
         }
         
-        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");  
+        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
         
         myCamera.cullingMask = maskCameraPlayer;
         startPos = cameraTransform.localPosition;
@@ -163,6 +166,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         speed = moveSpeed;
         
         shooter = gameObject.GetComponent<ShooterComponent>();
+
+        capsuleCollider = GetComponent<CapsuleCollider>();
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)
@@ -309,19 +314,18 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
     }
 
+
     public void Sit(Transform sitPos)
     {
         isSitting = true;
         canSit = false;
         sittingPos = sitPos;
-        capsule.enabled = false;
     }
 
     public void StandUp()
     {
         sittingPos = null;
         isSitting = false;
-        capsule.enabled = true;
     }
 
     bool CheckCanReload()
@@ -355,6 +359,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         Debug.Log("Stop freeze");
         isFreeze = false;
     }
+    
+    
     
     void HandleCameraInput()
     {
@@ -465,6 +471,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
     {
         if (controller != null) controller.enabled = false;
+
+        capsuleCollider.enabled = false;
+        
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
         
@@ -473,8 +482,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             netTransform.InLocalSpace = true;
         }
         
-        capsule.enabled = false;
-
         if (IsOwner) {
             Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
             transform.localPosition = targetSeat.localPosition;
@@ -486,11 +493,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         print("ExitTruck");
         
+        capsuleCollider.enabled = true;
+        
         transform.position = exitPosition;
         
         truckRb = null;
-
-        capsule.enabled = true;
         
         if (controller != null)
             controller.enabled = true;
@@ -612,19 +619,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         SetPassengerModeServerRpc(false, Vector3.zero);
     }
-
-    /*public void OnCollisionEnter(Collision other)
-    {
-        if (other.collider.CompareTag("Treasure"))
-        {
-            Rigidbody rb = other.collider.GetComponent<Rigidbody>();
-            print(rb.linearVelocity.magnitude);
-            if (rb.linearVelocity.magnitude >= MiniVelocityToTakeDamageFromThune)
-            {
-                GetComponent<HealthComponent>().TryTakeDamage(1000);
-            }
-        }
-    }*/
+    
+  
 }
 
 public interface IParentable

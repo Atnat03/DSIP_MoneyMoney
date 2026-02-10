@@ -732,15 +732,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 127
+      value: 13.258182
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 56.8
+      value: 26.22
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -549.5
+      value: -17.134207
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -832,6 +832,7 @@ MonoBehaviour:
   acceleration: 20
   deceleration: 10
   hoverDamping: 20
+  tir: {fileID: 0}
 --- !u!65 &3809262632910638000
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -869,6 +870,7 @@ MonoBehaviour:
   rotorRotateSpeed: 2000
   helicopter: {fileID: 3615118056360169707}
   isDead: 0
+  explosionParticle: {fileID: 6230730314918658108, guid: 87c7b0d474bb8824c874173c6b5d8ad9, type: 3}
 --- !u!114 &7064880152496618411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -881,8 +883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2061302133
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 4003554846
+  InScenePlacedSourceGlobalObjectIdHash: 2061302133
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0

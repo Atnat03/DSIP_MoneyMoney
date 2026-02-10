@@ -39,6 +39,8 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
     public bool goRight;
     public LookAtTarget lookAtTarget;
     
+    public GameObject vfxMort;
+    
     public float currentSpeed => agent != null ? agent.velocity.magnitude : 0f;
 
     void Start()
@@ -161,6 +163,9 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
 
     public void Die()
     {
+        NetworkObject explosionParticleIntance = Instantiate(vfxMort, transform.position, transform.rotation).GetComponent<NetworkObject>();
+        explosionParticleIntance.Spawn();
+        
         if (TryGetComponent<NetworkObject>(out var netObj))
         {
             netObj.Despawn();

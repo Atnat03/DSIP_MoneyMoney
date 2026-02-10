@@ -157,7 +157,6 @@ public class TruckController : NetworkBehaviour
     {
         if (rb.linearVelocity.magnitude > velocityToTriggerShake)
         {
-            print("ca shake");
             TriggerCameraShakeClientRpc();
         }
     }
@@ -417,6 +416,14 @@ public class TruckController : NetworkBehaviour
         verticalInput = 0f;
         isBreaking = false;
         BackLightOn.Value = false;
+    }
+    
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            CheckVelecityToApplyShake();
+        }
     }
     
     private void OnDrawGizmos()

@@ -1,43 +1,38 @@
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 public class PlayerSpawner : NetworkBehaviour
 {
-    public GameObject player1Prefab;
+    public GameObject playerPrefab;
     public Camera startCam;
     
     public Transform defaultSpawnPoint;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+        if (!IsServer) return;
 
-        if (IsServer)
-        {
-            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-            {
-                OnClientConnected(client.ClientId);
-            }
-        }
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
+        if (!IsServer) return;
+        
         if (NetworkManager.Singleton != null)
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
-    
 
     private void OnClientConnected(ulong clientId)
     {
         if (!IsServer) return;
+        
+        if (NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject != null)
+            return;
 
-        GameObject playerInstance = Instantiate(player1Prefab);
-        playerInstance.transform.position = defaultSpawnPoint.position;
-        playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-    
-        if (startCam != null)
-            startCam.gameObject.SetActive(false);
+        GameObject player = Instantiate(playerPrefab, defaultSpawnPoint.position, Quaternion.identity);
+        NetworkObject networkObject = player.GetComponent<NetworkObject>();
+        
+        networkObject.SpawnAsPlayerObject(clientId, true);
     }
 }
