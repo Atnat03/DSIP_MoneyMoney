@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerSpawner : NetworkBehaviour
 {
-    public GameObject player1Prefab;
+    public GameObject playerPrefab;
     public Camera startCam;
     
     public Transform defaultSpawnPoint;
@@ -26,13 +26,10 @@ public class PlayerSpawner : NetworkBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        if (!IsServer) return;
+        if (NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject != null)
+            return;
 
-        GameObject playerInstance = Instantiate(player1Prefab);
-        playerInstance.transform.position = defaultSpawnPoint.position;
-        playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-    
-        if (startCam != null)
-            startCam.gameObject.SetActive(false);
+        GameObject player = Instantiate(playerPrefab, defaultSpawnPoint.position, Quaternion.identity);
+        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
     }
 }
