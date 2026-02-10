@@ -621,7 +621,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             print(rb.linearVelocity.magnitude);
             if (rb.linearVelocity.magnitude >= MiniVelocityToTakeDamageFromThune)
             {
-                GetComponent<HealthComponent>().TryTakeDamage(rb.mass * 1000);
+                GetComponent<HealthComponent>().TryTakeDamage(1000);
             }
         }
     }
