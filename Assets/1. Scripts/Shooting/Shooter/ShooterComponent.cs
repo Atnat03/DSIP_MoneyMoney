@@ -67,6 +67,7 @@ namespace Shooting
             OnShoot.AddListener(() => EventBus.Invoke("OnPlayerShoot"));
             
             _shooter.OnShoot += MakeTrail;
+            Reload();
         }
 
         public void Reload()

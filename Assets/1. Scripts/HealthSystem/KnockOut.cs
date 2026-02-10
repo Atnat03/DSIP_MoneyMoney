@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using System.Linq;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -18,9 +16,11 @@ public class KnockOut : NetworkBehaviour, IInteractible
     [SerializeField] private float soloReviveTime = 10f;
     [SerializeField] private float mateReviveTime = 2f;
     private float soloElapsed = 0;
-    private float mateElapsed = 0;
 
     [SerializeField] private Image reviveImage;
+    [SerializeField] private Ragdoll ragdollController;
+    
+    public Animator cameraAnimator;
 
     private ulong local_clientId;
     
@@ -59,8 +59,24 @@ public class KnockOut : NetworkBehaviour, IInteractible
     [ServerRpc(RequireOwnership = false)]
     public void KOServerRpc()
     {
+        Vector3 force = Random.insideUnitSphere * koForce;
+        
         isKnockedOut.Value = true;
         AutoJoinedLobby.Instance.GetComponent<ServerMessaging>().PrintMessageOnKOPlayer(local_clientId);
+        
+        ApplyKOForceClientRpc(force);
+    }
+
+    [ClientRpc]
+    private void ApplyKOForceClientRpc(Vector3 force)
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.AddForce(force, ForceMode.Impulse);
+        
+        if (ragdollController != null)
+        {
+            ragdollController.EnableRagdoll(force);
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -75,20 +91,24 @@ public class KnockOut : NetworkBehaviour, IInteractible
         {
             component.enabled = !newValue;
         }
+        
+        cameraAnimator.SetBool("KO", newValue);
 
         Rigidbody rb = GetComponent<Rigidbody>();
 
-        if (newValue) // KO
+        if (newValue)
         {
-            rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.AddForce(Random.insideUnitSphere * koForce, ForceMode.Impulse);
-
+            
             soloElapsed = soloReviveTime;
         }
-        else // Revive
+        else
         {
             GetComponent<HealthComponent>().Heal();
+
+            if (ragdollController != null)
+            {
+                ragdollController.DisableRagdoll();
+            }
 
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
@@ -100,10 +120,6 @@ public class KnockOut : NetworkBehaviour, IInteractible
                 isMateRevive.Value = false;
                 currentValueToRevive.Value = 0f;
             }
-
-
-            rb.isKinematic = true;
-            rb.useGravity = false;
 
             Vector3 euler = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
@@ -180,7 +196,6 @@ public class KnockOut : NetworkBehaviour, IInteractible
         NotifyReviverUIClientRpc(0f, false, reviverParams);
     }
 
-
     [ClientRpc]
     private void NotifyReviverUIClientRpc(
         float value,
@@ -193,7 +208,6 @@ public class KnockOut : NetworkBehaviour, IInteractible
         PlayerRayCast.LocalInstance.UpdateReviveUI(value, isActive);
     }
 
-    
     [ClientRpc]
     private void UpdateReviveUIClientRpc(float value, bool isActive, ClientRpcParams rpcParams = default)
     {
@@ -204,11 +218,11 @@ public class KnockOut : NetworkBehaviour, IInteractible
         reviveImage.fillAmount = value;
     }
 
-
     public string InteractionName
     {
         get { return interactionName; }
         set { interactionName = value; }
     }
 
-    public string interactionName;}
+    public string interactionName;
+}

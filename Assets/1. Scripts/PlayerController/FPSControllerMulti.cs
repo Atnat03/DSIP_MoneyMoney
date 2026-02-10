@@ -128,9 +128,12 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
             
-            meshRenderer.GetComponent<MeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
-            meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
-            
+            meshRenderer.transform.GetChild(2).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            meshRenderer.transform.GetChild(3).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            meshRenderer.transform.GetChild(2).gameObject.layer = LayerMask.NameToLayer("Default");
+            meshRenderer.transform.GetChild(3).gameObject.layer = LayerMask.NameToLayer("Default");
+            meshRenderer.transform.GetChild(3).transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("Default");
+
             myCamera.gameObject.SetActive(false);
             
             gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");

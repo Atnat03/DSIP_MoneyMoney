@@ -1,5 +1,4 @@
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 public class PlayerSpawner : NetworkBehaviour
@@ -9,7 +8,6 @@ public class PlayerSpawner : NetworkBehaviour
     
     public Transform defaultSpawnPoint;
 
-
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
@@ -17,19 +15,24 @@ public class PlayerSpawner : NetworkBehaviour
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
+        if (!IsServer) return;
+        
         if (NetworkManager.Singleton != null)
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
     }
-    
 
     private void OnClientConnected(ulong clientId)
     {
+        if (!IsServer) return;
+        
         if (NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject != null)
             return;
 
         GameObject player = Instantiate(playerPrefab, defaultSpawnPoint.position, Quaternion.identity);
-        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+        NetworkObject networkObject = player.GetComponent<NetworkObject>();
+        
+        networkObject.SpawnAsPlayerObject(clientId, true);
     }
 }
