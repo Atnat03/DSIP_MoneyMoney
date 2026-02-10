@@ -16,11 +16,13 @@ public class ServerMessaging : NetworkBehaviour
 
     private void PrintMessageConnected(ulong clientId)
     {
+        if (!IsServer) return;
         PlayerConnectedClientRpc(clientId);
     }
 
     private void PrintMessageDisconned(ulong clientId)
     {
+        if (!IsServer) return;
         PlayerDisconnectedClientRpc(clientId);
     }
     
@@ -31,7 +33,7 @@ public class ServerMessaging : NetworkBehaviour
         
         TextMeshProUGUI message = Instantiate(prefabMessage, parentUI);
         message.SetText(GetPlayerFromId(clientId).GetComponent<PlayerCustom>().PlayerName.Value + " a rejoint la partie");
-        message.GetComponent<NetworkObject>().Spawn();
+        Destroy(message, 5f);
     }
 
     [ClientRpc]
@@ -41,7 +43,7 @@ public class ServerMessaging : NetworkBehaviour
         
         TextMeshProUGUI message = Instantiate(prefabMessage, parentUI);
         message.SetText(GetPlayerFromId(clientId).GetComponent<PlayerCustom>().PlayerName.Value + " a quitter la partie");
-        message.GetComponent<NetworkObject>().Spawn();
+        Destroy(message, 5f);
     }
 
     public GameObject GetPlayerFromId(ulong clientId)

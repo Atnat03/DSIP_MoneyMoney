@@ -108,11 +108,16 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [Header("Ladder Settings")]
     [SerializeField] private float ladderClimbSpeed = 3f;
     private bool isOnLadder = false;
+    
+    [Header("Map")]
+    [SerializeField] private GameObject map;
+    private KeyCode mapKey = KeyCode.Semicolon;
+    public bool isMapActive = false;
 
     public void SetVisibleGun()
     {
-        gunOther.SetActive(hasSomethingInHand);
-        gunOwner.SetActive(!hasSomethingInHand);
+        gunOther.SetActive(hasSomethingInHand && isMapActive);
+        gunOwner.SetActive(!hasSomethingInHand && !isMapActive);
     }
     
     public override void OnNetworkSpawn()
@@ -218,6 +223,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             }
         }
 
+        if (Input.GetKeyDown(mapKey))
+        {
+            if (isMapActive)
+            {
+                isMapActive = false;
+            }else
+            {
+                isMapActive = true;
+            }
+        }
+        
+        map.SetActive(isMapActive && !hasSomethingInHand);
+        
         canReload = CheckCanReload();
 
         if (Input.GetKeyUp(KeyCode.E) && !isDriver)
@@ -320,17 +338,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         return (Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload) && final;
     }
 
-    private bool isFreeze;
+    [SerializeField] private bool isFreeze;
     public bool IsFreeze => isFreeze;
     private Vector3 freezeCameraPos;
     
     public void StartFreeze()
     {
+        Debug.Log("Start freeze");
         isFreeze = true;
     }
 
     public void StopFreeze()
     {
+        Debug.Log("Stop freeze");
         isFreeze = false;
     }
     
@@ -429,6 +449,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (!IsOwner) return;
         if (isFreeze) return;
         if (MyCamera().GetComponent<CameraShake>().shaking) return;
+        if(Time.timeScale == 0) return;
         
         transform.rotation = Quaternion.Euler(0, yaw, 0);
         cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);

@@ -750,7 +750,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7901696997711536647}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SittingPos (1)
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
@@ -1788,7 +1788,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4646
+  m_VersionIndex: 4658
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2023,7 +2023,7 @@ GameObject:
   - component: {fileID: 103921502526351184}
   - component: {fileID: 5039984757033610257}
   - component: {fileID: 3485649448330407148}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Chair
   m_TagString: Chairs
   m_Icon: {fileID: 0}
@@ -2415,7 +2415,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2558
+  m_VersionIndex: 2570
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4488,7 +4488,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3936
+  m_VersionIndex: 3948
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6348,7 +6348,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3936
+  m_VersionIndex: 3948
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7024,7 +7024,7 @@ GameObject:
   - component: {fileID: 3913062972771388533}
   - component: {fileID: 8269219806327710920}
   - component: {fileID: 3167068353197915456}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Chair
   m_TagString: Chairs
   m_Icon: {fileID: 0}
@@ -7416,7 +7416,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2558
+  m_VersionIndex: 2570
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7886,8 +7886,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
-  interactionSortirName: Sortir la rampe
-  interactionRentreName: Rentrer la rampe
+  interactionSortirName: Rentrer la rampe
+  interactionRentreName: Sortir la rampe
   rampeAnimator: {fileID: 2063454461865046253}
 --- !u!114 &7861015797196297421
 MonoBehaviour:
@@ -8302,7 +8302,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ListenEventDoor
   ShowTopMostFoldoutHeaderGroup: 1
-  interactionName: Ouvrir la porte
+  interactionOpenName: Ouvrir la porte
+  "interactionFerm\xE9Name": Fermer la porte
 --- !u!95 &96982989263999362
 Animator:
   serializedVersion: 7
@@ -10681,7 +10682,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3831
+  m_VersionIndex: 3843
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11461,7 +11462,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4646
+  m_VersionIndex: 4658
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -12819,7 +12820,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4584
+  m_VersionIndex: 4596
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13068,14 +13069,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2868268409995372933}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0.277, y: 1.697, z: 2.012}
   m_LocalScale: {x: 0.82467616, y: 0.86538076, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1973811494613054797}
   m_Father: {fileID: 5729001311705654942}
-  m_LocalEulerAnglesHint: {x: 90, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &8791913660762020768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13089,7 +13090,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ListenEventDoor
   ShowTopMostFoldoutHeaderGroup: 1
-  interactionName: Ourvrir la trappe
+  interactionOpenName: Ouvrir la trappe
+  "interactionFerm\xE9Name": Fermer la trappe
 --- !u!95 &1253209413366833989
 Animator:
   serializedVersion: 7
@@ -13180,8 +13182,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.7020819, y: 2.428597, z: 1}
-  m_Center: {x: -0.01837657, y: -0.028823143, z: 8.962784e-17}
+  m_Size: {x: 1.7020823, y: 1.3081776, z: 2.393426}
+  m_Center: {x: -0.01837657, y: 0.26695058, z: -0.03985548}
 --- !u!1 &2917089594702178094
 GameObject:
   m_ObjectHideFlags: 0
@@ -13542,7 +13544,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2514
+  m_VersionIndex: 2526
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -14940,7 +14942,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3936
+  m_VersionIndex: 3948
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15452,7 +15454,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2558
+  m_VersionIndex: 2570
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -17848,7 +17850,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3214
+  m_VersionIndex: 3226
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18173,7 +18175,7 @@ GameObject:
   - component: {fileID: 7299292108327021043}
   - component: {fileID: 5589104052404641052}
   - component: {fileID: 8248998802926170064}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Chair
   m_TagString: Chairs
   m_Icon: {fileID: 0}
@@ -18565,7 +18567,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2558
+  m_VersionIndex: 2570
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -19054,6 +19056,132 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &4635506653870566606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4090198124077297898}
+  - component: {fileID: 264786366751077675}
+  - component: {fileID: 1233346078030513296}
+  - component: {fileID: 6108453178981522259}
+  - component: {fileID: 1756463308302312522}
+  m_Layer: 14
+  m_Name: DetectCameraShake
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4090198124077297898
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635506653870566606}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.79, z: 7.97}
+  m_LocalScale: {x: 4.775, y: 1, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5729001311705654942}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &264786366751077675
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635506653870566606}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1233346078030513296
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635506653870566606}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6108453178981522259
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635506653870566606}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1756463308302312522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635506653870566606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0104b914dfcd34443881b23079a790ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DetectWall
+  truckController: {fileID: 3102921428755124855}
 --- !u!1 &4674077748640672548
 GameObject:
   m_ObjectHideFlags: 0
@@ -19917,7 +20045,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ListenEventDoor
   ShowTopMostFoldoutHeaderGroup: 1
-  interactionName: Ourvrir la porte
+  interactionOpenName: Ouvrir la porte
+  "interactionFerm\xE9Name": Fermer la porte
 --- !u!95 &36621327685019792
 Animator:
   serializedVersion: 7
@@ -21095,7 +21224,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3917678930102848396}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SittingPos
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
@@ -22279,7 +22408,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3936
+  m_VersionIndex: 3948
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -23559,7 +23688,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2514
+  m_VersionIndex: 2526
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -24519,7 +24648,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1959664522685996358}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SittingPos
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
@@ -27229,13 +27358,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7312485737973888743}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4592855, y: 2.3162484, z: 0.15828}
+  m_LocalScale: {x: 1.4592855, y: 1.8857614, z: 0.15828}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3465129847218284747}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &135427503468675149
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -27269,7 +27398,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: f61ce9916fe199e49af6142bdbcba95e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -27785,7 +27914,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3214
+  m_VersionIndex: 3226
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -28668,8 +28797,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.99999976, y: 1.0169897, z: 0.41022497}
-  m_Center: {x: -2, y: -0.3984596, z: 0.2948875}
+  m_Size: {x: 1, y: 1.6422175, z: 0.41022494}
+  m_Center: {x: -2, y: -0.3020214, z: 0.2948875}
 --- !u!1 &7939272308068614595
 GameObject:
   m_ObjectHideFlags: 0
@@ -31352,7 +31481,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3831
+  m_VersionIndex: 3843
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -32464,7 +32593,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4584
+  m_VersionIndex: 4596
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -34756,6 +34885,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5953099846294381974}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4090198124077297898}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
@@ -35095,8 +35227,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.680042, y: 2.4525833, z: 16.903372}
-  m_Center: {x: -0.102996826, y: 0.72629166, z: 0.8869486}
+  m_Size: {x: 5.680042, y: 2.4525833, z: 15.81604}
+  m_Center: {x: -0.102996826, y: 0.72629166, z: 0.34328365}
 --- !u!114 &2927816387896424514
 MonoBehaviour:
   m_ObjectHideFlags: 0
