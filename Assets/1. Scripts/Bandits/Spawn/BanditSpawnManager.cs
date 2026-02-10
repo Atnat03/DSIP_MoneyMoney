@@ -12,8 +12,9 @@ public class BanditSpawnManager : MonoBehaviour
     public NetworkVariable<float> _timeUntilHelicopter = new(0);
     
     
-    public float timeUntilBanditFollow;
-    public float timeUntilBanditBarrage, timeUntilHelicopter;
+    public float[] timeUntilBanditFollow;
+    public float[] timeUntilBanditBarrage;
+    public float[] timeUntilHelicopter;
 
     public Vector3 detectionRadius;
     public LayerMask spawnPointLayer;
@@ -23,16 +24,17 @@ public class BanditSpawnManager : MonoBehaviour
     public GameObject banditFollowPrefab;
     public GameObject helicopterPrefab;
     public GameObject truck;
-    
+
+    public int bankVisited;
     
 
 
     void Awake()
     {
         instance = this;
-        _timeUntilBanditFollow.Value = timeUntilBanditFollow;
-        _timeUntilBanditBarrage.Value = timeUntilBanditBarrage;
-        _timeUntilHelicopter.Value = timeUntilHelicopter;
+        _timeUntilBanditFollow.Value = timeUntilBanditFollow[bankVisited-1];
+        _timeUntilBanditBarrage.Value = timeUntilBanditBarrage[bankVisited-1];
+        _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1];
         
         _timeUntilBanditFollow.OnValueChanged += OnTimeUntilBFChaned;
         _timeUntilBanditBarrage.OnValueChanged += OnTimeUntilBBChaned;
@@ -41,21 +43,28 @@ public class BanditSpawnManager : MonoBehaviour
 
     private void OnTimeUntilBFChaned(float previousValue, float newValue)
     {
-        if (_timeUntilBanditFollow.Value <= 0) { _timeUntilBanditFollow.Value = timeUntilBanditFollow; SpawnBanditFollowServerRpc(); }
+        if (_timeUntilBanditFollow.Value <= 0) { _timeUntilBanditFollow.Value = timeUntilBanditFollow[bankVisited-1]; SpawnBanditFollowServerRpc(); }
     }
     
     private void OnTimeUntilBHChaned(float previousValue, float newValue)
     {
-        if (_timeUntilHelicopter.Value <= 0) { _timeUntilHelicopter.Value = timeUntilHelicopter; SpawnBanditHelicoServerRpc(); }
+        if (_timeUntilHelicopter.Value <= 0) { _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1]; SpawnBanditHelicoServerRpc(); }
     }
     private void OnTimeUntilBBChaned(float previousValue, float newValue)
     {
         if (_timeUntilBanditBarrage.Value <= 0) { SpawnBanditBarrageServerRpc(); }
     }
 
+    
+
     public void Update()
     {
+        bankVisited = BankManager.instance.BankVisited();
+        
         if (!NetworkManager.Singleton.IsServer)
+            return;
+
+        if (truck.GetComponent<Rigidbody>().linearVelocity.sqrMagnitude > 3)
             return;
         
         if (_timeUntilBanditBarrage.Value > 0) { _timeUntilBanditBarrage.Value-= Time.deltaTime; }

@@ -23,7 +23,7 @@ public class SpawnBarrage : MonoBehaviour
         if (other.CompareTag("Truck") && BanditSpawnManager.instance.hasToSpawnBarrage)
         {
             BanditSpawnManager.instance.hasToSpawnBarrage = false;
-            BanditSpawnManager.instance._timeUntilBanditBarrage.Value = BanditSpawnManager.instance.timeUntilBanditBarrage;
+            BanditSpawnManager.instance._timeUntilBanditBarrage.Value = BanditSpawnManager.instance.timeUntilBanditBarrage[BanditSpawnManager.instance.bankVisited-1];
 
             if (vertical)
             {
