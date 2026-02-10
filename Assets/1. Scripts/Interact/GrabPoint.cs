@@ -248,6 +248,9 @@ public class GrabPoint : NetworkBehaviour
 
     public GameObject GetCurrentObjectInHand()
     {
+        if (_heldItem == null)
+            return null;
+        
         return _heldItem.gameObject;
     }
 }

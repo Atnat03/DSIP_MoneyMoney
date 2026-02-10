@@ -16,23 +16,30 @@ public class Helicopter : MonoBehaviour, IVehicule
     [SerializeField] public bool isDead = false;
     
     private void Update()
-    { 
-        rotor.transform.Rotate(Vector3.up, rotorRotateSpeed * Time.deltaTime);
+    {
+        if (!isDead)
+        {
+            rotor.transform.Rotate(Vector3.up, rotorRotateSpeed * Time.deltaTime);
+        }
+        
     }
 
     public void Die()
     {
         isDead =  true;
-        helicopter.AddComponent<Rigidbody>();
+        Rigidbody rb = helicopter.AddComponent<Rigidbody>();
+        rb.AddTorque(300,0,0);
 
         StartCoroutine(DestroyAfter());
     }
 
     IEnumerator DestroyAfter()
     {
-        yield return new WaitUntil(() => helicopter.transform.position.y < 0f);
+        print(helicopter.transform.position.y);
+        yield return new WaitUntil(() => helicopter.transform.position.y < 4f);
         
-        if (TryGetComponent(out BanditVehicleAI ai))
+        
+        if (TryGetComponent(out HelicopterVehicleAI ai))
         {
             GetComponent<NetworkObject>().Despawn();
             Destroy(ai.gameObject);
