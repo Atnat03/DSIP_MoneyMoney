@@ -79,7 +79,7 @@ public class BanditBarrage : MonoBehaviour
         {
             if (rb != null && !rb.isKinematic)
             {
-                rb.velocity = navAgent.velocity;
+                rb.linearVelocity = navAgent.velocity;
             }
         }
     }
@@ -100,7 +100,7 @@ public class BanditBarrage : MonoBehaviour
         // Arrêter le Rigidbody progressivement
         if (rb != null)
         {
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
         
