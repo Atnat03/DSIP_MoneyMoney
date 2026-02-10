@@ -50,10 +50,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dd91923966241394c860e1250d51bdb0, type: 3}
       propertyPath: m_Name
-      value: SM_Barrier
+      value: P_Barrier
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dd91923966241394c860e1250d51bdb0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8583951384247298263}
   m_SourcePrefab: {fileID: 100100000, guid: dd91923966241394c860e1250d51bdb0, type: 3}
+--- !u!1 &3509185478224762810 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dd91923966241394c860e1250d51bdb0, type: 3}
+  m_PrefabInstance: {fileID: 4355623265784752875}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8583951384247298263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3509185478224762810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca741ecd83d08f043bd83e057583abe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakableStuff
+  ejectionForce: 30
