@@ -8,8 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_CellShading 4
-  m_Shader: {fileID: -6465566751694194690, guid: 04a5d8ad51b6d8249aa3387823f5ddf4, type: 3}
-  m_Parent: {fileID: -876546973899608171, guid: 04a5d8ad51b6d8249aa3387823f5ddf4, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 784eed4dba2ed614d89b3efa4bd58eaa, type: 3}
+  m_Parent: {fileID: -876546973899608171, guid: 784eed4dba2ed614d89b3efa4bd58eaa, type: 3}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -23,11 +23,15 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 772f7b8132f5aa94b87fade66ab3752a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _EdgeHeight: 0.992
-    - _Float: 0.937
+    - _Float: 1
     - _Float_1: 2.03
     - _Outline: 0
     - _QueueControl: 0
