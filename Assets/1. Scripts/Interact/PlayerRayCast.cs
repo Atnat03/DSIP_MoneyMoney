@@ -87,11 +87,6 @@ public class PlayerRayCast : NetworkBehaviour
                     ResetRevive();
                 }
             }
-            else
-            {
-                ResetRevive();
-            }
-
             
             //Le reste
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
@@ -111,9 +106,7 @@ public class PlayerRayCast : NetworkBehaviour
                     }
                     else if(!hit.collider.CompareTag("TruckPart"))
                     {
-                        IInteractible i = hit.collider.GetComponent<IInteractible>();
-                        
-                        Interact.RayInteract(hit.collider.gameObject, gameObject, i != null ? i.InteractionName : RepearInteractionName);
+                        Interact.RayInteract(hit.collider.gameObject, gameObject, RepearInteractionName);
                     }
                 }
                 else
@@ -172,9 +165,9 @@ public class PlayerRayCast : NetworkBehaviour
         if (isReviving && targetKO != null)
         {
             targetKO.StopMateReviveServerRpc();
+            GetComponent<FPSControllerMulti>().StopFreeze();
         }
 
-        GetComponent<FPSControllerMulti>().StopFreeze();
         isReviving = false;
         targetKO = null;
         uiController?.OnStopInteract();
