@@ -6,6 +6,6 @@ public class IconeFollow : MonoBehaviour
     void Update()
     {
         transform.position = new Vector3(targetFollow.transform.position.x, transform.position.y, targetFollow.transform.position.z);
-        transform.rotation = new Quaternion(0, 0, targetFollow.rotation.z, 0);
+        //transform.rotation = targetFollow.rotation;
     }
 }
