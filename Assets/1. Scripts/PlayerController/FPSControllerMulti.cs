@@ -610,6 +610,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         SetPassengerModeServerRpc(false, Vector3.zero);
     }
+
+    public void OnCollisionEnter(Collision other)
+    {
+        if (other.collider.CompareTag("Treasure"))
+        {
+            Rigidbody rb = other.collider.GetComponent<Rigidbody>();
+            print(rb.linearVelocity.magnitude);
+            if (rb.linearVelocity.magnitude >= 10)
+            {
+                GetComponent<HealthComponent>().TryTakeDamage(rb.mass * 1000);
+            }
+        }
+    }
 }
 
 public interface IParentable
