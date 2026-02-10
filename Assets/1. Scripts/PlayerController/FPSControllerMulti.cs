@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = System.Object;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -43,18 +44,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField] private Vector3 startPos;
     [SerializeField, Range(0, 2f)] float sprintAmplitudeMultiplier = 1.5f;
     [SerializeField, Range(0, 2f)] float sprintFrequencyMultiplier = 1.5f;
-
-    [Header("Gun Sway Settings")] 
-    [SerializeField] private float step = 0.01f;
-    [SerializeField] private float maxStepDistance = 0.06f;
-    private Vector3 swayPos;
-    
-    [Header("Gun Sway Rotation Settings")] 
-    [SerializeField] private float rotationStep = 4f;
-    [SerializeField] private float maxRotationStep = 5f;
-    private Vector3 swayEulerAngles;
-    private float smooth = 10f;
-    private float smoothRot = 12f; 
 
     [Header("Truck Physics")]
     [SerializeField] float truckDamping = 5f;
@@ -158,7 +147,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             t.gameObject.layer = LayerMask.NameToLayer("Default");
         }
         
-        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");  
+        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
         
         myCamera.cullingMask = maskCameraPlayer;
         startPos = cameraTransform.localPosition;
@@ -321,6 +310,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             HandleMovement();
         }
     }
+
 
     public void Sit(Transform sitPos)
     {
@@ -627,33 +617,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         SetPassengerModeServerRpc(false, Vector3.zero);
     }
     
-    //Sway
-    void Sway()
-    {
-        Vector3 lookInput = new Vector3(pitch, yaw, 0);
-        Vector3 invertLook = lookInput * -step;
-        invertLook.x = Mathf.Clamp(invertLook.x, -maxStepDistance, maxStepDistance);
-        invertLook.y = Mathf.Clamp(invertLook.y, -maxStepDistance, maxStepDistance);
-        
-        swayPos = invertLook;
-    }
-    
-    void SwayRotation()
-    {
-        Vector3 lookInput = new Vector3(pitch, yaw, 0);
-        Vector2 invertLook = lookInput * -rotationStep;
-        invertLook.x = Mathf.Clamp(invertLook.x, -maxRotationStep, maxRotationStep);
-        invertLook.y = Mathf.Clamp(invertLook.y, -maxRotationStep, maxRotationStep);
-        
-        swayEulerAngles = new Vector3(invertLook.y, invertLook.x, invertLook.x);
-    }
-
-    void CompositePositionRotation()
-    {
-        Transform gun = gunOwner.transform;
-        gun.localPosition = Vector3.Lerp(gun.localPosition, swayPos, Time.deltaTime * smooth);
-        gun.localRotation = Quaternion.Slerp(gun.localRotation, Quaternion.Euler(swayEulerAngles), Time.deltaTime * smoothRot);
-    }
+  
 }
 
 public interface IParentable

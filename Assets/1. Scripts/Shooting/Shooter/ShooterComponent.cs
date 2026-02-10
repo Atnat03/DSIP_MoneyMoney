@@ -45,6 +45,11 @@ namespace Shooting
         [SerializeField] private Transform _instantPos;
         [SerializeField] private float reloadingTime = 2f;
         [SerializeField] private float maxDistance = 100f;
+        [SerializeField] private Animator gunAnimator;
+        [SerializeField] private GameObject muzzleFlashEffect;
+        private float elpased = 0;
+        [SerializeField] private bool canShoot = false;
+        [SerializeField] private float FireRate = 0.1f;
         #endregion
 
         #region Methods
@@ -124,6 +129,16 @@ namespace Shooting
         private void Update()
         {
             if (!IsOwner) return;
+
+            if (elpased > 0)
+            {
+                canShoot = false;
+                elpased -= Time.deltaTime;
+            }
+            else
+            {
+                canShoot = true;
+            }
             
             HandleInputs();
 
@@ -160,6 +175,8 @@ namespace Shooting
             {
                 return false;
             }
+            
+            if(!canShoot) return false;
 
             Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
             
@@ -172,6 +189,14 @@ namespace Shooting
                 WarnShotTargets(bullets);
                 _currentAmmo--;
             }
+            
+            gunAnimator.SetTrigger("Shoot");
+            
+            NetworkObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity).GetComponent<NetworkObject>();
+            muzzleFlash.TrySetParent(_instantPos);
+            muzzleFlash.Spawn();
+
+            elpased = FireRate;
 
             return didShoot;
         }
