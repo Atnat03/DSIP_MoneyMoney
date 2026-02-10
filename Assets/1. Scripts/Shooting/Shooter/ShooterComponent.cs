@@ -89,6 +89,12 @@ namespace Shooting
         {
             if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
                 return;
+            
+            if (GetComponent<FPSControllerMulti>().isMapActive)
+                return;
+            
+            if (GetComponent<FPSControllerMulti>().IsFreeze)
+                return;
 
             Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
             Vector3 startPos = _instantPos.position;
@@ -142,6 +148,12 @@ namespace Shooting
         public bool TryShoot()
         {
             if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
+                return false;
+
+            if (GetComponent<FPSControllerMulti>().isMapActive)
+                return false;
+            
+            if (GetComponent<FPSControllerMulti>().IsFreeze)
                 return false;
             
             if (_currentAmmo <= 0)

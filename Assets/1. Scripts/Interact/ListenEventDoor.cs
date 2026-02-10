@@ -62,9 +62,10 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
 
     public string InteractionName
     {
-        get { return interactionName; }
-        set { interactionName = value; }
-    }
+        get { return isOpenDoor.Value ? interactionFerméName : interactionOpenName ; }
+        set { }
+    }   
 
-    public string interactionName;
+    public string interactionOpenName;
+    public string interactionFerméName;
 }

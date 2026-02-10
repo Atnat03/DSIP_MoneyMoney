@@ -1,71 +1,141 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(Rigidbody))]
 public class BanditBarrage : MonoBehaviour
 {
+    [Header("Navigation Points")]
     public Transform pointA;
     public Transform pointB;
-
-    public float maxSpeed = 10f;
-    public float acceleration = 10f;
-    public float rotationSpeed = 5f;
-    public float uprightStrength = 500f; // force qui maintient la voiture droite
-
+    
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 3f;
+    [SerializeField] private float arrivalDistance = 3f;
+    
+    [Header("Components")]
+    private NavMeshAgent navAgent;
     private Rigidbody rb;
-    private Transform currentTarget;
-
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-        // ❌ PLUS DE CONSTRAINTS
-        rb.centerOfMass = new Vector3(0f, -0.8f, 0f);
-    }
+    
+    private bool hasReachedDestination = false;
 
     void Start()
     {
-        currentTarget = pointB;
+        // Setup components
+        rb = GetComponent<Rigidbody>();
+        navAgent = GetComponent<NavMeshAgent>();
+        
+        if (navAgent == null)
+        {
+            navAgent = GetComponent<NavMeshAgent>();
+        }
+        
+        // Configure NavMeshAgent
+        navAgent.speed = moveSpeed;
+        navAgent.angularSpeed = rotationSpeed * 60f;
+        navAgent.acceleration = 50f;
+        navAgent.stoppingDistance = 0.1f; // Très petit pour éviter les oscillations
+        navAgent.autoBraking = true;
+        navAgent.updateRotation = true;
+        
+        // Configure Rigidbody pour compatibilité NavMesh
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
+        
+        // Positionner au point A et aller vers point B
+        if (pointA != null)
+        {
+            transform.position = pointA.position;
+            transform.rotation = pointA.rotation;
+        }
+        
+        if (pointB != null)
+        {
+            navAgent.SetDestination(pointB.position);
+        }
+    }
+
+    void Update()
+    {
+        if (hasReachedDestination || navAgent == null || pointB == null)
+            return;
+
+        // Vérifier la distance réelle au point B (pas le remainingDistance du NavMesh)
+        float distanceToTarget = Vector3.Distance(transform.position, pointB.position);
+        
+        if (distanceToTarget <= arrivalDistance)
+        {
+            OnReachedDestination();
+        }
     }
 
     void FixedUpdate()
     {
-        KeepUpright();
-
-        Vector3 toTarget = currentTarget.position - rb.position;
-        float distance = toTarget.magnitude;
-
-        if (distance < 0.1f)
+        // Synchroniser la physique avec le NavMeshAgent
+        if (navAgent != null && navAgent.enabled && !hasReachedDestination)
         {
-            rb.linearVelocity = Vector3.zero;
-            this.enabled = false;
-            return;
+            if (rb != null && !rb.isKinematic)
+            {
+                rb.linearVelocity = navAgent.velocity;
+            }
         }
-
-        Vector3 direction = toTarget.normalized;
-
-        float brakingDistance = (maxSpeed * maxSpeed) / (2f * acceleration);
-        float speed = (distance < brakingDistance)
-            ? Mathf.Sqrt(2f * acceleration * distance)
-            : maxSpeed;
-
-        Vector3 desiredVelocity = direction * speed;
-
-        Vector3 force = (desiredVelocity - rb.linearVelocity) * acceleration;
-        force.y = 0f;
-        rb.AddForce(force, ForceMode.Acceleration);
-
-        // Rotation vers la cible (uniquement Y)
-        Quaternion targetRot = Quaternion.LookRotation(direction, Vector3.up);
-        Quaternion yOnly = Quaternion.Euler(0, targetRot.eulerAngles.y, 0);
-        rb.MoveRotation(Quaternion.Slerp(rb.rotation, yOnly, rotationSpeed * Time.fixedDeltaTime));
     }
 
-    void KeepUpright()
+    private void OnReachedDestination()
     {
-        Vector3 torque = Vector3.Cross(transform.up, Vector3.up);
-        rb.AddTorque(torque * uprightStrength);
+        hasReachedDestination = true;
+        
+        // PAS de snap de position - on laisse la voiture où elle est naturellement
+        
+        // Arrêter le NavMeshAgent
+        if (navAgent != null)
+        {
+            navAgent.isStopped = true;
+            navAgent.enabled = false;
+        }
+        
+        // Arrêter le Rigidbody progressivement
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+        
+        // Désactiver le script
+        this.enabled = false;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // La physique du Rigidbody gère automatiquement la collision
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        if (pointA != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(pointA.position, 0.5f);
+            Gizmos.DrawLine(pointA.position, pointA.position + pointA.forward * 2f);
+        }
+        
+        if (pointB != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(pointB.position, 0.5f);
+            Gizmos.DrawLine(pointB.position, pointB.position + pointB.forward * 2f);
+        }
+        
+        if (pointA != null && pointB != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(pointA.position, pointB.position);
+        }
     }
 }

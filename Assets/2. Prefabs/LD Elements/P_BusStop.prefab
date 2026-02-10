@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 850894810013744901}
   - component: {fileID: 8486567582024005742}
   - component: {fileID: 8372940803352092504}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Chair (1)
   m_TagString: Chairs
   m_Icon: {fileID: 0}
@@ -407,7 +407,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2552
+  m_VersionIndex: 2561
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -527,6 +527,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chair
   sittingPos: {fileID: 4343889453299615423}
+  interactionAssoirName: S'assoir
+  interactionDeboutName: Se lever
 --- !u!1 &4787207542248907342
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +538,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4343889453299615423}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SittingPos
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
@@ -580,15 +582,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 118.61507
+      value: -19.75953
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.49999958
+      value: 0.000060570397
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 469.8222
+      value: 6.5253434
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       propertyPath: m_LocalRotation.w

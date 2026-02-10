@@ -1,15 +1,18 @@
 using UnityEngine;
+using Unity.Netcode;
+using UnityEngine;
 
 public class BanditSpawnManager : MonoBehaviour
 {
     public static BanditSpawnManager instance;
     
+    
+    public NetworkVariable<float> _timeUntilBanditFollow = new(0);
+    public NetworkVariable<float> _timeUntilBanditBarrage = new(0);
+    
+    
     public float timeUntilBanditFollow;
     public float timeUntilBanditBarrage;
-    
-    
-    [SerializeField]private float _timeUntilBanditFollow;
-    [SerializeField]private float _timeUntilBanditBarrage;
 
     public Vector3 detectionRadius;
     public LayerMask spawnPointLayer;
@@ -17,39 +20,61 @@ public class BanditSpawnManager : MonoBehaviour
     public Transform boxCenter;
     
     public GameObject banditFollowPrefab;
+    public GameObject truck;
+    
+    public 
 
 
     void Awake()
     {
         instance = this;
-        _timeUntilBanditFollow = timeUntilBanditFollow;
-        _timeUntilBanditBarrage = timeUntilBanditBarrage;
+        _timeUntilBanditFollow.Value = timeUntilBanditFollow;
+        _timeUntilBanditBarrage.Value = timeUntilBanditBarrage;
+        
+        _timeUntilBanditFollow.OnValueChanged += OnTimeUntilBFChaned;
+        _timeUntilBanditBarrage.OnValueChanged += OnTimeUntilBBChaned;
+    }
+
+    private void OnTimeUntilBFChaned(float previousValue, float newValue)
+    {
+        if (_timeUntilBanditFollow.Value <= 0) { _timeUntilBanditFollow.Value = timeUntilBanditFollow; SpawnBanditFollowServerRpc(); }
+    }
+    private void OnTimeUntilBBChaned(float previousValue, float newValue)
+    {
+        if (_timeUntilBanditBarrage.Value <= 0) { SpawnBanditBarrageServerRpc(); }
     }
 
     public void Update()
     {
-        //_timeUntilBanditBarrage -= Time.deltaTime;
-        _timeUntilBanditFollow -= Time.deltaTime;
-
-        if (_timeUntilBanditFollow <= 0) { _timeUntilBanditFollow = timeUntilBanditFollow; SpawnBanditFollow(); }
+        if (!NetworkManager.Singleton.IsServer)
+            return;
         
-        if (_timeUntilBanditBarrage <= 0) { _timeUntilBanditBarrage = timeUntilBanditBarrage; SpawnBanditBarrage(); }
+        if (_timeUntilBanditBarrage.Value > 0)
+        {
+            _timeUntilBanditBarrage.Value-= Time.deltaTime;
+            
+        }
+
+        if (_timeUntilBanditFollow.Value > 0)
+        {
+            _timeUntilBanditFollow.Value -= Time.deltaTime;
+            
+        }
     }
 
 
-    public void SpawnBanditFollow()
+    [ServerRpc]
+    public void SpawnBanditFollowServerRpc()
     {
         Collider[] hits = Physics.OverlapBox(boxCenter.position, detectionRadius,  Quaternion.identity, spawnPointLayer);
         
         Transform closest = null;
-        float minDist = Mathf.Infinity;
+        float minDist = 0;
         
-        Debug.Log("on appelle la fonction");
         foreach (var hit in hits)
         {
-            Debug.Log("au moins un ? ");
             float dist = (hit.transform.position - transform.position).sqrMagnitude;
-            if (dist < minDist)
+            if (dist > minDist)
             {
                 minDist = dist;
                 closest = hit.transform;
@@ -58,13 +83,25 @@ public class BanditSpawnManager : MonoBehaviour
 
         if (closest != null)
         {
-            Instantiate(banditFollowPrefab, closest.position, Quaternion.identity);
+            GameObject bandit = Instantiate(banditFollowPrefab, closest.position, Quaternion.identity);
+            
+            bandit.GetComponent<BanditVehicleAI>().truck = truck.transform;
+            bandit.GetComponent<BanditVehicleAI>().lookAtTarget.target = truck.transform;
+            
+            int rdm = Random.Range(0, 2);
+            bool goRight = (rdm == 0);      
+            bandit.GetComponent<BanditVehicleAI>().goRight = goRight;
+            
+            bandit.GetComponent<NetworkObject>().Spawn();
         }
     }
 
-    public void SpawnBanditBarrage()
+    public bool hasToSpawnBarrage;
+
+    [ServerRpc]
+    public void SpawnBanditBarrageServerRpc()
     {
-        
+        hasToSpawnBarrage = true;
     }
     
     private void OnDrawGizmosSelected()

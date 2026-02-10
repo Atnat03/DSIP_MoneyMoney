@@ -12,6 +12,8 @@ public interface IInteractible
 
 public class PlayerRayCast : NetworkBehaviour
 {
+    public static PlayerRayCast LocalInstance;
+    
     public UIController uiController;
     public float durationRepair;
 
@@ -24,11 +26,23 @@ public class PlayerRayCast : NetworkBehaviour
 
     public string RepearInteractionName = "Réparer";
     
+    private KnockOut targetKO;
+    
+    private bool isReviving = false;
+    
     private void Start()
     {
         uiController = VariableManager.instance.uiController;
         circleCD = VariableManager.instance.circleCD;
         materialVisual.transform.parent = GetComponent<FPSControllerMulti>().MyCamera().transform;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            LocalInstance = this;
+        }
     }
 
     private void Update()
@@ -44,24 +58,39 @@ public class PlayerRayCast : NetworkBehaviour
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
         if (Physics.Raycast(ray, out hit, hitDistance,layerMask))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
+            //Réanimer
+            if (hit.collider.TryGetComponent<KnockOut>(out KnockOut ko))
             {
-                if ((!hit.collider.CompareTag("TruckPart") || 
-                    (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial)))
+                targetKO = ko;
+
+                if (ko.isKnockedOut.Value)
                 {
-                    if(hit.collider.CompareTag("Sangles"))
+                    uiController?.OnInteract();
+                    uiController?.SetText("Réanimer");
+
+                    if (Input.GetKeyDown(KeyCode.E) && !isReviving)
                     {
-                        if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
-                            return;
+                        isReviving = true;
+                        GetComponent<FPSControllerMulti>().StartFreeze();
+                        targetKO.StartMateReviveServerRpc(NetworkManager.Singleton.LocalClientId);
                     }
-                        
-                    if (hit.collider.TryGetComponent<IInteractible>(out var interactible))
+
+                    if (Input.GetKeyUp(KeyCode.E) && isReviving)
                     {
-                        uiController?.OnInteract();
-                        uiController?.SetText(interactible.InteractionName);
+                        GetComponent<FPSControllerMulti>().StopFreeze();
+                        isReviving = false;
+                        targetKO.StopMateReviveServerRpc();
                     }
                 }
-
+                else
+                {
+                    ResetRevive();
+                }
+            }
+            
+            //Le reste
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Interactable"))
+            {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     if (hit.collider.CompareTag("TruckPart") && hasMaterial)
@@ -78,6 +107,22 @@ public class PlayerRayCast : NetworkBehaviour
                     else if(!hit.collider.CompareTag("TruckPart"))
                     {
                         Interact.RayInteract(hit.collider.gameObject, gameObject, RepearInteractionName);
+                    }
+                }
+                else
+                if ((!hit.collider.CompareTag("TruckPart") || 
+                    (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial)))
+                {
+                    if(hit.collider.CompareTag("Sangles"))
+                    {
+                        if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
+                            return;
+                    }
+                        
+                    if (hit.collider.TryGetComponent<IInteractible>(out var interactible))
+                    {
+                        uiController?.OnInteract();
+                        uiController?.SetText(interactible.InteractionName);
                     }
                 }
             }
@@ -113,5 +158,29 @@ public class PlayerRayCast : NetworkBehaviour
         Interact.RayInteract(truck, gameObject, RepearInteractionName);
         GetComponent<FPSControllerMulti>().StopFreeze();
         TakeMaterial();
+    }
+    
+    private void ResetRevive()
+    {
+        if (isReviving && targetKO != null)
+        {
+            targetKO.StopMateReviveServerRpc();
+            GetComponent<FPSControllerMulti>().StopFreeze();
+        }
+
+        isReviving = false;
+        targetKO = null;
+        uiController?.OnStopInteract();
+    }
+    
+    [SerializeField] private Image reviveHUDImage;
+
+    public void UpdateReviveUI(float value, bool isActive)
+    {
+        if (reviveHUDImage == null)
+            return;
+
+        reviveHUDImage.transform.parent.gameObject.SetActive(isActive);
+        reviveHUDImage.fillAmount = Mathf.Clamp01(value);
     }
 }
