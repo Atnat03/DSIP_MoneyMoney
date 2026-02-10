@@ -18,6 +18,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField] Transform cameraTarget;
     [SerializeField] Transform cameraTransform;
     [SerializeField] Camera myCamera;
+    [SerializeField] CapsuleCollider capsuleCollider;
     
     [Header("Move Settings")]
     [SerializeField] float moveSpeed = 5f;
@@ -60,6 +61,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField, Range(0, 1f)] float truckFollowStrength = 0.5f;
     
     private TruckInteraction nearbyTruck;
+    
     public bool isDriver
     {
         get
@@ -160,6 +162,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         speed = moveSpeed;
         
         shooter = gameObject.GetComponent<ShooterComponent>();
+
+        capsuleCollider = GetComponent<CapsuleCollider>();
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)
@@ -460,6 +464,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
     {
         if (controller != null) controller.enabled = false;
+
+        capsuleCollider.enabled = false;
+        
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
         
@@ -478,6 +485,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public void ExitTruck(Vector3 exitPosition)
     {
         print("ExitTruck");
+        
+        capsuleCollider.enabled = true;
         
         transform.position = exitPosition;
         

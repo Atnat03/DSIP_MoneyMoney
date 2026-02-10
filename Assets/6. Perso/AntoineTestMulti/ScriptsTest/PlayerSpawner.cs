@@ -4,22 +4,17 @@ using UnityEngine;
 
 public class PlayerSpawner : NetworkBehaviour
 {
-    public GameObject player1Prefab;
+    public GameObject playerPrefab;
     public Camera startCam;
     
     public Transform defaultSpawnPoint;
 
-    private void Start()
-    {
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
 
-        if (IsServer)
-        {
-            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-            {
-                OnClientConnected(client.ClientId);
-            }
-        }
+    public override void OnNetworkSpawn()
+    {
+        if (!IsServer) return;
+
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
 
     private void OnDisable()
@@ -31,13 +26,10 @@ public class PlayerSpawner : NetworkBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        if (!IsServer) return;
+        if (NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject != null)
+            return;
 
-        GameObject playerInstance = Instantiate(player1Prefab);
-        playerInstance.transform.position = defaultSpawnPoint.position;
-        playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
-    
-        if (startCam != null)
-            startCam.gameObject.SetActive(false);
+        GameObject player = Instantiate(playerPrefab, defaultSpawnPoint.position, Quaternion.identity);
+        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
     }
 }
