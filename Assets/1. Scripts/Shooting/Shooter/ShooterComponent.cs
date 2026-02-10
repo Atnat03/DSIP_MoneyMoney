@@ -67,11 +67,13 @@ namespace Shooting
             OnShoot.AddListener(() => EventBus.Invoke("OnPlayerShoot"));
             
             _shooter.OnShoot += MakeTrail;
-            
-            Reload();
         }
 
-        public void Reload() => _currentAmmo = _maxAmmo;
+        public void Reload()
+        {
+            _currentAmmo = _maxAmmo;
+            gunAnimator.SetTrigger("Reload");
+        }
 
         public void StartToReload()
         {
@@ -81,6 +83,7 @@ namespace Shooting
         public IEnumerator Reloading()
         {
             GetComponent<FPSControllerMulti>().StartFreeze();
+            Reload();
             Image circleCD = VariableManager.instance.circleCD;
             float count = reloadingTime;
             while (count > 0)
@@ -90,7 +93,6 @@ namespace Shooting
                 circleCD.fillAmount =  count / reloadingTime;
             }
             GetComponent<FPSControllerMulti>().StopFreeze();
-            Reload();
         }
 
         private void MakeTrail()
