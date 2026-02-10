@@ -967,6 +967,7 @@ MonoBehaviour:
   driftSlowdown: 3
   goRight: 0
   lookAtTarget: {fileID: 582672426505465266}
+  vfxMort: {fileID: 6230730314918658108, guid: 87c7b0d474bb8824c874173c6b5d8ad9, type: 3}
 --- !u!65 &2426944586062192942
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1000,7 +1001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2661722037
+  GlobalObjectIdHash: 2083879455
   InScenePlacedSourceGlobalObjectIdHash: 1158135261
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1329,6 +1330,7 @@ MonoBehaviour:
   damage: 10
   isRight: 0
   banditAI: {fileID: 792700703697483768}
+  helicoAI: {fileID: 0}
 --- !u!1 &8639841333092637422
 GameObject:
   m_ObjectHideFlags: 0

@@ -45,6 +45,14 @@ namespace Shooting
         [SerializeField] private Transform _instantPos;
         [SerializeField] private float reloadingTime = 2f;
         [SerializeField] private float maxDistance = 100f;
+        [SerializeField] private Animator gunAnimator;
+        [SerializeField] private GameObject muzzleFlashEffect;
+        private float elpased = 0;
+        [SerializeField] public bool canShoot = false;
+        [SerializeField] private float FireRate = 0.1f;
+
+        [SerializeField] private AudioClip shootClip;
+        
         #endregion
 
         #region Methods
@@ -59,11 +67,13 @@ namespace Shooting
             OnShoot.AddListener(() => EventBus.Invoke("OnPlayerShoot"));
             
             _shooter.OnShoot += MakeTrail;
-            
-            Reload();
         }
 
-        public void Reload() => _currentAmmo = _maxAmmo;
+        public void Reload()
+        {
+            _currentAmmo = _maxAmmo;
+            gunAnimator.SetTrigger("Reload");
+        }
 
         public void StartToReload()
         {
@@ -73,6 +83,7 @@ namespace Shooting
         public IEnumerator Reloading()
         {
             GetComponent<FPSControllerMulti>().StartFreeze();
+            Reload();
             Image circleCD = VariableManager.instance.circleCD;
             float count = reloadingTime;
             while (count > 0)
@@ -82,7 +93,6 @@ namespace Shooting
                 circleCD.fillAmount =  count / reloadingTime;
             }
             GetComponent<FPSControllerMulti>().StopFreeze();
-            Reload();
         }
 
         private void MakeTrail()
@@ -124,6 +134,16 @@ namespace Shooting
         private void Update()
         {
             if (!IsOwner) return;
+
+            if (elpased > 0)
+            {
+                canShoot = false;
+                elpased -= Time.deltaTime;
+            }
+            else
+            {
+                canShoot = true;
+            }
             
             HandleInputs();
 
@@ -160,6 +180,8 @@ namespace Shooting
             {
                 return false;
             }
+            
+            if(!canShoot) return false;
 
             Camera camera = GetComponent<FPSControllerMulti>().MyCamera();
             
@@ -172,8 +194,24 @@ namespace Shooting
                 WarnShotTargets(bullets);
                 _currentAmmo--;
             }
+            
+            gunAnimator.SetTrigger("Shoot");
+
+            ShoopClientRpc();
+            
+
+            elpased = FireRate;
 
             return didShoot;
+        }
+        
+        [ClientRpc]
+        private void ShoopClientRpc()
+        {
+            NetworkObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity).GetComponent<NetworkObject>();
+            muzzleFlash.transform.SetParent(_instantPos);
+            muzzleFlash.Spawn();        
+            GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
         }
 
         /// <summary>

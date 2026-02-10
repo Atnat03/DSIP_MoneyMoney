@@ -20,9 +20,7 @@ public class Bandit_Health : NetworkBehaviour, ITarget
 
     public Action<BulletInfo> OnShot { get; private set; }
     public Collider Collider { get; private set; }
-
-    public GameObject vfxMort;
-
+    
     private void Awake()
     {
         Collider = GetComponent<Collider>();

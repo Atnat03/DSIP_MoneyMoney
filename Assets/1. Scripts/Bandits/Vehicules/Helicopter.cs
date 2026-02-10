@@ -14,6 +14,7 @@ public class Helicopter : MonoBehaviour, IVehicule
     [SerializeField] private float rotorRotateSpeed = 5f;
     [SerializeField] private GameObject helicopter;
     [SerializeField] public bool isDead = false;
+    [SerializeField] public GameObject explosionParticle;
     
     private void Update()
     {
@@ -21,7 +22,6 @@ public class Helicopter : MonoBehaviour, IVehicule
         {
             rotor.transform.Rotate(Vector3.up, rotorRotateSpeed * Time.deltaTime);
         }
-        
     }
 
     public void Die()
@@ -38,9 +38,11 @@ public class Helicopter : MonoBehaviour, IVehicule
         print(helicopter.transform.position.y);
         yield return new WaitUntil(() => helicopter.transform.position.y < 4f);
         
-        
         if (TryGetComponent(out HelicopterVehicleAI ai))
         {
+            NetworkObject explosionParticleIntance = Instantiate(explosionParticle, transform.position, transform.rotation).GetComponent<NetworkObject>();
+            explosionParticleIntance.Spawn();
+            
             GetComponent<NetworkObject>().Despawn();
             BanditSpawnManager.instance.canSpawnHelico = true;
             Destroy(ai.gameObject);

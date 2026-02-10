@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = System.Object;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -49,8 +50,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     float yaw;
     float pitch;
-    float horizontalInput;
-    private float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
     
     public bool isInTruck = false;
     private Transform truckParent;
@@ -146,7 +147,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             t.gameObject.layer = LayerMask.NameToLayer("Default");
         }
         
-        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");  
+        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
         
         myCamera.cullingMask = maskCameraPlayer;
         startPos = cameraTransform.localPosition;
@@ -310,6 +311,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
     }
 
+
     public void Sit(Transform sitPos)
     {
         isSitting = true;
@@ -354,6 +356,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         Debug.Log("Stop freeze");
         isFreeze = false;
     }
+    
+    
     
     void HandleCameraInput()
     {
@@ -612,6 +616,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         SetPassengerModeServerRpc(false, Vector3.zero);
     }
+    
+  
 }
 
 public interface IParentable
