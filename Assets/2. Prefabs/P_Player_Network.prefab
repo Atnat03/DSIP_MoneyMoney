@@ -507,6 +507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41585ce5c7169a54cb7fbb376cbdfd4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraShake
+  shaking: 0
 --- !u!1 &1483528920974573254
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,6 +540,118 @@ Transform:
   - {fileID: 2044659267831424274}
   m_Father: {fileID: 6716381766532528946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1688934673668781492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2520354859165068654}
+  - component: {fileID: 971337257339323800}
+  - component: {fileID: 2743562297130865454}
+  m_Layer: 7
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2520354859165068654
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688934673668781492}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 653136072347524691}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.00022125, y: -0.00002861}
+  m_SizeDelta: {x: 401.92, y: 61.574}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &971337257339323800
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688934673668781492}
+  m_CullTransparentMesh: 1
+--- !u!114 &2743562297130865454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688934673668781492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 2cb6473e008d43447bba3ace8dc17bb7, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1698919007165967106
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 653136072347524691}
+  m_Layer: 7
+  m_Name: BarRevive
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &653136072347524691
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698919007165967106}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2520354859165068654}
+  - {fileID: 4299969413253366174}
+  m_Father: {fileID: 4696590037447686293}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 334}
+  m_SizeDelta: {x: 401.9209, y: 61.5737}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2056509845383443183
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,6 +1429,7 @@ RectTransform:
   - {fileID: 3789979163212514604}
   - {fileID: 5564130174421129753}
   - {fileID: 2812059470039633649}
+  - {fileID: 653136072347524691}
   - {fileID: 6907069008045560680}
   m_Father: {fileID: 6716381766532528946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1553,6 +1667,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Emote
   emoteIndex: 1
   targetPlayer: {fileID: 5322193334059012131}
+--- !u!1 &5842288148481821025
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4299969413253366174}
+  - component: {fileID: 6921695396018643179}
+  - component: {fileID: 7218583380799286716}
+  m_Layer: 7
+  m_Name: ValueRevive
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4299969413253366174
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5842288148481821025}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 653136072347524691}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.00022125, y: -0.00002861}
+  m_SizeDelta: {x: 401.92, y: 61.574}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &6921695396018643179
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5842288148481821025}
+  m_CullTransparentMesh: 1
+--- !u!114 &7218583380799286716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5842288148481821025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.29495454, g: 1, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 2cb6473e008d43447bba3ace8dc17bb7, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5914053476759244639
 GameObject:
   m_ObjectHideFlags: 0
@@ -1936,6 +2125,7 @@ GameObject:
   - component: {fileID: -8397553320606875098}
   - component: {fileID: 5322193334059012131}
   - component: {fileID: 5225601816550349719}
+  - component: {fileID: 8017075535117252575}
   m_Layer: 7
   m_Name: P_Player_Network
   m_TagString: Player
@@ -2009,6 +2199,7 @@ MonoBehaviour:
   materialVisual: {fileID: 8219632236736230469}
   hitDistance: 3
   RepearInteractionName: "R\xE9parer"
+  reviveHUDImage: {fileID: 7218583380799286716}
 --- !u!114 &3666952883803456061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2105,13 +2296,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.75076926
-      value: 0.22695974
-      inSlope: 1
-      outSlope: 1
+      time: 0.72419316
+      value: 0.013596293
+      inSlope: 0.05568915
+      outSlope: 0.05568915
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.3260897
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
@@ -2243,8 +2434,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.25
+  m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &6002100493801107169
@@ -2372,6 +2563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b40cbfe449c44ad44abc62b271d12cd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  ShowTopMostFoldoutHeaderGroup: 1
   _maxHealth: 2000
   _impactDamage: 0
   _impactDamageRange: {x: 0, y: 0, z: 0, w: 0}
@@ -2386,7 +2578,35 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   healthBar: {fileID: 0}
-  _health: 0
+--- !u!114 &8017075535117252575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200783157656878878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58281f9930fdec94d93065c96fba33e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KnockOut
+  ShowTopMostFoldoutHeaderGroup: 1
+  isKnockedOut:
+    m_InternalValue: 0
+  isMateRevive:
+    m_InternalValue: 0
+  currentValueToRevive:
+    m_InternalValue: 0
+  componentsToDisables:
+  - {fileID: 2094199091246566129}
+  - {fileID: 5307100726240828314}
+  - {fileID: 3666952883803456061}
+  - {fileID: 3169066338042641253}
+  koForce: 3
+  soloReviveTime: 10
+  mateReviveTime: 2
+  reviveImage: {fileID: 7218583380799286716}
+  interactionName: Relever
 --- !u!1 &7658033872997971598
 GameObject:
   m_ObjectHideFlags: 0

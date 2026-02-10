@@ -11,7 +11,6 @@ public class AbribusBehaviour : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("please");
             playerWaiting = other.transform;
         }
     }
@@ -31,6 +30,10 @@ public class AbribusBehaviour : MonoBehaviour
             _currentTimer -= Time.deltaTime;
             if (_currentTimer <= 0)
             {
+                FPSControllerMulti fps = playerWaiting.GetComponent<FPSControllerMulti>();
+                if(fps.isSitting)
+                    fps.StandUp();
+                
                 BankManager.instance.TeleportNextBank(playerWaiting);
             }
         }

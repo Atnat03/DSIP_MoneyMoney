@@ -184,8 +184,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         SetVisibleGun();
         
-        capsule.enabled = !isDriver;
-        
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed = sprintSpeed;
@@ -322,17 +320,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         return (Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload) && final;
     }
 
-    private bool isFreeze;
+    [SerializeField] private bool isFreeze;
     public bool IsFreeze => isFreeze;
     private Vector3 freezeCameraPos;
     
     public void StartFreeze()
     {
+        Debug.Log("Start freeze");
         isFreeze = true;
     }
 
     public void StopFreeze()
     {
+        Debug.Log("Stop freeze");
         isFreeze = false;
     }
     
@@ -451,6 +451,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (netTransform != null) {
             netTransform.InLocalSpace = true;
         }
+        
+        capsule.enabled = false;
 
         if (IsOwner) {
             Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
@@ -466,6 +468,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         transform.position = exitPosition;
         
         truckRb = null;
+
+        capsule.enabled = true;
         
         if (controller != null)
             controller.enabled = true;

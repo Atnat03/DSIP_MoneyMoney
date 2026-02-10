@@ -23,7 +23,7 @@ public class SpawnBarrage : MonoBehaviour
         if (other.CompareTag("Truck") && BanditSpawnManager.instance.hasToSpawnBarrage)
         {
             BanditSpawnManager.instance.hasToSpawnBarrage = false;
-            BanditSpawnManager.instance._timeUntilBanditBarrage = BanditSpawnManager.instance.timeUntilBanditBarrage;
+            BanditSpawnManager.instance._timeUntilBanditBarrage.Value = BanditSpawnManager.instance.timeUntilBanditBarrage;
 
             if (vertical)
             {
@@ -31,7 +31,7 @@ public class SpawnBarrage : MonoBehaviour
             }
             else
             {
-                isSouthEast = other.transform.position.z < transform.position.z;
+                isSouthEast = other.transform.position.z > transform.position.z;
             }
             
             if (isSouthEast)
