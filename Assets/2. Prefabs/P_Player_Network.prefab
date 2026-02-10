@@ -1339,9 +1339,9 @@ RectTransform:
   - {fileID: 2731178949565434485}
   m_Father: {fileID: 653318236445998327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 173.79015, y: -62.319782}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8626152660892580634
@@ -2529,9 +2529,9 @@ RectTransform:
   - {fileID: 4195995189816866749}
   m_Father: {fileID: 653318236445998327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 173.79015, y: -186.95935}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3832308266555507451
@@ -2762,9 +2762,9 @@ RectTransform:
   - {fileID: 2465472629009977008}
   m_Father: {fileID: 653318236445998327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 173.79015, y: -311.5989}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4611145067040044954
@@ -2858,6 +2858,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7770147990601004}
+  - component: {fileID: 738059765283072650}
+  - component: {fileID: 3107975793217284477}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -2881,6 +2883,39 @@ Transform:
   - {fileID: 5475596234079531840}
   m_Father: {fileID: 6716381766532528946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &738059765283072650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6735231894082441938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40eebdd13a6db7b4486c45f5c681e342, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!135 &3107975793217284477
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6735231894082441938}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6818244959143783779
 GameObject:
   m_ObjectHideFlags: 0
@@ -3011,13 +3046,13 @@ GameObject:
   - component: {fileID: 1252422010119750778}
   - component: {fileID: 5307100726240828314}
   - component: {fileID: 2094199091246566129}
-  - component: {fileID: 2076102677452798421}
   - component: {fileID: 6002100493801107169}
   - component: {fileID: -8397553320606875098}
   - component: {fileID: 5322193334059012131}
   - component: {fileID: 5225601816550349719}
   - component: {fileID: 8017075535117252575}
   - component: {fileID: 7029264905206466626}
+  - component: {fileID: 4922955457322330164}
   m_Layer: 7
   m_Name: P_Player_Network
   m_TagString: Player
@@ -3241,7 +3276,7 @@ MonoBehaviour:
   cameraTarget: {fileID: 7770147990601004}
   cameraTransform: {fileID: 5475596234079531840}
   myCamera: {fileID: 4915749887442312037}
-  capsule: {fileID: 2076102677452798421}
+  capsule: {fileID: 0}
   moveSpeed: 5
   sprintSpeed: 12
   mouseSensibility: 5
@@ -3312,29 +3347,6 @@ MonoBehaviour:
   _onThrow:
     m_PersistentCalls:
       m_Calls: []
---- !u!136 &2076102677452798421
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200783157656878878}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.25
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &6002100493801107169
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3526,6 +3538,29 @@ MonoBehaviour:
   pauseText:
   - Mettre en pause la partie
   - Continuer la partie
+--- !u!136 &4922955457322330164
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200783157656878878}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7267270393736431613
 GameObject:
   m_ObjectHideFlags: 0

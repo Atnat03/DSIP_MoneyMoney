@@ -18,7 +18,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField] Transform cameraTarget;
     [SerializeField] Transform cameraTransform;
     [SerializeField] Camera myCamera;
-    [SerializeField] private CapsuleCollider capsule;
     
     [Header("Move Settings")]
     [SerializeField] float moveSpeed = 5f;
@@ -104,9 +103,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         return myCamera;
     }
-
-    public float MiniVelocityToTakeDamageFromThune = 8;
-
+    
     [Header("Ladder Settings")]
     [SerializeField] private float ladderClimbSpeed = 3f;
     private bool isOnLadder = false;
@@ -314,14 +311,12 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         isSitting = true;
         canSit = false;
         sittingPos = sitPos;
-        capsule.enabled = false;
     }
 
     public void StandUp()
     {
         sittingPos = null;
         isSitting = false;
-        capsule.enabled = true;
     }
 
     bool CheckCanReload()
@@ -473,8 +468,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             netTransform.InLocalSpace = true;
         }
         
-        capsule.enabled = false;
-
         if (IsOwner) {
             Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
             transform.localPosition = targetSeat.localPosition;
@@ -489,8 +482,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         transform.position = exitPosition;
         
         truckRb = null;
-
-        capsule.enabled = true;
         
         if (controller != null)
             controller.enabled = true;
@@ -612,19 +603,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         SetPassengerModeServerRpc(false, Vector3.zero);
     }
-
-    /*public void OnCollisionEnter(Collision other)
-    {
-        if (other.collider.CompareTag("Treasure"))
-        {
-            Rigidbody rb = other.collider.GetComponent<Rigidbody>();
-            print(rb.linearVelocity.magnitude);
-            if (rb.linearVelocity.magnitude >= MiniVelocityToTakeDamageFromThune)
-            {
-                GetComponent<HealthComponent>().TryTakeDamage(1000);
-            }
-        }
-    }*/
 }
 
 public interface IParentable
