@@ -42,7 +42,7 @@ public class HelicopterVehicleAI : MonoBehaviour, IVehicule
 
         Vector3 toTarget = targetPos - transform.position;
         Rigidbody truckRb = truck.GetComponent<Rigidbody>();
-        float truckSpeed = truckRb != null ? truckRb.velocity.magnitude : 0f;
+        float truckSpeed = truckRb != null ? truckRb.linearVelocity.magnitude : 0f;
 
         // Décider si on doit hover ou voler
         if (toTarget.magnitude <= arrivalThreshold && truckSpeed < 0.1f)
