@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 189311186842769525}
   - component: {fileID: 2227000951669796019}
   - component: {fileID: 3079713612038202068}
-  m_Layer: 15
+  m_Layer: 27
   m_Name: SmallTruck_Tyre_B_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8777653750673974428}
-  m_Layer: 15
+  m_Layer: 27
   m_Name: Truck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,8 @@ GameObject:
   - component: {fileID: 164358262787095612}
   - component: {fileID: 6781572698358878886}
   - component: {fileID: 4790729012829990619}
-  m_Layer: 15
+  - component: {fileID: 1542801571549444936}
+  m_Layer: 27
   m_Name: Bandit_Truck_Barrage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,6 +363,20 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1542801571549444936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2272291960386097672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca741ecd83d08f043bd83e057583abe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakableStuff
+  ejectionForce: 100
+  isBandit: 0
 --- !u!1 &3254012700741879298
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +389,7 @@ GameObject:
   - component: {fileID: 3824107203192017355}
   - component: {fileID: 629180344167303184}
   - component: {fileID: 7810688851357406522}
-  m_Layer: 15
+  m_Layer: 27
   m_Name: SmallTruck_Tyre_F_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -487,7 +502,7 @@ GameObject:
   - component: {fileID: 2747058975749679347}
   - component: {fileID: 7733186269185422572}
   - component: {fileID: 2291230648840747109}
-  m_Layer: 15
+  m_Layer: 27
   m_Name: SmallTruck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,7 +615,7 @@ GameObject:
   - component: {fileID: 572899576640186158}
   - component: {fileID: 4070111050244675532}
   - component: {fileID: 7015998681262274229}
-  m_Layer: 15
+  m_Layer: 27
   m_Name: SmallTruck_Tyre_B_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -713,7 +728,7 @@ GameObject:
   - component: {fileID: 6522435759068732267}
   - component: {fileID: 3369866519798516590}
   - component: {fileID: 2205956081566309}
-  m_Layer: 15
+  m_Layer: 27
   m_Name: SmallTruck_Tyre_F_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
