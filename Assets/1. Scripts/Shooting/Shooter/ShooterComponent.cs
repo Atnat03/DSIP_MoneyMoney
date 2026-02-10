@@ -48,8 +48,11 @@ namespace Shooting
         [SerializeField] private Animator gunAnimator;
         [SerializeField] private GameObject muzzleFlashEffect;
         private float elpased = 0;
-        [SerializeField] private bool canShoot = false;
+        [SerializeField] public bool canShoot = false;
         [SerializeField] private float FireRate = 0.1f;
+
+        [SerializeField] private AudioClip shootClip;
+        
         #endregion
 
         #region Methods
@@ -191,14 +194,22 @@ namespace Shooting
             }
             
             gunAnimator.SetTrigger("Shoot");
+
+            ShoopClientRpc();
             
-            NetworkObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity).GetComponent<NetworkObject>();
-            muzzleFlash.TrySetParent(_instantPos);
-            muzzleFlash.Spawn();
 
             elpased = FireRate;
 
             return didShoot;
+        }
+        
+        [ClientRpc]
+        private void ShoopClientRpc()
+        {
+            NetworkObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity).GetComponent<NetworkObject>();
+            muzzleFlash.transform.SetParent(_instantPos);
+            muzzleFlash.Spawn();        
+            GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
         }
 
         /// <summary>

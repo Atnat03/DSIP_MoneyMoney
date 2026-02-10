@@ -50,8 +50,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     float yaw;
     float pitch;
-    float horizontalInput;
-    private float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
     
     public bool isInTruck = false;
     private Transform truckParent;

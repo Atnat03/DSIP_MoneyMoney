@@ -3055,6 +3055,7 @@ GameObject:
   - component: {fileID: 8017075535117252575}
   - component: {fileID: 7029264905206466626}
   - component: {fileID: 407337842058240766}
+  - component: {fileID: -4363553623774736247}
   m_Layer: 7
   m_Name: P_Player_Network
   m_TagString: Player
@@ -3157,6 +3158,7 @@ MonoBehaviour:
   muzzleFlashEffect: {fileID: 7682931739056552084, guid: 40f5af29ce3e841419122482eac6fb74, type: 3}
   canShoot: 0
   FireRate: 0.1
+  shootClip: {fileID: 8300000, guid: a8eaebda7e1082d4ea22702ca302bb85, type: 3}
 --- !u!114 &6267907623663290062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3302,6 +3304,8 @@ MonoBehaviour:
   sprintAmplitudeMultiplier: 1.75
   sprintFrequencyMultiplier: 1.75
   truckDamping: 5
+  horizontalInput: 0
+  verticalInput: 0
   isInTruck: 0
   interactDistance: 100
   truckLayer:
@@ -3327,19 +3331,6 @@ MonoBehaviour:
   controller: {fileID: 6002100493801107169}
   canEnterInTruck: 0
   isFreeze: 0
-  swayAmount: 0.02
-  maxSwayAmount: 0.06
-  swaySmoothness: 6
-  swayRotationAmount: 4
-  maxSwayRotation: 5
-  swayRotationSmoothness: 8
-  bobAmount: {x: 0.01, y: 0.01, z: 0.01}
-  travelLimit: {x: 0.025, y: 0.025, z: 0.025}
-  bobSpeed: 12
-  bobRotationAmount: {x: 2, y: 1, z: 1.5}
-  sprintBobMultiplier: 1.5
-  sprintSwayMultiplier: 1.3
-  baseOffset: {x: 0.5, y: -0.3, z: 0.75}
 --- !u!114 &2094199091246566129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3579,6 +3570,103 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!82 &-4363553623774736247
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200783157656878878}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.565
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7267270393736431613
 GameObject:
   m_ObjectHideFlags: 0
@@ -5779,8 +5867,36 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5676705567912080630}
   m_SourcePrefab: {fileID: 100100000, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
+--- !u!1 &6141945275983978594 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
+  m_PrefabInstance: {fileID: 6484615557082832179}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5676705567912080630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141945275983978594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68b2a451ee41fb5449bff704192abe47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunSway
+  smooth: 8
+  swayMultiplier: 2
+  fps: {fileID: 5307100726240828314}
+  _amplitude: 0.01
+  frequency: 20
+  startPos: {x: 0.0028, y: -0.0584, z: 0.0809}
+  sprintAmplitudeMultiplier: 1.5
+  sprintFrequencyMultiplier: 1.5
 --- !u!4 &6806981944565938904 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
