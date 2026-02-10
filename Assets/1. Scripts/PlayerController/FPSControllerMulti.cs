@@ -105,6 +105,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         return myCamera;
     }
 
+    public float MiniVelocityToTakeDamageFromThune = 8;
+
     [Header("Ladder Settings")]
     [SerializeField] private float ladderClimbSpeed = 3f;
     private bool isOnLadder = false;
@@ -617,7 +619,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             Rigidbody rb = other.collider.GetComponent<Rigidbody>();
             print(rb.linearVelocity.magnitude);
-            if (rb.linearVelocity.magnitude >= 10)
+            if (rb.linearVelocity.magnitude >= MiniVelocityToTakeDamageFromThune)
             {
                 GetComponent<HealthComponent>().TryTakeDamage(rb.mass * 1000);
             }
