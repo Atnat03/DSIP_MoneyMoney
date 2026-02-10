@@ -2862,7 +2862,7 @@ GameObject:
   - component: {fileID: 3107975793217284477}
   m_Layer: 11
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3126,7 +3126,7 @@ MonoBehaviour:
   circleCD: {fileID: 0}
   hasMaterial: 0
   materialVisual: {fileID: 8219632236736230469}
-  hitDistance: 3
+  hitDistance: 5
   RepearInteractionName: "R\xE9parer"
   reviveHUDImage: {fileID: 7218583380799286716}
 --- !u!114 &3666952883803456061
@@ -3259,8 +3259,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInterface
   FPSControllerMulti: {fileID: 5307100726240828314}
   ShooterComponent: {fileID: 3666952883803456061}
-  GrabPoint: {fileID: 0}
-  HealthComponent: {fileID: 0}
+  GrabPoint: {fileID: 2094199091246566129}
+  HealthComponent: {fileID: 5225601816550349719}
 --- !u!114 &5307100726240828314
 MonoBehaviour:
   m_ObjectHideFlags: 0
