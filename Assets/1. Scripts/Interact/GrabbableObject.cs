@@ -51,6 +51,14 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
     }
 
     public string interactionName;
+    
+    public Outline[] Outline     
+    {
+        get { return outline; ; }
+        set { }
+    }
+
+    public Outline[] outline;
 }
 
 

@@ -10,19 +10,19 @@ public class ColorSelectVisual : MonoBehaviour
     {
         foreach (Button go in buttonList)
         {
-            go.GetComponent<Outline>().enabled = false;
+            go.GetComponent<UnityEngine.UI.Outline>().enabled = false;
         }
         
-        buttonList[0].GetComponent<Outline>().enabled = true;
+        buttonList[0].GetComponent<UnityEngine.UI.Outline>().enabled = true;
     }
 
     public void OnSelectButton(Button b)
     {
         foreach (Button go in buttonList)
         {
-            go.GetComponent<Outline>().enabled = false;
+            go.GetComponent<UnityEngine.UI.Outline>().enabled = false;
         }
 
-        b.GetComponent<Outline>().enabled = true;
+        b.GetComponent<UnityEngine.UI.Outline>().enabled = true;
     }
 }

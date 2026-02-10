@@ -266,4 +266,12 @@ public class Sangles : NetworkBehaviour, IInteractible
 
         netObj.gameObject.layer = LayerMask.NameToLayer("Interactable");
     }
+    
+    public Outline[] Outline     
+    {
+        get { return outline; ; }
+        set { }
+    }
+
+    public Outline[] outline;
 }

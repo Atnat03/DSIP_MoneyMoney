@@ -3120,7 +3120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3557140025
+  GlobalObjectIdHash: 4055741435
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3446,7 +3446,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   controllerScript: {fileID: 5307100726240828314}
   nameText: {fileID: 1751480116020007111}
-  playerRenderer: {fileID: 0}
+  playerRenderer: {fileID: 6118699137260303387}
   emoteKey: 9
   EmoteParent: {fileID: 9119604756531350115}
   emoteImage: {fileID: 7148161306538845652}
@@ -3549,6 +3549,7 @@ MonoBehaviour:
   reviveImage: {fileID: 7218583380799286716}
   ragdollController: {fileID: 9066817082615069985}
   cameraAnimator: {fileID: 8539712608229256782}
+  outline: []
   interactionName: Relever
 --- !u!114 &7029264905206466626
 MonoBehaviour:
@@ -6871,6 +6872,11 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!137 &6118699137260303387 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1050874764156380856, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}
+  m_PrefabInstance: {fileID: 2703134537250696531}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6738551742605727316 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -574398542170260729, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}

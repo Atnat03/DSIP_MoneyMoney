@@ -56,4 +56,12 @@ public class ButtonRampe : NetworkBehaviour, IInteractible
     {
         rampeAnimator.SetBool("IsOpen", newValue);
     }
+    
+    public Outline[] Outline     
+    {
+        get { return outline; ; }
+        set { }
+    }
+
+    public Outline[] outline;
 }

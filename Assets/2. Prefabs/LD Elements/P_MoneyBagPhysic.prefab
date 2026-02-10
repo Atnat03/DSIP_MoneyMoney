@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1917369
+      value: 30.007645
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.765
+      value: 0.00000048458503
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.11651043
+      value: 9.307133
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
       propertyPath: m_LocalRotation.w
@@ -99,6 +99,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8415917237144071027}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2211880393532029633}
   m_SourcePrefab: {fileID: 100100000, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
 --- !u!1 &3389049563541913053 stripped
 GameObject:
@@ -172,7 +175,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   IsGrabbed:
     m_InternalValue: 0
+  type: 0
   interactionName: Prendre le sac de billets
+  outline:
+  - {fileID: 2211880393532029633}
 --- !u!114 &2739809740405493619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,3 +248,21 @@ CapsuleCollider:
   m_Height: 1.2517823
   m_Direction: 1
   m_Center: {x: 0.000000029802322, y: 0.1352539, z: 0.00000035762787}
+--- !u!114 &2211880393532029633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3389049563541913053}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

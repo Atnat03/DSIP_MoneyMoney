@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public interface IInteractible
 {
     public string InteractionName { get; set; }
+    public Outline[] Outline { get; set; }
 }
 
 public class PlayerRayCast : NetworkBehaviour
@@ -29,6 +30,9 @@ public class PlayerRayCast : NetworkBehaviour
     private KnockOut targetKO;
     
     private bool isReviving = false;
+    
+    // Ajout : référence au dernier objet interactible
+    private IInteractible lastInteractible;
     
     private void Start()
     {
@@ -56,6 +60,9 @@ public class PlayerRayCast : NetworkBehaviour
         Ray ray = new Ray(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward);
         Debug.DrawRay(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward, Color.green, hitDistance);
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
+        
+        bool hitInteractible = false; // Flag pour savoir si on regarde un interactible
+        
         if (Physics.Raycast(ray, out hit, hitDistance, layerMask))
         {
             //Réanimer
@@ -119,25 +126,60 @@ public class PlayerRayCast : NetworkBehaviour
                     if(hit.collider.CompareTag("Sangles"))
                     {
                         if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
+                        {
+                            DisableLastOutline(); // Désactive l'outline avant de return
                             return;
+                        }
                     }
                         
                     if (hit.collider.TryGetComponent<IInteractible>(out var interactible))
                     {
+                        hitInteractible = true;
+                        
+                        // Si c'est un nouvel objet, désactive l'ancien outline
+                        if (lastInteractible != null && lastInteractible != interactible)
+                        {
+                            DisableLastOutline();
+                        }
+                        
+                        // Active le nouvel outline
+                        lastInteractible = interactible;
                         uiController?.OnInteract();
                         uiController?.SetText(interactible.InteractionName);
+
+                        foreach (Outline o in interactible.Outline)
+                        {
+                            o.enabled = true;
+                        }
                     }
                 }
             }
         }
-        else
+        
+        // Si on ne regarde plus un interactible, désactive l'outline
+        if (!hitInteractible)
         {
+            DisableLastOutline();
             uiController?.OnStopInteract();
         }
 
         if (Input.GetButtonDown("Fire2") && hasMaterial && !GetComponent<FPSControllerMulti>().IsFreeze)
         {
             TakeMaterial();
+        }
+    }
+    
+    // Nouvelle méthode pour désactiver l'outline du dernier objet
+    private void DisableLastOutline()
+    {
+        if (lastInteractible != null)
+        {
+            foreach (Outline o in lastInteractible.Outline)
+            {
+                if (o != null)
+                    o.enabled = false;
+            }
+            lastInteractible = null;
         }
     }
 

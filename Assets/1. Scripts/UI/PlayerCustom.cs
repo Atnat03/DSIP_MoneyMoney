@@ -11,7 +11,7 @@ public class PlayerCustom : NetworkBehaviour
 
     [Header("UI")]
     public TextMeshProUGUI nameText;
-    public MeshRenderer playerRenderer;
+    public SkinnedMeshRenderer playerRenderer;
 
     [Header("EMOTES")]
     public KeyCode emoteKey = KeyCode.Tab;

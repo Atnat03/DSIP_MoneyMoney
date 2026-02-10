@@ -44,4 +44,11 @@ public class Chair : MonoBehaviour, IInteractible
     public string interactionAssoirName;
     public string interactionDeboutName;
     
+    public Outline[] Outline     
+    {
+        get { return outline; ; }
+        set { }
+    }
+
+    public Outline[] outline;
 }
