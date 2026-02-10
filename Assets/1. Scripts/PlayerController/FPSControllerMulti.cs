@@ -154,7 +154,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
+        
         nearbyTruck = TruckController.instance.GetComponent<TruckInteraction>();
 
         yaw = transform.eulerAngles.y;
@@ -613,7 +613,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         SetPassengerModeServerRpc(false, Vector3.zero);
     }
 
-    public void OnCollisionEnter(Collision other)
+    /*public void OnCollisionEnter(Collision other)
     {
         if (other.collider.CompareTag("Treasure"))
         {
@@ -624,7 +624,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                 GetComponent<HealthComponent>().TryTakeDamage(1000);
             }
         }
-    }
+    }*/
 }
 
 public interface IParentable
