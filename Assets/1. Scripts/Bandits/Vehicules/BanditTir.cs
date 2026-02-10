@@ -33,10 +33,19 @@ public class BanditTir : MonoBehaviour
 
     private float nextFireTime;
     public BanditVehicleAI banditAI;
+    public HelicopterVehicleAI helicoAI;
     
     private void Start()
     {
-        isRight = banditAI.goRight;
+        if (banditAI != null)
+        {
+            isRight = banditAI.goRight;
+        }
+        else
+        {
+            isRight = helicoAI.sideOffset >= 0;
+        }
+       
     }
 
     private void Update()
