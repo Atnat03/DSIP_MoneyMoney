@@ -9,17 +9,12 @@ public class PlayerSpawner : NetworkBehaviour
     
     public Transform defaultSpawnPoint;
 
-    private void Start()
-    {
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
 
-        if (IsServer)
-        {
-            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-            {
-                OnClientConnected(client.ClientId);
-            }
-        }
+    public override void OnNetworkSpawn()
+    {
+        if (!IsServer) return;
+
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
 
     private void OnDisable()

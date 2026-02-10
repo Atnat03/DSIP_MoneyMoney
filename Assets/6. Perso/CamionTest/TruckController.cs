@@ -157,7 +157,6 @@ public class TruckController : NetworkBehaviour
     {
         if (rb.linearVelocity.magnitude > velocityToTriggerShake)
         {
-            print("ca shake");
             TriggerCameraShakeClientRpc();
         }
     }

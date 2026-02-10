@@ -21,13 +21,16 @@ public class KnockOut : NetworkBehaviour, IInteractible
     private float mateElapsed = 0;
 
     [SerializeField] private Image reviveImage;
-    
+
+    private ulong local_clientId;
     
     public override void OnNetworkSpawn()
     {
         isKnockedOut.OnValueChanged += OnKOStateChange;
         
         reviveImage.transform.parent.gameObject.SetActive(false);
+
+        local_clientId = NetworkManager.Singleton.LocalClientId;
     }
 
     private void Update()
@@ -57,6 +60,7 @@ public class KnockOut : NetworkBehaviour, IInteractible
     public void KOServerRpc()
     {
         isKnockedOut.Value = true;
+        AutoJoinedLobby.Instance.GetComponent<ServerMessaging>().PrintMessageOnKOPlayer(local_clientId);
     }
 
     [ServerRpc(RequireOwnership = false)]

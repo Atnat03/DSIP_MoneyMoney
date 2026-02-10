@@ -1780,7 +1780,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &3587691986678185446
 MonoBehaviour:
@@ -3054,6 +3054,7 @@ GameObject:
   - component: {fileID: 5225601816550349719}
   - component: {fileID: 8017075535117252575}
   - component: {fileID: 7029264905206466626}
+  - component: {fileID: 407337842058240766}
   m_Layer: 7
   m_Name: P_Player_Network
   m_TagString: Player
@@ -3277,6 +3278,7 @@ MonoBehaviour:
   cameraTarget: {fileID: 7770147990601004}
   cameraTransform: {fileID: 5475596234079531840}
   myCamera: {fileID: 4915749887442312037}
+  capsuleCollider: {fileID: 0}
   moveSpeed: 5
   sprintSpeed: 12
   mouseSensibility: 5
@@ -3537,6 +3539,29 @@ MonoBehaviour:
   pauseText:
   - Mettre en pause la partie
   - Continuer la partie
+--- !u!136 &407337842058240766
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200783157656878878}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7267270393736431613
 GameObject:
   m_ObjectHideFlags: 0
@@ -5401,7 +5426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2040401633155409787, guid: 857fd85c326b3854e868e1ff76eedcee, type: 3}
       propertyPath: m_Layer
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
