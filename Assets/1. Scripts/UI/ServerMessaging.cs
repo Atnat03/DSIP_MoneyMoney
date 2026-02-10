@@ -31,7 +31,7 @@ public class ServerMessaging : NetworkBehaviour
         
         TextMeshProUGUI message = Instantiate(prefabMessage, parentUI);
         message.SetText(GetPlayerFromId(clientId).GetComponent<PlayerCustom>().PlayerName.Value + " a rejoint la partie");
-        Destroy(message.gameObject, 5f);
+        message.GetComponent<NetworkObject>().Spawn();
     }
 
     [ClientRpc]
@@ -41,7 +41,7 @@ public class ServerMessaging : NetworkBehaviour
         
         TextMeshProUGUI message = Instantiate(prefabMessage, parentUI);
         message.SetText(GetPlayerFromId(clientId).GetComponent<PlayerCustom>().PlayerName.Value + " a quitter la partie");
-        Destroy(message.gameObject, 5f);
+        message.GetComponent<NetworkObject>().Spawn();
     }
 
     public GameObject GetPlayerFromId(ulong clientId)
