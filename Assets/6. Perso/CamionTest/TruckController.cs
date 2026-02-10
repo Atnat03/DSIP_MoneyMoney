@@ -419,6 +419,14 @@ public class TruckController : NetworkBehaviour
         BackLightOn.Value = false;
     }
     
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        {
+            CheckVelecityToApplyShake();
+        }
+    }
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
