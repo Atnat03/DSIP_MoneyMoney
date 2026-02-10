@@ -56,14 +56,17 @@ public class PlayerRayCast : NetworkBehaviour
         Ray ray = new Ray(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward);
         Debug.DrawRay(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward, Color.green, hitDistance);
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
-        if (Physics.Raycast(ray, out hit, hitDistance,layerMask))
+        if (Physics.Raycast(ray, out hit, hitDistance, layerMask))
         {
             //Réanimer
-            if (hit.collider.TryGetComponent<KnockOut>(out KnockOut ko))
+            if (hit.collider.TryGetComponent<KnockOut>(out KnockOut ko) || hit.collider.gameObject.layer == LayerMask.NameToLayer("PlayerRagdoll"))
             {
                 targetKO = ko;
 
-                if (ko.isKnockedOut.Value)
+                if (targetKO == null)
+                    targetKO = hit.transform.GetComponentInParent<KnockOut>();
+                    
+                if (targetKO.isKnockedOut.Value)
                 {
                     uiController?.OnInteract();
                     uiController?.SetText("Réanimer");
