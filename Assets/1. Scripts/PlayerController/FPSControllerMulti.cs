@@ -184,8 +184,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         SetVisibleGun();
         
-        capsule.enabled = !isDriver;
-        
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed = sprintSpeed;
@@ -451,6 +449,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (netTransform != null) {
             netTransform.InLocalSpace = true;
         }
+        
+        capsule.enabled = false;
 
         if (IsOwner) {
             Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
@@ -466,6 +466,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         transform.position = exitPosition;
         
         truckRb = null;
+
+        capsule.enabled = true;
         
         if (controller != null)
             controller.enabled = true;

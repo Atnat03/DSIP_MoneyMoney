@@ -10,8 +10,8 @@ using Random = UnityEngine.Random;
 public class KnockOut : NetworkBehaviour, IInteractible
 {
     public NetworkVariable<bool> isKnockedOut = new NetworkVariable<bool>(false);
-    public NetworkVariable<bool> isMateRevive = new NetworkVariable<bool>(false);
-    public NetworkVariable<float> currentValueToRevive = new NetworkVariable<float>();
+    public NetworkVariable<bool> isMateRevive = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<float> currentValueToRevive = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     
     [SerializeField] private MonoBehaviour[] componentsToDisables;
     [SerializeField] private float koForce = 1f;
@@ -22,10 +22,10 @@ public class KnockOut : NetworkBehaviour, IInteractible
 
     [SerializeField] private Image reviveImage;
     
+    
     public override void OnNetworkSpawn()
     {
         isKnockedOut.OnValueChanged += OnKOStateChange;
-        currentValueToRevive.OnValueChanged += OnCurrentValueChange;
         
         reviveImage.transform.parent.gameObject.SetActive(false);
     }
@@ -59,7 +59,7 @@ public class KnockOut : NetworkBehaviour, IInteractible
         isKnockedOut.Value = true;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void ReviveServerRpc()
     {
         isKnockedOut.Value = false;
@@ -90,8 +90,12 @@ public class KnockOut : NetworkBehaviour, IInteractible
             rb.angularVelocity = Vector3.zero;
 
             soloElapsed = 0;
-            isMateRevive.Value = false;
-            currentValueToRevive.Value = 0f;
+
+            if (IsServer)
+            {
+                isMateRevive.Value = false;
+                currentValueToRevive.Value = 0f;
+            }
 
 
             rb.isKinematic = true;
@@ -102,40 +106,12 @@ public class KnockOut : NetworkBehaviour, IInteractible
         }
     }
 
-
-    IEnumerator StandUp(Rigidbody rb)
-    {
-        NetworkTransform transformN = GetComponent<NetworkTransform>();
-        transformN.enabled = false;
-        
-        rb.isKinematic = true;
-        rb.useGravity = false;
-
-        Quaternion start = transform.rotation;
-        Quaternion target = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
-
-        float t = 0f;
-        while (t < 1f)
-        {
-            transform.rotation = Quaternion.Slerp(start, target, t);
-            t += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = target;
-        transformN.enabled = true;
-    }
-    
-    
-    private void OnCurrentValueChange(float previous, float current)
-    {
-        if (reviveImage != null)
-            reviveImage.fillAmount = current;
-    }
-
     [ServerRpc(RequireOwnership = false)]
     public void StartMateReviveServerRpc(ulong reviverClientId)
     {
+        if (isMateRevive.Value)
+            return;
+        
         isMateRevive.Value = true;
         currentValueToRevive.Value = 0f;
 
@@ -145,49 +121,85 @@ public class KnockOut : NetworkBehaviour, IInteractible
     [ServerRpc(RequireOwnership = false)]
     public void StopMateReviveServerRpc()
     {
+        if (!isMateRevive.Value)
+            return;
+        
         isMateRevive.Value = false;
         currentValueToRevive.Value = 0f;
     }
 
     private IEnumerator MateReviveCoroutine(ulong reviverClientId)
     {
-        ulong[] targets = new ulong[] { reviverClientId, OwnerClientId };
+        ClientRpcParams koParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { OwnerClientId }
+            }
+        };
+
+        ClientRpcParams reviverParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { reviverClientId }
+            }
+        };
+
+        UpdateReviveUIClientRpc(0f, true, koParams);
+        NotifyReviverUIClientRpc(0f, true, reviverParams);
 
         while (isMateRevive.Value)
         {
             currentValueToRevive.Value += Time.deltaTime / mateReviveTime;
+            float value = Mathf.Clamp01(currentValueToRevive.Value);
 
-            UpdateReviveUIClientRpc(targets, currentValueToRevive.Value, true);
+            UpdateReviveUIClientRpc(value, true, koParams);
+            NotifyReviverUIClientRpc(value, true, reviverParams);
 
-            if (currentValueToRevive.Value >= 1f)
+            if (value >= 1f)
             {
                 ReviveServerRpc();
+
                 isMateRevive.Value = false;
                 currentValueToRevive.Value = 0f;
-                UpdateReviveUIClientRpc(targets, 0f, false);
+
+                UpdateReviveUIClientRpc(0f, false, koParams);
+                NotifyReviverUIClientRpc(0f, false, reviverParams);
                 yield break;
             }
 
             yield return null;
         }
 
-        UpdateReviveUIClientRpc(targets, 0f, false);
+        UpdateReviveUIClientRpc(0f, false, koParams);
+        NotifyReviverUIClientRpc(0f, false, reviverParams);
     }
 
+
+    [ClientRpc]
+    private void NotifyReviverUIClientRpc(
+        float value,
+        bool isActive,
+        ClientRpcParams rpcParams = default)
+    {
+        if (PlayerRayCast.LocalInstance == null)
+            return;
+
+        PlayerRayCast.LocalInstance.UpdateReviveUI(value, isActive);
+    }
 
     
     [ClientRpc]
-    private void UpdateReviveUIClientRpc(ulong[] targetClientIds, float value, bool isEnding)
+    private void UpdateReviveUIClientRpc(float value, bool isActive, ClientRpcParams rpcParams = default)
     {
-        if (!targetClientIds.Contains(NetworkManager.Singleton.LocalClientId))
+        if (reviveImage == null)
             return;
 
-        if (reviveImage != null)
-        {
-            reviveImage.transform.parent.gameObject.SetActive(isEnding);
-            reviveImage.fillAmount = value;
-        }
+        reviveImage.transform.parent.gameObject.SetActive(isActive);
+        reviveImage.fillAmount = value;
     }
+
 
     public string InteractionName
     {
