@@ -7361,6 +7361,68 @@ Transform:
   - {fileID: 1931177249}
   m_Father: {fileID: 1315017746}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &308214154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 308214155}
+  - component: {fileID: 308214156}
+  m_Layer: 5
+  m_Name: Messaging
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &308214155
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308214154}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 391491725}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -676.6643, y: 396.06116}
+  m_SizeDelta: {x: 464.5522, y: 214.879}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &308214156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308214154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 1
 --- !u!43 &310140506
 Mesh:
   m_ObjectHideFlags: 0
@@ -9585,6 +9647,7 @@ RectTransform:
   - {fileID: 731281}
   - {fileID: 882603245}
   - {fileID: 501029907}
+  - {fileID: 308214155}
   m_Father: {fileID: 1113743000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -17664,8 +17727,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 521b1ac4deecd7c45bf7dfacc342e343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
+  ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 1667550981}
-  interactionObject: {fileID: 0}
   max_TimeBeforeDrop: 10
   mini_TimeBeforeDrop: 5
   interactionName: Accrocher le sac
@@ -31004,10 +31067,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6485c059e2648c40a9c3da3943511f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BanditSpawnManager
+  _timeUntilBanditFollow:
+    m_InternalValue: 0
+  _timeUntilBanditBarrage:
+    m_InternalValue: 0
   timeUntilBanditFollow: 50
   timeUntilBanditBarrage: 10
-  _timeUntilBanditFollow: 0
-  _timeUntilBanditBarrage: 0
   detectionRadius: {x: 350, y: 20, z: 650}
   spawnPointLayer:
     serializedVersion: 2
@@ -40409,6 +40474,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1769357924}
   - component: {fileID: 1769357925}
+  - component: {fileID: 1769357926}
+  - component: {fileID: 1769357927}
   m_Layer: 0
   m_Name: "\U0001F6D6AutoJoin"
   m_TagString: Untagged
@@ -40457,6 +40524,46 @@ MonoBehaviour:
   StartCanva: {fileID: 1622764390}
   ConnectingTXT: {fileID: 1823253774}
   ElementsToConnect: {fileID: 1814679878}
+--- !u!114 &1769357926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769357923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3980583774
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &1769357927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769357923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd1af0eb53718e4198dccc6bffeac8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServerMessaging
+  ShowTopMostFoldoutHeaderGroup: 1
+  parentUI: {fileID: 308214155}
+  prefabMessage: {fileID: 8303288286283500786, guid: 00c84936223e90c4cb4b066a053eedb2, type: 3}
 --- !u!1001 &1775269968
 PrefabInstance:
   m_ObjectHideFlags: 0
