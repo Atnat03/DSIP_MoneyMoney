@@ -26,6 +26,7 @@ public class BanditSpawnManager : MonoBehaviour
     public GameObject truck;
 
     public int bankVisited;
+    public bool canSpawnHelico = true;
     
 
 
@@ -48,7 +49,7 @@ public class BanditSpawnManager : MonoBehaviour
     
     private void OnTimeUntilBHChaned(float previousValue, float newValue)
     {
-        if (_timeUntilHelicopter.Value <= 0) { _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1]; SpawnBanditHelicoServerRpc(); }
+        if (_timeUntilHelicopter.Value <= 0 && canSpawnHelico) { _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1]; SpawnBanditHelicoServerRpc(); }
     }
     private void OnTimeUntilBBChaned(float previousValue, float newValue)
     {
@@ -139,6 +140,7 @@ public class BanditSpawnManager : MonoBehaviour
                 bandit.GetComponent<HelicopterVehicleAI>().sideOffset *= -1;
             }
             bandit.GetComponent<NetworkObject>().Spawn();
+            canSpawnHelico = false;
         }
     }
 
