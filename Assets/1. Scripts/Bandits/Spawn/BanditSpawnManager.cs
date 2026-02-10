@@ -1,15 +1,18 @@
 using UnityEngine;
+using Unity.Netcode;
+using UnityEngine;
 
 public class BanditSpawnManager : MonoBehaviour
 {
     public static BanditSpawnManager instance;
     
+    
+    public NetworkVariable<float> _timeUntilBanditFollow = new(0);
+    public NetworkVariable<float> _timeUntilBanditBarrage = new(0);
+    
+    
     public float timeUntilBanditFollow;
     public float timeUntilBanditBarrage;
-    
-    
-    public float _timeUntilBanditFollow;
-    public float _timeUntilBanditBarrage;
 
     public Vector3 detectionRadius;
     public LayerMask spawnPointLayer;
@@ -25,39 +28,53 @@ public class BanditSpawnManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        _timeUntilBanditFollow = timeUntilBanditFollow;
-        _timeUntilBanditBarrage = timeUntilBanditBarrage;
+        _timeUntilBanditFollow.Value = timeUntilBanditFollow;
+        _timeUntilBanditBarrage.Value = timeUntilBanditBarrage;
+        
+        _timeUntilBanditFollow.OnValueChanged += OnTimeUntilBFChaned;
+        _timeUntilBanditBarrage.OnValueChanged += OnTimeUntilBBChaned;
+    }
+
+    private void OnTimeUntilBFChaned(float previousValue, float newValue)
+    {
+        if (_timeUntilBanditFollow.Value <= 0) { _timeUntilBanditFollow.Value = timeUntilBanditFollow; SpawnBanditFollowServerRpc(); }
+    }
+    private void OnTimeUntilBBChaned(float previousValue, float newValue)
+    {
+        if (_timeUntilBanditBarrage.Value <= 0) { SpawnBanditBarrageServerRpc(); }
     }
 
     public void Update()
     {
-        if (_timeUntilBanditBarrage > 0)
+        if (!NetworkManager.Singleton.IsServer)
+            return;
+        
+        if (_timeUntilBanditBarrage.Value > 0)
         {
-            _timeUntilBanditBarrage -= Time.deltaTime;
-            if (_timeUntilBanditFollow <= 0) { _timeUntilBanditFollow = timeUntilBanditFollow; SpawnBanditFollow(); }
+            _timeUntilBanditBarrage.Value-= Time.deltaTime;
+            
         }
 
-        if (_timeUntilBanditFollow > 0)
+        if (_timeUntilBanditFollow.Value > 0)
         {
-            _timeUntilBanditFollow -= Time.deltaTime;
-            if (_timeUntilBanditBarrage <= 0) { SpawnBanditBarrage(); }
+            _timeUntilBanditFollow.Value -= Time.deltaTime;
+            
         }
-        
-        
     }
 
 
-    public void SpawnBanditFollow()
+    [ServerRpc]
+    public void SpawnBanditFollowServerRpc()
     {
         Collider[] hits = Physics.OverlapBox(boxCenter.position, detectionRadius,  Quaternion.identity, spawnPointLayer);
         
         Transform closest = null;
-        float minDist = Mathf.Infinity;
+        float minDist = 0;
         
         foreach (var hit in hits)
         {
             float dist = (hit.transform.position - transform.position).sqrMagnitude;
-            if (dist < minDist)
+            if (dist > minDist)
             {
                 minDist = dist;
                 closest = hit.transform;
@@ -74,12 +91,15 @@ public class BanditSpawnManager : MonoBehaviour
             int rdm = Random.Range(0, 2);
             bool goRight = (rdm == 0);      
             bandit.GetComponent<BanditVehicleAI>().goRight = goRight;
+            
+            bandit.GetComponent<NetworkObject>().Spawn();
         }
     }
 
     public bool hasToSpawnBarrage;
 
-    public void SpawnBanditBarrage()
+    [ServerRpc]
+    public void SpawnBanditBarrageServerRpc()
     {
         hasToSpawnBarrage = true;
     }
