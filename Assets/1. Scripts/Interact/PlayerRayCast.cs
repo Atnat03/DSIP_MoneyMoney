@@ -54,7 +54,7 @@ public class PlayerRayCast : NetworkBehaviour
         
         RaycastHit hit;
         Ray ray = new Ray(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward);
-        Debug.DrawRay(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward, Color.green);
+        Debug.DrawRay(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward, Color.green, hitDistance);
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
         if (Physics.Raycast(ray, out hit, hitDistance,layerMask))
         {
