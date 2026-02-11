@@ -109,7 +109,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     [Header("Ladder Settings")]
     [SerializeField] private float ladderClimbSpeed = 3f;
-    private bool isOnLadder = false;
+    [SerializeField] private bool isOnLadder = false;
     
     [Header("Map")]
     [SerializeField] private GameObject map;
@@ -316,7 +316,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
     }
 
-
     public void Sit(Transform sitPos)
     {
         isSitting = true;
@@ -362,24 +361,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         isFreeze = false;
     }
     
-    
-    
     void HandleCameraInput()
     {
-        if (!isFreeze)
-        {
-            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
-            float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
 
-            yaw += mouseX;
-            pitch -= mouseY;
-            pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
-        }
+        yaw += mouseX;
+        pitch -= mouseY;
+        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
     }
 
     private void HandleHeadbob()
     {
-        if (isOnLadder) return;
+        if (isOnLadder || isDriver) return;
         
         if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
         {
@@ -421,7 +415,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
             Vector3 move = Vector3.zero;
             
-            if (isOnLadder)
+            if (isOnLadder && !controller.isGrounded)
             {
                 Vector3 climb = new Vector3(horizontalInput, verticalInput, 0f);
                 move = transform.TransformDirection(climb) * ladderClimbSpeed;
@@ -615,7 +609,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         if (other.CompareTag("Echelle"))
         {
+            print("plus dans echelle");
             isOnLadder = false;
+            verticalVelocity = 0f;
         }
     }
 
