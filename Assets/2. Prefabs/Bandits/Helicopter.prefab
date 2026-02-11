@@ -827,10 +827,10 @@ MonoBehaviour:
   flightHeight: 14.3
   backOffset: 10
   sideOffset: 10
-  arrivalThreshold: 1
   maxSpeed: 60
   acceleration: 20
-  deceleration: 10
+  followRadius: 6
+  predictionTime: 0.6
   hoverDamping: 20
   tir: {fileID: 7082859207399937899}
 --- !u!65 &3809262632910638000
@@ -883,7 +883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2061302133
+  GlobalObjectIdHash: 2582449628
   InScenePlacedSourceGlobalObjectIdHash: 2061302133
   DeferredDespawnTick: 0
   Ownership: 1

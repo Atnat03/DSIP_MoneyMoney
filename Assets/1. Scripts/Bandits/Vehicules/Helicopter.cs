@@ -36,7 +36,7 @@ public class Helicopter : MonoBehaviour, IVehicule
     IEnumerator DestroyAfter()
     {
         print(helicopter.transform.position.y);
-        yield return new WaitUntil(() => helicopter.transform.position.y < 4f);
+        yield return new WaitUntil(() => helicopter.transform.position.y < 10f);
         
         if (TryGetComponent(out HelicopterVehicleAI ai))
         {
