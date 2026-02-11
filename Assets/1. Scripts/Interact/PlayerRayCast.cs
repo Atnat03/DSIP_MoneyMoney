@@ -33,14 +33,18 @@ public class PlayerRayCast : NetworkBehaviour
     
     private IInteractible lastInteractible;
 
-    private Camera mycam;
+    private Camera mycam; 
+    private FPSControllerMulti playerFPS;
+    private GrabPoint playerGrab;
     
     private void Start()
     {
         uiController = VariableManager.instance.uiController;
         circleCD = VariableManager.instance.circleCD;
-        materialVisual.transform.parent = GetComponent<FPSControllerMulti>().MyCamera().transform;
-        mycam = GetComponent<FPSControllerMulti>().MyCamera();
+        playerFPS = GetComponent<FPSControllerMulti>();
+        materialVisual.transform.parent = playerFPS.MyCamera().transform;
+        mycam = playerFPS.MyCamera();
+        playerGrab = playerFPS.GetComponent<GrabPoint>();
     }
 
     public override void OnNetworkSpawn()
@@ -82,13 +86,13 @@ public class PlayerRayCast : NetworkBehaviour
                     if (Input.GetKeyDown(KeyCode.E) && !isReviving)
                     {
                         isReviving = true;
-                        GetComponent<FPSControllerMulti>().StartFreeze();
+                        playerFPS.StartFreeze();
                         targetKO.StartMateReviveServerRpc(NetworkManager.Singleton.LocalClientId);
                     }
 
                     if (Input.GetKeyUp(KeyCode.E) && isReviving)
                     {
-                        GetComponent<FPSControllerMulti>().StopFreeze();
+                        playerFPS.StopFreeze();
                         isReviving = false;
                         targetKO.StopMateReviveServerRpc();
                     }
@@ -126,9 +130,9 @@ public class PlayerRayCast : NetworkBehaviour
                 {
                     if(hit.collider.CompareTag("Sangles"))
                     {
-                        if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
+                        if (!playerGrab.IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
                         {
-                            DisableLastOutline(); // Désactive l'outline avant de return
+                            DisableLastOutline();
                             return;
                         }
                     }
@@ -137,13 +141,11 @@ public class PlayerRayCast : NetworkBehaviour
                     {
                         hitInteractible = true;
                         
-                        // Si c'est un nouvel objet, désactive l'ancien outline
                         if (lastInteractible != null && lastInteractible != interactible)
                         {
                             DisableLastOutline();
                         }
                         
-                        // Active le nouvel outline
                         lastInteractible = interactible;
                         uiController?.OnInteract();
                         uiController?.SetText(interactible.InteractionName);
@@ -157,20 +159,18 @@ public class PlayerRayCast : NetworkBehaviour
             }
         }
         
-        // Si on ne regarde plus un interactible, désactive l'outline
         if (!hitInteractible)
         {
             DisableLastOutline();
             uiController?.OnStopInteract();
         }
 
-        if (Input.GetButtonDown("Fire2") && hasMaterial && !GetComponent<FPSControllerMulti>().IsFreeze)
+        if (Input.GetButtonDown("Fire2") && hasMaterial && !playerFPS.IsFreeze)
         {
             TakeMaterial();
         }
     }
     
-    // Nouvelle méthode pour désactiver l'outline du dernier objet
     private void DisableLastOutline()
     {
         if (lastInteractible != null)
@@ -187,13 +187,13 @@ public class PlayerRayCast : NetworkBehaviour
     public void TakeMaterial()
     {
         hasMaterial = !hasMaterial;
-        GetComponent<FPSControllerMulti>().hasSomethingInHand = hasMaterial;
+        playerFPS.hasSomethingInHand = hasMaterial;
         materialVisual.SetActive(hasMaterial);
     }
 
     public IEnumerator RepairPart(GameObject truck)
     {
-        GetComponent<FPSControllerMulti>().StartFreeze();
+        playerFPS.StartFreeze();
         float count = durationRepair;
         while (count > 0)
         {
@@ -202,7 +202,7 @@ public class PlayerRayCast : NetworkBehaviour
             circleCD.fillAmount =  count / durationRepair;
         }
         Interact.RayInteract(truck, gameObject, RepearInteractionName);
-        GetComponent<FPSControllerMulti>().StopFreeze();
+        playerFPS.StopFreeze();
         TakeMaterial();
     }
     
@@ -211,7 +211,7 @@ public class PlayerRayCast : NetworkBehaviour
         if (isReviving && targetKO != null)
         {
             targetKO.StopMateReviveServerRpc();
-            GetComponent<FPSControllerMulti>().StopFreeze();
+            playerFPS.StopFreeze();
         }
 
         isReviving = false;

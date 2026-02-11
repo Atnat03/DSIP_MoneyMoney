@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : NetworkBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : NetworkBehaviour
     public TextMeshProUGUI textTimer;
     public bool isTimerPause = false;
 
+    public PiscineDeBillet scoreData;
+
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
@@ -21,6 +24,11 @@ public class GameManager : NetworkBehaviour
         currentTime.Value = MaxTimer;
         currentTime.OnValueChanged += OnTimerChanged;
         StopTimer();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        currentTime.OnValueChanged -= OnTimerChanged;
     }
 
     private void OnTimerChanged(float previousValue, float newValue)
@@ -54,6 +62,8 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     private void EndGameClientRpc()
     {
-        Debug.Log("END GAME");
+        EndGame player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.GetComponent<EndGame>();
+        player.SetScore(scoreData.numberOfSac.Value, scoreData.numberOfLingot.Value);
+        player.isEnd = true;
     }
 }

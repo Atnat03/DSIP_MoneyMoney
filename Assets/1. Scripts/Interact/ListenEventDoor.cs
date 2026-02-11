@@ -53,6 +53,7 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
     private void ToggleDoor()
     {
         isOpenDoor.Value = !isOpenDoor.Value;
+        print("DOOR : " + isOpenDoor.Value);
     }
 
     private void OnDoorStateChanged(bool previousValue, bool newValue)

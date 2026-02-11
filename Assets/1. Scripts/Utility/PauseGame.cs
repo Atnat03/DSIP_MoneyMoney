@@ -9,6 +9,7 @@ public class PauseGame : NetworkBehaviour
     [Header("References")]
     [SerializeField] private GameObject uiPause;
     [SerializeField] private Button pauseButton;
+    [SerializeField] private Button debugCamionButton;
     [SerializeField] private Button continueButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private TextMeshProUGUI buttonPauseText;
@@ -24,10 +25,12 @@ public class PauseGame : NetworkBehaviour
         if (!IsServer)
         {
             Destroy(pauseButton.gameObject);
+            Destroy(debugCamionButton.gameObject);
         }
         else
         {
             pauseButton.onClick.AddListener(PausingTheGame);
+            debugCamionButton.onClick.AddListener(ResetCametar);
         }
         
         continueButton.onClick.AddListener(ContinueTheGame);
@@ -36,6 +39,11 @@ public class PauseGame : NetworkBehaviour
         fpsController = GetComponent<FPSControllerMulti>();
         
         pausingInfo.SetActive(false);
+    }
+
+    private void ResetCametar()
+    {
+        TruckController.instance.ResetCamionToNearPoint();
     }
 
     private void Update()
