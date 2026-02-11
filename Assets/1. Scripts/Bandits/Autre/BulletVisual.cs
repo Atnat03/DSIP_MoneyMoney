@@ -20,10 +20,6 @@ public class BulletVisual : MonoBehaviour
 
         if (Vector3.Distance(transform.position, target) < 0.1f)
         {
-            if (TryGetComponent<NetworkObject>(out var netObj2))
-            {
-                netObj2.Despawn();
-            }
             Destroy(gameObject);
         }
     }

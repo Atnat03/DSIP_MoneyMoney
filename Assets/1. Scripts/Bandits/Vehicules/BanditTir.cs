@@ -196,7 +196,7 @@ public class BanditTir : MonoBehaviour
     private void SpawnVisualBullet(Vector3 start, Vector3 end)
     {
         GameObject bullet = Instantiate(bulletVisualPrefab, start, Quaternion.identity);
-        bullet.GetComponent<NetworkObject>().Spawn();
+        //bullet.GetComponent<NetworkObject>().Spawn();
         bullet.GetComponent<BulletVisual>().Init(end, bulletVisualSpeed);
     }
 
