@@ -2,33 +2,20 @@ using Shooting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ReloadStation : MonoBehaviour
+public class ReloadStation : MonoBehaviour, IInteractible
 {
-    [Header("Reload station")]
-    [SerializeField] private UnityEvent _onReload;
-
-    private void OnEnable()
+    public string InteractionName
     {
-        Interact.OnInteract += HitInteract;
-    }
-
-    private void OnDisable()
-    {
-        Interact.OnInteract -= HitInteract;
+        get { return interactionName ; }
+        set { }
     }
     
-    private void HitInteract(GameObject obj,  GameObject player)
+    public Outline[] Outline
     {
-        Debug.Log("Hit interact");
-        if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
-        {
-            Debug.Log("Reload station");
-
-            if (player.TryGetComponent(out ShooterComponent comp))
-            {
-                comp.Reload();
-                _onReload.Invoke();
-            }
-        }
+        get { return outline; ; }
+        set { }
     }
+
+    public Outline[] outline;
+    public string interactionName;
 }
