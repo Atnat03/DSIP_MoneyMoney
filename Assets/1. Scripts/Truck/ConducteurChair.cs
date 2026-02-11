@@ -21,7 +21,8 @@ public class ConducteurChair : NetworkBehaviour, IInteractible
 
     private void Update()
     {
-        col.enabled = !truckInteraction.hasDriver.Value;
+        if(truckInteraction != null)
+            col.enabled = !truckInteraction.hasDriver.Value;
     }
 
     private void HitInteract(GameObject obj, GameObject player)
