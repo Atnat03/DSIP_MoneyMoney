@@ -13,8 +13,10 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
     public Transform Transform => transform;
     public NetworkObject NetworkObject => GetComponent<NetworkObject>();
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
+        Reference.AddObject(this as IParentable);
+        
         Interact.OnInteract += HitInteract;
     }
 
