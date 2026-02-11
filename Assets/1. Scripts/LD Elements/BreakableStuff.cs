@@ -12,6 +12,7 @@ public class BreakableStuff : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Truck"))
         {
             if (isBandit) GetComponent<BanditBarrage>().enabled = false;
+            GetComponent<Rigidbody>().isKinematic = false;
             GetComponent<Rigidbody>().AddForce(ejectionForce * other.transform.forward + new Vector3(0,ejectionForce/3,0),  ForceMode.Impulse);
         }
     }
