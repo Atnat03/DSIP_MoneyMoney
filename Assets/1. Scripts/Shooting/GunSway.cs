@@ -59,11 +59,8 @@ public class GunSway : MonoBehaviour
         bobOffset.y = Mathf.Sin(Time.time * freq) * amp;
         bobOffset.x = Mathf.Cos(Time.time * freq * 0.5f) * amp * 2f;
         bobOffset.z = 0f;
-
-        Quaternion bobj;
-
+        
         transform.localPosition = startPos + bobOffset;
-        transform.localRotation = startRot;
     }
 
 }
