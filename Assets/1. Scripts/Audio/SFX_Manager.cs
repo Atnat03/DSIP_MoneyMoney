@@ -20,10 +20,10 @@ public class SFX_Manager : MonoBehaviour
         instance = this;
     }
 
-    public void PlaySFX(int clipID, float volume, float pitch)
+    public void PlaySFX(int clipID, float volume = 0.5f, float pitch = 1f)
     {
         audioSource = GetComponent<AudioSource>();
-        
+
         audioSource.pitch = pitch;
         audioSource.PlayOneShot(data.clips[clipID], volume);
     }
