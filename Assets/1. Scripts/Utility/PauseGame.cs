@@ -56,10 +56,10 @@ public class PauseGame : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && !isPause)
         {
             fpsController.StartFreeze();
-            isPause = true;
+            isPause = !isPause;
             
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            Cursor.lockState = isPause ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = isPause;
         }
     }
 
