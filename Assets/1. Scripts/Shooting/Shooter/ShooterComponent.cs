@@ -211,7 +211,6 @@ namespace Shooting
         {
             NetworkObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity).GetComponent<NetworkObject>();
             muzzleFlash.transform.SetParent(_instantPos);
-            muzzleFlash.Spawn();        
             GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
         }
 
