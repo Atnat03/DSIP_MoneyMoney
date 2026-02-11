@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3948170085943028274}
   - component: {fileID: -2621854378027236317}
   - component: {fileID: 858900252488722528}
+  - component: {fileID: -255615945738245449}
   m_Layer: 17
   m_Name: Debris (12)
   m_TagString: Untagged
@@ -132,10 +133,17 @@ MonoBehaviour:
   ejectForce: 5
   ejectUpwardForce: 2
   startDestroyed: 0
+  currentHealth:
+    m_InternalValue: 100
   mult: 1
   lifeMode: 0
   isBroke:
     m_InternalValue: 0
+  mesh: {fileID: 0}
+  baseMaterial: {fileID: 2100000, guid: 8a5858cba668a024ab1618c5ded6329d, type: 2}
+  interactionName: "R\xE9parer"
+  outline:
+  - {fileID: 0}
 --- !u!114 &858900252488722528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3631777030
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -161,3 +169,21 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &-255615945738245449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8673945755336185779}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
