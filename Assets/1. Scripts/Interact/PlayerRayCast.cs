@@ -26,6 +26,8 @@ public class PlayerRayCast : NetworkBehaviour
     public float hitDistance = 2f;
 
     public string RepearInteractionName = "Réparer";
+    public Material TransparentMaterial;
+    private MeshRenderer mesh;
     
     private KnockOut targetKO;
     
@@ -36,6 +38,7 @@ public class PlayerRayCast : NetworkBehaviour
     private Camera mycam; 
     private FPSControllerMulti playerFPS;
     private GrabPoint playerGrab;
+    private TruckPart truckPart;
     
     private void Start()
     {
@@ -110,7 +113,9 @@ public class PlayerRayCast : NetworkBehaviour
                 {
                     if (hit.collider.CompareTag("TruckPart") && hasMaterial)
                     {
-                        if (hit.collider.GetComponent<TruckPart>().isBroke.Value)
+                        TruckPart part = hit.collider.GetComponent<TruckPart>();
+                        
+                        if (part.isBroke.Value)
                         {
                             StartCoroutine(RepairPart(hit.collider.gameObject));
                         }
@@ -150,6 +155,14 @@ public class PlayerRayCast : NetworkBehaviour
                         uiController?.OnInteract();
                         uiController?.SetText(interactible.InteractionName);
 
+                        TruckPart part = hit.collider.GetComponent<TruckPart>();
+                        if (part)
+                        {
+                            part.mesh.enabled = true;
+                            part.mesh.material = TransparentMaterial;
+                            truckPart = part;
+                        }
+                        
                         foreach (Outline o in interactible.Outline)
                         {
                             o.enabled = true;
@@ -175,6 +188,12 @@ public class PlayerRayCast : NetworkBehaviour
     {
         if (lastInteractible != null)
         {
+            if (truckPart)
+            {
+                truckPart.mesh.enabled = false;
+                truckPart = null;
+            }
+            
             foreach (Outline o in lastInteractible.Outline)
             {
                 if (o != null)
@@ -191,7 +210,7 @@ public class PlayerRayCast : NetworkBehaviour
         materialVisual.SetActive(hasMaterial);
     }
 
-    public IEnumerator RepairPart(GameObject truck)
+    public IEnumerator RepairPart(GameObject part)
     {
         playerFPS.StartFreeze();
         float count = durationRepair;
@@ -201,7 +220,7 @@ public class PlayerRayCast : NetworkBehaviour
             yield return null;
             circleCD.fillAmount =  count / durationRepair;
         }
-        Interact.RayInteract(truck, gameObject, RepearInteractionName);
+        Interact.RayInteract(part, gameObject, RepearInteractionName);
         playerFPS.StopFreeze();
         TakeMaterial();
     }
