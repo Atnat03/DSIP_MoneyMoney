@@ -607,6 +607,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &468139187059129288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5579257819286247212}
+  m_Layer: 9
+  m_Name: Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5579257819286247212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468139187059129288}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.16, y: 0, z: 0.147}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6707460702643616838}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &504344639403639899
 GameObject:
   m_ObjectHideFlags: 0
@@ -1838,7 +1869,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4706
+  m_VersionIndex: 4712
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2497,7 +2528,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2618
+  m_VersionIndex: 2624
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4578,7 +4609,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3996
+  m_VersionIndex: 4002
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -5015,7 +5046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3506795122
+  GlobalObjectIdHash: 1542092363
   InScenePlacedSourceGlobalObjectIdHash: 4245292978
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6439,7 +6470,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3996
+  m_VersionIndex: 4002
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7535,7 +7566,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2618
+  m_VersionIndex: 2624
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -8043,7 +8074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2357725861
+  GlobalObjectIdHash: 3335125749
   InScenePlacedSourceGlobalObjectIdHash: 4245292978
   DeferredDespawnTick: 0
   Ownership: 1
@@ -8552,7 +8583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1824209096
+  GlobalObjectIdHash: 449743697
   InScenePlacedSourceGlobalObjectIdHash: 4245292978
   DeferredDespawnTick: 0
   Ownership: 1
@@ -10627,7 +10658,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3891
+  m_VersionIndex: 3897
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11063,9 +11094,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 26763853618172188}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &2410932539606952759
 GameObject:
@@ -11539,7 +11570,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4706
+  m_VersionIndex: 4712
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11999,9 +12030,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 1905928408722422282}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &2576513305556131234
 GameObject:
@@ -12131,9 +12162,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 8649906077136130500}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &2581860026275991997
 GameObject:
@@ -13049,7 +13080,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4644
+  m_VersionIndex: 4650
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13381,7 +13412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1649612194
+  GlobalObjectIdHash: 1158741285
   InScenePlacedSourceGlobalObjectIdHash: 4245292978
   DeferredDespawnTick: 0
   Ownership: 1
@@ -13775,7 +13806,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2574
+  m_VersionIndex: 2580
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15045,7 +15076,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3996
+  m_VersionIndex: 4002
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -17306,9 +17337,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 6895688377678388771}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &3999915605408601907
 GameObject:
@@ -17557,7 +17588,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3274
+  m_VersionIndex: 3280
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18275,7 +18306,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2618
+  m_VersionIndex: 2624
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -19787,7 +19818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1281658791
+  GlobalObjectIdHash: 1150001142
   InScenePlacedSourceGlobalObjectIdHash: 4245292978
   DeferredDespawnTick: 0
   Ownership: 1
@@ -22088,7 +22119,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3996
+  m_VersionIndex: 4002
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -22678,6 +22709,138 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5596449762266382153
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6707460702643616838}
+  - component: {fileID: 3778024507199210038}
+  - component: {fileID: 3516853547784241464}
+  - component: {fileID: 7998697709309964052}
+  - component: {fileID: 5717207698658827151}
+  m_Layer: 9
+  m_Name: Sangle (8)
+  m_TagString: Sangles
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6707460702643616838
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 2.381, y: 0.861, z: -3.218}
+  m_LocalScale: {x: 0.14487994, y: 0.9332364, z: 0.77676}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5579257819286247212}
+  m_Father: {fileID: 5729001311705654942}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!33 &3778024507199210038
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &3516853547784241464
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: af5d4ed78663fd1429bcd1ec7c9146e1, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7998697709309964052
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5717207698658827151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 521b1ac4deecd7c45bf7dfacc342e343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sangles
+  ShowTopMostFoldoutHeaderGroup: 1
+  stayPos: {fileID: 5579257819286247212}
+  interactionName: Accrocher le sac
+  max_TimeBeforeDrop: 250
+  mini_TimeBeforeDrop: 30
+  outline: []
 --- !u!1 &5771500549078586793
 GameObject:
   m_ObjectHideFlags: 0
@@ -23256,7 +23419,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2574
+  m_VersionIndex: 2580
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -23868,7 +24031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3294898031
+  GlobalObjectIdHash: 3452996480
   InScenePlacedSourceGlobalObjectIdHash: 4245292978
   DeferredDespawnTick: 0
   Ownership: 1
@@ -24378,9 +24541,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 5624855390146977435}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &5937974364036305129
 GameObject:
@@ -25433,9 +25596,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 5400104923930699094}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &6160043959960118693
 GameObject:
@@ -26072,9 +26235,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 442737586395789853}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &6560385871709170247
 GameObject:
@@ -26652,9 +26815,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 8312688197490957091}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &6829267402790344156
 GameObject:
@@ -27877,7 +28040,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3274
+  m_VersionIndex: 3280
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -31375,7 +31538,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3891
+  m_VersionIndex: 3897
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -31919,9 +32082,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 7024369268705168456}
+  interactionName: Accrocher le sac
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  interactionName: Accrocher le sac
   outline: []
 --- !u!1 &8769209891873612492
 GameObject:
@@ -32669,7 +32832,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4644
+  m_VersionIndex: 4650
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -33063,7 +33226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3246409255515682382, guid: 48da3299666c1e1498e92b4124a12e2a, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1241815328
+      value: 3308475403
       objectReference: {fileID: 0}
     - target: {fileID: 3246409255515682382, guid: 48da3299666c1e1498e92b4124a12e2a, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -33120,7 +33283,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4796823000065445607, guid: 715b7e843e9c4f7448786d2a221465e7, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3329005059
+      value: 1497887678
       objectReference: {fileID: 0}
     - target: {fileID: -4796823000065445607, guid: 715b7e843e9c4f7448786d2a221465e7, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -33229,7 +33392,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 8a5858cba668a024ab1618c5ded6329d, type: 2}
     - target: {fileID: 3456162418949086660, guid: 7c5624923bd82f64a8366e555fe0d5ae, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4131091051
+      value: 1685690582
       objectReference: {fileID: 0}
     - target: {fileID: 3456162418949086660, guid: 7c5624923bd82f64a8366e555fe0d5ae, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -33504,7 +33667,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5977575394467146618, guid: a783089d7467a6845836c53266940535, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 233432176
+      value: 1967096520
       objectReference: {fileID: 0}
     - target: {fileID: 5977575394467146618, guid: a783089d7467a6845836c53266940535, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -33545,7 +33708,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7645657248646454366, guid: 9bce45e3d0d71f74d89c9420629987b9, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2616000583
+      value: 4151176346
       objectReference: {fileID: 0}
     - target: {fileID: -7645657248646454366, guid: 9bce45e3d0d71f74d89c9420629987b9, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -33726,7 +33889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8971077316261705910, guid: cac5cc48fd3c9724cbcc03a8725a784e, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3535325356
+      value: 16071020
       objectReference: {fileID: 0}
     - target: {fileID: 8971077316261705910, guid: cac5cc48fd3c9724cbcc03a8725a784e, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -33815,7 +33978,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5225276263843788485, guid: 126b037dcff6733449175c51d52e934c, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3292169652
+      value: 2063163421
       objectReference: {fileID: 0}
     - target: {fileID: 5225276263843788485, guid: 126b037dcff6733449175c51d52e934c, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -33872,7 +34035,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7645657248646454366, guid: 9bce45e3d0d71f74d89c9420629987b9, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1126424567
+      value: 1714187386
       objectReference: {fileID: 0}
     - target: {fileID: -7645657248646454366, guid: 9bce45e3d0d71f74d89c9420629987b9, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -34001,7 +34164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 858900252488722528, guid: 4f162a75f2e0f0f43817baa6184407d9, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 783671997
+      value: 1696439154
       objectReference: {fileID: 0}
     - target: {fileID: 858900252488722528, guid: 4f162a75f2e0f0f43817baa6184407d9, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -34098,7 +34261,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8020025796941473058, guid: 0008d9d0933fce0448cdcd0e41c44b1e, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1141769270
+      value: 3267829588
       objectReference: {fileID: 0}
     - target: {fileID: -8020025796941473058, guid: 0008d9d0933fce0448cdcd0e41c44b1e, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -34251,7 +34414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4846463606563297603, guid: 0eeae91177bf4564190c4434b659f2b4, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4092552187
+      value: 3295048675
       objectReference: {fileID: 0}
     - target: {fileID: 4846463606563297603, guid: 0eeae91177bf4564190c4434b659f2b4, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -34308,7 +34471,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7057207311426488058, guid: ac6cdd841af2ee5469450385859d05bc, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2636649244
+      value: 2585889123
       objectReference: {fileID: 0}
     - target: {fileID: -7057207311426488058, guid: ac6cdd841af2ee5469450385859d05bc, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -34417,7 +34580,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1713757880596917200, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: m_VersionIndex
-      value: 2618
+      value: 2624
       objectReference: {fileID: 0}
     - target: {fileID: 2214941433687442627, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: m_Name
@@ -34425,7 +34588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5296546060280279569, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2298535822
+      value: 334860039
       objectReference: {fileID: 0}
     - target: {fileID: 5296546060280279569, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -34563,7 +34726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8093993234245829338, guid: 395eac506072d2a41ad045801023c9d1, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 804895213
+      value: 2892030019
       objectReference: {fileID: 0}
     - target: {fileID: 8093993234245829338, guid: 395eac506072d2a41ad045801023c9d1, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -34604,31 +34767,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 23.8
+      value: 14.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.16
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -141.4
+      value: -125.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.81506234
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.5793732
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -34636,7 +34799,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 70.813
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -34808,6 +34971,9 @@ PrefabInstance:
       addedObject: {fileID: 170994655251887907}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 6707460702643616838}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 7125243059408208359}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
@@ -34855,6 +35021,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2927816387896424514}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2090344926725927767}
   m_SourcePrefab: {fileID: 100100000, guid: ca2c647abcf38614497889c331112d59, type: 3}
 --- !u!1 &4956863376682007588 stripped
 GameObject:
@@ -34873,7 +35042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1078969261
+  GlobalObjectIdHash: 4245292978
   InScenePlacedSourceGlobalObjectIdHash: 4245292978
   DeferredDespawnTick: 0
   Ownership: 1
@@ -35214,6 +35383,22 @@ MonoBehaviour:
   canShootPlayerLeft: 0
   canShootPlayerRight: 0
   partToShootPlayer: 5
+--- !u!208 &2090344926725927767
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4956863376682007588}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 5, y: 5, z: 5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &5729001311705654942 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
@@ -35343,7 +35528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -177557146693375530, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3437352905
+      value: 1217864339
       objectReference: {fileID: 0}
     - target: {fileID: -177557146693375530, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -35520,7 +35705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8093993234245829338, guid: 395eac506072d2a41ad045801023c9d1, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 770355186
+      value: 3878777453
       objectReference: {fileID: 0}
     - target: {fileID: 8093993234245829338, guid: 395eac506072d2a41ad045801023c9d1, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -35613,7 +35798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6761401361311576534, guid: 8abea64961b102f49a77d80f1dd56db7, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2995263629
+      value: 3690349775
       objectReference: {fileID: 0}
     - target: {fileID: 6761401361311576534, guid: 8abea64961b102f49a77d80f1dd56db7, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -35911,7 +36096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1956166548516628036, guid: 01dbc92a7caeac54dae77fb82045125a, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 755134983
+      value: 2981964926
       objectReference: {fileID: 0}
     - target: {fileID: 1956166548516628036, guid: 01dbc92a7caeac54dae77fb82045125a, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -36008,7 +36193,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8417968484850247067, guid: c3827bde69b48b8498d74b8303f0401a, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 108390878
+      value: 547908129
       objectReference: {fileID: 0}
     - target: {fileID: -8417968484850247067, guid: c3827bde69b48b8498d74b8303f0401a, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -36121,7 +36306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4302468012501877949, guid: 9459203022a010a45890fc261b751c3e, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3979849733
+      value: 419596680
       objectReference: {fileID: 0}
     - target: {fileID: -4302468012501877949, guid: 9459203022a010a45890fc261b751c3e, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -36218,7 +36403,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4609661546843177716, guid: fe19d1a444c629c438265dd379b3ea2e, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1783983968
+      value: 1447671008
       objectReference: {fileID: 0}
     - target: {fileID: -4609661546843177716, guid: fe19d1a444c629c438265dd379b3ea2e, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -36327,7 +36512,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3433002813997271634, guid: 650ae464608f39e498d9116e1af7bbdd, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 872436168
+      value: 2643418606
       objectReference: {fileID: 0}
     - target: {fileID: -3433002813997271634, guid: 650ae464608f39e498d9116e1af7bbdd, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -36578,7 +36763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6761401361311576534, guid: 8abea64961b102f49a77d80f1dd56db7, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4004867473
+      value: 1041783955
       objectReference: {fileID: 0}
     - target: {fileID: 6761401361311576534, guid: 8abea64961b102f49a77d80f1dd56db7, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -36687,7 +36872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4377000154684117178, guid: ce05c18927fd5b9478678c32dd377d4b, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 789342549
+      value: 535302380
       objectReference: {fileID: 0}
     - target: {fileID: 4377000154684117178, guid: ce05c18927fd5b9478678c32dd377d4b, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -36948,7 +37133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8788724833339942017, guid: 56f76e339344c6f4cb3ce6e6da020cf8, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3082375177
+      value: 1478740011
       objectReference: {fileID: 0}
     - target: {fileID: 8788724833339942017, guid: 56f76e339344c6f4cb3ce6e6da020cf8, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -37053,7 +37238,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 8a5858cba668a024ab1618c5ded6329d, type: 2}
     - target: {fileID: 6614999049236334220, guid: d4e00977fd4bc1d409b3386d7ce0a6e0, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1179809981
+      value: 2975735506
       objectReference: {fileID: 0}
     - target: {fileID: 6614999049236334220, guid: d4e00977fd4bc1d409b3386d7ce0a6e0, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -37170,7 +37355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8788724833339942017, guid: 56f76e339344c6f4cb3ce6e6da020cf8, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2942881522
+      value: 405226423
       objectReference: {fileID: 0}
     - target: {fileID: 8788724833339942017, guid: 56f76e339344c6f4cb3ce6e6da020cf8, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -37231,7 +37416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 970085263421996232, guid: 02bd25d8c64620e45b4fff067ab89218, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4042910855
+      value: 1770152465
       objectReference: {fileID: 0}
     - target: {fileID: 970085263421996232, guid: 02bd25d8c64620e45b4fff067ab89218, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -37329,7 +37514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 970085263421996232, guid: 02bd25d8c64620e45b4fff067ab89218, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3312664124
+      value: 430556572
       objectReference: {fileID: 0}
     - target: {fileID: 970085263421996232, guid: 02bd25d8c64620e45b4fff067ab89218, type: 3}
       propertyPath: SceneMigrationSynchronization
