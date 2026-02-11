@@ -1022,7 +1022,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 500
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -3072,7 +3072,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: d0f89c00e8e6c8c46a40003b7c5005b5, type: 3}
+  m_Texture: {fileID: 2800000, guid: a39ae2621547a554ba4c36e2d365bb76, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -4710,7 +4710,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: d0f89c00e8e6c8c46a40003b7c5005b5, type: 3}
+  m_Texture: {fileID: 2800000, guid: a39ae2621547a554ba4c36e2d365bb76, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -5623,7 +5623,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -6213,7 +6213,7 @@ MonoBehaviour:
   gunAnimator: {fileID: 5385537408999844859}
   muzzleFlashEffect: {fileID: 7682931739056552084, guid: 40f5af29ce3e841419122482eac6fb74, type: 3}
   canShoot: 0
-  FireRate: 0.05
+  FireRate: 0.1
   shootClip: {fileID: 8300000, guid: a8eaebda7e1082d4ea22702ca302bb85, type: 3}
 --- !u!114 &6267907623663290062
 MonoBehaviour:

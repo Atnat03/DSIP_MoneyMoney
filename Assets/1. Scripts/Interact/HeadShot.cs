@@ -6,11 +6,11 @@ public class HeadShot : MonoBehaviour
     public GrabPoint grabPoint;
     public HealthComponent healthComponent;
     
-    public void OnTriggerEnter(Collider other)
+    public void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("Treasure") && (grabPoint.GetCurrentObjectInHand() == null && grabPoint.GetCurrentObjectInHand() != other.gameObject))
+        if (other.collider.CompareTag("Treasure") && (grabPoint.GetCurrentObjectInHand() == null && grabPoint.GetCurrentObjectInHand() != other.gameObject))
         {
-            Rigidbody rb = other.GetComponent<Rigidbody>();
+            Rigidbody rb = other.collider.GetComponent<Rigidbody>();
             print(rb.linearVelocity.magnitude);
             if (rb.linearVelocity.magnitude >= MiniVelocityToTakeDamageFromThune)
             {
