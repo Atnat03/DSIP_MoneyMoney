@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 56cbf5f9b6ed41e4cbb50eb2f6f1fd02, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f61ce9916fe199e49af6142bdbcba95e, type: 2}
     - target: {fileID: 919132149155446097, guid: 56cbf5f9b6ed41e4cbb50eb2f6f1fd02, type: 3}
       propertyPath: m_Name
       value: P_Trashbin_Closed
@@ -133,3 +137,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableStuff
   ejectionForce: 30
+  isBandit: 0
