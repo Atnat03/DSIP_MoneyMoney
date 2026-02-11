@@ -3120,7 +3120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3557140025
+  GlobalObjectIdHash: 4055741435
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3309,8 +3309,8 @@ MonoBehaviour:
   myCamera: {fileID: 4915749887442312037}
   capsuleCollider: {fileID: 0}
   moveSpeed: 5
-  sprintSpeed: 12
-  mouseSensibility: 5
+  sprintSpeed: 8
+  mouseSensibility: 3
   verticalLimit: {x: -80, y: 80}
   cameraSmoothFollow: 500
   gravity: -9.81
@@ -3324,8 +3324,8 @@ MonoBehaviour:
   _amplitude: 0.05
   frequency: 10
   startPos: {x: 0, y: 0, z: 0}
-  sprintAmplitudeMultiplier: 1.75
-  sprintFrequencyMultiplier: 1.75
+  sprintAmplitudeMultiplier: 1.25
+  sprintFrequencyMultiplier: 1.25
   truckDamping: 5
   horizontalInput: 0
   verticalInput: 0
@@ -5220,12 +5220,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9220349912804369470}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.099, z: 0.224}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.016, y: 0.31480005, z: 0.32}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 588090855661036517}
+  m_Father: {fileID: 6806981944565938904}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &592228632407759463
 PrefabInstance:
@@ -5364,9 +5364,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4878850369403266, guid: a78a725941312494b930d664f3b315d0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6806981944565938904}
-    - targetCorrespondingSourceObject: {fileID: 4878850369403266, guid: a78a725941312494b930d664f3b315d0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1959629027819541335}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1690370004738036, guid: a78a725941312494b930d664f3b315d0, type: 3}
       insertIndex: -1
@@ -7003,19 +7000,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9990483
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.000000021855694
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.043619405
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7023,7 +7020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -7039,7 +7036,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1959629027819541335}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5d81734fd8239645ad431e8cc7d7b01, type: 3}
       insertIndex: -1
@@ -7065,9 +7065,10 @@ MonoBehaviour:
   smooth: 8
   swayMultiplier: 2
   fps: {fileID: 5307100726240828314}
-  _amplitude: 0.01
-  frequency: 20
-  startPos: {x: 0.0028, y: -0.0584, z: 0.0809}
+  _amplitude: 0.004
+  frequency: 16
+  startPos: {x: 0.0028, y: -0.07, z: 0.0809}
+  startRot: {x: 0, y: -0.043619387, z: 0, w: 0.99904823}
   sprintAmplitudeMultiplier: 1.5
   sprintFrequencyMultiplier: 1.5
 --- !u!4 &6806981944565938904 stripped
