@@ -70,46 +70,70 @@ namespace Shooting
         private BulletInfo ShootBulletByRaycast(Vector3 Pos, Vector3 Dir, out bool hasHit)
         {
             hasHit = false;
-
-            RaycastHit[] hitInfos = Physics.RaycastAll(Pos, Dir, MaxDistance);
-
             BulletInfo result = new BulletInfo(true);
 
-            foreach (RaycastHit hitInfo in hitInfos)
+            if (EnablePenetration)
             {
-                bool hitObjectIsTarget = false;
-                ITarget target = null;
+                RaycastHit[] hitInfos = Physics.RaycastAll(Pos, Dir, MaxDistance);
+        
+                Array.Sort(hitInfos, (a, b) => a.distance.CompareTo(b.distance));
 
-                // Find a component that is a target on the collided gameobject
-                foreach (var comp in hitInfo.collider.gameObject.GetComponents<Behaviour>())
+                foreach (RaycastHit hitInfo in hitInfos)
                 {
-                    if (comp == null || !comp.isActiveAndEnabled) continue;
-                    if (comp is ITarget currTarget)
+                    if (hitInfo.collider.isTrigger) continue;
+            
+                    ITarget target = GetTargetFromHit(hitInfo);
+            
+                    if (target != null)
                     {
-                        hitObjectIsTarget = true;
-                        target = currTarget;
-                        break;
-                    }
-                }
-
-                // If it is a non-null target, add it to the result list
-                if (hitObjectIsTarget && target != null)
-                {
-                    result.Shooter = this;
-                    result.HasHit = true;
-                    hasHit = true;
-                    if (EnablePenetration || (result.HitTargets.Count == 0 && result.Positions.Count == 0))
-                    {
+                        result.Shooter = this;
+                        result.HasHit = true;
+                        hasHit = true;
                         result.HitTargets.Add(target);
                         result.Positions.Add(hitInfo.point);
-                    }
-
                         OnTargetHit_Callback(target);
+                    }
                 }
             }
+            else
+            {
+                RaycastHit[] allHits = Physics.RaycastAll(Pos, Dir, MaxDistance);
+                Array.Sort(allHits, (a, b) => a.distance.CompareTo(b.distance));
+        
+                foreach (RaycastHit hitInfo in allHits)
+                {
+                    if (hitInfo.collider.isTrigger) continue;
+            
+                    ITarget target = GetTargetFromHit(hitInfo);
+            
+                    if (target != null)
+                    {
+                        result.Shooter = this;
+                        result.HasHit = true;
+                        hasHit = true;
+                        result.HitTargets.Add(target);
+                        result.Positions.Add(hitInfo.point);
+                        OnTargetHit_Callback(target);
+                    }
+            
+                    break;
+                }
+            }
+    
             return result;
         }
-
+        private ITarget GetTargetFromHit(RaycastHit hitInfo)
+        {
+            foreach (var comp in hitInfo.collider.gameObject.GetComponents<Behaviour>())
+            {
+                if (comp == null || !comp.isActiveAndEnabled) continue;
+                if (comp is ITarget target)
+                {
+                    return target;
+                }
+            }
+            return null;
+        }
         private void OnShoot_Callback()
         {
             if (EnableCallbacks)

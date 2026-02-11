@@ -108,8 +108,7 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.TryGetComponent<Collider>(out var col))
         {
-            if(IsSacInHand())
-                col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
+            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
             col.isTrigger = true;
         }
 
@@ -237,10 +236,13 @@ public class GrabPoint : NetworkBehaviour
         if (item.OwnerClientId != rpc.Receive.SenderClientId)
             return;
 
+        item.transform.position = pos;
+        item.transform.rotation = rot;
+
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
-            rb.position = pos;
-            rb.rotation = rot;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
     }
 

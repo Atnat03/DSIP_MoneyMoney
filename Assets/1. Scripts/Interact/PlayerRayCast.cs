@@ -31,14 +31,16 @@ public class PlayerRayCast : NetworkBehaviour
     
     private bool isReviving = false;
     
-    // Ajout : référence au dernier objet interactible
     private IInteractible lastInteractible;
+
+    private Camera mycam;
     
     private void Start()
     {
         uiController = VariableManager.instance.uiController;
         circleCD = VariableManager.instance.circleCD;
         materialVisual.transform.parent = GetComponent<FPSControllerMulti>().MyCamera().transform;
+        mycam = GetComponent<FPSControllerMulti>().MyCamera();
     }
 
     public override void OnNetworkSpawn()
@@ -53,15 +55,14 @@ public class PlayerRayCast : NetworkBehaviour
     {
         if (!IsOwner) return;
         
-        if(GetComponent<FPSControllerMulti>().MyCamera() == null)
+        if(mycam == null)
             return;
         
         RaycastHit hit;
-        Ray ray = new Ray(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward);
-        Debug.DrawRay(GetComponent<FPSControllerMulti>().MyCamera().transform.position, GetComponent<FPSControllerMulti>().MyCamera().transform.forward, Color.green, hitDistance);
+        Ray ray = new Ray(mycam.transform.position, mycam.transform.forward);
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
         
-        bool hitInteractible = false; // Flag pour savoir si on regarde un interactible
+        bool hitInteractible = false; 
         
         if (Physics.Raycast(ray, out hit, hitDistance, layerMask))
         {

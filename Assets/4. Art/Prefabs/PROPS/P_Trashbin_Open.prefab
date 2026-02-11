@@ -90,7 +90,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5760465168522449586, guid: a8e65d9275139f243a06ca286000cf52, type: 3}
 --- !u!114 &6188711262720853741
@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableStuff
   ejectionForce: 30
+  isBandit: 0
 --- !u!54 &701766987424970390
 Rigidbody:
   m_ObjectHideFlags: 0
