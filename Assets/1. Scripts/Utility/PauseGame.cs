@@ -55,7 +55,7 @@ public class PauseGame : NetworkBehaviour
         if(!IsServer)
             pausingInfo.SetActive(Time.timeScale == 0);
         
-        PartyCodeTxt.text = AutoJoinedLobby.Instance.CodeLobby;
+        PartyCodeTxt.text = AutoJoinedLobby.Instance.RelayCode;
         
         if (Input.GetKeyDown(KeyCode.Escape) && !isPause)
         {
