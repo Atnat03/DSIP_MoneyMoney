@@ -19,6 +19,9 @@ public class Chair : MonoBehaviour, IInteractible
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
 
+        if (!TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value)
+            return;
+
         FPSControllerMulti fps = player.GetComponent<FPSControllerMulti>();
 
         if (fps.isSitting)
