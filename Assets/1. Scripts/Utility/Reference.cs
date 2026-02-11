@@ -116,7 +116,8 @@ public class Reference
     }
     public static T GetObject<T>() where T : class => Instance.GetElementOfType<T>();
 
-
+    public static void AddObject<T>(T obj) where T : MonoBehaviour => Instance.AddObject_Instance(obj);
+    public static void RemoveObject<T>(T obj) where T : MonoBehaviour => Instance.RemoveObject_Instance(obj);
 
 
 
@@ -181,6 +182,21 @@ public class Reference
 
             _elementDict[type].InsertRange(0, (IEnumerable<MonoBehaviour>)GameObject.FindObjectsByType(type, FindObjectsSortMode.None));
         }
+    }
+    public void AddObject_Instance<T>(T obj) where T : MonoBehaviour
+    {
+        if (!_elementDict.ContainsKey(typeof(T)))
+            _elementDict.Add(typeof (T), new List<MonoBehaviour>());
+        if (!_elementDict[typeof(T)].Contains(obj))
+            _elementDict[typeof(T)].Add(obj);
+    }
+    public void RemoveObject_Instance<T>(T obj) where T : MonoBehaviour
+    {
+        if (!_elementDict.ContainsKey(typeof(T)))
+            return;
+        if (!_elementDict[typeof(T)].Contains(obj))
+            return;
+        _elementDict[typeof(T)].Remove(obj);
     }
 
     public void DebugTrackedObjectsCount()
