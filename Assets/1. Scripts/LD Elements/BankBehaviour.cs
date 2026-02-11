@@ -16,6 +16,7 @@ public class BankBehaviour : MonoBehaviour
     public MoneySpawn[] moneySpawns;
     public bool visited;
     public float delay;
+    public string colorBank;
 
     public Transform spawnPlayer;
     

@@ -23,11 +23,11 @@ public class BankManager : MonoBehaviour
         return count;
     }
 
-    public void TeleportNextBank(Transform player)
+    public void TeleportNextBank(string coloBank, Transform player)
     {
         foreach (BankBehaviour bank in banks)
         {
-            if (!bank.visited)
+            if (bank.colorBank == coloBank)
             {
                 player.position = bank.spawnPlayer.position;
                 break;

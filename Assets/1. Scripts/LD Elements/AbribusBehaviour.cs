@@ -33,8 +33,8 @@ public class AbribusBehaviour : MonoBehaviour
                 FPSControllerMulti fps = playerWaiting.GetComponent<FPSControllerMulti>();
                 if(fps.isSitting)
                     fps.StandUp();
-                
-                BankManager.instance.TeleportNextBank(playerWaiting);
+                playerWaiting.GetComponent<BusPassenger>().OpenMenu();
+
             }
         }
         else
