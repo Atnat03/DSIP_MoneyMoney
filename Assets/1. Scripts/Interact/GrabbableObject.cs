@@ -15,7 +15,7 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
 
     public override void OnNetworkSpawn()
     {
-        Reference.AddObject(this);
+        Reference.AddObject(this as IParentable);
         
         Interact.OnInteract += HitInteract;
     }

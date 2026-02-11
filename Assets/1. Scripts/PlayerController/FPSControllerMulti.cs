@@ -171,7 +171,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         cameraShake = MyCamera().GetComponent<CameraShake>();
         
-        Reference.AddObject(this);
+        Reference.AddObject(this as IParentable);
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)
