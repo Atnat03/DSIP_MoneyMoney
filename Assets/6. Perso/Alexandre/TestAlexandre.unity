@@ -16198,7 +16198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6014402450850977778, guid: 4a2f31892e7ae3c46b4f1a3313a6dec3, type: 3}
       propertyPath: ShapeModule.angle
-      value: 25
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 6014402450850977778, guid: 4a2f31892e7ae3c46b4f1a3313a6dec3, type: 3}
       propertyPath: SizeModule.enabled
@@ -16210,7 +16210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6014402450850977778, guid: 4a2f31892e7ae3c46b4f1a3313a6dec3, type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 0.34
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 6014402450850977778, guid: 4a2f31892e7ae3c46b4f1a3313a6dec3, type: 3}
       propertyPath: RotationModule.curve.scalar
@@ -16599,6 +16599,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 695f20c9a930ba946a7bcbccba57aa75, type: 2}
+    - target: {fileID: 4003767113646558163, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
+      propertyPath: ShapeModule.angle
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 4003767113646558163, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8481076570587427546, guid: 8f0905f5e14b64340ad212bef40f94da, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.37
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
