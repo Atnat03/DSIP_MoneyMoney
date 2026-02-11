@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -334,7 +335,7 @@ public class TruckController : NetworkBehaviour
 
             if (currentValueToResetNet.Value >= targetValueToReset.Value)
             {
-                ResetTruckServerRpc();
+                ResetTruckServerRpc(transform.position);
             }
         }
     }
@@ -346,11 +347,11 @@ public class TruckController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ResetTruckServerRpc()
+    private void ResetTruckServerRpc(Vector3 newPosition)
     {
         Vector3 rot = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
-        transform.position += Vector3.up * 2f;
+        transform.position += newPosition + Vector3.up * 2f;
         
         jaugeMashing.transform.parent.gameObject.SetActive(false);
 
@@ -358,6 +359,28 @@ public class TruckController : NetworkBehaviour
         isFallen.Value = false;
 
         multiply = false;
+    }
+
+    public float raduisReset = 50;
+    
+    public void ResetCamionToNearPoint()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, raduisReset,  LayerMask.NameToLayer("SpawnPointBandit"));
+        
+        Transform closest = null;
+        float minDist = Mathf.Infinity;
+        
+        foreach (Collider hit in hits)
+        {
+            float dist = (hit.transform.position - transform.position).sqrMagnitude;
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = hit.transform;
+            }
+        }
+        
+        ResetTruckServerRpc(closest.position);
     }
 
     public void AddValueToReset()
@@ -438,5 +461,8 @@ public class TruckController : NetworkBehaviour
         
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(reload.position, raduisToReload);
+        
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, raduisReset);
     }
 }
