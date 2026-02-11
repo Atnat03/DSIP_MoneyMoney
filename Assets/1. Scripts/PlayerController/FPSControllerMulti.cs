@@ -170,6 +170,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         capsuleCollider = GetComponent<CapsuleCollider>();
         
         cameraShake = MyCamera().GetComponent<CameraShake>();
+        
+        Reference.AddObject(this);
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)

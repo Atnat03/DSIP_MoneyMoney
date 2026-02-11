@@ -185,7 +185,7 @@ public class TruckController : NetworkBehaviour
     void CheckPassengersBounds()
     {
         if (!IsServer) return;
-
+        
         IParentable[] parentables = Reference.GetAll<IParentable>().ToArray();
 
         foreach (IParentable parentable in parentables)
