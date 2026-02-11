@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,7 @@ public class TruckController : NetworkBehaviour
     public NetworkVariable<bool> BackLightOn = new NetworkVariable<bool>();
 
     public GameObject frontLights;
-    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public MeshRenderer lightsButtons;
     
     float horizontalInput;
@@ -164,6 +165,12 @@ public class TruckController : NetworkBehaviour
     private void OnBackLightsChanged(bool previousValue, bool newValue)
     {
         backLights.SetActive(newValue);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    public void ToggleFrontLightsServerRpc()
+    {
+        FrontLightOn.Value = !FrontLightOn.Value;
     }
     
     private void OnFrontLigthChanged(bool previousValue, bool newValue)
@@ -334,7 +341,7 @@ public class TruckController : NetworkBehaviour
 
             if (currentValueToResetNet.Value >= targetValueToReset.Value)
             {
-                ResetTruckServerRpc();
+                ResetTruckServerRpc(transform.position);
             }
         }
     }
@@ -346,11 +353,13 @@ public class TruckController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ResetTruckServerRpc()
+    private void ResetTruckServerRpc(Vector3 newPosition)
     {
+        print("ca a reset");
+        
         Vector3 rot = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
-        transform.position += Vector3.up * 2f;
+        transform.position += newPosition + Vector3.up * 2f;
         
         jaugeMashing.transform.parent.gameObject.SetActive(false);
 
@@ -358,6 +367,32 @@ public class TruckController : NetworkBehaviour
         isFallen.Value = false;
 
         multiply = false;
+    }
+
+    public float raduisReset = 50;
+    
+    public void ResetCamionToNearPoint()
+    {
+        int layer = LayerMask.NameToLayer("SpawnPointBandit");
+        LayerMask mask = 1 << layer;
+        
+        Collider[] hits = Physics.OverlapSphere(transform.position, raduisReset,  mask);
+        
+        Transform closest = null;
+        float minDist = Mathf.Infinity;
+        
+        foreach (Collider hit in hits)
+        {
+            float dist = (hit.transform.position - transform.position).sqrMagnitude;
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = hit.transform;
+            }
+        }
+        
+        if(closest != null)
+            ResetTruckServerRpc(closest.position);
     }
 
     public void AddValueToReset()
@@ -438,5 +473,8 @@ public class TruckController : NetworkBehaviour
         
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(reload.position, raduisToReload);
+        
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, raduisReset);
     }
 }

@@ -4,6 +4,7 @@ public class HeadShot : MonoBehaviour
 {
     public float MiniVelocityToTakeDamageFromThune = 8;
     public GrabPoint grabPoint;
+    public HealthComponent healthComponent;
     
     public void OnTriggerEnter(Collider other)
     {
@@ -13,7 +14,7 @@ public class HeadShot : MonoBehaviour
             print(rb.linearVelocity.magnitude);
             if (rb.linearVelocity.magnitude >= MiniVelocityToTakeDamageFromThune)
             {
-                GetComponent<HealthComponent>().TryTakeDamage(1000);
+                healthComponent.TryTakeDamage(1000);
             }
         }
     }

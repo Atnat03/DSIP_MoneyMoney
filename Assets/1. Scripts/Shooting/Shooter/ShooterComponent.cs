@@ -209,7 +209,7 @@ namespace Shooting
         [ClientRpc]
         private void ShoopClientRpc()
         {
-            NetworkObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity).GetComponent<NetworkObject>();
+            GameObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity);
             muzzleFlash.transform.SetParent(_instantPos);
             GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
         }
