@@ -61,7 +61,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField] LayerMask truckLayer;
     [SerializeField, Range(0, 1f)] float truckFollowStrength = 0.5f;
     
-    private TruckInteraction nearbyTruck;
+    private TruckInteraction truckInteraction;
     
     public bool isDriver
     {
@@ -109,13 +109,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     [Header("Ladder Settings")]
     [SerializeField] private float ladderClimbSpeed = 3f;
-    private bool isOnLadder = false;
+    [SerializeField] private bool isOnLadder = false;
     
     [Header("Map")]
     [SerializeField] private GameObject map;
     private KeyCode mapKey = KeyCode.Semicolon;
     public bool isMapActive = false;
-
+    
     public void SetVisibleGun()
     {
         gunOther.SetActive(hasSomethingInHand && isMapActive);
@@ -158,7 +158,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        nearbyTruck = TruckController.instance.GetComponent<TruckInteraction>();
+        truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
 
         yaw = transform.eulerAngles.y;
         pitch = cameraTransform.localEulerAngles.x;
@@ -168,6 +168,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         shooter = gameObject.GetComponent<ShooterComponent>();
 
         capsuleCollider = GetComponent<CapsuleCollider>();
+        
+        cameraShake = MyCamera().GetComponent<CameraShake>();
     }
     
     void SetLayerRecursively(GameObject obj, int newLayer)
@@ -208,16 +210,16 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             if (isInTruck && isDriver)
             {
-                nearbyTruck.TryExitTruck(this);
+                truckInteraction.TryExitTruck(this);
             }
             else if (isInTruck && !isDriver && canEnterInTruck)
             {
-                TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
+                truckInteraction.TryEnterTruck(this);
             }
             else if (!isInTruck && canEnterInTruck)
             {
                 canEnterInTruck = false;
-                TruckController.instance.GetComponent<TruckInteraction>().TryEnterTruck(this);
+                truckInteraction.TryEnterTruck(this);
             }
         }
 
@@ -243,17 +245,17 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         map.SetActive(isMapActive && !hasSomethingInHand && !isDriver);
         
-        canReload = CheckCanReload();
-
         if (Input.GetKeyUp(KeyCode.E) && !isDriver)
         {
+            canReload = CheckCanReload();
+            
             if(canReload)
             {
                 shooter.StartToReload();
                 canReload = false;
             }
 
-            if (TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false)
+            if (truckInteraction.hasDriver.Value == false)
                 return;
         }
 
@@ -288,7 +290,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                     
                     if (hit.collider.CompareTag("Phares"))
                     {
-                        TruckController.instance.FrontLightOn.Value = !TruckController.instance.FrontLightOn.Value;
+                        TruckController.instance.ToggleFrontLightsServerRpc();
                     }
                 }
             }
@@ -313,7 +315,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             HandleMovement();
         }
     }
-
 
     public void Sit(Transform sitPos)
     {
@@ -360,24 +361,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         isFreeze = false;
     }
     
-    
-    
     void HandleCameraInput()
     {
-        if (!isFreeze)
-        {
-            float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
-            float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
+        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
 
-            yaw += mouseX;
-            pitch -= mouseY;
-            pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
-        }
+        yaw += mouseX;
+        pitch -= mouseY;
+        pitch = Mathf.Clamp(pitch, verticalLimit.x, verticalLimit.y);
     }
 
     private void HandleHeadbob()
     {
-        if (isOnLadder) return;
+        if (isOnLadder || isDriver) return;
         
         if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
         {
@@ -419,7 +415,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
             Vector3 move = Vector3.zero;
             
-            if (isOnLadder)
+            if (isOnLadder && !controller.isGrounded)
             {
                 Vector3 climb = new Vector3(horizontalInput, verticalInput, 0f);
                 move = transform.TransformDirection(climb) * ladderClimbSpeed;
@@ -452,11 +448,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
     }
 
+    private CameraShake cameraShake;
+    
     void LateUpdate()
     {
         if (!IsOwner) return;
         if (isFreeze) return;
-        if (MyCamera().GetComponent<CameraShake>().shaking) return;
+        if (cameraShake.shaking) return;
         if(Time.timeScale == 0) return;
         
         transform.rotation = Quaternion.Euler(0, yaw, 0);
@@ -484,6 +482,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             netTransform.InLocalSpace = true;
         }
         
+        SetVisibleGun();
+        
         if (IsOwner) {
             Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
             transform.localPosition = targetSeat.localPosition;
@@ -498,6 +498,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         capsuleCollider.enabled = true;
         
         hasSomethingInHand = false;
+        
+        SetVisibleGun();
         
         transform.position = exitPosition;
         
@@ -585,7 +587,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("PorteConducteur") && 
-            TruckController.instance.GetComponent<TruckInteraction>().hasDriver.Value == false &&
+            truckInteraction.hasDriver.Value == false &&
             !hasSomethingInHand)
         {
             canEnterInTruck = true;
@@ -607,7 +609,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         if (other.CompareTag("Echelle"))
         {
+            print("plus dans echelle");
             isOnLadder = false;
+            verticalVelocity = 0f;
         }
     }
 

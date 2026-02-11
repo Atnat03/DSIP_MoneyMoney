@@ -12,9 +12,10 @@ public class GunSway : MonoBehaviour
     [SerializeField] private FPSControllerMulti fps;
     
     [Header("Headbob Settings")]
-    [SerializeField, Range(0, 0.2f)] float _amplitude = 0.05f;
+    [SerializeField, Range(0, 0.1f)] float _amplitude = 0.05f;
     [SerializeField, Range(0, 30)] float frequency = 10f;
     [SerializeField] private Vector3 startPos;
+    [SerializeField] private Quaternion startRot;
     [SerializeField, Range(0, 2f)] float sprintAmplitudeMultiplier = 1.5f;
     [SerializeField, Range(0, 2f)] float sprintFrequencyMultiplier = 1.5f;
 
@@ -43,8 +44,8 @@ public class GunSway : MonoBehaviour
             transform.localPosition = Vector3.Lerp(
                 transform.localPosition,
                 startPos,
-                Time.deltaTime
-            );
+                Time.deltaTime);
+            
             return;
         }
         
@@ -58,7 +59,7 @@ public class GunSway : MonoBehaviour
         bobOffset.y = Mathf.Sin(Time.time * freq) * amp;
         bobOffset.x = Mathf.Cos(Time.time * freq * 0.5f) * amp * 2f;
         bobOffset.z = 0f;
-
+        
         transform.localPosition = startPos + bobOffset;
     }
 

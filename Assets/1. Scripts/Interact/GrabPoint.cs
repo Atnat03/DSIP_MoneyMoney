@@ -29,6 +29,8 @@ public class GrabPoint : NetworkBehaviour
     private NetworkObject _heldItem;
     private Transform _camera;
 
+    public GameObject uiThrow;
+    
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
@@ -67,6 +69,8 @@ public class GrabPoint : NetworkBehaviour
 
             UpdateHeldPositionServerRpc(_heldItem.NetworkObjectId, pos, rot);
         }
+        
+        uiThrow.SetActive(_heldItem != null);
 
         HandleThrowInput();
     }
@@ -108,8 +112,7 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.TryGetComponent<Collider>(out var col))
         {
-            if(IsSacInHand())
-                col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
+            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
             col.isTrigger = true;
         }
 
@@ -237,10 +240,13 @@ public class GrabPoint : NetworkBehaviour
         if (item.OwnerClientId != rpc.Receive.SenderClientId)
             return;
 
+        item.transform.position = pos;
+        item.transform.rotation = rot;
+
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
-            rb.position = pos;
-            rb.rotation = rot;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
     }
 
