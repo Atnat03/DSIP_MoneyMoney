@@ -10,15 +10,13 @@ public class BankManager : MonoBehaviour
     {
         instance = this;
     }
-    
-    public int  BankVisited()
+    public int BankVisited()
     {
         int count = 0;
         foreach (BankBehaviour bank in banks)
         {
             if (bank.visited) count++;
         }
-
         if (count == 0) return 1;
         return count;
     }
