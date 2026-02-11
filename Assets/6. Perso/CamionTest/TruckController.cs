@@ -453,7 +453,7 @@ public class TruckController : NetworkBehaviour
     
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle") || other.gameObject.layer == LayerMask.NameToLayer("Bandits"))
         {
             CheckVelecityToApplyShake();
         }
