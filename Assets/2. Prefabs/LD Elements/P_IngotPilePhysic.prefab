@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.6907969
+      value: 28.069204
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.031
+      value: -0.00000027928957
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.75927633
+      value: 8.201503
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -99,6 +99,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6335569832160450534}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4265702065396126455}
   m_SourcePrefab: {fileID: 100100000, guid: bb1a6979a9188a74b96f32c02719015f, type: 3}
 --- !u!1 &6584897066571411342 stripped
 GameObject:
@@ -241,3 +244,23 @@ MonoBehaviour:
     m_InternalValue: 0
   type: 1
   interactionName: Prendre la pile de lingots
+  outline:
+  - {fileID: 4265702065396126455}
+--- !u!114 &4265702065396126455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6584897066571411342}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

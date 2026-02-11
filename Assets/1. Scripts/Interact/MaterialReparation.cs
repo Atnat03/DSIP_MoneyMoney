@@ -7,5 +7,13 @@ public class MaterialReparation : MonoBehaviour, IInteractible
         get { return interactionName; }
         set { interactionName = value; }
     }
+    
+    public Outline[] Outline     
+    {
+        get { return outline; ; }
+        set { }
+    }
+
+    public Outline[] outline;
 
     public string interactionName;}

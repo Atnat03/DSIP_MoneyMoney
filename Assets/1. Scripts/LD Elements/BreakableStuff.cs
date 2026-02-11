@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class BreakableStuff : MonoBehaviour
 {
-    [SerializeField] GameObject IntactObject;
-    [SerializeField] GameObject breakObject;
-    private void OnTriggerEnter(Collider other)
+
+
+    public float ejectionForce;
+    public bool isBandit;
+    private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Truck"))
         {
-            IntactObject.SetActive(false);
-            breakObject.SetActive(true);
+            if (isBandit) GetComponent<BanditBarrage>().enabled = false;
+            GetComponent<Rigidbody>().AddForce(ejectionForce * other.transform.forward + new Vector3(0,ejectionForce/3,0),  ForceMode.Impulse);
         }
     }
 }

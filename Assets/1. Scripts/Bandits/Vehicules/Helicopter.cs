@@ -44,6 +44,7 @@ public class Helicopter : MonoBehaviour, IVehicule
             explosionParticleIntance.Spawn();
             
             GetComponent<NetworkObject>().Despawn();
+            BanditSpawnManager.instance.canSpawnHelico = true;
             Destroy(ai.gameObject);
         }
     }

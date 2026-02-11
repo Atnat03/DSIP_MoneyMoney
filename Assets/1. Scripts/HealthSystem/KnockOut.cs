@@ -224,5 +224,13 @@ public class KnockOut : NetworkBehaviour, IInteractible
         set { interactionName = value; }
     }
 
+    public Outline[] Outline     
+    {
+        get { return outline; ; }
+        set { }
+    }
+
+    public Outline[] outline;
+
     public string interactionName;
 }
