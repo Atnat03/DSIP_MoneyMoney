@@ -32,7 +32,7 @@ public class TruckController : NetworkBehaviour
     public NetworkVariable<bool> BackLightOn = new NetworkVariable<bool>();
 
     public GameObject frontLights;
-    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<bool> FrontLightOn = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public MeshRenderer lightsButtons;
     
     float horizontalInput;
@@ -165,6 +165,12 @@ public class TruckController : NetworkBehaviour
     private void OnBackLightsChanged(bool previousValue, bool newValue)
     {
         backLights.SetActive(newValue);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    public void ToggleFrontLightsServerRpc()
+    {
+        FrontLightOn.Value = !FrontLightOn.Value;
     }
     
     private void OnFrontLigthChanged(bool previousValue, bool newValue)
@@ -349,6 +355,8 @@ public class TruckController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ResetTruckServerRpc(Vector3 newPosition)
     {
+        print("ca a reset");
+        
         Vector3 rot = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
         transform.position += newPosition + Vector3.up * 2f;
@@ -365,7 +373,10 @@ public class TruckController : NetworkBehaviour
     
     public void ResetCamionToNearPoint()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, raduisReset,  LayerMask.NameToLayer("SpawnPointBandit"));
+        int layer = LayerMask.NameToLayer("SpawnPointBandit");
+        LayerMask mask = 1 << layer;
+        
+        Collider[] hits = Physics.OverlapSphere(transform.position, raduisReset,  mask);
         
         Transform closest = null;
         float minDist = Mathf.Infinity;
@@ -380,7 +391,8 @@ public class TruckController : NetworkBehaviour
             }
         }
         
-        ResetTruckServerRpc(closest.position);
+        if(closest != null)
+            ResetTruckServerRpc(closest.position);
     }
 
     public void AddValueToReset()
