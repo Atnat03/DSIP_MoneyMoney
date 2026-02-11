@@ -14,6 +14,8 @@ public class Ragdoll : MonoBehaviour
     private Collider[] ragdollColliders;
     private CharacterJoint[] ragdollJoints;
     
+    public GameObject[] meshList;
+    
     private Vector3[] initialLocalPositions;
     private Quaternion[] initialLocalRotations;
     private Transform[] ragdollTransforms;
@@ -56,6 +58,11 @@ public class Ragdoll : MonoBehaviour
     public void EnableRagdoll(Vector3 force)
     {
         SetRagdollState(true);
+
+        foreach (GameObject g in meshList)
+        {
+            g.layer = LayerMask.NameToLayer("Interactable");
+        }
         
         foreach (Rigidbody rb in ragdollRigidbodies)
         {
@@ -73,6 +80,11 @@ public class Ragdoll : MonoBehaviour
 
     public void DisableRagdoll()
     {
+        foreach (GameObject g in meshList)
+        {
+            g.layer = LayerMask.NameToLayer("Skin");
+        }
+        
         ResetPose();
         SetRagdollState(false);
     }

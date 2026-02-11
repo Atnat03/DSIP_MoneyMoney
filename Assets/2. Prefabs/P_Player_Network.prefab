@@ -5605,7 +5605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40eebdd13a6db7b4486c45f5c681e342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  MiniVelocityToTakeDamageFromThune: 8
+  MiniVelocityToTakeDamageFromThune: 1
   grabPoint: {fileID: 2094199091246566129}
   healthComponent: {fileID: 5225601816550349719}
 --- !u!65 &6095605793997815558
@@ -5627,8 +5627,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1.9279485, z: 1.5}
-  m_Center: {x: 0.017127484, y: -0.7910017, z: -0.065537214}
+  m_Size: {x: 0.98073155, y: 1.9279485, z: 1.0967236}
+  m_Center: {x: 0.00435099, y: -0.7910017, z: -0.056593895}
 --- !u!1 &6762169179017282632
 GameObject:
   m_ObjectHideFlags: 0
@@ -6373,7 +6373,7 @@ MonoBehaviour:
   textReload: {fileID: 6033497389074205837}
   maskCameraPlayer:
     serializedVersion: 2
-    m_Bits: 36170711
+    m_Bits: 170388439
   meshRenderer: {fileID: 2972973183292395522}
   canSit: 0
   isSitting: 0
@@ -10147,6 +10147,7 @@ MonoBehaviour:
   maxAngularVelocity: 7
   ragdollDrag: 2
   ragdollAngularDrag: 2
+  meshList: []
 --- !u!1 &3748360516839209453 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7960204090592062274, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}

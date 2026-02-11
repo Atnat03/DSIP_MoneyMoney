@@ -123,21 +123,39 @@ public class Sangles : NetworkBehaviour, IInteractible
     private void TryStock(NetworkObject playerNetObj, ulong senderId)
     {
         var grabPoint = playerNetObj.GetComponent<GrabPoint>();
-        if (grabPoint == null || !grabPoint.IsSacInHand()) return;
+        if (grabPoint == null) return;
 
         GameObject heldObject = grabPoint.GetCurrentObjectInHand();
         if (heldObject == null) return;
 
+        // Vérifie que c'est bien un sac
+        var grabbable = heldObject.GetComponent<GrabbableObject>();
+        if (grabbable == null || grabbable.type != GrabType.Sac) return;
+
         NetworkObject objectNetObj = heldObject.GetComponent<NetworkObject>();
         if (objectNetObj == null) return;
 
-        // Force le joueur à lâcher côté serveur
-        grabPoint.Throw();
+        // 🔹 Lâcher l’objet côté serveur
+        Rigidbody rb = objectNetObj.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
 
+        if (objectNetObj.TryGetComponent<Collider>(out var col))
+            col.enabled = true;
+
+        if (grabbable != null)
+            grabbable.IsGrabbed.Value = false;
+
+        // 🔹 Stocker sur la sangle
         storedObjectId.Value = objectNetObj.NetworkObjectId;
         interactionObject = objectNetObj;
 
-        if (objectNetObj.TryGetComponent<Rigidbody>(out var rb))
+        if (rb != null)
         {
             rb.isKinematic = true;
             rb.useGravity = false;
@@ -145,13 +163,15 @@ public class Sangles : NetworkBehaviour, IInteractible
             rb.angularVelocity = Vector3.zero;
         }
 
-        if (objectNetObj.TryGetComponent<Collider>(out var col))
+        if (col != null)
             col.enabled = false;
 
         dropTimer.Value = Random.Range(mini_TimeBeforeDrop, max_TimeBeforeDrop);
 
         UpdateObjectPositionClientRpc(objectNetObj.NetworkObjectId, stayPos.position);
     }
+
+
 
     [ClientRpc]
     private void UpdateObjectPositionClientRpc(ulong objectId, Vector3 position)

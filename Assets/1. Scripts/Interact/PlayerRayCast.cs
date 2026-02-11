@@ -118,6 +118,7 @@ public class PlayerRayCast : NetworkBehaviour
                         if (part.isBroke.Value)
                         {
                             StartCoroutine(RepairPart(hit.collider.gameObject));
+                            return;
                         }
                     }
                     else if (hit.collider.CompareTag("Material"))

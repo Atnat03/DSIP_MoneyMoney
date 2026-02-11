@@ -179,6 +179,37 @@ public class GrabPoint : NetworkBehaviour
             throwJauge.fillAmount = 0;
         }
     }
+    
+    public void ForceReleaseServer(ulong itemId)
+    {
+        ForceReleaseServerRpc(itemId);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void ForceReleaseServerRpc(ulong itemId, ServerRpcParams rpc = default)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
+
+        if (item.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.isKinematic = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (item.TryGetComponent<Collider>(out var col))
+        {
+            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
+            col.enabled = true;
+        }
+
+        if (item.TryGetComponent<GrabbableObject>(out var g))
+            g.IsGrabbed.Value = false;
+
+        ReleaseClientRpc(item.OwnerClientId);
+    }
+
 
     public void Throw()
     {
