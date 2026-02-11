@@ -58,14 +58,17 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dd91923966241394c860e1250d51bdb0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8583951384247298263}
+      addedObject: {fileID: -4899289196701338502}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dd91923966241394c860e1250d51bdb0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1832867787008934551}
   m_SourcePrefab: {fileID: 100100000, guid: dd91923966241394c860e1250d51bdb0, type: 3}
 --- !u!1 &3509185478224762810 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dd91923966241394c860e1250d51bdb0, type: 3}
   m_PrefabInstance: {fileID: 4355623265784752875}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8583951384247298263
+--- !u!114 &-4899289196701338502
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,4 +80,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca741ecd83d08f043bd83e057583abe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableStuff
-  ejectionForce: 30
+  ejectionForce: 10
+  isBandit: 0
+--- !u!65 &-1832867787008934551
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3509185478224762810}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4, y: 4, z: 4}
+  m_Center: {x: -0.0087272525, y: 0.7326841, z: 0.025090918}

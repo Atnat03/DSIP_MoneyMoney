@@ -39,7 +39,7 @@ public class BanditTir : MonoBehaviour
     {
         if (banditAI != null)
         {
-            isRight = banditAI.goRight;
+            isRight = banditAI.flankPosition == BanditVehicleAI.FlankPosition.Right;
         }
         else
         {
