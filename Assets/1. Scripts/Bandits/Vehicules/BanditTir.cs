@@ -31,6 +31,8 @@ public class BanditTir : MonoBehaviour
     public float damage;
     public bool isRight;
 
+    public Transform place;
+
     #endregion
 
     private float nextFireTime;
@@ -53,6 +55,9 @@ public class BanditTir : MonoBehaviour
     private void Update()
     {
         if (Time.time < nextFireTime) return;
+
+        transform.position = place.position;
+        //transform.rotation = place.rotation;
 
         Transform target = ChooseTarget();
         if (target == null) return;

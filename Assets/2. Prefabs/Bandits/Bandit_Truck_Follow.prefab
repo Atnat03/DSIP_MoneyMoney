@@ -420,6 +420,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2965296764367827960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6714311816902118843}
+  m_Layer: 15
+  m_Name: TourellePlace
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6714311816902118843
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2965296764367827960}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.39041027, z: -0, w: 0.920641}
+  m_LocalPosition: {x: 0, y: 3.71, z: -1.4779968}
+  m_LocalScale: {x: 1, y: 0.28815123, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2720923380287564076}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3664017778846668908
 GameObject:
   m_ObjectHideFlags: 0
@@ -939,6 +970,7 @@ Transform:
   - {fileID: 4964842997399903146}
   - {fileID: 2753348775928284163}
   - {fileID: 6784337852270672780}
+  - {fileID: 6714311816902118843}
   - {fileID: 8100457542360563936}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1332,6 +1364,7 @@ MonoBehaviour:
   bulletVisualSpeed: 120
   damage: 10
   isRight: 0
+  place: {fileID: 6784337852270672780}
   banditAI: {fileID: 792700703697483768}
   helicoAI: {fileID: 0}
 --- !u!114 &5952251429939239181
