@@ -29,6 +29,8 @@ public class GrabPoint : NetworkBehaviour
     private NetworkObject _heldItem;
     private Transform _camera;
 
+    public GameObject uiThrow;
+    
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
@@ -67,6 +69,8 @@ public class GrabPoint : NetworkBehaviour
 
             UpdateHeldPositionServerRpc(_heldItem.NetworkObjectId, pos, rot);
         }
+        
+        uiThrow.SetActive(_heldItem != null);
 
         HandleThrowInput();
     }

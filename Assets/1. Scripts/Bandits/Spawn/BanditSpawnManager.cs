@@ -56,8 +56,6 @@ public class BanditSpawnManager : MonoBehaviour
         if (_timeUntilBanditBarrage.Value <= 0) { SpawnBanditBarrageServerRpc(); }
     }
 
-    
-
     public void Update()
     {
         bankVisited = BankManager.instance.BankVisited();
