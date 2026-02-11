@@ -21,7 +21,7 @@ public class Reference
     #region Fields
 
     private Type[] _trackedTypes = TrackedTypes.GetTypes();
-    private Dictionary<Type, List<MonoBehaviour>> _elementDict;
+    private Dictionary<Type, List<object>> _elementDict;
     private Dictionary<Type, IManager> _managers;
 
     private static Reference _instance;
@@ -116,8 +116,8 @@ public class Reference
     }
     public static T GetObject<T>() where T : class => Instance.GetElementOfType<T>();
 
-    public static void AddObject<T>(T obj) where T : MonoBehaviour => Instance.AddObject_Instance(obj);
-    public static void RemoveObject<T>(T obj) where T : MonoBehaviour => Instance.RemoveObject_Instance(obj);
+    public static void AddObject<T>(T obj) where T : class => Instance.AddObject_Instance(obj);
+    public static void RemoveObject<T>(T obj) where T : class => Instance.RemoveObject_Instance(obj);
 
 
 
@@ -162,10 +162,10 @@ public class Reference
     }
     public T GetElementOfType<T>() where T : class => GetElementsOfType<T>().FirstOrDefault();
 
-    public void TryAddElement<T>(T element) where T : MonoBehaviour
+    public void TryAddElement<T>(T element) where T : class
     {
         if (!_elementDict.ContainsKey(typeof(T)))
-            _elementDict.Add(typeof(T), new List<MonoBehaviour>());
+            _elementDict.Add(typeof(T), new List<object>());
         if (!_elementDict[typeof(T)].Contains(element))
             _elementDict[typeof(T)].Add(element);
     }
@@ -178,19 +178,19 @@ public class Reference
         foreach (var type in _trackedTypes)
         {
             if (!_elementDict.ContainsKey(type))
-                _elementDict.Add(type, new List<MonoBehaviour>());
+                _elementDict.Add(type, new List<object>());
 
-            _elementDict[type].InsertRange(0, (IEnumerable<MonoBehaviour>)GameObject.FindObjectsByType(type, FindObjectsSortMode.None));
+            _elementDict[type].InsertRange(0, (IEnumerable<object>)GameObject.FindObjectsByType(type, FindObjectsSortMode.None));
         }
     }
-    public void AddObject_Instance<T>(T obj) where T : MonoBehaviour
+    public void AddObject_Instance<T>(T obj) where T : class
     {
         if (!_elementDict.ContainsKey(typeof(T)))
-            _elementDict.Add(typeof (T), new List<MonoBehaviour>());
+            _elementDict.Add(typeof (T), new List<object>());
         if (!_elementDict[typeof(T)].Contains(obj))
             _elementDict[typeof(T)].Add(obj);
     }
-    public void RemoveObject_Instance<T>(T obj) where T : MonoBehaviour
+    public void RemoveObject_Instance<T>(T obj) where T : class
     {
         if (!_elementDict.ContainsKey(typeof(T)))
             return;
