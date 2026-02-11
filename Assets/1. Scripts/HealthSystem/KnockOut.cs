@@ -70,9 +70,6 @@ public class KnockOut : NetworkBehaviour, IInteractible
     [ClientRpc]
     private void ApplyKOForceClientRpc(Vector3 force)
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.AddForce(force, ForceMode.Impulse);
-        
         if (ragdollController != null)
         {
             ragdollController.EnableRagdoll(force);
@@ -93,9 +90,7 @@ public class KnockOut : NetworkBehaviour, IInteractible
         }
         
         cameraAnimator.SetBool("KO", newValue);
-
-        Rigidbody rb = GetComponent<Rigidbody>();
-
+        
         if (newValue)
         {
             
@@ -109,9 +104,6 @@ public class KnockOut : NetworkBehaviour, IInteractible
             {
                 ragdollController.DisableRagdoll();
             }
-
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
 
             soloElapsed = 0;
 

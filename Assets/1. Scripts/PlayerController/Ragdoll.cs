@@ -3,7 +3,6 @@ using UnityEngine;
 public class Ragdoll : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-    [SerializeField] private Rigidbody mainRigidbody;
     
     [Header("Ragdoll Physics")]
     [SerializeField] private float maxVelocity = 10f;
@@ -14,6 +13,8 @@ public class Ragdoll : MonoBehaviour
     private Rigidbody[] ragdollRigidbodies;
     private Collider[] ragdollColliders;
     private CharacterJoint[] ragdollJoints;
+    
+    public GameObject[] meshList;
     
     private Vector3[] initialLocalPositions;
     private Quaternion[] initialLocalRotations;
@@ -43,7 +44,7 @@ public class Ragdoll : MonoBehaviour
         
         for (int i = 0; i < count; i++)
         {
-            if (ragdollRigidbodies[i] != mainRigidbody && ragdollRigidbodies[i] != null)
+            if (ragdollRigidbodies[i] != null)
             {
                 ragdollTransforms[i] = ragdollRigidbodies[i].transform;
                 initialLocalPositions[i] = ragdollTransforms[i].localPosition;
@@ -57,10 +58,15 @@ public class Ragdoll : MonoBehaviour
     public void EnableRagdoll(Vector3 force)
     {
         SetRagdollState(true);
+
+        foreach (GameObject g in meshList)
+        {
+            g.layer = LayerMask.NameToLayer("Interactable");
+        }
         
         foreach (Rigidbody rb in ragdollRigidbodies)
         {
-            if (rb != mainRigidbody && rb != null)
+            if (rb != null)
             {
                 rb.AddForce(force, ForceMode.Impulse);
                 
@@ -74,6 +80,11 @@ public class Ragdoll : MonoBehaviour
 
     public void DisableRagdoll()
     {
+        foreach (GameObject g in meshList)
+        {
+            g.layer = LayerMask.NameToLayer("Skin");
+        }
+        
         ResetPose();
         SetRagdollState(false);
     }
@@ -82,7 +93,7 @@ public class Ragdoll : MonoBehaviour
     {
         for (int i = 0; i < ragdollRigidbodies.Length; i++)
         {
-            if (ragdollRigidbodies[i] != mainRigidbody && ragdollTransforms[i] != null)
+            if (ragdollTransforms[i] != null)
             {
                 ragdollRigidbodies[i].linearVelocity = Vector3.zero;
                 ragdollRigidbodies[i].angularVelocity = Vector3.zero;
@@ -103,7 +114,7 @@ public class Ragdoll : MonoBehaviour
 
         foreach (Rigidbody rb in ragdollRigidbodies)
         {
-            if (rb != mainRigidbody && rb != null)
+            if (rb != null)
             {
                 rb.isKinematic = !isRagdoll;
                 rb.useGravity = isRagdoll;
@@ -125,7 +136,7 @@ public class Ragdoll : MonoBehaviour
         
         foreach (Rigidbody rb in ragdollRigidbodies)
         {
-            if (rb != mainRigidbody && rb != null && !rb.isKinematic)
+            if (rb != null && !rb.isKinematic)
             {
                 if (rb.linearVelocity.magnitude > maxVelocity)
                 {
