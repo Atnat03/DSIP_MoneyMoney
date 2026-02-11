@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 6781572698358878886}
   - component: {fileID: 4790729012829990619}
   - component: {fileID: 1542801571549444936}
+  - component: {fileID: -5418426702675326966}
   m_Layer: 27
   m_Name: Bandit_Truck_Barrage
   m_TagString: Untagged
@@ -377,6 +378,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BreakableStuff
   ejectionForce: 100
   isBandit: 0
+--- !u!114 &-5418426702675326966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2272291960386097672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7bb50cb2a58484f9221b91716f8ba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Selfdestroy
 --- !u!1 &3254012700741879298
 GameObject:
   m_ObjectHideFlags: 0
