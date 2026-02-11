@@ -1,19 +1,20 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class ConducteurChair : MonoBehaviour, IInteractible
+public class ConducteurChair : NetworkBehaviour, IInteractible
 {
     public Collider col;
     TruckInteraction truckInteraction;
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
         truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
         
         Interact.OnInteract += HitInteract;
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
         Interact.OnInteract -= HitInteract;
     }
@@ -26,6 +27,8 @@ public class ConducteurChair : MonoBehaviour, IInteractible
     private void HitInteract(GameObject obj, GameObject player)
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
+        
+        print("Enter driver");
         
         FPSControllerMulti fps = player.GetComponent<FPSControllerMulti>();
         truckInteraction.TryEnterTruck(fps);
