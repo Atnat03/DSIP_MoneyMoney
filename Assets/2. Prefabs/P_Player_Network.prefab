@@ -5596,7 +5596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4055741435
+  GlobalObjectIdHash: 3557140025
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -5786,7 +5786,7 @@ MonoBehaviour:
   capsuleCollider: {fileID: 0}
   moveSpeed: 5
   sprintSpeed: 8
-  mouseSensibility: 3
+  mouseSensibility: 4
   verticalLimit: {x: -80, y: 80}
   cameraSmoothFollow: 500
   gravity: -9.81
@@ -5797,11 +5797,11 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
-  _amplitude: 0.05
-  frequency: 10
+  _amplitude: 0.02
+  frequency: 20
   startPos: {x: 0, y: 0, z: 0}
-  sprintAmplitudeMultiplier: 1.25
-  sprintFrequencyMultiplier: 1.25
+  sprintAmplitudeMultiplier: 1.5
+  sprintFrequencyMultiplier: 1.5
   truckDamping: 5
   horizontalInput: 0
   verticalInput: 0
@@ -10108,10 +10108,10 @@ MonoBehaviour:
   smooth: 8
   swayMultiplier: 2
   fps: {fileID: 5307100726240828314}
-  _amplitude: 0.004
-  frequency: 16
+  _amplitude: 0.0012
+  frequency: 10
   startPos: {x: 0.0028, y: -0.07, z: 0.0809}
-  startRot: {x: 0, y: -0.043619387, z: 0, w: 0.99904823}
+  startRot: {x: 0, y: 0, z: 0, w: 1}
   sprintAmplitudeMultiplier: 1.5
   sprintFrequencyMultiplier: 1.5
 --- !u!4 &6806981944565938904 stripped
