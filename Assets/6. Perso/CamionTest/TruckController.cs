@@ -186,9 +186,7 @@ public class TruckController : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        IParentable[] parentables = FindObjectsOfType<MonoBehaviour>(true)
-            .OfType<IParentable>()
-            .ToArray();
+        IParentable[] parentables = Reference.GetAll<IParentable>().ToArray();
 
         foreach (IParentable parentable in parentables)
         {
