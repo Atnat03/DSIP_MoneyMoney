@@ -488,6 +488,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             netTransform.InLocalSpace = true;
         }
         
+        SetVisibleGun();
+        
         if (IsOwner) {
             Transform targetSeat = asDriver ? TruckController.instance.driverPos : TruckController.instance.spawnPassager;
             transform.localPosition = targetSeat.localPosition;
@@ -502,6 +504,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         capsuleCollider.enabled = true;
         
         hasSomethingInHand = false;
+        
+        SetVisibleGun();
         
         transform.position = exitPosition;
         
