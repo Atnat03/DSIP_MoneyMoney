@@ -115,6 +115,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField] private GameObject map;
     private KeyCode mapKey = KeyCode.Semicolon;
     public bool isMapActive = false;
+
+    private Quaternion freezeSaveRotation = Quaternion.identity;
     
     public void SetVisibleGun()
     {
@@ -323,6 +325,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         isSitting = true;
         canSit = false;
         sittingPos = sitPos;
+        
+        freezeSaveRotation = MyCamera().transform.rotation;
     }
 
     public void StandUp()
@@ -455,17 +459,31 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     void LateUpdate()
     {
         if (!IsOwner) return;
-        if (isFreeze) return;
         if (cameraShake.shaking) return;
         if(Time.timeScale == 0) return;
         
-        transform.rotation = Quaternion.Euler(0, yaw, 0);
-        cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
-        
-        cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
-    
-        if(!isInTruck || !isDriver)
-            HandleHeadbob();
+        if(!isFreeze)
+        {
+            transform.rotation = Quaternion.Euler(0, yaw, 0);
+            cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
+
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position,
+                Time.deltaTime * cameraSmoothFollow);
+
+            if (!isInTruck || !isDriver)
+                HandleHeadbob();
+        }
+        else
+        {
+            if (freezeSaveRotation != Quaternion.identity && freezeSaveRotation.w != 0)
+            {
+                cameraTransform.rotation = Quaternion.Lerp(
+                    cameraTransform.rotation, 
+                    freezeSaveRotation, 
+                    Time.deltaTime * cameraSmoothFollow
+                );
+            }
+        }
     }
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
