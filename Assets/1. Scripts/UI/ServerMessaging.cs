@@ -9,6 +9,7 @@ public class ServerMessaging : NetworkBehaviour
 {
     public Transform parentUI;
     public TextMeshProUGUI prefabMessage;
+    public static Action clientEnd;
 
     public override void OnNetworkSpawn()
     {
