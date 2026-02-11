@@ -67,6 +67,7 @@ public class PlayerRayCast : NetworkBehaviour
         
         RaycastHit hit;
         Ray ray = new Ray(mycam.transform.position, mycam.transform.forward);
+        Debug.DrawRay(mycam.transform.position, mycam.transform.forward, Color.darkRed);
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
         
         bool hitInteractible = false; 
