@@ -288,7 +288,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                     
                     if (hit.collider.CompareTag("Phares"))
                     {
-                        TruckController.instance.FrontLightOn.Value = !TruckController.instance.FrontLightOn.Value;
+                        TruckController.instance.ToggleFrontLightsServerRpc();
                     }
                 }
             }

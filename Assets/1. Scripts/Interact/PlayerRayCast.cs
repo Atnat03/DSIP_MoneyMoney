@@ -128,7 +128,7 @@ public class PlayerRayCast : NetworkBehaviour
                     {
                         if (!GetComponent<GrabPoint>().IsSacInHand() && !hit.collider.GetComponent<Sangles>().IsStock())
                         {
-                            DisableLastOutline(); // Désactive l'outline avant de return
+                            DisableLastOutline();
                             return;
                         }
                     }
@@ -137,13 +137,11 @@ public class PlayerRayCast : NetworkBehaviour
                     {
                         hitInteractible = true;
                         
-                        // Si c'est un nouvel objet, désactive l'ancien outline
                         if (lastInteractible != null && lastInteractible != interactible)
                         {
                             DisableLastOutline();
                         }
                         
-                        // Active le nouvel outline
                         lastInteractible = interactible;
                         uiController?.OnInteract();
                         uiController?.SetText(interactible.InteractionName);
@@ -157,7 +155,6 @@ public class PlayerRayCast : NetworkBehaviour
             }
         }
         
-        // Si on ne regarde plus un interactible, désactive l'outline
         if (!hitInteractible)
         {
             DisableLastOutline();
@@ -170,7 +167,6 @@ public class PlayerRayCast : NetworkBehaviour
         }
     }
     
-    // Nouvelle méthode pour désactiver l'outline du dernier objet
     private void DisableLastOutline()
     {
         if (lastInteractible != null)
