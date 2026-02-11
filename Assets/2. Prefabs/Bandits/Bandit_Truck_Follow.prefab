@@ -968,6 +968,7 @@ MonoBehaviour:
   driftSlowdown: 3
   lookAtTarget: {fileID: 582672426505465266}
   vfxMort: {fileID: 6230730314918658108, guid: 87c7b0d474bb8824c874173c6b5d8ad9, type: 3}
+  tourelle: {fileID: 7934255063006774804}
 --- !u!65 &2426944586062192942
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1001,7 +1002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1782731183
+  GlobalObjectIdHash: 1158135261
   InScenePlacedSourceGlobalObjectIdHash: 1158135261
   DeferredDespawnTick: 0
   Ownership: 1

@@ -42,10 +42,13 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
     public GameObject vfxMort;
 
     public float currentSpeed => agent != null ? agent.velocity.magnitude : 0f;
+    public GameObject tourelle;
 
     void Start()
     {
         SetupNavMeshAgent();
+
+        tourelle.GetComponent<NetworkObject>().Spawn();
     }
 
     void SetupNavMeshAgent()
@@ -160,6 +163,11 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
         if (TryGetComponent<NetworkObject>(out var netObj))
         {
             netObj.Despawn();
+        }
+        
+        if (tourelle.TryGetComponent<NetworkObject>(out var netObj2))
+        {
+            netObj2.Despawn();
         }
 
         Destroy(gameObject);
