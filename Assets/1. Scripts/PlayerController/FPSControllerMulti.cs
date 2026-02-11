@@ -325,8 +325,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         isSitting = true;
         canSit = false;
         sittingPos = sitPos;
-        
-        freezeSaveRotation = MyCamera().transform.rotation;
     }
 
     public void StandUp()
@@ -357,13 +355,16 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     public void StartFreeze()
     {
-        Debug.Log("Start freeze");
+        cameraTransform.GetComponent<Animator>().enabled = false;
+        
+        freezeSaveRotation = cameraTransform.rotation;
         isFreeze = true;
     }
 
     public void StopFreeze()
     {
-        Debug.Log("Stop freeze");
+        cameraTransform.GetComponent<Animator>().enabled = true;
+        
         isFreeze = false;
     }
     
