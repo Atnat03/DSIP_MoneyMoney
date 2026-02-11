@@ -151,9 +151,10 @@ public class Sangles : NetworkBehaviour, IInteractible
         if (grabbable != null)
             grabbable.IsGrabbed.Value = false;
 
-        // 🔹 Stocker sur la sangle
         storedObjectId.Value = objectNetObj.NetworkObjectId;
         interactionObject = objectNetObj;
+        
+        objectNetObj.transform.position = stayPos.position;
 
         if (rb != null)
         {
@@ -165,6 +166,8 @@ public class Sangles : NetworkBehaviour, IInteractible
 
         if (col != null)
             col.enabled = false;
+
+        objectNetObj.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
         dropTimer.Value = Random.Range(mini_TimeBeforeDrop, max_TimeBeforeDrop);
 
@@ -182,6 +185,12 @@ public class Sangles : NetworkBehaviour, IInteractible
 
         netObj.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         netObj.transform.position = position;
+        
+        var grabbable = netObj.GetComponent<GrabbableObject>();
+        if (grabbable != null)
+        {
+            grabbable.IsGrabbed.Value = false;
+        }
     }
 
     #endregion
@@ -224,15 +233,30 @@ public class Sangles : NetworkBehaviour, IInteractible
 
         netObj.gameObject.layer = LayerMask.NameToLayer("Interactable");
 
-        // Redonner l’objet au bon joueur uniquement en local
         if (NetworkManager.Singleton.LocalClientId == playerId)
         {
-            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(playerId, out var client))
-            {
-                var grabPoint = client.PlayerObject.GetComponent<GrabPoint>();
-                if (grabPoint != null)
-                    grabPoint.TryGrab(netObj);
-            }
+            RequestGrabServerRpc(objectId, playerId);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestGrabServerRpc(ulong objectId, ulong playerId)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects
+            .TryGetValue(objectId, out var netObj))
+            return;
+
+        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(playerId, out var client))
+            return;
+
+        var grabPoint = client.PlayerObject.GetComponent<GrabPoint>();
+        var grabbable = netObj.GetComponent<GrabbableObject>();
+        
+        if (grabPoint != null && grabbable != null)
+        {
+            // Assigner l'objet au GrabPoint
+            grabbable.IsGrabbed.Value = true;
+            // Appeler la méthode que votre GrabPoint utilise normalement
         }
     }
 

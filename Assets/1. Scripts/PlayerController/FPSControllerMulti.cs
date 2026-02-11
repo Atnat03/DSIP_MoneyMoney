@@ -256,20 +256,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         map.SetActive(isMapActive && !hasSomethingInHand && !isDriver);
         
-        if (Input.GetKeyUp(KeyCode.E) && !isDriver)
-        {
-            canReload = CheckCanReload();
-            
-            if(canReload)
-            {
-                shooter.StartToReload();
-                canReload = false;
-            }
-
-            if (truckInteraction.hasDriver.Value == false)
-                return;
-        }
-
         if (isDriver && isInTruck)
         {
             if (TruckController.instance != null)
@@ -338,22 +324,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         sittingPos = null;
         isSitting = false;
-    }
-
-    bool CheckCanReload()
-    {
-        RaycastHit hit;
-        bool final = false;
-
-        if (Physics.Raycast(MyCamera().transform.position, MyCamera().transform.forward, out hit, 5f))
-        {
-            if (hit.collider.CompareTag("ReloadStation"))
-            {
-                final = true;
-            }
-        }
-        
-        return (Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload) && final;
     }
 
     [SerializeField] private bool isFreeze;
