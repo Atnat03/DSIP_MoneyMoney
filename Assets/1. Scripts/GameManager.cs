@@ -23,6 +23,11 @@ public class GameManager : NetworkBehaviour
         StopTimer();
     }
 
+    public override void OnNetworkDespawn()
+    {
+        currentTime.OnValueChanged -= OnTimerChanged;
+    }
+
     private void OnTimerChanged(float previousValue, float newValue)
     {
         UpdateTimerClientRpc(newValue);
