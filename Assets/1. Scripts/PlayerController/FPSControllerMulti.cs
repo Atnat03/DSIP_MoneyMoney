@@ -241,7 +241,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             }
         }
         
-        map.SetActive(isMapActive && !hasSomethingInHand);
+        map.SetActive(isMapActive && !hasSomethingInHand && !isDriver);
         
         canReload = CheckCanReload();
 
@@ -476,6 +476,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
+
+        hasSomethingInHand = true;
         
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {
@@ -494,6 +496,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         print("ExitTruck");
         
         capsuleCollider.enabled = true;
+        
+        hasSomethingInHand = false;
         
         transform.position = exitPosition;
         
