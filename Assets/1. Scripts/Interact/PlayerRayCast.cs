@@ -156,7 +156,7 @@ public class PlayerRayCast : NetworkBehaviour
                         uiController?.SetText(interactible.InteractionName);
 
                         TruckPart part = hit.collider.GetComponent<TruckPart>();
-                        if (part)
+                        if (part && part.isBroke.Value)
                         {
                             part.mesh.enabled = true;
                             part.mesh.material = TransparentMaterial;

@@ -120,8 +120,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     public void SetVisibleGun()
     {
-        gunOther.SetActive(hasSomethingInHand && isMapActive);
-        gunOwner.SetActive(!hasSomethingInHand && !isMapActive);
+        gunOther.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
+        gunOwner.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
     }
     
     public override void OnNetworkSpawn()
@@ -139,6 +139,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             myCamera.gameObject.SetActive(false);
             
             gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
+            map.gameObject.layer = LayerMask.NameToLayer("Other");
             SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
             
             ui.SetActive(false);
@@ -153,6 +154,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
         
         gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
+        map.gameObject.layer = LayerMask.NameToLayer("Owner");
         
         myCamera.cullingMask = maskCameraPlayer;
         startPos = cameraTransform.localPosition;
@@ -172,10 +174,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         capsuleCollider = GetComponent<CapsuleCollider>();
         
         cameraShake = MyCamera().GetComponent<CameraShake>();
-        
-        Reference.AddObject(this as IParentable);
     }
-    
+
+    private void OnEnable()
+    {
+        TruckController.instance.AddInParent(this);
+    }
+
     void SetLayerRecursively(GameObject obj, int newLayer)
     {
         obj.layer = newLayer;
@@ -236,7 +241,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             }
         }
 
-        if (Input.GetKeyDown(mapKey))
+        if (Input.GetKeyDown(mapKey) && !isDriver)
         {
             if (isMapActive)
             {
@@ -495,8 +500,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
-
-        hasSomethingInHand = true;
         
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {
@@ -517,8 +520,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         print("ExitTruck");
         
         capsuleCollider.enabled = true;
-        
-        hasSomethingInHand = false;
         
         SetVisibleGun();
         

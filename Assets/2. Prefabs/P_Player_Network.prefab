@@ -5627,8 +5627,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.68854296, z: 0.64471817}
-  m_Center: {x: 0, y: -0.15572852, z: -0.10290623}
+  m_Size: {x: 1.5, y: 1.9279485, z: 1.5}
+  m_Center: {x: 0.017127484, y: -0.7910017, z: -0.065537214}
 --- !u!1 &6762169179017282632
 GameObject:
   m_ObjectHideFlags: 0
@@ -6402,7 +6402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GrabPoint
   ShowTopMostFoldoutHeaderGroup: 1
   _throw: 324
-  holdDistance: 1
+  holdDistance: 2
   _maxChargeTime: 1.5
   _minThrowStrength: 2
   _maxThrowStrength: 20
@@ -6433,12 +6433,12 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.3
+  m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: -0.12}
+  m_Center: {x: 0, y: 0, z: -0.09}
 --- !u!114 &5322193334059012131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6557,7 +6557,8 @@ MonoBehaviour:
   reviveImage: {fileID: 7218583380799286716}
   ragdollController: {fileID: 9066817082615069985}
   cameraAnimator: {fileID: 8539712608229256782}
-  outline: []
+  outline:
+  - {fileID: 355249124311739583}
   interactionName: Relever
 --- !u!114 &7029264905206466626
 MonoBehaviour:
@@ -9337,6 +9338,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -4804164587276833927, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1701626521259156950}
+    - targetCorrespondingSourceObject: {fileID: -385116144084830326, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 355249124311739583}
   m_SourcePrefab: {fileID: 100100000, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}
 --- !u!1 &257522943961885514 stripped
 GameObject:
@@ -10139,7 +10143,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   animator: {fileID: 4550466455895585992}
-  mainRigidbody: {fileID: 0}
   maxVelocity: 10
   maxAngularVelocity: 7
   ragdollDrag: 2
@@ -10457,6 +10460,29 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -574398542170260729, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}
   m_PrefabInstance: {fileID: 2703134537250696531}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6855811663910984409 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -385116144084830326, guid: 3dcd1663e4aa6da46a91dd8de31e4b9e, type: 3}
+  m_PrefabInstance: {fileID: 2703134537250696531}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &355249124311739583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855811663910984409}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &2770643654123943058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10527,9 +10553,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2040401633155409787, guid: 857fd85c326b3854e868e1ff76eedcee, type: 3}
       propertyPath: m_Layer
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3966285137213422513, guid: 857fd85c326b3854e868e1ff76eedcee, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

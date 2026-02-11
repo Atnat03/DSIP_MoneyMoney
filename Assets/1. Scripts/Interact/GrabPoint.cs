@@ -113,7 +113,7 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
-            col.isTrigger = true;
+            col.enabled = false;
         }
 
         if (item.TryGetComponent<GrabbableObject>(out var grab))
@@ -158,7 +158,6 @@ public class GrabPoint : NetworkBehaviour
         {
             _chargeTimer += Time.deltaTime;
             _chargeTimer = Mathf.Clamp(_chargeTimer, 0, _maxChargeTime);
-
             throwJauge.fillAmount = _chargeTimer / _maxChargeTime;
         }
 
@@ -171,6 +170,11 @@ public class GrabPoint : NetworkBehaviour
 
             ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
 
+            // ✅ SOLUTION : Réinitialiser immédiatement côté client
+            _heldItem = null;
+            handState = HandState.Free;
+            GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
+
             _chargeTimer = 0;
             throwJauge.fillAmount = 0;
         }
@@ -180,7 +184,12 @@ public class GrabPoint : NetworkBehaviour
     {
         Debug.Log("Slow Throw");
         ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, _minThrowStrength);
+    
+        _heldItem = null;
+        handState = HandState.Free;
+        GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
     }
+
 
     [ServerRpc(RequireOwnership = false)]
     private void ThrowServerRpc(ulong itemId, Vector3 direction, float force, ServerRpcParams rpc = default)
@@ -206,7 +215,7 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.gameObject.layer = LayerMask.NameToLayer("Interactable");
-            col.isTrigger = false;
+            col.enabled = true;
         }
 
         if (item.TryGetComponent<GrabbableObject>(out var g))
