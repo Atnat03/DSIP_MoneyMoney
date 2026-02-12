@@ -1,8 +1,12 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class AbribusBehaviour : MonoBehaviour
 {
     public float timeForTP;
+    public NetworkObject rain;
+    private NetworkObject currentRain;
+    [SerializeField] private Transform posRain;
     [SerializeField]private float _currentTimer;
 
     public Transform playerWaiting;
@@ -13,6 +17,8 @@ public class AbribusBehaviour : MonoBehaviour
         {
             other.GetComponent<BusPassenger>().jaugeGlobale.SetActive(true);
             playerWaiting = other.transform;
+            currentRain = Instantiate(rain, posRain.position, posRain.rotation);
+            currentRain.Spawn();
         }
     }
 
@@ -22,6 +28,11 @@ public class AbribusBehaviour : MonoBehaviour
         {
             playerWaiting.GetComponent<BusPassenger>().jaugeGlobale.SetActive(false);
             playerWaiting = null;
+            if(currentRain != null)
+            {
+                currentRain.Despawn();
+                Destroy(currentRain.gameObject);
+            }
         }
     }
     
