@@ -16,6 +16,10 @@ public class DestroyOnLoad : MonoBehaviour
     {
         yield return new WaitForSeconds(timerBeforeDestroy);
         
+        NetworkObject n = GetComponent<NetworkObject>();
+        
+        if (n != null) n.Despawn();
+        
         Destroy(gameObject);
     }
 }

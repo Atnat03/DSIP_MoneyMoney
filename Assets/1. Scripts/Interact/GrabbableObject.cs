@@ -55,13 +55,11 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
         
-        // ✅ Empêcher le re-grab pendant le cooldown
         if (Time.time - lastReleaseTime < REGRAB_COOLDOWN)
         {
             return;
         }
         
-        // ✅ Ne pas grab si déjà grabbed
         if (IsGrabbed.Value) return;
 
         var grabPoint = player.GetComponent<GrabPoint>();
