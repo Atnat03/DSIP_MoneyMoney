@@ -2,7 +2,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-public class BanditTir : MonoBehaviour
+public class BanditTir : NetworkBehaviour
 {
     #region Inspector
 
@@ -41,15 +41,17 @@ public class BanditTir : MonoBehaviour
     
     private string targetTag;
     
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         if (banditAI != null)
         {
             isRight = banditAI.flankPosition == BanditVehicleAI.FlankPosition.Right;
+            GetComponent<NetworkObject>().TrySetParent(banditAI.transform);
         }
         else
         {
             isRight = helicoAI.sideOffset >= 0;
+            GetComponent<NetworkObject>().TrySetParent(banditAI.transform);
         }
        
     }
@@ -58,7 +60,7 @@ public class BanditTir : MonoBehaviour
     {
         if (Time.time < nextFireTime) return;
 
-        transform.position = place.position;
+        //transform.position = place.position;
         //transform.rotation = place.rotation;
 
         Transform target = ChooseTarget();

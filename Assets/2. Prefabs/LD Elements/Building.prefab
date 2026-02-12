@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8304176453717211892}
-  m_Layer: 13
+  m_Layer: 29
   m_Name: Ligne Trottoir (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1060871319128069212}
-  m_Layer: 13
+  m_Layer: 29
   m_Name: Ligne Trottoir (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 3641402915747483781}
   - component: {fileID: 5685222591743172959}
   - component: {fileID: 3276750635709071621}
+  - component: {fileID: 888981442497902932}
   m_Layer: 13
   m_Name: Building Body
   m_TagString: Untagged
@@ -330,6 +331,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &888981442497902932
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3573653934144106050}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &5400978379793421507
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,7 +619,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7578722111434474139}
-  m_Layer: 13
+  m_Layer: 29
   m_Name: Ligne Trottoir
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,7 +658,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2959237359615093787}
-  m_Layer: 13
+  m_Layer: 29
   m_Name: Ligne Trottoir (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -967,6 +984,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_corner
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ee56d1485fd22da4bab3fc25bceeac7f, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1041,6 +1062,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_LineRough
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1114,6 +1139,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_LineRough
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1340,13 +1369,63 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7146423292135570537, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3818409183775090169}
+    - targetCorrespondingSourceObject: {fileID: 7146423292135570537, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1566363020999936418}
   m_SourcePrefab: {fileID: 100100000, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
 --- !u!4 &7070124218388174783 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7800368443141700871, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
   m_PrefabInstance: {fileID: 1035363100591221432}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7886765431679620817 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7146423292135570537, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
+  m_PrefabInstance: {fileID: 1035363100591221432}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &3818409183775090169
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7886765431679620817}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1566363020999936418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7886765431679620817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 022841b2342c0b0469b6d35247569d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scotch
 --- !u!1001 &1263670584397845417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1883,7 +1962,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7566523239313307588, guid: 4a847e49bcbe6f04aa2660140839596e, type: 3}
       propertyPath: m_VersionIndex
-      value: 2633
+      value: 2663
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1959,6 +2038,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2024,6 +2107,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2099,6 +2186,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2164,6 +2255,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2473,6 +2568,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2538,6 +2637,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2612,6 +2715,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2753,6 +2860,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_corner
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ee56d1485fd22da4bab3fc25bceeac7f, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2818,6 +2929,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2885,6 +3000,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_Line (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2950,6 +3069,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3094,6 +3217,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3288,6 +3415,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ee56d1485fd22da4bab3fc25bceeac7f, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_corner
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ee56d1485fd22da4bab3fc25bceeac7f, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3793,7 +3924,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7566523239313307588, guid: 4a847e49bcbe6f04aa2660140839596e, type: 3}
       propertyPath: m_VersionIndex
-      value: 2633
+      value: 2663
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3860,6 +3991,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3935,6 +4070,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_LineRough
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3996,6 +4135,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ee56d1485fd22da4bab3fc25bceeac7f, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_corner
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ee56d1485fd22da4bab3fc25bceeac7f, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4207,6 +4350,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_Line (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4351,6 +4498,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_Line (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4417,6 +4568,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_Line
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4482,6 +4637,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4937,6 +5096,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_Line
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5089,6 +5252,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5162,6 +5329,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5303,6 +5474,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_LineRough
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5384,13 +5559,63 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7146423292135570537, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4112316045376087121}
+    - targetCorrespondingSourceObject: {fileID: 7146423292135570537, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3728647003383779389}
   m_SourcePrefab: {fileID: 100100000, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
 --- !u!4 &205912227190895564 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7800368443141700871, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
   m_PrefabInstance: {fileID: 7970234244603563723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &988196863623475874 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7146423292135570537, guid: 42788efd3287ad9408c5b7a3885b00a4, type: 3}
+  m_PrefabInstance: {fileID: 7970234244603563723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &4112316045376087121
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988196863623475874}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &3728647003383779389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988196863623475874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 022841b2342c0b0469b6d35247569d34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Scotch
 --- !u!1001 &8017696208672340559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5513,6 +5738,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_Line
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5586,6 +5815,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5887,6 +6120,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Trottoir_Line (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6092,6 +6329,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_LineRough (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d9ee1b7bff4938e4ab1c95ec8b68c348, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6302,6 +6543,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
       propertyPath: m_Name
       value: SM_Trottoir_Line
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 914e5b90554da19449c5248ca5c234df, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

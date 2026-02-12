@@ -57,7 +57,7 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
 
         agent.speed = maxSpeed;
         agent.acceleration = acceleration;
-        agent.angularSpeed = 120f;
+        agent.angularSpeed = 250f;
         agent.stoppingDistance = stoppingDistance;
         agent.autoBraking = true;
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
