@@ -167,7 +167,6 @@ public class GrabPoint : NetworkBehaviour
 
             ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
 
-            // ✅ SOLUTION : Réinitialiser immédiatement côté client
             _heldItem = null;
             handState = HandState.Free;
             GetComponent<FPSControllerMulti>().hasSomethingInHand = false;

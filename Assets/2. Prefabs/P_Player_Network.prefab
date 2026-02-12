@@ -6125,7 +6125,6 @@ GameObject:
   - component: {fileID: 7770147990601004}
   - component: {fileID: 738059765283072650}
   - component: {fileID: 6095605793997815558}
-  - component: {fileID: 6502196373859403675}
   - component: {fileID: 8501137336355525466}
   m_Layer: 11
   m_Name: Head
@@ -6186,21 +6185,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.98073155, y: 1.9279485, z: 1.0967236}
   m_Center: {x: 0.00435099, y: -0.7910017, z: -0.056593895}
---- !u!114 &6502196373859403675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6735231894082441938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ce9150ad6ff2544498813e5d5e60df1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DrunkEffectCamera
-  intensity: 10
-  speed: 5
-  duration: 5
 --- !u!114 &8501137336355525466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7116,6 +7100,7 @@ MonoBehaviour:
   _onDeath:
     m_PersistentCalls:
       m_Calls: []
+  effetDamage: {fileID: 8501137336355525466}
   healthBar: {fileID: 0}
 --- !u!114 &8017075535117252575
 MonoBehaviour:
