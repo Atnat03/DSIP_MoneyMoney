@@ -64,7 +64,7 @@ public class AutoJoinedLobby : MonoBehaviour
         ConnectingTXT.SetActive(true);
         ElementsToConnect.SetActive(false);
         
-        EnterGame();
+        _ = EnterGame();
     }
 
     public void ChangeColor(int colorIndex)
@@ -77,7 +77,7 @@ public class AutoJoinedLobby : MonoBehaviour
         LocalPlayerSkin = skinIndex;
     }
 
-    private async void EnterGame()
+    private async Task EnterGame()
     {
         if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
         {
