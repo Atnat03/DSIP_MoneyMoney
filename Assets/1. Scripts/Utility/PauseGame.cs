@@ -10,7 +10,6 @@ public class PauseGame : NetworkBehaviour
     [SerializeField] private GameObject uiPause;
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button debugCamionButton;
-    [SerializeField] private Button continueButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private TextMeshProUGUI buttonPauseText;
     [SerializeField] private TextMeshProUGUI PartyCodeTxt;
@@ -35,7 +34,6 @@ public class PauseGame : NetworkBehaviour
             debugCamionButton.onClick.AddListener(ResetCametar);
         }
         
-        continueButton.onClick.AddListener(ContinueTheGame);
         quitButton.onClick.AddListener(QuitTheGame);
         
         fpsController = GetComponent<FPSControllerMulti>();
@@ -87,12 +85,10 @@ public class PauseGame : NetworkBehaviour
         if(Time.timeScale == 0)
         {
             buttonPauseText.text = pauseText[0];
-            continueButton.interactable = true;
         }
         else
         {
             buttonPauseText.text = pauseText[1];
-            continueButton.interactable = false;
         }
         
         UpdateFreezeTimeClientRpc();
@@ -108,19 +104,6 @@ public class PauseGame : NetworkBehaviour
         else
         {
             Time.timeScale = 0;
-        }
-    }
-    
-    private void ContinueTheGame()
-    {
-        Debug.Log("ContinueTheGame");
-
-        if (isPause)
-        {
-            fpsController.StopFreeze();
-            isPause = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
     }
     

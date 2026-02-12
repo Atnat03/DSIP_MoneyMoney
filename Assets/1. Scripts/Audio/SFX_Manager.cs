@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -8,7 +9,7 @@ public class SFX_SO : ScriptableObject
     public List<AudioClip> clips;
 }
 
-public class SFX_Manager : MonoBehaviour
+public class SFX_Manager : NetworkBehaviour
 {
     public static SFX_Manager instance;
     
@@ -22,6 +23,12 @@ public class SFX_Manager : MonoBehaviour
     }
 
     public void PlaySFX(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
+    {
+        PlaySoundClientRpc(clipID, volume, pitch, loop);
+    }
+
+    [ClientRpc]
+    public void PlaySoundClientRpc(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
     {
         audioSource.pitch = pitch;
         if (loop)
@@ -39,14 +46,6 @@ public class SFX_Manager : MonoBehaviour
         else
         {
             audioSource.PlayOneShot(data.clips[clipID], volume);  
-        }
-    }
-    
-    public void StopSFX()
-    {
-        print("sfx stopped");
-
-        loopAudioSource.clip = null;
-        loopAudioSource.Stop();
+        }    
     }
 }

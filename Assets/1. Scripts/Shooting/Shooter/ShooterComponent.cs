@@ -214,8 +214,6 @@ namespace Shooting
             fps.animator.SetBool("Shoot", true);
 
             ShoopClientRpc();
-            
-            
 
             elpased = FireRate;
 
