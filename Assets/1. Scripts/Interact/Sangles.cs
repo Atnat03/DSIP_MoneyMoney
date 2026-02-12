@@ -41,7 +41,7 @@ public class Sangles : NetworkBehaviour, IInteractible
         storedObjectId.OnValueChanged += OnStoredObjectChanged;
 
         if (storedObjectId.Value != 0)
-            UpdateStoredObjectReference();
+            OnStoredObjectChanged(0, storedObjectId.Value);
     }
 
     public override void OnNetworkDespawn()
@@ -52,8 +52,32 @@ public class Sangles : NetworkBehaviour, IInteractible
     private void OnStoredObjectChanged(ulong oldVal, ulong newVal)
     {
         Log($"StoredObject changed {oldVal} → {newVal}");
-        UpdateStoredObjectReference();
+
+        if (newVal == 0)
+        {
+            if (interactionObject != null)
+            {
+                SetObjectPhysics(interactionObject, false);
+                interactionObject.transform.SetParent(null);
+                interactionObject = null;
+            }
+            return;
+        }
+
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(newVal, out var obj))
+        {
+            interactionObject = obj;
+            obj.transform.SetParent(stayPos);
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localRotation = Quaternion.identity;
+            SetObjectPhysics(obj, true);
+        }
+        else
+        {
+            LogWarning("Stored object not yet spawned on client");
+        }
     }
+
 
     #endregion
 
