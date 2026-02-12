@@ -6161,7 +6161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40eebdd13a6db7b4486c45f5c681e342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  MiniVelocityToTakeDamageFromThune: 1
+  MiniVelocityToTakeDamageFromThune: 0.9
   grabPoint: {fileID: 2094199091246566129}
   healthComponent: {fileID: 5225601816550349719}
 --- !u!65 &6095605793997815558
@@ -6754,7 +6754,7 @@ MonoBehaviour:
   circleCD: {fileID: 0}
   hasMaterial: 0
   materialVisual: {fileID: 8219632236736230469}
-  hitDistance: 5
+  hitDistance: 3
   RepearInteractionName: "R\xE9parer"
   TransparentMaterial: {fileID: 2100000, guid: be1e57385f8c36043a4998d50408863e, type: 2}
   reviveHUDImage: {fileID: 7218583380799286716}
@@ -6979,7 +6979,7 @@ MonoBehaviour:
   holdDistance: 2
   _maxChargeTime: 1.5
   _minThrowStrength: 2
-  _maxThrowStrength: 30
+  _maxThrowStrength: 22
   throwJauge: {fileID: 3742478140714004104}
   _onGrab:
     m_PersistentCalls:

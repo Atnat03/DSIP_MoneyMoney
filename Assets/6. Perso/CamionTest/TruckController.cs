@@ -356,11 +356,11 @@ public class TruckController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ResetTruckServerRpc(Vector3 newPosition)
     {
-        print("ca a reset");
+        print("Reset position : " + newPosition);
         
         Vector3 rot = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
-        transform.position += newPosition + Vector3.up * 2f;
+        transform.position = newPosition + Vector3.up * 2f;
         
         jaugeMashing.transform.parent.gameObject.SetActive(false);
 
@@ -374,16 +374,18 @@ public class TruckController : NetworkBehaviour
     
     public void ResetCamionToNearPoint()
     {
-        int layer = LayerMask.NameToLayer("SpawnPointBandit");
-        LayerMask mask = 1 << layer;
-        
-        Collider[] hits = Physics.OverlapSphere(transform.position, raduisReset,  mask);
-        
-        Transform closest = null;
         float minDist = Mathf.Infinity;
+        Transform closest = null;
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, raduisReset);
+
+        print(hits.Length);
         
         foreach (Collider hit in hits)
         {
+            if (hit.gameObject.layer != LayerMask.NameToLayer("SpawnPointBandit"))
+                continue;
+
             float dist = (hit.transform.position - transform.position).sqrMagnitude;
             if (dist < minDist)
             {
@@ -391,10 +393,11 @@ public class TruckController : NetworkBehaviour
                 closest = hit.transform;
             }
         }
-        
-        if(closest != null)
+
+        if (closest != null)
             ResetTruckServerRpc(closest.position);
     }
+
 
     public void AddValueToReset()
     {

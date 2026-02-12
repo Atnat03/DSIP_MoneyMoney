@@ -242,15 +242,17 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.OwnerClientId != rpc.Receive.SenderClientId)
             return;
-        
+
         if (item.gameObject.CompareTag("Material"))
             return;
 
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.isKinematic = false;
+            rb.useGravity = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.WakeUp();
 
             rb.AddForce(direction.normalized * force, ForceMode.Impulse);
         }
@@ -266,6 +268,7 @@ public class GrabPoint : NetworkBehaviour
 
         ReleaseClientRpc(rpc.Receive.SenderClientId);
     }
+
 
     [ClientRpc]
     private void ReleaseClientRpc(ulong ownerId)
