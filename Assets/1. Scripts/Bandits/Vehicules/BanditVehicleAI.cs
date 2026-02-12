@@ -155,6 +155,7 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
 
     #endregion
 
+    public GameObject debris;
     public void Die()
     {
         NetworkObject explosionParticleIntance = Instantiate(vfxMort, transform.position, transform.rotation).GetComponent<NetworkObject>();
@@ -171,6 +172,8 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
             netObj2.Despawn();
         }
 
+        GameObject debriss = Instantiate(debris, transform.position, transform.rotation);
+        debriss.GetComponent<NetworkObject>().Spawn();
         Destroy(gameObject);
     }
 
