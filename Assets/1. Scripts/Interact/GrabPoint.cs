@@ -92,28 +92,25 @@ public class GrabPoint : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void GrabServerRpc(ulong itemId, ServerRpcParams rpc = default)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
-            return;
-
-        if (item.TryGetComponent<GrabbableObject>(out var g) && g.IsGrabbed.Value)
-            return;
-
-        if (item.gameObject.CompareTag("Material") || item.GetComponent<ListenEventDoor>())
-            return;
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item)) return;
+        if (item.TryGetComponent<GrabbableObject>(out var g) && g.IsGrabbed.Value) return;
+        if (item.gameObject.CompareTag("Material") || item.GetComponent<ListenEventDoor>()) return;
 
         item.ChangeOwnership(rpc.Receive.SenderClientId);
 
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
-            rb.isKinematic = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.WakeUp();
         }
 
         if (item.TryGetComponent<Collider>(out var col))
         {
-            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
             col.enabled = false;
+            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
         }
 
         if (item.TryGetComponent<GrabbableObject>(out var grab))
@@ -195,9 +192,10 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
-            rb.isKinematic = false;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+
+            rb.isKinematic = true;
         }
 
         if (item.TryGetComponent<Collider>(out var col))
