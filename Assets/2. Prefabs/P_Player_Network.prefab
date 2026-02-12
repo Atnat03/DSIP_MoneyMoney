@@ -6739,7 +6739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4055741435
+  GlobalObjectIdHash: 3557140025
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -6835,9 +6835,9 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -7354,6 +7354,7 @@ MonoBehaviour:
   throwBottleForce: 25
   throwRotateTroqueForce: {x: 1000, y: 0, z: 0}
   uiClique: {fileID: 4634971724312730908}
+  effet: {fileID: 0}
 --- !u!1 &7267270393736431613
 GameObject:
   m_ObjectHideFlags: 0
@@ -9941,6 +9942,13 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
     DestinationState: 1757557519
     TransitionDuration: 0.25
     TriggerNameHash: -1907200461
@@ -9970,7 +9978,7 @@ MonoBehaviour:
     - name: Jump
       NameHash: 125937960
       Synchronize: 1
-      ParameterType: 4
+      ParameterType: 9
     - name: Shoot
       NameHash: -1316629574
       Synchronize: 1
@@ -9979,10 +9987,6 @@ MonoBehaviour:
       NameHash: -1525363869
       Synchronize: 1
       ParameterType: 9
-    - name: Walk
-      NameHash: 765711723
-      Synchronize: 1
-      ParameterType: 4
   AnimatorParametersExpanded: 0
 --- !u!1 &755027624444638344 stripped
 GameObject:
@@ -11948,6 +11952,13 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
     DestinationState: 1757557519
     TransitionDuration: 0.25
     TriggerNameHash: -1907200461
@@ -11977,7 +11988,7 @@ MonoBehaviour:
     - name: Jump
       NameHash: 125937960
       Synchronize: 1
-      ParameterType: 4
+      ParameterType: 9
     - name: Shoot
       NameHash: -1316629574
       Synchronize: 1
@@ -11986,10 +11997,6 @@ MonoBehaviour:
       NameHash: -1525363869
       Synchronize: 1
       ParameterType: 9
-    - name: Walk
-      NameHash: 765711723
-      Synchronize: 1
-      ParameterType: 4
   AnimatorParametersExpanded: 0
 --- !u!1 &5202224070701330050 stripped
 GameObject:
@@ -14681,6 +14688,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2147517661573180615, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3776166681
+      objectReference: {fileID: 0}
     - target: {fileID: 3925650740219368190, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
       propertyPath: m_Name
       value: Liquide
@@ -15860,6 +15871,13 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
     DestinationState: 1757557519
     TransitionDuration: 0.25
     TriggerNameHash: -1907200461
@@ -15889,7 +15907,7 @@ MonoBehaviour:
     - name: Jump
       NameHash: 125937960
       Synchronize: 1
-      ParameterType: 4
+      ParameterType: 9
     - name: Shoot
       NameHash: -1316629574
       Synchronize: 1
@@ -15898,10 +15916,6 @@ MonoBehaviour:
       NameHash: -1525363869
       Synchronize: 1
       ParameterType: 9
-    - name: Walk
-      NameHash: 765711723
-      Synchronize: 1
-      ParameterType: 4
   AnimatorParametersExpanded: 0
 --- !u!1 &7360723321750180933 stripped
 GameObject:
@@ -17828,6 +17842,13 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
     DestinationState: 1757557519
     TransitionDuration: 0.25
     TriggerNameHash: -1907200461
@@ -17857,7 +17878,7 @@ MonoBehaviour:
     - name: Jump
       NameHash: 125937960
       Synchronize: 1
-      ParameterType: 4
+      ParameterType: 9
     - name: Shoot
       NameHash: -1316629574
       Synchronize: 1
@@ -17866,10 +17887,6 @@ MonoBehaviour:
       NameHash: -1525363869
       Synchronize: 1
       ParameterType: 9
-    - name: Walk
-      NameHash: 765711723
-      Synchronize: 1
-      ParameterType: 4
   AnimatorParametersExpanded: 0
 --- !u!1 &8345748851882135843 stripped
 GameObject:

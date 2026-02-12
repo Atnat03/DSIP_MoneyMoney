@@ -453,9 +453,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                 move.y = verticalVelocity;
             }
 
-            controller.enabled = true;
             controller.Move(move * Time.deltaTime);
-            controller.enabled = false;
         }
     }    
     
