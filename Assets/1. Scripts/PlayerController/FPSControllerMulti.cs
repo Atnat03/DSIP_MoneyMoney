@@ -50,11 +50,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     public bool isInTruck = false;
     private Transform truckParent;
+    public bool isPassenger = false; // NOUVEAU: pour distinguer passager du conducteur
 
     [Header("Truck Interaction")]
     [SerializeField] float interactDistance = 5f;
     [SerializeField] LayerMask truckLayer;
     [SerializeField, Range(0, 1f)] float truckFollowStrength = 0.5f;
+    [SerializeField] float passengerMoveSpeed = 2f; // NOUVEAU: vitesse de déplacement dans le camion
     
     private TruckInteraction truckInteraction;
     
@@ -216,7 +218,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         animator.SetFloat("Speed", isMoving);
         
         textGoInCamion.SetActive(canEnterInTruck);
-        textGoOUTCamion.SetActive(isDriver);
+        textGoOUTCamion.SetActive(isDriver || isPassenger); // MODIFIÉ: afficher aussi pour les passagers
         textReload.SetActive(canReload);
 
         isInTruck = transform.parent == TruckController.instance.transform;
@@ -234,6 +236,10 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck || isInTruck))
         {
             if (isInTruck && isDriver)
+            {
+                truckInteraction.TryExitTruck(this);
+            }
+            else if (isInTruck && isPassenger) // MODIFIÉ: les passagers peuvent aussi sortir
             {
                 truckInteraction.TryExitTruck(this);
             }
@@ -309,6 +315,14 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             return;
         }
 
+        // NOUVEAU: Gestion du mouvement pour les passagers
+        if (isPassenger && isInTruck && !isDriver)
+        {
+            HandlePassengerMovement();
+            HandleCameraInput();
+            return;
+        }
+
         if (isSitting && sittingPos != null)
         {
             transform.position = sittingPos.position;
@@ -323,6 +337,38 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (!isInTruck || !isDriver)
         {
             HandleMovement();
+        }
+    }
+
+    // NOUVELLE FONCTION: Gestion du mouvement des passagers dans le camion
+    void HandlePassengerMovement()
+    {
+        if (isFreeze) return;
+
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        // Mouvement local dans le camion
+        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+        Vector3 worldMove = transform.TransformDirection(localMove) * passengerMoveSpeed * Time.deltaTime;
+        
+        // Déplacer en position locale pour rester attaché au camion
+        transform.localPosition += transform.parent.InverseTransformDirection(worldMove);
+        
+        // Vérifier les limites du camion
+        if (TruckController.instance != null)
+        {
+            Vector3 localPos = transform.localPosition;
+            Vector3 boundsCenter = TruckController.instance.boundsCenter;
+            Vector3 boundsSize = TruckController.instance.boundsSize;
+            Vector3 halfSize = boundsSize * 0.5f;
+            
+            // Clamper la position pour rester dans les limites
+            localPos.x = Mathf.Clamp(localPos.x, boundsCenter.x - halfSize.x, boundsCenter.x + halfSize.x);
+            localPos.y = Mathf.Clamp(localPos.y, boundsCenter.y - halfSize.y, boundsCenter.y + halfSize.y);
+            localPos.z = Mathf.Clamp(localPos.z, boundsCenter.z - halfSize.z, boundsCenter.z + halfSize.z);
+            
+            transform.localPosition = localPos;
         }
     }
 
@@ -374,7 +420,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     private void HandleHeadbob()
     {
-        if (isOnLadder || isDriver) return;
+        if (isOnLadder || isDriver || isPassenger) return; // MODIFIÉ: pas de headbob pour les passagers non plus
         
         if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
         {
@@ -503,7 +549,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             netTransform.InLocalSpace = true;
         }
         
-        animator.SetBool("Sit", true);
+        animator.SetBool("Sit", asDriver); // MODIFIÉ: seulement le conducteur est assis
+        
+        isPassenger = !asDriver; // NOUVEAU: marquer comme passager si pas conducteur
         
         SetVisibleGun();
         
@@ -522,6 +570,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         animator.SetBool("Sit", false);
         
+        isPassenger = false; // NOUVEAU: ne plus être passager
+        
         SetVisibleGun();
         
         transform.position = exitPosition;
@@ -538,11 +588,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     }
 
     [ClientRpc]
-    private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
+    private void SetPassengerModeClientRpc(bool isPassengerMode, Vector3 desiredLocalPos)
     {
-        isInTruck = isPassenger;
+        isInTruck = isPassengerMode;
 
-        if (isPassenger)
+        if (isPassengerMode)
         {
 
             var netTransform = GetComponent<NetworkTransform>();
