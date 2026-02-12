@@ -18,7 +18,6 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     [Header("UI")]
     public Image healthBar;
 
-    public GameObject core, pieces;
 
     public Action<BulletInfo> OnShot { get; private set; }
     public Collider Collider { get; private set; }
@@ -80,12 +79,5 @@ public class Bandit_Health : NetworkBehaviour, ITarget
     private void Die()
     {
         GetComponent<IVehicule>().Die();
-        if (core != null)
-        {
-            core.SetActive(false);
-            pieces.SetActive(true);
-        }
-        
-       
     }
 }
