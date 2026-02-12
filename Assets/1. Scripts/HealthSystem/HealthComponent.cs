@@ -148,7 +148,7 @@ public class HealthComponent : NetworkBehaviour
         effetDamage.SetDizziness(0);
         effetDamage.SetIntensity(0.5f);
         
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
 
         effetDamage.SetIntensity(0);
 
