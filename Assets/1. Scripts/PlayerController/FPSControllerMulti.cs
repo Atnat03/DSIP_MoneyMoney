@@ -239,7 +239,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             {
                 truckInteraction.TryExitTruck(this);
             }
-            else if (isInTruck && isPassenger) // MODIFIÉ: les passagers peuvent aussi sortir
+            else if (isInTruck && isPassenger)
             {
                 truckInteraction.TryExitTruck(this);
             }
@@ -314,7 +314,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             HandleCameraInput();
             return;
         }
-
+        
         // NOUVEAU: Gestion du mouvement pour les passagers
         if (isPassenger && isInTruck && !isDriver)
         {
@@ -553,6 +553,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         isPassenger = !asDriver; // NOUVEAU: marquer comme passager si pas conducteur
         
+        controller.enabled = false;
+        
         SetVisibleGun();
         
         if (IsOwner) {
@@ -567,6 +569,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         print("ExitTruck");
         
         capsuleCollider.enabled = true;
+        controller.enabled = true;
         
         animator.SetBool("Sit", false);
         

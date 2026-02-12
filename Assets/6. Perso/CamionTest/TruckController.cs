@@ -231,8 +231,13 @@ public class TruckController : NetworkBehaviour
 
         parentable.OnParented(transform);
 
-        netObj.GetComponent<NetworkTransform>().InLocalSpace = true;
-
+        FPSControllerMulti fps = netObj.GetComponent<FPSControllerMulti>();
+        if(fps)
+        {
+            fps.GetComponent<CapsuleCollider>().enabled = false;
+            fps.controller.enabled = false;
+        }
+        
         Debug.Log($"{netObj.name} parenté au camion");
     }
 
@@ -244,6 +249,13 @@ public class TruckController : NetworkBehaviour
         trackedParentables.Remove(netObj);
 
         parentable.OnUnparented();
+        
+        FPSControllerMulti fps = netObj.GetComponent<FPSControllerMulti>();
+        if(fps)
+        {
+            fps.GetComponent<CapsuleCollider>().enabled = true;
+            fps.controller.enabled = true;
+        }
         
         netObj.GetComponent<NetworkTransform>().InLocalSpace = false;
 
