@@ -53,6 +53,7 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
     private void ToggleDoor()
     {
         isOpenDoor.Value = !isOpenDoor.Value;
+        SFX_Manager.instance.PlaySFX(13);
         print("DOOR : " + isOpenDoor.Value);
     }
 

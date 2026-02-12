@@ -28,6 +28,8 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
 
     private void OnGrabbedChanged(bool oldValue, bool newValue)
     {
+        SFX_Manager.instance.PlaySFX(14);
+        
         // Quand l'objet passe de grabbed à non-grabbed
         if (oldValue == true && newValue == false)
         {
