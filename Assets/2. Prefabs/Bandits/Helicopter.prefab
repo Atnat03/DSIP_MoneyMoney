@@ -399,6 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154ca578d258914eb15e2218a75014f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BanditTir
+  ShowTopMostFoldoutHeaderGroup: 1
   turretGun: {fileID: 5146999362374400352}
   firePoint: {fileID: 8699160269240570624}
   rotationSpeed: 8
@@ -992,7 +993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2061302133
+  GlobalObjectIdHash: 2582449628
   InScenePlacedSourceGlobalObjectIdHash: 2061302133
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1020,6 +1021,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   maxHealth: 20
   healthBar: {fileID: 4735962681536404126}
+  core: {fileID: 0}
+  pieces: {fileID: 0}
 --- !u!114 &1600144204417638947
 MonoBehaviour:
   m_ObjectHideFlags: 0

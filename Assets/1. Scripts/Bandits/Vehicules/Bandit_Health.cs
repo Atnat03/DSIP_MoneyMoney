@@ -79,8 +79,13 @@ public class Bandit_Health : NetworkBehaviour, ITarget
 
     private void Die()
     {
-        core.SetActive(false);
-        pieces.SetActive(true);
         GetComponent<IVehicule>().Die();
+        if (core != null)
+        {
+            core.SetActive(false);
+            pieces.SetActive(true);
+        }
+        
+       
     }
 }

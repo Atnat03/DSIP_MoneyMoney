@@ -51,7 +51,7 @@ public class BanditTir : NetworkBehaviour
         else
         {
             isRight = helicoAI.sideOffset >= 0;
-            GetComponent<NetworkObject>().TrySetParent(banditAI.transform);
+            GetComponent<NetworkObject>().TrySetParent(helicoAI.transform);
         }
        
     }
@@ -80,6 +80,7 @@ public class BanditTir : NetworkBehaviour
             (isRight && TruckLife.instance.canShootPlayerRight) ||
             (!isRight && TruckLife.instance.canShootPlayerLeft);
 
+        Debug.Log(canShootPlayer + "stpp");
         if (canShootPlayer)
         {
             Transform visiblePlayer = FindClosestVisiblePlayer();
@@ -149,11 +150,13 @@ public class BanditTir : NetworkBehaviour
         Vector3 dir = (target.position - origin).normalized;
 
         RaycastHit hit;
+        Debug.DrawRay(origin, dir, Color.red);
         if (Physics.Raycast(origin, dir, out hit, detectionRadius, visibilityMask, QueryTriggerInteraction.Ignore))
         {
+            
             return hit.transform == target;
         }
-        
+        Debug.Log("invisiiiible   " + hit.transform.name);
         return false;
     }
 
