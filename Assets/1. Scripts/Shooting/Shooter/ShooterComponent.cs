@@ -218,7 +218,7 @@ namespace Shooting
             muzzleFlash.transform.SetParent(_instantPos);
             GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
         }
-
+        
         /// <summary>
         /// Invokes feedbacks on every target that is shot.
         /// </summary>
