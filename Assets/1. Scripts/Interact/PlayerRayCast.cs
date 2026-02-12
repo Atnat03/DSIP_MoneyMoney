@@ -81,9 +81,7 @@ public class PlayerRayCast : NetworkBehaviour
 
                 if (targetKO == null)
                     targetKO = hit.transform.GetComponentInParent<KnockOut>();
-                
-                print("RAGDOLLL" + targetKO.name);
-                    
+                 
                 if (targetKO.isKnockedOut.Value)
                 {
                     uiController?.OnInteract();

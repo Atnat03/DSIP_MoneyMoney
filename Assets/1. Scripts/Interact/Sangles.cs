@@ -73,7 +73,6 @@ public class Sangles : NetworkBehaviour, IInteractible
         {
             interactionObject = netObj;
             
-            // 🔹 Appliquer la physique côté client aussi
             netObj.transform.position = stayPos.position;
             
             if (netObj.TryGetComponent<Rigidbody>(out var rb))
@@ -148,19 +147,17 @@ public class Sangles : NetworkBehaviour, IInteractible
         NetworkObject objectNetObj = heldObject.GetComponent<NetworkObject>();
         if (objectNetObj == null) return;
 
-        // ✅ SOLUTION : Relâcher l'objet côté serveur ET client AVANT de stocker
+        // ✅ Relâcher l'interface du joueur
         ForceReleaseFromHandServerRpc(objectNetObj.NetworkObjectId, senderId);
         
-        // ⏳ Attendre que le relâchement soit effectif avant de stocker
+        // ⏳ Stocker après relâchement
         StartCoroutine(StockAfterRelease(objectNetObj));
     }
 
     private System.Collections.IEnumerator StockAfterRelease(NetworkObject objectNetObj)
     {
-        // Attendre 1 frame pour que le relâchement soit propagé
         yield return null;
         
-        // 🔹 Stocker l'objet
         storedObjectId.Value = objectNetObj.NetworkObjectId;
         interactionObject = objectNetObj;
         
@@ -182,7 +179,6 @@ public class Sangles : NetworkBehaviour, IInteractible
 
         dropTimer.Value = Random.Range(mini_TimeBeforeDrop, max_TimeBeforeDrop);
 
-        // 🔹 Synchroniser côté clients
         UpdateObjectPositionClientRpc(objectNetObj.NetworkObjectId, stayPos.position);
     }
 
@@ -192,14 +188,27 @@ public class Sangles : NetworkBehaviour, IInteractible
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
             return;
 
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(playerId, out var client))
+        // ✅ Juste changer le flag IsGrabbed
+        if (item.TryGetComponent<GrabbableObject>(out var g))
+            g.IsGrabbed.Value = false;
+
+        // ✅ Notifier le client de relâcher l'UI
+        ForceClientReleaseClientRpc(playerId);
+    }
+
+    [ClientRpc]
+    private void ForceClientReleaseClientRpc(ulong playerId)
+    {
+        if (NetworkManager.Singleton.LocalClientId != playerId) 
             return;
 
-        var grabPoint = client.PlayerObject.GetComponent<GrabPoint>();
+        var player = NetworkManager.Singleton.LocalClient.PlayerObject;
+        if (player == null) return;
+
+        var grabPoint = player.GetComponent<GrabPoint>();
         if (grabPoint == null) return;
 
-        // ✅ Forcer le relâchement via la méthode existante
-        grabPoint.ForceReleaseServer(itemId);
+        grabPoint.ForceLocalRelease();
     }
 
     [ClientRpc]
@@ -209,7 +218,6 @@ public class Sangles : NetworkBehaviour, IInteractible
             .TryGetValue(objectId, out var netObj))
             return;
 
-        // 🔹 IMPORTANT : Appliquer la physique côté client
         netObj.transform.position = position;
         netObj.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         
@@ -265,7 +273,6 @@ public class Sangles : NetworkBehaviour, IInteractible
             .TryGetValue(objectId, out var netObj))
             return;
 
-        // 🔹 Remettre la physique côté client
         netObj.gameObject.layer = LayerMask.NameToLayer("Interactable");
         
         if (netObj.TryGetComponent<Rigidbody>(out var rb))
@@ -277,7 +284,6 @@ public class Sangles : NetworkBehaviour, IInteractible
         if (netObj.TryGetComponent<Collider>(out var col))
             col.enabled = true;
 
-        // 🔹 Si c'est le joueur qui a cliqué, grab l'objet
         if (NetworkManager.Singleton.LocalClientId == playerId)
         {
             RequestGrabServerRpc(objectId, playerId);
@@ -298,7 +304,6 @@ public class Sangles : NetworkBehaviour, IInteractible
         
         if (grabPoint != null)
         {
-            // 🔹 SOLUTION : Appeler la vraie méthode TryGrab
             grabPoint.TryGrab(netObj);
         }
     }
@@ -314,7 +319,6 @@ public class Sangles : NetworkBehaviour, IInteractible
     
     private void Update()
     {
-        // 🔹 Forcer la position de l'objet stocké (côté serveur ET client)
         if (storedObjectId.Value != 0 && interactionObject != null)
         {
             interactionObject.transform.position = stayPos.position;

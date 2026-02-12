@@ -120,6 +120,8 @@ public class TruckController : NetworkBehaviour
         CheckPassengersBounds();
     
         rb.centerOfMass = centerOfMass;
+
+        rb.isKinematic = !truckInteraction.hasDriver.Value;
         
         if (truckInteraction != null && truckInteraction.HasDriver())
         {

@@ -190,6 +190,8 @@ public class GrabPoint : NetworkBehaviour
     {
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
             return;
+        
+        ulong itemOwnerId = item.OwnerClientId;
 
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
@@ -207,9 +209,22 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<GrabbableObject>(out var g))
             g.IsGrabbed.Value = false;
 
-        ReleaseClientRpc(item.OwnerClientId);
+        ReleaseClientRpc(itemOwnerId);
     }
 
+    // ✅ Méthode publique pour relâcher localement
+    public void ForceLocalRelease()
+    {
+        if (_heldItem != null)
+        {
+            _heldItem = null;
+        }
+    
+        handState = HandState.Free;
+        GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
+    
+        _onThrow?.Invoke();
+    }
 
     public void Throw()
     {
