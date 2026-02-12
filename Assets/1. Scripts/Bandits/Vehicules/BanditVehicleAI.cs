@@ -176,7 +176,9 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
         {
             netObj2.Despawn();
         }
-        Destroy(gameObject);
+        
+        netObj.Despawn(true);
+        netObj2.Despawn(true);
     }
 
     void OnDrawGizmosSelected()
