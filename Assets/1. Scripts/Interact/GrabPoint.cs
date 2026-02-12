@@ -300,6 +300,9 @@ public class GrabPoint : NetworkBehaviour
         if (item.OwnerClientId != rpc.Receive.SenderClientId)
             return;
 
+        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
+            return;
+        
         item.transform.position = pos;
         item.transform.rotation = rot;
 
@@ -308,6 +311,29 @@ public class GrabPoint : NetworkBehaviour
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
 
+            rb.isKinematic = true;
+        }
+        
+        UpdateHeldPositionClientRpc(itemId, pos, rot);
+    }
+
+    [ClientRpc(Delivery = RpcDelivery.Unreliable)]
+    private void UpdateHeldPositionClientRpc(ulong itemId, Vector3 pos, Quaternion rot)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item)) return;
+
+        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
+            return;
+
+        if (item.OwnerClientId == NetworkManager.Singleton.LocalClientId) return;
+
+        item.transform.position = pos;
+        item.transform.rotation = rot;
+
+        if (item.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
     }

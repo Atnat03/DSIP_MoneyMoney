@@ -214,8 +214,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         float isMoving = controller.isGrounded ? controller.velocity.magnitude : 0;
         
         animator.SetFloat("Speed", isMoving);
-
-        //UpdateAnimationServerRpc(isMoving);
         
         textGoInCamion.SetActive(canEnterInTruck);
         textGoOUTCamion.SetActive(isDriver);
@@ -423,26 +421,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             {
                 isOnLadder = false;
                 verticalVelocity = jumpForce * 0.5f;
-                SFX_Manager.instance.StopSFX();
-                // Ne pas return ici ! On continue pour appliquer le mouvement
             }
             
             if (isOnLadder && !controller.isGrounded)
             {
                 Vector3 climb = new Vector3(horizontalInput, verticalInput, 0f);
                 move = transform.TransformDirection(climb) * ladderClimbSpeed;
-
-                bool isClimbing = Mathf.Abs(horizontalInput) > 0.1f || Mathf.Abs(verticalInput) > 0.1f;
                 
-                if (isClimbing)
-                {
-                    SFX_Manager.instance.PlaySFX(11, 0.5f, 1f, true);
-                }
-                else
-                {
-                    SFX_Manager.instance.StopSFX();
-                }
-
                 verticalVelocity = 0f;
             }
             else
@@ -466,24 +451,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                 Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
                 move = transform.TransformDirection(localMove) * speed;
                 move.y = verticalVelocity;
-                
-                bool isWalking = localMove.magnitude > 0.1f && controller.isGrounded;
-                
-                if (isWalking)
-                {
-                    if (Input.GetKey(KeyCode.LeftShift))
-                    {
-                        SFX_Manager.instance.PlaySFX(2, 0.5f, 1f, true);
-                    }
-                    else
-                    {
-                        SFX_Manager.instance.PlaySFX(1, 0.5f, 1f, true);
-                    }
-                }
-                else if (!isOnLadder)
-                {
-                    SFX_Manager.instance.StopSFX();
-                }
             }
 
             controller.enabled = true;
