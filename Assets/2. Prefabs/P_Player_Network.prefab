@@ -6713,7 +6713,7 @@ Transform:
   m_GameObject: {fileID: 7200783157656878878}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6739,7 +6739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3557140025
+  GlobalObjectIdHash: 4055741435
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -7354,7 +7354,7 @@ MonoBehaviour:
   throwBottleForce: 25
   throwRotateTroqueForce: {x: 1000, y: 0, z: 0}
   uiClique: {fileID: 4634971724312730908}
-  effet: {fileID: 8501137336355525466}
+  effet: {fileID: 0}
 --- !u!1 &7267270393736431613
 GameObject:
   m_ObjectHideFlags: 0
@@ -14624,10 +14624,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5475596234079531840}
     m_Modifications:
-    - target: {fileID: 121560701433995454, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
-      propertyPath: InLocalSpace
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
@@ -14693,10 +14689,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2147517661573180615, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
-      propertyPath: AllowOwnerToParent
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147517661573180615, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1383675181
       objectReference: {fileID: 0}
@@ -14704,9 +14696,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Liquide
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2147517661573180615, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
-    - {fileID: 121560701433995454, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
