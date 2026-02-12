@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7287951309579089003}
   - component: {fileID: 5963440972690852198}
   - component: {fileID: 6149232815499427527}
-  - component: {fileID: -5725106100592338036}
+  - component: {fileID: 7138435639808544608}
   - component: {fileID: 2929868337178489712}
   - component: {fileID: -187956866479821393}
   m_Layer: 9
@@ -147,7 +147,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-5725106100592338036
+--- !u!114 &7138435639808544608
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4140037087
+  GlobalObjectIdHash: 0
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -186,11 +186,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sangles
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 113097128686900684}
-  max_TimeBeforeDrop: 10
-  mini_TimeBeforeDrop: 5
   interactionName: Accrocher le sac
   outline:
   - {fileID: -187956866479821393}
+  max_TimeBeforeDrop: 10
+  mini_TimeBeforeDrop: 5
 --- !u!114 &-187956866479821393
 MonoBehaviour:
   m_ObjectHideFlags: 0
