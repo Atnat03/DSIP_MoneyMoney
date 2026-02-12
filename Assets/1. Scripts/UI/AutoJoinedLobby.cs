@@ -13,7 +13,6 @@ using Unity.Services.Relay.Models;
 
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-using Unity.Services.Core.Environments;
 using Random = UnityEngine.Random;
 
 public class AutoJoinedLobby : MonoBehaviour
@@ -85,7 +84,7 @@ public class AutoJoinedLobby : MonoBehaviour
             return;
         }
     
-        await UnityServices.InitializeAsync(new InitializationOptions().SetEnvironmentName("production"));
+        await InitializeServices();
         
         string relayCode = inputRelayCode.text.Trim();
         
