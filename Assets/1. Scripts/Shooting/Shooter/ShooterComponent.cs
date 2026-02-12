@@ -169,13 +169,18 @@ namespace Shooting
 
         public bool TryShoot()
         {
-            if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
+            FPSControllerMulti fps = GetComponent<FPSControllerMulti>();
+            
+            if(fps.hasSomethingInHand)
                 return false;
 
-            if (GetComponent<FPSControllerMulti>().isMapActive)
+            if (fps.isMapActive)
                 return false;
             
-            if (GetComponent<FPSControllerMulti>().IsFreeze)
+            if (fps.IsFreeze)
+                return false;
+
+            if (fps.isDriver)
                 return false;
             
             if (_currentAmmo <= 0)
