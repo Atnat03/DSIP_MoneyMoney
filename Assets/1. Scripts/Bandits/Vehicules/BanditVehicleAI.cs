@@ -10,20 +10,22 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
     [Header("Target")]
     public Transform truck;
     public FlankPosition flankPosition = FlankPosition.Left;
-    
+
     [Header("Positioning")]
-    [Tooltip("Distance latérale par rapport au camion")]
     public float flankDistance = 8f;
-    [Tooltip("Décalage vers l'avant (pour pas être pile à côté)")]
     public float forwardOffset = 5f;
-    [Tooltip("Distance min pour éviter collision avec camion")]
-    public float avoidTruckRadius = 5f;
-    
+
+    [Header("Truck Safety")]
+    [Tooltip("Distance minimale autorisée autour du camion")]
+    public float minDistanceFromTruck = 7f;
+    [Tooltip("Distance max pour éviter que le bandit parte trop loin")]
+    public float maxDistanceFromTruck = 20f;
+
     [Header("Speed Settings")]
     public float maxSpeed = 25f;
     public float acceleration = 8f;
     public float deceleration = 10f;
-    
+
     [Header("NavMesh Settings")]
     public float updateDestinationInterval = 0.2f;
     public float stoppingDistance = 2f;
@@ -36,30 +38,29 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
     private float nextUpdateTime = 0f;
     private Vector3 currentVelocity;
 
-    public bool goRight;
     public LookAtTarget lookAtTarget;
-    
     public GameObject vfxMort;
-    
+
     public float currentSpeed => agent != null ? agent.velocity.magnitude : 0f;
+    public GameObject tourelle;
 
     void Start()
     {
         SetupNavMeshAgent();
+
+        tourelle.GetComponent<NetworkObject>().Spawn();
     }
 
     void SetupNavMeshAgent()
     {
         agent = GetComponent<NavMeshAgent>();
-        
-        // Configuration NavMesh
+
         agent.speed = maxSpeed;
         agent.acceleration = acceleration;
-        agent.angularSpeed = 120f; // Vitesse de rotation
+        agent.angularSpeed = 250f;
         agent.stoppingDistance = stoppingDistance;
         agent.autoBraking = true;
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-        //agent.radius = 2f; // Ajuste selon taille véhicule
         agent.height = 2f;
     }
 
@@ -73,25 +74,29 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
             return;
         }
 
-        // Update destination périodiquement (pas chaque frame = perfs)
         if (Time.time >= nextUpdateTime)
         {
             UpdateDestination();
             nextUpdateTime = Time.time + updateDestinationInterval;
         }
 
-        // Ajuster vitesse dynamiquement selon distance
         AdjustSpeed();
     }
 
     void UpdateDestination()
     {
         Vector3 targetPos = CalculateFlankPosition();
-        
-        // Vérifier qu'on est pas trop proche du camion
-        if (IsTooCloseToTruck(targetPos))
+
+        // 🔒 Refus du path s'il entre dans la zone interdite
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(targetPos, path);
+
+        foreach (var corner in path.corners)
         {
-            targetPos = PushAwayFromTruck(targetPos);
+            if (Vector3.Distance(corner, truck.position) < minDistanceFromTruck)
+            {
+                return; // on annule cette destination
+            }
         }
 
         agent.SetDestination(targetPos);
@@ -99,38 +104,28 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
 
     Vector3 CalculateFlankPosition()
     {
-        // Position sur le flanc
         Vector3 rightDir = truck.right;
         float sideMultiplier = flankPosition == FlankPosition.Left ? -1f : 1f;
-        
-        Vector3 flankOffset = rightDir * (flankDistance * sideMultiplier);
-        Vector3 forwardOffsetVec = truck.forward * forwardOffset;
-        
-        return truck.position + flankOffset + forwardOffsetVec;
-    }
 
-    bool IsTooCloseToTruck(Vector3 position)
-    {
-        float distanceToTruck = Vector3.Distance(position, truck.position);
-        return distanceToTruck < avoidTruckRadius;
-    }
+        Vector3 desired = truck.position
+                        + rightDir * (flankDistance * sideMultiplier)
+                        + truck.forward * forwardOffset;
 
-    Vector3 PushAwayFromTruck(Vector3 position)
-    {
-        // Repousser la position pour éviter collision
-        Vector3 dirAwayFromTruck = (position - truck.position).normalized;
-        return truck.position + dirAwayFromTruck * avoidTruckRadius;
+        // 🔒 Clamp dans un anneau sécurisé autour du camion
+        Vector3 dir = (desired - truck.position).normalized;
+        float dist = Vector3.Distance(desired, truck.position);
+        dist = Mathf.Clamp(dist, minDistanceFromTruck, maxDistanceFromTruck);
+
+        return truck.position + dir * dist;
     }
 
     void AdjustSpeed()
     {
-        // Ralentir si proche de la destination
         float distanceToTarget = Vector3.Distance(transform.position, agent.destination);
-        
+
         Rigidbody truckRb = truck.GetComponent<Rigidbody>();
         float truckSpeed = truckRb != null ? truckRb.linearVelocity.magnitude : maxSpeed;
 
-        // Adapter vitesse : ralentir près du point, matcher vitesse camion sinon
         if (distanceToTarget < 10f)
         {
             agent.speed = Mathf.Lerp(agent.speed, truckSpeed * 0.9f, Time.deltaTime * deceleration);
@@ -151,7 +146,6 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
             agent.isStopped = true;
         }
 
-        // Drift/glisse progressif
         if (agent.velocity.magnitude > 0.1f)
         {
             currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, driftSlowdown * Time.deltaTime);
@@ -165,29 +159,32 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
     {
         NetworkObject explosionParticleIntance = Instantiate(vfxMort, transform.position, transform.rotation).GetComponent<NetworkObject>();
         explosionParticleIntance.Spawn();
-        
+
         if (TryGetComponent<NetworkObject>(out var netObj))
         {
             netObj.Despawn();
         }
+        
+        if (tourelle.TryGetComponent<NetworkObject>(out var netObj2))
+        {
+            netObj2.Despawn();
+        }
+
         Destroy(gameObject);
     }
 
-    // Debug visuel
     void OnDrawGizmosSelected()
     {
         if (truck == null) return;
 
-        // Position cible
         Vector3 targetPos = CalculateFlankPosition();
+
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(targetPos, 1f);
 
-        // Zone d'évitement camion
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(truck.position, avoidTruckRadius);
+        Gizmos.DrawWireSphere(truck.position, minDistanceFromTruck);
 
-        // Ligne vers cible
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, targetPos);
     }

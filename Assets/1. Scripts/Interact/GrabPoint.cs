@@ -113,7 +113,7 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
-            col.isTrigger = true;
+            col.enabled = false;
         }
 
         if (item.TryGetComponent<GrabbableObject>(out var grab))
@@ -158,7 +158,6 @@ public class GrabPoint : NetworkBehaviour
         {
             _chargeTimer += Time.deltaTime;
             _chargeTimer = Mathf.Clamp(_chargeTimer, 0, _maxChargeTime);
-
             throwJauge.fillAmount = _chargeTimer / _maxChargeTime;
         }
 
@@ -171,16 +170,72 @@ public class GrabPoint : NetworkBehaviour
 
             ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
 
+            // ✅ SOLUTION : Réinitialiser immédiatement côté client
+            _heldItem = null;
+            handState = HandState.Free;
+            GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
+
             _chargeTimer = 0;
             throwJauge.fillAmount = 0;
         }
+    }
+    
+    public void ForceReleaseServer(ulong itemId)
+    {
+        ForceReleaseServerRpc(itemId);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void ForceReleaseServerRpc(ulong itemId, ServerRpcParams rpc = default)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
+        
+        ulong itemOwnerId = item.OwnerClientId;
+
+        if (item.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.isKinematic = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (item.TryGetComponent<Collider>(out var col))
+        {
+            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
+            col.enabled = true;
+        }
+
+        if (item.TryGetComponent<GrabbableObject>(out var g))
+            g.IsGrabbed.Value = false;
+
+        ReleaseClientRpc(itemOwnerId);
+    }
+
+    // ✅ Méthode publique pour relâcher localement
+    public void ForceLocalRelease()
+    {
+        if (_heldItem != null)
+        {
+            _heldItem = null;
+        }
+    
+        handState = HandState.Free;
+        GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
+    
+        _onThrow?.Invoke();
     }
 
     public void Throw()
     {
         Debug.Log("Slow Throw");
         ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, _minThrowStrength);
+    
+        _heldItem = null;
+        handState = HandState.Free;
+        GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
     }
+
 
     [ServerRpc(RequireOwnership = false)]
     private void ThrowServerRpc(ulong itemId, Vector3 direction, float force, ServerRpcParams rpc = default)
@@ -206,7 +261,7 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.gameObject.layer = LayerMask.NameToLayer("Interactable");
-            col.isTrigger = false;
+            col.enabled = true;
         }
 
         if (item.TryGetComponent<GrabbableObject>(out var g))

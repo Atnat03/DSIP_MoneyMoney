@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class TruckPart : NetworkBehaviour
+public class TruckPart : NetworkBehaviour, IInteractible
 {
     #region Inspector
     [Header("Health")]
@@ -36,15 +36,22 @@ public class TruckPart : NetworkBehaviour
         readPerm: NetworkVariableReadPermission.Everyone,
         writePerm: NetworkVariableWritePermission.Server
     );
+
+    public MeshRenderer mesh;
+    public Material baseMaterial;
     
     public override void OnNetworkSpawn()
     {
         if (IsServer)
             currentHealth.Value = maxHealth;
+
+        mesh = GetComponent<MeshRenderer>();
         
         Interact.OnInteract += HitInteract;
         
         isBroke.OnValueChanged += OnBrokeStateChanged;
+        
+        outline[0] = GetComponent<Outline>();
         
         UpdateVisuals();
     }
@@ -61,9 +68,17 @@ public class TruckPart : NetworkBehaviour
         UpdateVisuals();
     }
 
+    void Update()
+    {
+        if (mesh == null) return;
+        
+        if(!isBroke.Value && !mesh.enabled)
+            UpdateVisuals();
+    }
+
     private void UpdateVisuals()
     {
-        GetComponent<MeshRenderer>().enabled = !isBroke.Value;
+        mesh.enabled = !isBroke.Value;
         GetComponent<BoxCollider>().isTrigger = isBroke.Value;
     }
 
@@ -156,7 +171,25 @@ public class TruckPart : NetworkBehaviour
             }
             detachedInstanceId.Value = 0;
         }
+        
+        mesh.material = baseMaterial;
     }
     
     #endregion
+
+    public string InteractionName
+    {
+        get { return interactionName;}
+        set { }
+    }
+
+    public string interactionName;
+    
+    public Outline[] Outline     
+    {
+        get { return outline; ; }
+        set { }
+    }
+
+    public Outline[] outline;
 }

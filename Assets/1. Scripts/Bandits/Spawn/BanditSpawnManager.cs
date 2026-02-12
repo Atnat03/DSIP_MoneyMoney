@@ -99,7 +99,9 @@ public class BanditSpawnManager : MonoBehaviour
             
             int rdm = Random.Range(0, 2);
             bool goRight = (rdm == 0);      
-            bandit.GetComponent<BanditVehicleAI>().goRight = goRight;
+            if(rdm ==0) bandit.GetComponent<BanditVehicleAI>().flankPosition = BanditVehicleAI.FlankPosition.Right;
+            else bandit.GetComponent<BanditVehicleAI>().flankPosition = BanditVehicleAI.FlankPosition.Left;
+           
             
             bandit.GetComponent<NetworkObject>().Spawn();
         }

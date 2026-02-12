@@ -82,6 +82,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public GameObject ui;
 
     public GameObject textGoInCamion;
+    public GameObject textGoOUTCamion;
     public GameObject textReload;
     public LayerMask maskCameraPlayer;
 
@@ -115,11 +116,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [SerializeField] private GameObject map;
     private KeyCode mapKey = KeyCode.Semicolon;
     public bool isMapActive = false;
+
+    private Quaternion freezeSaveRotation = Quaternion.identity;
     
     public void SetVisibleGun()
     {
-        gunOther.SetActive(hasSomethingInHand && isMapActive);
-        gunOwner.SetActive(!hasSomethingInHand && !isMapActive);
+        gunOther.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
+        gunOwner.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
     }
     
     public override void OnNetworkSpawn()
@@ -130,6 +133,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             
             meshRenderer.transform.GetChild(2).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
             meshRenderer.transform.GetChild(3).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            meshRenderer.transform.GetChild(3).transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            
             meshRenderer.transform.GetChild(2).gameObject.layer = LayerMask.NameToLayer("PlayerRagdoll");
             meshRenderer.transform.GetChild(3).gameObject.layer = LayerMask.NameToLayer("PlayerRagdoll");
             meshRenderer.transform.GetChild(3).transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("PlayerRagdoll");
@@ -137,6 +142,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             myCamera.gameObject.SetActive(false);
             
             gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
+            map.gameObject.layer = LayerMask.NameToLayer("Other");
             SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
             
             ui.SetActive(false);
@@ -151,6 +157,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
         
         gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
+        map.gameObject.layer = LayerMask.NameToLayer("Owner");
         
         myCamera.cullingMask = maskCameraPlayer;
         startPos = cameraTransform.localPosition;
@@ -171,7 +178,12 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         cameraShake = MyCamera().GetComponent<CameraShake>();
     }
-    
+
+    private void OnEnable()
+    {
+        TruckController.instance.AddInParent(this);
+    }
+
     void SetLayerRecursively(GameObject obj, int newLayer)
     {
         obj.layer = newLayer;
@@ -192,6 +204,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (!IsOwner) return;
         
         textGoInCamion.SetActive(canEnterInTruck);
+        textGoOUTCamion.SetActive(isDriver);
         textReload.SetActive(canReload);
 
         isInTruck = transform.parent == TruckController.instance.transform;
@@ -232,7 +245,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             }
         }
 
-        if (Input.GetKeyDown(mapKey))
+        if (Input.GetKeyDown(mapKey) && !isDriver)
         {
             if (isMapActive)
             {
@@ -245,20 +258,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         map.SetActive(isMapActive && !hasSomethingInHand && !isDriver);
         
-        if (Input.GetKeyUp(KeyCode.E) && !isDriver)
-        {
-            canReload = CheckCanReload();
-            
-            if(canReload)
-            {
-                shooter.StartToReload();
-                canReload = false;
-            }
-
-            if (truckInteraction.hasDriver.Value == false)
-                return;
-        }
-
         if (isDriver && isInTruck)
         {
             if (TruckController.instance != null)
@@ -329,40 +328,29 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         isSitting = false;
     }
 
-    bool CheckCanReload()
-    {
-        RaycastHit hit;
-        bool final = false;
-
-        if (Physics.Raycast(MyCamera().transform.position, MyCamera().transform.forward, out hit, 5f))
-        {
-            if (hit.collider.CompareTag("ReloadStation"))
-            {
-                final = true;
-            }
-        }
-        
-        return (Vector3.Distance(transform.position, TruckController.instance.reload.position) < TruckController.instance.raduisToReload) && final;
-    }
-
     [SerializeField] private bool isFreeze;
     public bool IsFreeze => isFreeze;
     private Vector3 freezeCameraPos;
     
     public void StartFreeze()
     {
-        Debug.Log("Start freeze");
+        cameraTransform.GetComponent<Animator>().enabled = false;
+        
+        freezeSaveRotation = cameraTransform.rotation;
         isFreeze = true;
     }
 
     public void StopFreeze()
     {
-        Debug.Log("Stop freeze");
+        cameraTransform.GetComponent<Animator>().enabled = true;
+        
         isFreeze = false;
     }
     
     void HandleCameraInput()
     {
+        if (isFreeze) return;
+        
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
 
@@ -453,17 +441,31 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     void LateUpdate()
     {
         if (!IsOwner) return;
-        if (isFreeze) return;
         if (cameraShake.shaking) return;
         if(Time.timeScale == 0) return;
         
-        transform.rotation = Quaternion.Euler(0, yaw, 0);
-        cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
-        
-        cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position, Time.deltaTime * cameraSmoothFollow);
-    
-        if(!isInTruck || !isDriver)
-            HandleHeadbob();
+        if(!isFreeze)
+        {
+            transform.rotation = Quaternion.Euler(0, yaw, 0);
+            cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
+
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position,
+                Time.deltaTime * cameraSmoothFollow);
+
+            if (!isInTruck || !isDriver)
+                HandleHeadbob();
+        }
+        else
+        {
+            if (freezeSaveRotation != Quaternion.identity && freezeSaveRotation.w != 0)
+            {
+                cameraTransform.rotation = Quaternion.Lerp(
+                    cameraTransform.rotation, 
+                    freezeSaveRotation, 
+                    Time.deltaTime * cameraSmoothFollow
+                );
+            }
+        }
     }
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
@@ -474,8 +476,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
         lastTruckPosition = truckRb.position;
-
-        hasSomethingInHand = true;
         
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {
@@ -496,8 +496,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         print("ExitTruck");
         
         capsuleCollider.enabled = true;
-        
-        hasSomethingInHand = false;
         
         SetVisibleGun();
         

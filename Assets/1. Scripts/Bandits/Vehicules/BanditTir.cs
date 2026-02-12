@@ -1,6 +1,8 @@
+using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
-public class BanditTir : MonoBehaviour
+public class BanditTir : NetworkBehaviour
 {
     #region Inspector
 
@@ -29,21 +31,25 @@ public class BanditTir : MonoBehaviour
     public float damage;
     public bool isRight;
 
+    public Transform place;
+
     #endregion
 
     private float nextFireTime;
     public BanditVehicleAI banditAI;
     public HelicopterVehicleAI helicoAI;
     
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         if (banditAI != null)
         {
-            isRight = banditAI.goRight;
+            isRight = banditAI.flankPosition == BanditVehicleAI.FlankPosition.Right;
+            GetComponent<NetworkObject>().TrySetParent(banditAI.transform);
         }
         else
         {
             isRight = helicoAI.sideOffset >= 0;
+            GetComponent<NetworkObject>().TrySetParent(banditAI.transform);
         }
        
     }
@@ -51,6 +57,9 @@ public class BanditTir : MonoBehaviour
     private void Update()
     {
         if (Time.time < nextFireTime) return;
+
+        //transform.position = place.position;
+        //transform.rotation = place.rotation;
 
         Transform target = ChooseTarget();
         if (target == null) return;
@@ -194,6 +203,7 @@ public class BanditTir : MonoBehaviour
     private void SpawnVisualBullet(Vector3 start, Vector3 end)
     {
         GameObject bullet = Instantiate(bulletVisualPrefab, start, Quaternion.identity);
+        //bullet.GetComponent<NetworkObject>().Spawn();
         bullet.GetComponent<BulletVisual>().Init(end, bulletVisualSpeed);
     }
 

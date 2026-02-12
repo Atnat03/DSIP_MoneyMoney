@@ -22,8 +22,13 @@ public class AutoJoinedLobby : MonoBehaviour
     private Lobby lobby;
     public int maxPlayers = 4;
 
+    [Header("UI Fields")]
     public TMP_InputField inputName;
+    public TMP_InputField inputRelayCode; // ✅ CHANGÉ : Input pour le code Relay
+    
     public string LocalPlayerName { get; private set; }
+    public string RelayCode { get; private set; } // ✅ CHANGÉ : Stocke le code Relay
+    
     public Color LocalPlayerColor { get; set; }
     public Color[] colorsList;
 
@@ -49,10 +54,11 @@ public class AutoJoinedLobby : MonoBehaviour
 
     public void Join()
     {
-        if(inputName.text != "")
+        // Définir le nom du joueur
+        if (!string.IsNullOrEmpty(inputName.text))
             LocalPlayerName = inputName.text;
         else
-            LocalPlayerName = "Player " +  Random.Range(0, 99);
+            LocalPlayerName = "Player " + Random.Range(0, 99);
         
         ConnectingTXT.SetActive(true);
         ElementsToConnect.SetActive(false);
@@ -74,9 +80,21 @@ public class AutoJoinedLobby : MonoBehaviour
         }
     
         await InitializeServices();
-        await TryJoinOrCreateLobby();
+        
+        // ✅ CHANGÉ : Utiliser le code Relay
+        string relayCode = inputRelayCode.text.Trim();
+        
+        if (string.IsNullOrEmpty(relayCode))
+        {
+            // Pas de code → Créer un lobby
+            await CreateLobbyAndHost();
+        }
+        else
+        {
+            // Code fourni → Rejoindre directement avec le code Relay
+            await JoinByRelayCode(relayCode);
+        }
     }
-
 
     // ========================= INIT =========================
 
@@ -92,109 +110,186 @@ public class AutoJoinedLobby : MonoBehaviour
         }
     }
 
-    // ========================= LOBBY =========================
+    // ========================= HOST =========================
 
-    private async Task TryJoinOrCreateLobby()
+    private async Task CreateLobbyAndHost()
     {
-        QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(
-            new QueryLobbiesOptions { Count = 1 }
-        );
-        
-        if (response.Results.Count > 0)
+        try
         {
-            lobby = response.Results[0];
-    
-            await LobbyService.Instance.JoinLobbyByIdAsync(
-                lobby.Id,
-                new JoinLobbyByIdOptions
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
+            string relayCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
+            var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            utp.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "dtls"));
+            
+            // ✅ OPTIONNEL : Créer un lobby pour tracker les joueurs (peut être retiré si non nécessaire)
+            lobby = await LobbyService.Instance.CreateLobbyAsync(
+                $"Game_{relayCode.Substring(0, 4)}", // Nom basé sur le code Relay
+                maxPlayers,
+                new CreateLobbyOptions
                 {
+                    IsPrivate = false,
                     Player = new Player
                     {
                         Data = new Dictionary<string, PlayerDataObject>
                         {
                             { "Name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, LocalPlayerName) }
                         }
+                    },
+                    Data = new Dictionary<string, DataObject>
+                    {
+                        { "RelayCode", new DataObject(DataObject.VisibilityOptions.Public, relayCode) }
                     }
                 }
             );
 
-            lobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
-
-            string relayCode = lobby.Data["RelayCode"].Value;
-
-            Debug.Log($"🔵 Client rejoint Lobby | RelayCode: {relayCode} | Name: {LocalPlayerName}");
-
-            await JoinRelay(relayCode);
+            NetworkManager.Singleton.StartHost();
+            Debug.Log($"🟢 Host démarré | RelayCode: {relayCode} | Name: {LocalPlayerName}");
+            
+            ShowRelayCode(relayCode);
+            
+            StartCanva.SetActive(false);
         }
-        else
+        catch (Exception e)
         {
-            await CreateLobbyAndHost();
+            Debug.LogError($"Erreur création lobby: {e.Message}");
+            ResetConnection();
         }
-
     }
 
-    // ========================= HOST =========================
-
-    private async Task CreateLobbyAndHost()
+    // ✅ NOUVEAU : Rejoindre directement avec le code Relay
+    private async Task JoinByRelayCode(string relayCode)
     {
-        Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
-        string relayCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+        try
+        {
+            Debug.Log($"🔵 Tentative de connexion avec RelayCode: {relayCode}");
 
-        var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
-        utp.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "dtls"));
-        
-        lobby = await LobbyService.Instance.CreateLobbyAsync(
-            "AutoLobby",
-            maxPlayers,
-            new CreateLobbyOptions
-            {
-                Player = new Player
+            // ✅ OPTION 1 : Rejoindre DIRECTEMENT avec le code Relay (pas besoin de lobby)
+            await JoinRelay(relayCode);
+
+            // ✅ OPTION 2 (optionnel) : Chercher et rejoindre le lobby correspondant pour le tracking
+            await TryJoinLobbyByRelayCode(relayCode);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Erreur rejoindre avec RelayCode: {e.Message}");
+            ShowError($"Code Relay invalide: {relayCode}");
+            ResetConnection();
+        }
+    }
+
+    // ✅ OPTIONNEL : Chercher le lobby par code Relay pour le tracking
+    private async Task TryJoinLobbyByRelayCode(string relayCode)
+    {
+        try
+        {
+            QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(
+                new QueryLobbiesOptions
                 {
-                    Data = new Dictionary<string, PlayerDataObject>
+                    Count = 100,
+                    Filters = new List<QueryFilter>
                     {
-                        {
-                            "Name",
-                            new PlayerDataObject(
-                                PlayerDataObject.VisibilityOptions.Public,
-                                LocalPlayerName
-                            )
-                        }
-                    }
-                },
-                Data = new Dictionary<string, DataObject>
-                {
-                    {
-                        "RelayCode",
-                        new DataObject(DataObject.VisibilityOptions.Public, relayCode)
+                        new QueryFilter(
+                            QueryFilter.FieldOptions.S1, // Utilise un slot custom data
+                            relayCode,
+                            QueryFilter.OpOptions.EQ
+                        )
                     }
                 }
-            }
-        );
+            );
 
-        NetworkManager.Singleton.StartHost();
-        Debug.Log("🟢 Host démarré | RelayCode: " + relayCode + " | Name: " + LocalPlayerName);
-        StartCanva.SetActive(false);
+            // Chercher manuellement le lobby avec le bon RelayCode
+            foreach (var foundLobby in response.Results)
+            {
+                if (foundLobby.Data.TryGetValue("RelayCode", out var data) && data.Value == relayCode)
+                {
+                    lobby = foundLobby;
+                    
+                    await LobbyService.Instance.JoinLobbyByIdAsync(
+                        lobby.Id,
+                        new JoinLobbyByIdOptions
+                        {
+                            Player = new Player
+                            {
+                                Data = new Dictionary<string, PlayerDataObject>
+                                {
+                                    { "Name", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, LocalPlayerName) }
+                                }
+                            }
+                        }
+                    );
+                    
+                    Debug.Log($"✅ Lobby rejoint: {lobby.Name}");
+                    return;
+                }
+            }
+
+            Debug.LogWarning("Aucun lobby trouvé avec ce RelayCode (normal si c'est juste du Relay pur)");
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"Impossible de rejoindre le lobby: {e.Message} (connexion Relay maintenue)");
+        }
     }
 
     // ========================= CLIENT =========================
 
     private async Task JoinRelay(string relayCode)
     {
-        JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(relayCode);
+        try
+        {
+            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(relayCode);
 
-        var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
-        utp.SetRelayServerData(AllocationUtils.ToRelayServerData(joinAllocation, "dtls"));
+            var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            utp.SetRelayServerData(AllocationUtils.ToRelayServerData(joinAllocation, "dtls"));
 
-        NetworkManager.Singleton.StartClient();
-        Debug.Log("🔵 Client démarré | Name: " + LocalPlayerName);
-        StartCanva.SetActive(false);
+            NetworkManager.Singleton.StartClient();
+            Debug.Log($"🔵 Client démarré avec RelayCode: {relayCode} | Name: {LocalPlayerName}");
+            StartCanva.SetActive(false);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Erreur connexion relay: {e.Message}");
+            throw; // Renvoyer l'erreur pour la gestion en amont
+        }
     }
-    
+
+    // ========================= HELPERS =========================
+
+    private void ShowRelayCode(string code)
+    {
+        Debug.Log($"📋 CODE RELAY: {code}");
+        RelayCode = code;
+        // TODO: Afficher dans un TextMeshPro
+        // Exemple: relayCodeText.text = $"Code: {code}";
+    }
+
+    private void ShowError(string message)
+    {
+        Debug.LogError(message);
+        // TODO: Afficher dans votre UI
+    }
+
+    private void ResetConnection()
+    {
+        ConnectingTXT.SetActive(false);
+        ElementsToConnect.SetActive(true);
+    }
+
+    // ========================= CLEANUP =========================
+
     private async void OnDestroy()
     {
         if (lobby != null && lobby.HostId == AuthenticationService.Instance.PlayerId)
         {
-            await LobbyService.Instance.DeleteLobbyAsync(lobby.Id);
+            try
+            {
+                await LobbyService.Instance.DeleteLobbyAsync(lobby.Id);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Erreur suppression lobby: {e.Message}");
+            }
         }
     }
 }

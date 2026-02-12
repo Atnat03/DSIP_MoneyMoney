@@ -15,7 +15,13 @@ public class Helicopter : MonoBehaviour, IVehicule
     [SerializeField] private GameObject helicopter;
     [SerializeField] public bool isDead = false;
     [SerializeField] public GameObject explosionParticle;
-    
+    public GameObject tourelle;
+
+
+    public void Start()
+    {
+        tourelle.GetComponent<NetworkObject>().Spawn();
+    }
     private void Update()
     {
         if (!isDead)
@@ -36,7 +42,7 @@ public class Helicopter : MonoBehaviour, IVehicule
     IEnumerator DestroyAfter()
     {
         print(helicopter.transform.position.y);
-        yield return new WaitUntil(() => helicopter.transform.position.y < 4f);
+        yield return new WaitUntil(() => helicopter.transform.position.y < 10f);
         
         if (TryGetComponent(out HelicopterVehicleAI ai))
         {
@@ -45,6 +51,10 @@ public class Helicopter : MonoBehaviour, IVehicule
             
             GetComponent<NetworkObject>().Despawn();
             BanditSpawnManager.instance.canSpawnHelico = true;
+            if (tourelle.TryGetComponent<NetworkObject>(out var netObj2))
+            {
+                netObj2.Despawn();
+            }
             Destroy(ai.gameObject);
         }
     }

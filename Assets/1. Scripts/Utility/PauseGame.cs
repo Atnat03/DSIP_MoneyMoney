@@ -13,6 +13,7 @@ public class PauseGame : NetworkBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private TextMeshProUGUI buttonPauseText;
+    [SerializeField] private TextMeshProUGUI PartyCodeTxt;
     [SerializeField] private GameObject pausingInfo;
     
     [Header("Other")]
@@ -26,6 +27,7 @@ public class PauseGame : NetworkBehaviour
         {
             Destroy(pauseButton.gameObject);
             Destroy(debugCamionButton.gameObject);
+            Destroy(PartyCodeTxt.gameObject);
         }
         else
         {
@@ -53,13 +55,25 @@ public class PauseGame : NetworkBehaviour
         if(!IsServer)
             pausingInfo.SetActive(Time.timeScale == 0);
         
-        if (Input.GetKeyDown(KeyCode.Escape) && !isPause)
+        PartyCodeTxt.text = AutoJoinedLobby.Instance.RelayCode;
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            fpsController.StartFreeze();
-            isPause = true;
-            
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            isPause = !isPause;
+
+            if (isPause)
+            {
+                fpsController.StartFreeze();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                fpsController.StopFreeze();
+                            
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 
@@ -69,7 +83,7 @@ public class PauseGame : NetworkBehaviour
 
         if (!IsServer)
             return;
-
+        
         if(Time.timeScale == 0)
         {
             buttonPauseText.text = pauseText[0];

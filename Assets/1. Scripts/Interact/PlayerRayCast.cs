@@ -26,6 +26,8 @@ public class PlayerRayCast : NetworkBehaviour
     public float hitDistance = 2f;
 
     public string RepearInteractionName = "Réparer";
+    public Material TransparentMaterial;
+    private MeshRenderer mesh;
     
     private KnockOut targetKO;
     
@@ -36,6 +38,7 @@ public class PlayerRayCast : NetworkBehaviour
     private Camera mycam; 
     private FPSControllerMulti playerFPS;
     private GrabPoint playerGrab;
+    private TruckPart truckPart;
     
     private void Start()
     {
@@ -64,6 +67,7 @@ public class PlayerRayCast : NetworkBehaviour
         
         RaycastHit hit;
         Ray ray = new Ray(mycam.transform.position, mycam.transform.forward);
+        Debug.DrawRay(mycam.transform.position, mycam.transform.forward, Color.darkRed);
         int layerMask = ~LayerMask.GetMask("IgnoreRaycast");
         
         bool hitInteractible = false; 
@@ -77,7 +81,7 @@ public class PlayerRayCast : NetworkBehaviour
 
                 if (targetKO == null)
                     targetKO = hit.transform.GetComponentInParent<KnockOut>();
-                    
+                 
                 if (targetKO.isKnockedOut.Value)
                 {
                     uiController?.OnInteract();
@@ -110,15 +114,18 @@ public class PlayerRayCast : NetworkBehaviour
                 {
                     if (hit.collider.CompareTag("TruckPart") && hasMaterial)
                     {
-                        if (hit.collider.GetComponent<TruckPart>().isBroke.Value)
+                        TruckPart part = hit.collider.GetComponent<TruckPart>();
+                        
+                        if (part.isBroke.Value)
                         {
                             StartCoroutine(RepairPart(hit.collider.gameObject));
+                            return;
                         }
                     }
                     else if (hit.collider.CompareTag("Material"))
                     {
                         TakeMaterial();
-                    }
+                    }    
                     else if(!hit.collider.CompareTag("TruckPart"))
                     {
                         Interact.RayInteract(hit.collider.gameObject, gameObject, RepearInteractionName);
@@ -150,6 +157,14 @@ public class PlayerRayCast : NetworkBehaviour
                         uiController?.OnInteract();
                         uiController?.SetText(interactible.InteractionName);
 
+                        TruckPart part = hit.collider.GetComponent<TruckPart>();
+                        if (part && part.isBroke.Value)
+                        {
+                            part.mesh.enabled = true;
+                            part.mesh.material = TransparentMaterial;
+                            truckPart = part;
+                        }
+                        
                         foreach (Outline o in interactible.Outline)
                         {
                             o.enabled = true;
@@ -175,6 +190,12 @@ public class PlayerRayCast : NetworkBehaviour
     {
         if (lastInteractible != null)
         {
+            if (truckPart)
+            {
+                truckPart.mesh.enabled = false;
+                truckPart = null;
+            }
+            
             foreach (Outline o in lastInteractible.Outline)
             {
                 if (o != null)
@@ -191,7 +212,7 @@ public class PlayerRayCast : NetworkBehaviour
         materialVisual.SetActive(hasMaterial);
     }
 
-    public IEnumerator RepairPart(GameObject truck)
+    public IEnumerator RepairPart(GameObject part)
     {
         playerFPS.StartFreeze();
         float count = durationRepair;
@@ -201,7 +222,7 @@ public class PlayerRayCast : NetworkBehaviour
             yield return null;
             circleCD.fillAmount =  count / durationRepair;
         }
-        Interact.RayInteract(truck, gameObject, RepearInteractionName);
+        Interact.RayInteract(part, gameObject, RepearInteractionName);
         playerFPS.StopFreeze();
         TakeMaterial();
     }
@@ -211,8 +232,9 @@ public class PlayerRayCast : NetworkBehaviour
         if (isReviving && targetKO != null)
         {
             targetKO.StopMateReviveServerRpc();
-            playerFPS.StopFreeze();
         }
+        
+        playerFPS.StopFreeze();
 
         isReviving = false;
         targetKO = null;

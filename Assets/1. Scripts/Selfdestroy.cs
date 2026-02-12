@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class Selfdestroy : MonoBehaviour
 {
+
+   public float duration;
    void Start()
    {
       //Script de Nathan
-      Destroy(gameObject, 20f);
+      Destroy(gameObject, duration);
    }
 }

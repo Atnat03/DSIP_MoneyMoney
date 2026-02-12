@@ -72,7 +72,8 @@ public class TruckController : NetworkBehaviour
     [SerializeField] float velocityToTriggerShake = 25f;
     [SerializeField] float cameraShakeDuration = 0.25f;
     [SerializeField] float cameraShakeMagnitude = 0.1f;
-    
+
+    public List<IParentable> parentable;
     
     private void Awake()
     {
@@ -81,6 +82,8 @@ public class TruckController : NetworkBehaviour
         truckInteraction = GetComponent<TruckInteraction>();
         
         jaugeMashing.transform.parent.gameObject.SetActive(false);
+        
+        parentable = new List<IParentable>();
     }
 
     public override void OnNetworkSpawn()
@@ -94,7 +97,7 @@ public class TruckController : NetworkBehaviour
         isFallen.OnValueChanged += OnIsFallenChanged;
         BackLightOn.OnValueChanged += OnBackLightsChanged;
         FrontLightOn.OnValueChanged += OnFrontLigthChanged;
-
+        
         UpdateJauge();    
     }
 
@@ -117,6 +120,8 @@ public class TruckController : NetworkBehaviour
         CheckPassengersBounds();
     
         rb.centerOfMass = centerOfMass;
+
+        rb.isKinematic = !truckInteraction.hasDriver.Value;
         
         if (truckInteraction != null && truckInteraction.HasDriver())
         {
@@ -185,28 +190,24 @@ public class TruckController : NetworkBehaviour
     void CheckPassengersBounds()
     {
         if (!IsServer) return;
-
-        IParentable[] parentables = FindObjectsOfType<MonoBehaviour>(true)
-            .OfType<IParentable>()
-            .ToArray();
-
-        foreach (IParentable parentable in parentables)
+        
+        foreach (IParentable p in parentable)
         {
-            NetworkObject netObj = parentable.NetworkObject;
+            NetworkObject netObj = p.NetworkObject;
             if (netObj == null) continue;
 
-            Transform t = parentable.Transform;
+            Transform t = p.Transform;
 
             bool inside = !IsOutsideTruckBounds(t);
             bool alreadyParented = trackedParentables.Contains(netObj);
 
             if (inside && !alreadyParented)
             {
-                ParentObject(parentable);
+                ParentObject(p);
             }
             else if (!inside && alreadyParented)
             {
-                UnparentObject(parentable);
+                UnparentObject(p);
             }
         }
     }
@@ -455,7 +456,7 @@ public class TruckController : NetworkBehaviour
     
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacle") || other.gameObject.layer == LayerMask.NameToLayer("Bandits"))
         {
             CheckVelecityToApplyShake();
         }
@@ -476,5 +477,11 @@ public class TruckController : NetworkBehaviour
         
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, raduisReset);
+    }
+
+    public void AddInParent(IParentable ob)
+    {
+        print("AddInParent :  " + parentable.Count);
+        parentable.Add(ob);
     }
 }
