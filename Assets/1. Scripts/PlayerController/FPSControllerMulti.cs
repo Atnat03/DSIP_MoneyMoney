@@ -84,8 +84,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     private bool canReload = false;
     ShooterComponent shooter;
     
-    public GameObject meshRenderer;
-
     public bool canSit = false;
     public bool isSitting = false;
     private Transform sittingPos;
@@ -113,6 +111,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public bool isMapActive = false;
 
     private Quaternion freezeSaveRotation = Quaternion.identity;
+
+    public Skins skinManager;
     
     public void SetVisibleGun()
     {
@@ -120,20 +120,24 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         gunOwner.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
     }
     
+    
     public override void OnNetworkSpawn()
     {
+        if(IsOwner)
+        {
+            currentSkinId.OnValueChanged += OnSkinChanged;
+            SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
+            skinManager.SetSkin(currentSkinId.Value);
+        }
+        
         if (!IsOwner)
         {
-            meshRenderer.gameObject.layer = LayerMask.NameToLayer("Default");
+            GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(currentSkinId.Value);
             
-            meshRenderer.transform.GetChild(2).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
-            meshRenderer.transform.GetChild(3).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
-            meshRenderer.transform.GetChild(3).transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material.color = GetComponent<PlayerCustom>().colorPlayer.Value;
+            int ragdollLayer = LayerMask.NameToLayer("PlayerRagdoll");
+            SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
+            SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
             
-            meshRenderer.transform.GetChild(2).gameObject.layer = LayerMask.NameToLayer("PlayerRagdoll");
-            meshRenderer.transform.GetChild(3).gameObject.layer = LayerMask.NameToLayer("PlayerRagdoll");
-            meshRenderer.transform.GetChild(3).transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("PlayerRagdoll");
-
             myCamera.gameObject.SetActive(false);
             
             gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
@@ -143,7 +147,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             ui.SetActive(false);
             return;
         }
-
+        
         gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
 
         foreach (Transform t in gunOther.transform)
@@ -172,6 +176,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         capsuleCollider = GetComponent<CapsuleCollider>();
         
         cameraShake = MyCamera().GetComponent<CameraShake>();
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        currentSkinId.OnValueChanged -= OnSkinChanged;
     }
 
     private void OnEnable()
@@ -477,7 +486,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             transform.rotation = Quaternion.Euler(0, yaw, 0);
             
-            cameraTransform.rotation = Quaternion.Euler(pitch + drunkZOffset * 0.15f, yaw + drunkZOffset * 0.3f, drunkZOffset);
+            cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
 
             cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position,
                 Time.deltaTime * cameraSmoothFollow);
@@ -655,6 +664,33 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         SetPassengerModeServerRpc(false, Vector3.zero);
     }
+
+    #region Skins
+
+    public NetworkVariable<int> currentSkinId = new NetworkVariable<int>(0);
+    
+    public Ragdoll GetRagdoll()
+    {
+        return skinManager.GetRagdoll(currentSkinId.Value);
+    }
+    
+    public Animator Animator => skinManager.GetAnimator(currentSkinId.Value);
+
+        
+    [ServerRpc]
+    void SubmitSkinServerRpc(int skinID)
+    {
+        print("Change skin : " + skinID);
+        currentSkinId.Value = skinID;
+    }
+    
+    private void OnSkinChanged(int previousValue, int newValue)
+    {
+        skinManager.SetSkin(newValue);
+        print("NEW VALUE SKIN : " + newValue);
+    }
+
+    #endregion
     
   
 }

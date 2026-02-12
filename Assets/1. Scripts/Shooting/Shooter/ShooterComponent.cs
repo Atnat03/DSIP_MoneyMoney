@@ -220,7 +220,7 @@ namespace Shooting
             muzzleFlash.transform.SetParent(_instantPos);
             SFX_Manager.instance.PlaySFX(3);
         }
-
+        
         /// <summary>
         /// Invokes feedbacks on every target that is shot.
         /// </summary>
