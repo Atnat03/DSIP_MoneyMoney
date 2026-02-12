@@ -82,7 +82,7 @@ public class PlayerPastis : NetworkBehaviour
         
         if (currentGorgerBottle == 0)
         {
-            fps.MyCamera().transform.parent.GetComponent<DrunkEffectCamera>().AddDrunk(0.5f);
+            fps.MyCamera().transform.parent.GetComponent<DrunkEffectCamera>().AddDrunk();
         }
 
         animator.SetTrigger("Drink");
@@ -105,7 +105,8 @@ public class PlayerPastis : NetworkBehaviour
         audioSource.PlayOneShot(c);
     }
 
-    private void ThrowBottle()
+    [ServerRpc]
+    private void ThrowBottleServerRpc()
     {
         NetworkObject nt = Instantiate(throwBottlePrefab, throwPos.position, throwPos.rotation);
         nt.Spawn();
@@ -116,11 +117,19 @@ public class PlayerPastis : NetworkBehaviour
         rb.AddForce(forceDir, ForceMode.Impulse);
         rb.AddTorque(throwRotateTroqueForce);
         
+        ReposeLaBouteilleClientRpc();
+    }
+    
+    [ClientRpc]
+    private void ReposeLaBouteilleClientRpc()
+    {
         ReposeLaBouteille();
     }
 
     public void Update()
     {
+        if(!IsOwner)return;
+        
         if (!hasBottleInHand)
             return;
         
@@ -143,7 +152,7 @@ public class PlayerPastis : NetworkBehaviour
             }
             else
             {
-                ThrowBottle();
+                ThrowBottleServerRpc();
             }
         }
 

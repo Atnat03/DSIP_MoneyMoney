@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,10 +10,15 @@ public class DrunkEffectCamera : MonoBehaviour
 
     private Coroutine drunkCoroutine;
     private Quaternion initialRotation;
+    
+    DamageEffectController damageEffectController;
 
-    public FPSControllerMulti fps;
+    private void Start()
+    {
+        damageEffectController = GetComponent<DamageEffectController>();
+    }
 
-    public void AddDrunk(float amount)
+    public void AddDrunk()
     {
         if (drunkCoroutine != null)
             StopCoroutine(drunkCoroutine);
@@ -22,19 +28,30 @@ public class DrunkEffectCamera : MonoBehaviour
 
     private IEnumerator DrunkRoutine()
     {
+        damageEffectController.SetDizziness(0.5f);
+        damageEffectController.SetColor(Color.darkOliveGreen);
+        
         float timer = 0f;
-
-        while (timer < duration)
+        float transition = 0.5f;
+        
+        while (timer < transition)
         {
-            float angle = Mathf.Sin(Time.time * speed) * intensity;
-
-            fps.SetDrunkOffset(angle);
-
+            damageEffectController.SetIntensity(timer / transition);
+            
             timer += Time.deltaTime;
             yield return null;
         }
+        
+        yield return new WaitForSeconds(duration);
+        
+        while (timer > 0)
+        {
+            damageEffectController.SetIntensity(timer / transition);
+            
+            timer -= Time.deltaTime;
+            yield return null;
+        }
 
-        fps.SetDrunkOffset(0f);
         drunkCoroutine = null;
     }
 }
