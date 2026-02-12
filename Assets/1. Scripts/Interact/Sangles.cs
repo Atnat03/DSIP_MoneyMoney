@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -114,7 +115,6 @@ public class Sangles : NetworkBehaviour, IInteractible
 
         if (storedObjectId.Value == 0)
         {
-            // ── STOCKAGE ─────────────────────────────────────
             if (heldObjectNetId == 0) return;
 
             if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(heldObjectNetId, out var heldNetObj))
@@ -124,14 +124,11 @@ public class Sangles : NetworkBehaviour, IInteractible
             if (grabbable == null || grabbable.type != GrabType.Sac)
                 return;
 
-            // Validation ownership (tu peux remettre plus strict si besoin)
             if (heldNetObj.OwnerClientId != senderClientId && heldNetObj.OwnerClientId != 0)
                 return;
 
-            // Force release main du joueur
             ForceClientHandReleaseClientRpc(senderClientId, heldObjectNetId);
 
-            // Positionnement
             heldNetObj.transform.position = stayPos.position;
             heldNetObj.transform.rotation = stayPos.rotation;
 
@@ -147,7 +144,6 @@ public class Sangles : NetworkBehaviour, IInteractible
         }
         else
         {
-            // ── LIBERATION / DROP ─────────────────────────────
             TryRelease(senderClientId);
         }
     }
@@ -161,6 +157,8 @@ public class Sangles : NetworkBehaviour, IInteractible
     {
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out var obj))
             return;
+        
+        obj.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
 
         obj.transform.position = pos;
         obj.transform.rotation = rot;
@@ -204,9 +202,8 @@ public class Sangles : NetworkBehaviour, IInteractible
             grabbable.IsGrabbed.Value = false;
         }
 
-        // On lâche simplement — PAS de tentative de reprise
         SetObjectPhysics(netObj, false);
-        netObj.transform.position += Vector3.up * 0.2f; // petit lift anti-clip
+        netObj.transform.position += Vector3.up * 0.2f;
 
         DropClientRpc(storedObjectId.Value);
 

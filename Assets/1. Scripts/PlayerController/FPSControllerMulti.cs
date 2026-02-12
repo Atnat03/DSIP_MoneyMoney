@@ -532,7 +532,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     [ServerRpc(RequireOwnership = false)]
     public void SetPassengerModeServerRpc(bool isPassenger, Vector3 desiredLocalPos)
     {
-        // Le serveur peut valider si besoin (ex: vraiment dans le camion ?)
         SetPassengerModeClientRpc(isPassenger, desiredLocalPos);
     }
 
@@ -634,8 +633,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     }
 
     #endregion
-    
-  
 }
 
 public interface IParentable
