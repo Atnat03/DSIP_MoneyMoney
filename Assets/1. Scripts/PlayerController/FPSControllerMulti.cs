@@ -492,9 +492,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
     {
-        if (controller != null) controller.enabled = false;
-
-
         capsuleCollider.enabled = false;
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
@@ -528,9 +525,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         transform.position = exitPosition;
         
         truckRb = null;
-        
-        if (controller != null)
-            controller.enabled = true;
     }
 
     [ServerRpc(RequireOwnership = false)]

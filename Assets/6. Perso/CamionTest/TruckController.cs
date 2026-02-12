@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(-100)]
 public class TruckController : NetworkBehaviour
 {
     public static TruckController instance;
@@ -229,6 +231,8 @@ public class TruckController : NetworkBehaviour
 
         parentable.OnParented(transform);
 
+        netObj.GetComponent<NetworkTransform>().InLocalSpace = true;
+
         Debug.Log($"{netObj.name} parenté au camion");
     }
 
@@ -240,6 +244,8 @@ public class TruckController : NetworkBehaviour
         trackedParentables.Remove(netObj);
 
         parentable.OnUnparented();
+        
+        netObj.GetComponent<NetworkTransform>().InLocalSpace = false;
 
         Debug.Log($"{netObj.name} déparenté du camion");
     }
