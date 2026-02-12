@@ -32,6 +32,7 @@ public class DamageEffectController : MonoBehaviour
         SetIntensity(0);
     }
     public void SetIntensity(float intensity) => SetFloat("_GlobalIntensity", intensity, true);
+    public void SetDizziness(float intensity) => SetFloat("_Intensity", intensity, true);
     public void SetColor(Color color) => SetColor("_Color", color);
 
 
