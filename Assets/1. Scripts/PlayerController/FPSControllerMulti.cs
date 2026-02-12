@@ -534,6 +534,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             netTransform.InLocalSpace = true;
         }
         
+        animator.SetBool("Sit", true);
+        
         SetVisibleGun();
         
         if (IsOwner) {
@@ -548,6 +550,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         print("ExitTruck");
         
         capsuleCollider.enabled = true;
+        
+        animator.SetBool("Sit", false);
         
         SetVisibleGun();
         
