@@ -81,6 +81,8 @@ public class PlayerRayCast : NetworkBehaviour
 
                 if (targetKO == null)
                     targetKO = hit.transform.GetComponentInParent<KnockOut>();
+                
+                print("RAGDOLLL" + targetKO.name);
                     
                 if (targetKO.isKnockedOut.Value)
                 {
@@ -125,7 +127,7 @@ public class PlayerRayCast : NetworkBehaviour
                     else if (hit.collider.CompareTag("Material"))
                     {
                         TakeMaterial();
-                    }
+                    }    
                     else if(!hit.collider.CompareTag("TruckPart"))
                     {
                         Interact.RayInteract(hit.collider.gameObject, gameObject, RepearInteractionName);
@@ -232,8 +234,9 @@ public class PlayerRayCast : NetworkBehaviour
         if (isReviving && targetKO != null)
         {
             targetKO.StopMateReviveServerRpc();
-            playerFPS.StopFreeze();
         }
+        
+        playerFPS.StopFreeze();
 
         isReviving = false;
         targetKO = null;

@@ -82,6 +82,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public GameObject ui;
 
     public GameObject textGoInCamion;
+    public GameObject textGoOUTCamion;
     public GameObject textReload;
     public LayerMask maskCameraPlayer;
 
@@ -203,6 +204,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (!IsOwner) return;
         
         textGoInCamion.SetActive(canEnterInTruck);
+        textGoOUTCamion.SetActive(isDriver);
         textReload.SetActive(canReload);
 
         isInTruck = transform.parent == TruckController.instance.transform;
@@ -347,6 +349,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     void HandleCameraInput()
     {
+        if (isFreeze) return;
+        
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensibility;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensibility;
 

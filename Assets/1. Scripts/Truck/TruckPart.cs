@@ -70,6 +70,8 @@ public class TruckPart : NetworkBehaviour, IInteractible
 
     void Update()
     {
+        if (mesh == null) return;
+        
         if(!isBroke.Value && !mesh.enabled)
             UpdateVisuals();
     }

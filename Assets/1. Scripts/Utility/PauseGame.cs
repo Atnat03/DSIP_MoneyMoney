@@ -57,13 +57,23 @@ public class PauseGame : NetworkBehaviour
         
         PartyCodeTxt.text = AutoJoinedLobby.Instance.RelayCode;
         
-        if (Input.GetKeyDown(KeyCode.Escape) && !isPause)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            fpsController.StartFreeze();
             isPause = !isPause;
-            
-            Cursor.lockState = isPause ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = isPause;
+
+            if (isPause)
+            {
+                fpsController.StartFreeze();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                fpsController.StopFreeze();
+                            
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 

@@ -59,11 +59,6 @@ public class Ragdoll : MonoBehaviour
     {
         SetRagdollState(true);
 
-        foreach (GameObject g in meshList)
-        {
-            g.layer = LayerMask.NameToLayer("Interactable");
-        }
-        
         foreach (Rigidbody rb in ragdollRigidbodies)
         {
             if (rb != null)
@@ -80,11 +75,6 @@ public class Ragdoll : MonoBehaviour
 
     public void DisableRagdoll()
     {
-        foreach (GameObject g in meshList)
-        {
-            g.layer = LayerMask.NameToLayer("Skin");
-        }
-        
         ResetPose();
         SetRagdollState(false);
     }

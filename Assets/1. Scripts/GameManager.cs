@@ -12,6 +12,7 @@ public class GameManager : NetworkBehaviour
     public float MaxTimer = 10;
     public TextMeshProUGUI textTimer;
     public bool isTimerPause = false;
+    bool statedTimer = false;
 
     public PiscineDeBillet scoreData;
 
@@ -21,8 +22,9 @@ public class GameManager : NetworkBehaviour
 
         instance = this;
 
-        currentTime.Value = MaxTimer;
         currentTime.OnValueChanged += OnTimerChanged;
+        currentTime.Value = MaxTimer;
+        
         StopTimer();
     }
 
@@ -41,9 +43,17 @@ public class GameManager : NetworkBehaviour
     {
         textTimer.text = ((int)newValue).ToString();
     }
-    
-    public void StopTimer() => isTimerPause = true;
-    public void StartTimer() => isTimerPause = false;
+
+    public void StopTimer()
+    {
+        isTimerPause = true;
+    }
+
+    public void StartTimer()
+    {
+        isTimerPause = false;
+        statedTimer = true;
+    }
 
     private void Update()
     {
@@ -53,7 +63,7 @@ public class GameManager : NetworkBehaviour
         {
             currentTime.Value -= Time.deltaTime;
         }
-        else
+        else if(statedTimer)
         {
             EndGameClientRpc();
         }
@@ -65,5 +75,13 @@ public class GameManager : NetworkBehaviour
         EndGame player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.GetComponent<EndGame>();
         player.SetScore(scoreData.numberOfSac.Value, scoreData.numberOfLingot.Value);
         player.isEnd = true;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Truck") && !statedTimer)
+        {
+            StartTimer();
+        }
     }
 }

@@ -72,7 +72,22 @@ public class Sangles : NetworkBehaviour, IInteractible
             .TryGetValue(storedObjectId.Value, out var netObj))
         {
             interactionObject = netObj;
-            interactionObject.transform.position = stayPos.position;
+            
+            // 🔹 Appliquer la physique côté client aussi
+            netObj.transform.position = stayPos.position;
+            
+            if (netObj.TryGetComponent<Rigidbody>(out var rb))
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+            
+            if (netObj.TryGetComponent<Collider>(out var col))
+                col.enabled = false;
+                
+            netObj.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
     }
 
@@ -97,7 +112,6 @@ public class Sangles : NetworkBehaviour, IInteractible
         NetworkObject playerNetObj = player.GetComponent<NetworkObject>();
         if (playerNetObj == null) return;
 
-        // Le client demande au serveur
         TryInteractServerRpc(playerNetObj.NetworkObjectId);
     }
 
@@ -128,34 +142,31 @@ public class Sangles : NetworkBehaviour, IInteractible
         GameObject heldObject = grabPoint.GetCurrentObjectInHand();
         if (heldObject == null) return;
 
-        // Vérifie que c'est bien un sac
         var grabbable = heldObject.GetComponent<GrabbableObject>();
         if (grabbable == null || grabbable.type != GrabType.Sac) return;
 
         NetworkObject objectNetObj = heldObject.GetComponent<NetworkObject>();
         if (objectNetObj == null) return;
 
-        // 🔹 Lâcher l’objet côté serveur
-        Rigidbody rb = objectNetObj.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
+        // ✅ SOLUTION : Relâcher l'objet côté serveur ET client AVANT de stocker
+        ForceReleaseFromHandServerRpc(objectNetObj.NetworkObjectId, senderId);
+        
+        // ⏳ Attendre que le relâchement soit effectif avant de stocker
+        StartCoroutine(StockAfterRelease(objectNetObj));
+    }
 
-        if (objectNetObj.TryGetComponent<Collider>(out var col))
-            col.enabled = true;
-
-        if (grabbable != null)
-            grabbable.IsGrabbed.Value = false;
-
+    private System.Collections.IEnumerator StockAfterRelease(NetworkObject objectNetObj)
+    {
+        // Attendre 1 frame pour que le relâchement soit propagé
+        yield return null;
+        
+        // 🔹 Stocker l'objet
         storedObjectId.Value = objectNetObj.NetworkObjectId;
         interactionObject = objectNetObj;
         
         objectNetObj.transform.position = stayPos.position;
 
+        Rigidbody rb = objectNetObj.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = true;
@@ -164,17 +175,32 @@ public class Sangles : NetworkBehaviour, IInteractible
             rb.angularVelocity = Vector3.zero;
         }
 
-        if (col != null)
+        if (objectNetObj.TryGetComponent<Collider>(out var col))
             col.enabled = false;
 
         objectNetObj.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
         dropTimer.Value = Random.Range(mini_TimeBeforeDrop, max_TimeBeforeDrop);
 
+        // 🔹 Synchroniser côté clients
         UpdateObjectPositionClientRpc(objectNetObj.NetworkObjectId, stayPos.position);
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void ForceReleaseFromHandServerRpc(ulong itemId, ulong playerId)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
 
+        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(playerId, out var client))
+            return;
+
+        var grabPoint = client.PlayerObject.GetComponent<GrabPoint>();
+        if (grabPoint == null) return;
+
+        // ✅ Forcer le relâchement via la méthode existante
+        grabPoint.ForceReleaseServer(itemId);
+    }
 
     [ClientRpc]
     private void UpdateObjectPositionClientRpc(ulong objectId, Vector3 position)
@@ -183,14 +209,20 @@ public class Sangles : NetworkBehaviour, IInteractible
             .TryGetValue(objectId, out var netObj))
             return;
 
-        netObj.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        // 🔹 IMPORTANT : Appliquer la physique côté client
         netObj.transform.position = position;
+        netObj.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         
-        var grabbable = netObj.GetComponent<GrabbableObject>();
-        if (grabbable != null)
+        if (netObj.TryGetComponent<Rigidbody>(out var rb))
         {
-            grabbable.IsGrabbed.Value = false;
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
+        
+        if (netObj.TryGetComponent<Collider>(out var col))
+            col.enabled = false;
     }
 
     #endregion
@@ -217,6 +249,8 @@ public class Sangles : NetworkBehaviour, IInteractible
         if (netObj.TryGetComponent<Collider>(out var col))
             col.enabled = true;
 
+        netObj.gameObject.layer = LayerMask.NameToLayer("Interactable");
+
         ReleaseClientRpc(storedObjectId.Value, playerId);
 
         storedObjectId.Value = 0;
@@ -231,8 +265,19 @@ public class Sangles : NetworkBehaviour, IInteractible
             .TryGetValue(objectId, out var netObj))
             return;
 
+        // 🔹 Remettre la physique côté client
         netObj.gameObject.layer = LayerMask.NameToLayer("Interactable");
+        
+        if (netObj.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
+        
+        if (netObj.TryGetComponent<Collider>(out var col))
+            col.enabled = true;
 
+        // 🔹 Si c'est le joueur qui a cliqué, grab l'objet
         if (NetworkManager.Singleton.LocalClientId == playerId)
         {
             RequestGrabServerRpc(objectId, playerId);
@@ -250,13 +295,11 @@ public class Sangles : NetworkBehaviour, IInteractible
             return;
 
         var grabPoint = client.PlayerObject.GetComponent<GrabPoint>();
-        var grabbable = netObj.GetComponent<GrabbableObject>();
         
-        if (grabPoint != null && grabbable != null)
+        if (grabPoint != null)
         {
-            // Assigner l'objet au GrabPoint
-            grabbable.IsGrabbed.Value = true;
-            // Appeler la méthode que votre GrabPoint utilise normalement
+            // 🔹 SOLUTION : Appeler la vraie méthode TryGrab
+            grabPoint.TryGrab(netObj);
         }
     }
 
@@ -271,6 +314,12 @@ public class Sangles : NetworkBehaviour, IInteractible
     
     private void Update()
     {
+        // 🔹 Forcer la position de l'objet stocké (côté serveur ET client)
+        if (storedObjectId.Value != 0 && interactionObject != null)
+        {
+            interactionObject.transform.position = stayPos.position;
+        }
+
         if (!IsServer) return;
         if (storedObjectId.Value == 0) return;
 
@@ -298,6 +347,8 @@ public class Sangles : NetworkBehaviour, IInteractible
         if (netObj.TryGetComponent<Collider>(out var col))
             col.enabled = true;
 
+        netObj.gameObject.layer = LayerMask.NameToLayer("Interactable");
+
         DropClientRpc(storedObjectId.Value);
 
         storedObjectId.Value = 0;
@@ -313,6 +364,15 @@ public class Sangles : NetworkBehaviour, IInteractible
             return;
 
         netObj.gameObject.layer = LayerMask.NameToLayer("Interactable");
+        
+        if (netObj.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
+        
+        if (netObj.TryGetComponent<Collider>(out var col))
+            col.enabled = true;
     }
 
     #endregion
