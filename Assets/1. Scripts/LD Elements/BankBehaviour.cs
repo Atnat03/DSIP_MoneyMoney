@@ -14,7 +14,7 @@ public class BankBehaviour : MonoBehaviour
     }
 
     public MoneySpawn[] moneySpawns;
-    public bool visited;
+    public NetworkVariable<bool> visited = new NetworkVariable<bool>(false);
     public float delay;
     public string colorBank;
 
@@ -23,7 +23,7 @@ public class BankBehaviour : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Truck") && !visited)
+        if (other.CompareTag("Truck") && !visited.Value)
         {
             StartCoroutine(Spawnmoney());
         }
@@ -34,7 +34,7 @@ public class BankBehaviour : MonoBehaviour
         if (!NetworkManager.Singleton.IsServer)
             yield break;
             
-        visited = true;
+        visited.Value = true;
 
         foreach (MoneySpawn spawn in moneySpawns)
         {
