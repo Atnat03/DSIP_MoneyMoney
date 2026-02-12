@@ -39,6 +39,8 @@ public class BanditTir : MonoBehaviour
     public BanditVehicleAI banditAI;
     public HelicopterVehicleAI helicoAI;
     
+    private string targetTag;
+    
     private void Start()
     {
         if (banditAI != null)
@@ -175,6 +177,8 @@ public class BanditTir : MonoBehaviour
 
     private void Shoot(Transform target)
     {
+        SFX_Manager.instance.PlaySFX(3);
+        
         Vector3 origin = firePoint.position;
         Vector3 dir = (target.position - origin).normalized;
 
@@ -184,6 +188,7 @@ public class BanditTir : MonoBehaviour
         if (Physics.Raycast(origin, dir, out hit, detectionRadius, shootMask, QueryTriggerInteraction.Ignore))
         {
             hitPoint = hit.point;
+            targetTag = hit.collider.tag;
 
             if (hit.collider.CompareTag("Player"))
             {
@@ -202,7 +207,7 @@ public class BanditTir : MonoBehaviour
     {
         GameObject bullet = Instantiate(bulletVisualPrefab, start, Quaternion.identity);
         //bullet.GetComponent<NetworkObject>().Spawn();
-        bullet.GetComponent<BulletVisual>().Init(end, bulletVisualSpeed);
+        bullet.GetComponent<BulletVisual>().Init(end, bulletVisualSpeed, targetTag);
     }
 
     #endregion

@@ -84,6 +84,7 @@ namespace Shooting
         public IEnumerator Reloading()
         {
             GetComponent<FPSControllerMulti>().StartFreeze();
+            SFX_Manager.instance.PlaySFX(5);
             Reload();
             Image circleCD = VariableManager.instance.circleCD;
             float count = reloadingTime;
@@ -179,6 +180,7 @@ namespace Shooting
             
             if (_currentAmmo <= 0)
             {
+                SFX_Manager.instance.PlaySFX(4);
                 return false;
             }
             
@@ -211,7 +213,7 @@ namespace Shooting
         {
             GameObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity);
             muzzleFlash.transform.SetParent(_instantPos);
-            GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
+            SFX_Manager.instance.PlaySFX(3);
         }
 
         /// <summary>

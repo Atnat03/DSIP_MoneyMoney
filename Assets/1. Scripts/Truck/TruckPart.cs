@@ -137,6 +137,8 @@ public class TruckPart : NetworkBehaviour, IInteractible
             }
         }
 
+        SFX_Manager.instance.PlaySFX(9);
+        
         isBroke.Value = true;
         TruckLife.instance.DetermineIfShootable();
     }

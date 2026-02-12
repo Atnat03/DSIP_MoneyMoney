@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class SFX_SO : ScriptableObject
+public class SFX_SO : MonoBehaviour
 {
     public List<AudioClip> clips;
 }
