@@ -113,6 +113,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     private Quaternion freezeSaveRotation = Quaternion.identity;
 
     public Skins skinManager;
+
+    [HideInInspector]public Animator animator;
+    private NetworkAnimator networkAnimator;
     
     public void SetVisibleGun()
     {
@@ -120,15 +123,18 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         gunOwner.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
     }
     
-    
     public override void OnNetworkSpawn()
     {
+        currentSkinId.OnValueChanged += OnSkinChanged;
+    
         if(IsOwner)
         {
-            currentSkinId.OnValueChanged += OnSkinChanged;
             SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
-            skinManager.SetSkin(currentSkinId.Value);
         }
+    
+        skinManager.SetSkin(currentSkinId.Value);
+        animator = skinManager.GetAnimator(currentSkinId.Value);
+        networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
         
         if (!IsOwner)
         {
@@ -197,15 +203,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             SetLayerRecursively(child.gameObject, newLayer);
         }
     }
-
-    private Vector3 lastTruckPosition;
-
+    
     public CharacterController controller;
     public bool canEnterInTruck = false;
-
+    
     void Update()
     {
         if (!IsOwner) return;
+        
+        float isMoving = controller.isGrounded ? controller.velocity.magnitude : 0;
+        
+        animator.SetFloat("Speed", isMoving);
+
+        //UpdateAnimationServerRpc(isMoving);
         
         textGoInCamion.SetActive(canEnterInTruck);
         textGoOUTCamion.SetActive(isDriver);
@@ -244,7 +254,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             if (Input.GetKeyDown(resetTruckKey))
             {
-                print("KEY RESET");
                 TruckController.instance.AddValueToReset();
             }
         }
@@ -321,6 +330,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     public void Sit(Transform sitPos)
     {
+        GetComponent<FPSControllerMulti>().animator.SetBool("Sit", true);
         isSitting = true;
         canSit = false;
         sittingPos = sitPos;
@@ -328,6 +338,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     public void StandUp()
     {
+        GetComponent<FPSControllerMulti>().animator.SetBool("Sit", false);
         sittingPos = null;
         isSitting = false;
     }
@@ -407,14 +418,25 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
             Vector3 move = Vector3.zero;
             
+            // Vérifier saut depuis l'échelle AVANT de traiter le mouvement
+            if (isOnLadder && Input.GetKeyDown(KeyCode.Space))
+            {
+                isOnLadder = false;
+                verticalVelocity = jumpForce * 0.5f;
+                SFX_Manager.instance.StopSFX();
+                // Ne pas return ici ! On continue pour appliquer le mouvement
+            }
+            
             if (isOnLadder && !controller.isGrounded)
             {
                 Vector3 climb = new Vector3(horizontalInput, verticalInput, 0f);
                 move = transform.TransformDirection(climb) * ladderClimbSpeed;
 
-                if (transform.TransformDirection(climb) != Vector3.zero)
+                bool isClimbing = Mathf.Abs(horizontalInput) > 0.1f || Mathf.Abs(verticalInput) > 0.1f;
+                
+                if (isClimbing)
                 {
-                    SFX_Manager.instance.PlaySFX(11, 0.5f, 1f,true);
+                    SFX_Manager.instance.PlaySFX(11, 0.5f, 1f, true);
                 }
                 else
                 {
@@ -431,8 +453,10 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                         verticalVelocity = -2f;
 
                     if (Input.GetKeyDown(KeyCode.Space) && !isOnLadder)
+                    {
+                        animator.SetTrigger("Jump");
                         verticalVelocity = jumpForce;
-                    
+                    }
                 }
                 else
                 {
@@ -443,17 +467,18 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                 move = transform.TransformDirection(localMove) * speed;
                 move.y = verticalVelocity;
                 
-                if (transform.TransformDirection(localMove) != Vector3.zero && controller.isGrounded)
+                bool isWalking = localMove.magnitude > 0.1f && controller.isGrounded;
+                
+                if (isWalking)
                 {
-                    
                     if (Input.GetKey(KeyCode.LeftShift))
                     {
-                        SFX_Manager.instance.PlaySFX(2, 0.5f, 1f,true);
-                    }else
-                    {
-                        SFX_Manager.instance.PlaySFX(1, 0.5f, 1f,true);
+                        SFX_Manager.instance.PlaySFX(2, 0.5f, 1f, true);
                     }
-                    
+                    else
+                    {
+                        SFX_Manager.instance.PlaySFX(1, 0.5f, 1f, true);
+                    }
                 }
                 else if (!isOnLadder)
                 {
@@ -465,16 +490,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             controller.Move(move * Time.deltaTime);
             controller.enabled = false;
         }
-    }
-
-    private CameraShake cameraShake;
+    }    
     
-    private float drunkZOffset = 0f;
-
-    public void SetDrunkOffset(float value)
-    {
-        drunkZOffset = value;
-    }
+    private CameraShake cameraShake;
     
     void LateUpdate()
     {
@@ -502,7 +520,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                     cameraTransform.rotation, 
                     freezeSaveRotation, 
                     Time.deltaTime * cameraSmoothFollow
-                );
+                ); 
             }
         }
     }
@@ -511,15 +529,17 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     {
         if (controller != null) controller.enabled = false;
 
+
         capsuleCollider.enabled = false;
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
-        lastTruckPosition = truckRb.position;
         
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {
             netTransform.InLocalSpace = true;
         }
+        
+        animator.SetBool("Sit", true);
         
         SetVisibleGun();
         
@@ -535,6 +555,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         print("ExitTruck");
         
         capsuleCollider.enabled = true;
+        
+        animator.SetBool("Sit", false);
         
         SetVisibleGun();
         
