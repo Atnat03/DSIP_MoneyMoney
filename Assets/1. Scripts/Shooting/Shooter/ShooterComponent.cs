@@ -74,6 +74,11 @@ namespace Shooting
         {
             _currentAmmo = _maxAmmo;
             gunAnimator.SetTrigger("Reload");
+
+            Animator a = GetComponent<FPSControllerMulti>().animator;
+            
+            if(a)
+                a.SetTrigger("Reload");
         }
 
         public void StartToReload()

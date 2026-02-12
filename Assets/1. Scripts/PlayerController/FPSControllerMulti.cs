@@ -113,6 +113,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     private Quaternion freezeSaveRotation = Quaternion.identity;
 
     public Skins skinManager;
+
+    [HideInInspector]public Animator animator;
+    private NetworkAnimator networkAnimator;
     
     public void SetVisibleGun()
     {
@@ -120,15 +123,18 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         gunOwner.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
     }
     
-    
     public override void OnNetworkSpawn()
     {
+        currentSkinId.OnValueChanged += OnSkinChanged;
+    
         if(IsOwner)
         {
-            currentSkinId.OnValueChanged += OnSkinChanged;
             SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
-            skinManager.SetSkin(currentSkinId.Value);
         }
+    
+        skinManager.SetSkin(currentSkinId.Value);
+        animator = skinManager.GetAnimator(currentSkinId.Value);
+        networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
         
         if (!IsOwner)
         {
@@ -202,10 +208,31 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     public CharacterController controller;
     public bool canEnterInTruck = false;
-
+    
+    [ServerRpc(RequireOwnership = false)]
+    void UpdateAnimationServerRpc(float speed)
+    {
+        UpdateAnimationClientRpc(speed);
+    }
+    
+    [ClientRpc]
+    void UpdateAnimationClientRpc(float speed)
+    {
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", speed);
+        }
+    }
+    
     void Update()
     {
         if (!IsOwner) return;
+        
+        float isMoving = controller.velocity.magnitude;
+
+        animator.SetFloat("Speed", isMoving);
+
+        //UpdateAnimationServerRpc(isMoving);
         
         textGoInCamion.SetActive(canEnterInTruck);
         textGoOUTCamion.SetActive(isDriver);
