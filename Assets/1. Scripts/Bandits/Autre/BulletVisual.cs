@@ -28,7 +28,7 @@ public class BulletVisual : MonoBehaviour
             }
             else if (targetTag == "TruckPart")
             {
-                SFX_Manager.instance.PlaySFX(8,0.1f);
+                SFX_Manager.instance.PlaySFX(8,.3f);
             }
             
             Destroy(gameObject);

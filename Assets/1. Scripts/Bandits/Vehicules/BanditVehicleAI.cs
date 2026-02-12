@@ -159,6 +159,7 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
     {
         NetworkObject explosionParticleIntance = Instantiate(vfxMort, transform.position, transform.rotation).GetComponent<NetworkObject>();
         explosionParticleIntance.Spawn();
+        SFX_Manager.instance.PlaySFX(9,.4f);
 
         if (TryGetComponent<NetworkObject>(out var netObj))
         {
