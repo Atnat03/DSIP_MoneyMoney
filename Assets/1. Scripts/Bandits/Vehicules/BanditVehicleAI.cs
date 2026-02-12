@@ -161,6 +161,9 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
         NetworkObject explosionParticleIntance = Instantiate(vfxMort, transform.position, transform.rotation).GetComponent<NetworkObject>();
         explosionParticleIntance.Spawn();
         SFX_Manager.instance.PlaySFX(9,.4f);
+        
+        GameObject debriss = Instantiate(debris, transform.position, transform.rotation);
+        debriss.GetComponent<NetworkObject>().Spawn();
 
         if (TryGetComponent<NetworkObject>(out var netObj))
         {
@@ -171,9 +174,6 @@ public class BanditVehicleAI : MonoBehaviour, IVehicule
         {
             netObj2.Despawn();
         }
-
-        GameObject debriss = Instantiate(debris, transform.position, transform.rotation);
-        debriss.GetComponent<NetworkObject>().Spawn();
         Destroy(gameObject);
     }
 
