@@ -72,8 +72,12 @@ public class TruckController : NetworkBehaviour
     [SerializeField] float velocityToTriggerShake = 25f;
     [SerializeField] float cameraShakeDuration = 0.25f;
     [SerializeField] float cameraShakeMagnitude = 0.1f;
-
+    
     public List<IParentable> parentable;
+    
+    [Header("SFX")]
+    public AudioSource engineAudioSource;
+    public AudioSource klaxonAudioSource;
     
     private void Awake()
     {
@@ -97,6 +101,8 @@ public class TruckController : NetworkBehaviour
         isFallen.OnValueChanged += OnIsFallenChanged;
         BackLightOn.OnValueChanged += OnBackLightsChanged;
         FrontLightOn.OnValueChanged += OnFrontLigthChanged;
+        
+        engineAudioSource.Play();
         
         UpdateJauge();    
     }
@@ -134,6 +140,8 @@ public class TruckController : NetworkBehaviour
             verticalInput = 0f;
             isBreaking = false;
         }
+        
+        engineAudioSource.volume = rb.linearVelocity.magnitude/100;
     
         UpdateWheels();
         CheckFall();
@@ -260,7 +268,7 @@ public class TruckController : NetworkBehaviour
     [ClientRpc]
     private void PlayHornClientRpc()
     {
-        GetComponent<AudioSource>().PlayOneShot(klaxon);
+        klaxonAudioSource.PlayOneShot(klaxon);
     }
 
 

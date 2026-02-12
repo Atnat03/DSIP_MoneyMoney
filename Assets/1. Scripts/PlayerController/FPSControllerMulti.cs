@@ -403,6 +403,15 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                 Vector3 climb = new Vector3(horizontalInput, verticalInput, 0f);
                 move = transform.TransformDirection(climb) * ladderClimbSpeed;
 
+                if (transform.TransformDirection(climb) != Vector3.zero)
+                {
+                    SFX_Manager.instance.PlaySFX(11, 0.5f, 1f,true);
+                }
+                else
+                {
+                    SFX_Manager.instance.StopSFX();
+                }
+
                 verticalVelocity = 0f;
             }
             else
@@ -414,6 +423,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
                     if (Input.GetKeyDown(KeyCode.Space) && !isOnLadder)
                         verticalVelocity = jumpForce;
+                    
                 }
                 else
                 {
@@ -423,6 +433,23 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                 Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
                 move = transform.TransformDirection(localMove) * speed;
                 move.y = verticalVelocity;
+                
+                if (transform.TransformDirection(localMove) != Vector3.zero && controller.isGrounded)
+                {
+                    
+                    if (Input.GetKey(KeyCode.LeftShift))
+                    {
+                        SFX_Manager.instance.PlaySFX(2, 0.5f, 1f,true);
+                    }else
+                    {
+                        SFX_Manager.instance.PlaySFX(1, 0.5f, 1f,true);
+                    }
+                    
+                }
+                else if (!isOnLadder)
+                {
+                    SFX_Manager.instance.StopSFX();
+                }
             }
 
             controller.enabled = true;

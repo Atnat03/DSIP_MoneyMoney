@@ -215,6 +215,7 @@ public class PlayerRayCast : NetworkBehaviour
     public IEnumerator RepairPart(GameObject part)
     {
         playerFPS.StartFreeze();
+        SFX_Manager.instance.PlaySFX(10);
         float count = durationRepair;
         while (count > 0)
         {
