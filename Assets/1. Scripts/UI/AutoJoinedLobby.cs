@@ -13,6 +13,7 @@ using Unity.Services.Relay.Models;
 
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Core.Environments;
 using Random = UnityEngine.Random;
 
 public class AutoJoinedLobby : MonoBehaviour
@@ -55,7 +56,6 @@ public class AutoJoinedLobby : MonoBehaviour
 
     public void Join()
     {
-        // Définir le nom du joueur
         if (!string.IsNullOrEmpty(inputName.text))
             LocalPlayerName = inputName.text;
         else
@@ -63,8 +63,6 @@ public class AutoJoinedLobby : MonoBehaviour
         
         ConnectingTXT.SetActive(true);
         ElementsToConnect.SetActive(false);
-        
-        print("SKIN : " + LocalPlayerSkin);
         
         EnterGame();
     }
@@ -87,19 +85,16 @@ public class AutoJoinedLobby : MonoBehaviour
             return;
         }
     
-        await InitializeServices();
+        await UnityServices.InitializeAsync(new InitializationOptions().SetEnvironmentName("production"));
         
-        // ✅ CHANGÉ : Utiliser le code Relay
         string relayCode = inputRelayCode.text.Trim();
         
         if (string.IsNullOrEmpty(relayCode))
         {
-            // Pas de code → Créer un lobby
             await CreateLobbyAndHost();
         }
         else
         {
-            // Code fourni → Rejoindre directement avec le code Relay
             await JoinByRelayCode(relayCode);
         }
     }
