@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ public class PlayerPastis : NetworkBehaviour
     
     [Header("UI")]
     public GameObject uiClique;
+
+    public DamageEffectController effet;
 
     private FPSControllerMulti fps;
     private AudioSource audioSource;
@@ -82,13 +85,43 @@ public class PlayerPastis : NetworkBehaviour
         
         if (currentGorgerBottle == 0)
         {
-            fps.MyCamera().transform.parent.GetComponent<DrunkEffectCamera>().AddDrunk();
+            StartCoroutine(EffetBourrer());
         }
 
         animator.SetTrigger("Drink");
         
         elapsedTime = timeToDrink;
         canDrink = false;
+    }
+
+    IEnumerator EffetBourrer()
+    {
+        float duration = 0.25f;
+        float elapsed = 0;
+
+        effet.SetColor(Color.darkOliveGreen);
+        
+        while (elapsed <  duration)
+        {
+            effet.SetIntensity(elapsed / (duration + 0.25f));
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        effet.SetIntensity(0.5f);
+        
+        yield return new WaitForSeconds(3f);
+        
+        while (elapsed > 0)
+        {
+            effet.SetIntensity(elapsed / (duration + 0.25f));
+            
+            elapsed -= Time.deltaTime;
+            yield return null;
+        }
+        
+        effet.SetIntensity(0);
     }
     
     [ServerRpc(RequireOwnership = false)]

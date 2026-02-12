@@ -483,9 +483,6 @@ public class TruckController : NetworkBehaviour
         Gizmos.DrawWireCube(Vector3.zero, boundsSize);
         Gizmos.matrix = oldMatrix;
         
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(reload.position, raduisToReload);
-        
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, raduisReset);
     }
