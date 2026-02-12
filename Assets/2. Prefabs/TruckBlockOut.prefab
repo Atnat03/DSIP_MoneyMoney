@@ -184,7 +184,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 255959
+    m_Bits: 409200599
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 9f3ccbb4c67351c4ba293d7c446e5f47, type: 2}
   m_TargetDisplay: 0
@@ -1008,8 +1008,8 @@ Transform:
   m_GameObject: {fileID: 580056528224433570}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.0499996, y: 2.685, z: -0}
-  m_LocalScale: {x: 2.20399, y: 0.9600152, z: 0.15827997}
+  m_LocalPosition: {x: 1.0499996, y: 2.466, z: -0}
+  m_LocalScale: {x: 2.20399, y: 1.3980701, z: 0.15827997}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 979945244392788391}
@@ -1869,7 +1869,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4712
+  m_VersionIndex: 4721
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2528,7 +2528,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2624
+  m_VersionIndex: 2633
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -4609,7 +4609,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4002
+  m_VersionIndex: 4011
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6470,7 +6470,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4002
+  m_VersionIndex: 4011
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7566,7 +7566,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2624
+  m_VersionIndex: 2633
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7873,7 +7873,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 255959
+    m_Bits: 409200599
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 8a464633aff8e294f8fb260149a69c34, type: 2}
   m_TargetDisplay: 0
@@ -10658,7 +10658,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3897
+  m_VersionIndex: 3906
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -10979,6 +10979,8 @@ GameObject:
   - component: {fileID: 5562408584761631046}
   - component: {fileID: 847054314169942515}
   - component: {fileID: 7914902467731061745}
+  - component: {fileID: 3791038558047578449}
+  - component: {fileID: 65044307277934740}
   m_Layer: 9
   m_Name: Sangle (4)
   m_TagString: Sangles
@@ -11095,9 +11097,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 26763853618172188}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 65044307277934740}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &3791038558047578449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2178084953455473798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2667854993
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &65044307277934740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2178084953455473798}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &2410932539606952759
 GameObject:
   m_ObjectHideFlags: 0
@@ -11570,7 +11616,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4712
+  m_VersionIndex: 4721
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11839,7 +11885,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2478404924353117822}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11915,6 +11961,8 @@ GameObject:
   - component: {fileID: 739821218473259244}
   - component: {fileID: 7862303961672755378}
   - component: {fileID: 6282952160217280489}
+  - component: {fileID: 8203078542498799245}
+  - component: {fileID: 7637064798596906953}
   m_Layer: 9
   m_Name: Sangle (8)
   m_TagString: Sangles
@@ -12031,9 +12079,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 1905928408722422282}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 7637064798596906953}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &8203078542498799245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2547839770448374107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 32524881
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &7637064798596906953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2547839770448374107}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &2576513305556131234
 GameObject:
   m_ObjectHideFlags: 0
@@ -12047,6 +12139,8 @@ GameObject:
   - component: {fileID: 7686427492401374556}
   - component: {fileID: 8948203354969625686}
   - component: {fileID: 1808353111478915688}
+  - component: {fileID: 8956229991128186093}
+  - component: {fileID: 5405425508115331755}
   m_Layer: 9
   m_Name: Sangle (2)
   m_TagString: Sangles
@@ -12163,9 +12257,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 8649906077136130500}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 5405425508115331755}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &8956229991128186093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2576513305556131234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1539510838
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5405425508115331755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2576513305556131234}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &2581860026275991997
 GameObject:
   m_ObjectHideFlags: 0
@@ -13080,7 +13218,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4650
+  m_VersionIndex: 4659
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13806,7 +13944,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2580
+  m_VersionIndex: 2589
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15076,7 +15214,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4002
+  m_VersionIndex: 4011
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15420,7 +15558,7 @@ GameObject:
   - component: {fileID: 1014838321248511987}
   - component: {fileID: 4399952598460636506}
   - component: {fileID: 3318343437333652171}
-  m_Layer: 21
+  m_Layer: 28
   m_Name: Cube (60)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15457,7 +15595,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3174096394501830915}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -17222,6 +17360,8 @@ GameObject:
   - component: {fileID: 301741238369722444}
   - component: {fileID: 7501393468485511516}
   - component: {fileID: 1528966654375929528}
+  - component: {fileID: 2144453200040929948}
+  - component: {fileID: 5229614967062199540}
   m_Layer: 9
   m_Name: Sangle (3)
   m_TagString: Sangles
@@ -17338,9 +17478,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 6895688377678388771}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 2576326251898492207}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &2144453200040929948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984033824784976083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1349089545
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5229614967062199540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984033824784976083}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &3999915605408601907
 GameObject:
   m_ObjectHideFlags: 0
@@ -17588,7 +17772,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3280
+  m_VersionIndex: 3289
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18306,7 +18490,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2624
+  m_VersionIndex: 2633
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -19316,7 +19500,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1263945381906926589
 Transform:
   m_ObjectHideFlags: 0
@@ -20214,8 +20398,8 @@ Transform:
   m_GameObject: {fileID: 5096534407985491680}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5250002, y: 0.49009556, z: 0.13865004}
-  m_LocalScale: {x: 0.1, y: 1.7, z: 0.5}
+  m_LocalPosition: {x: 1.5250002, y: 0.4594, z: 0.13865004}
+  m_LocalScale: {x: 0.1, y: 1.7613701, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9220810406275990115}
@@ -22119,7 +22303,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4002
+  m_VersionIndex: 4011
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -22256,8 +22440,8 @@ Transform:
   m_GameObject: {fileID: 5473821853284338228}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.05, y: 2.685, z: 0}
-  m_LocalScale: {x: 2.2039926, y: 0.9600183, z: 0.15828}
+  m_LocalPosition: {x: -1.05, y: 2.466, z: 0}
+  m_LocalScale: {x: 2.2039926, y: 1.3980746, z: 0.15828}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1814343280495580980}
@@ -22722,6 +22906,8 @@ GameObject:
   - component: {fileID: 3516853547784241464}
   - component: {fileID: 7998697709309964052}
   - component: {fileID: 5717207698658827151}
+  - component: {fileID: 855684311896206834}
+  - component: {fileID: 2638996716125616307}
   m_Layer: 9
   m_Name: Sangle (8)
   m_TagString: Sangles
@@ -22838,9 +23024,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 5579257819286247212}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 2638996716125616307}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &855684311896206834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1029284154
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &2638996716125616307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5771500549078586793
 GameObject:
   m_ObjectHideFlags: 0
@@ -23419,7 +23649,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2580
+  m_VersionIndex: 2589
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -24426,6 +24656,8 @@ GameObject:
   - component: {fileID: 1383534344942013954}
   - component: {fileID: 4937149271392606455}
   - component: {fileID: 2683048474320106148}
+  - component: {fileID: 1336180334587871080}
+  - component: {fileID: 5644253311499902937}
   m_Layer: 9
   m_Name: Sangle (6)
   m_TagString: Sangles
@@ -24542,9 +24774,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 5624855390146977435}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 5644253311499902937}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &1336180334587871080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5935024326764770332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 247273684
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5644253311499902937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5935024326764770332}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5937974364036305129
 GameObject:
   m_ObjectHideFlags: 0
@@ -25128,7 +25404,7 @@ GameObject:
   - component: {fileID: 2921344011308732111}
   - component: {fileID: 6002172724207845343}
   - component: {fileID: 5697887942520977982}
-  m_Layer: 21
+  m_Layer: 28
   m_Name: Cube (58)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25165,7 +25441,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6052498745676784266}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -25481,6 +25757,8 @@ GameObject:
   - component: {fileID: 1550906586221999198}
   - component: {fileID: 6289493338916603873}
   - component: {fileID: 6997149783354210142}
+  - component: {fileID: 3030937352890958507}
+  - component: {fileID: 2576326251898492207}
   m_Layer: 9
   m_Name: Sangle (3)
   m_TagString: Sangles
@@ -25597,9 +25875,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 5400104923930699094}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 2576326251898492207}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &3030937352890958507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6145911970774091801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1672699706
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &2576326251898492207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6145911970774091801}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6160043959960118693
 GameObject:
   m_ObjectHideFlags: 0
@@ -26120,6 +26442,8 @@ GameObject:
   - component: {fileID: 2070527100848278655}
   - component: {fileID: 5102282055980486822}
   - component: {fileID: 8179331925687348023}
+  - component: {fileID: 5009480081287213271}
+  - component: {fileID: 4165563554632835467}
   m_Layer: 9
   m_Name: Sangle (1)
   m_TagString: Sangles
@@ -26236,9 +26560,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 442737586395789853}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 4165563554632835467}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &5009480081287213271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6544139472557916194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1416127317
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &4165563554632835467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6544139472557916194}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6560385871709170247
 GameObject:
   m_ObjectHideFlags: 0
@@ -26700,6 +27068,8 @@ GameObject:
   - component: {fileID: 6952429935535396355}
   - component: {fileID: 4990392536089392194}
   - component: {fileID: 8965409459936119015}
+  - component: {fileID: 4246516384719857757}
+  - component: {fileID: 5760415853756783090}
   m_Layer: 9
   m_Name: Sangle (5)
   m_TagString: Sangles
@@ -26816,9 +27186,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 8312688197490957091}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 5760415853756783090}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &4246516384719857757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6763516643170196853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2357632987
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5760415853756783090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6763516643170196853}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6829267402790344156
 GameObject:
   m_ObjectHideFlags: 0
@@ -28040,7 +28454,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3280
+  m_VersionIndex: 3289
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -31538,7 +31952,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3897
+  m_VersionIndex: 3906
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -31967,6 +32381,8 @@ GameObject:
   - component: {fileID: 2820748416362780716}
   - component: {fileID: 5555101941141048566}
   - component: {fileID: 657071950675924866}
+  - component: {fileID: 6585847725999422730}
+  - component: {fileID: 8577563403708075338}
   m_Layer: 9
   m_Name: Sangle (7)
   m_TagString: Sangles
@@ -32083,9 +32499,53 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   stayPos: {fileID: 7024369268705168456}
   interactionName: Accrocher le sac
+  outline:
+  - {fileID: 8577563403708075338}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
-  outline: []
+--- !u!114 &6585847725999422730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8720514864262516576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3756177205
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &8577563403708075338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8720514864262516576}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &8769209891873612492
 GameObject:
   m_ObjectHideFlags: 0
@@ -32832,7 +33292,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4650
+  m_VersionIndex: 4659
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -33582,6 +34042,14 @@ PrefabInstance:
     - target: {fileID: 7053741937067519333, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321247584405079362, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 96c42e3fa5359a74db1b0c5842c67797, type: 2}
+    - target: {fileID: 7321247584405079362, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -34570,6 +35038,200 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5445144798190912924, guid: ac6cdd841af2ee5469450385859d05bc, type: 3}
   m_PrefabInstance: {fileID: 3527784733297507131}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3672116871678019320
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5729001311705654942}
+    m_Modifications:
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.3710804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.40700006
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.5730972
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.879243
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.47637364
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -56.898
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Name
+      value: P_Pastis
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2567954739779193117, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2723500451364008137, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3925650740219368190, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4363196100749785567}
+    - targetCorrespondingSourceObject: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2518456082664859178}
+    - targetCorrespondingSourceObject: {fileID: 2723500451364008137, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7533412685962068899}
+    - targetCorrespondingSourceObject: {fileID: 2567954739779193117, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3253881076216815712}
+  m_SourcePrefab: {fileID: 100100000, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+--- !u!1 &1249414559727849445 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2567954739779193117, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3253881076216815712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249414559727849445}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!1 &1674824412013835825 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2723500451364008137, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7533412685962068899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674824412013835825}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!4 &2727360742768540146 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3355842020691157832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4363196100749785567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355842020691157832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c316e0ac26274674a9de2433c2c0e6a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  interactionName: Prendre un PASTIS
+  outline:
+  - {fileID: 7533412685962068899}
+  - {fileID: 3253881076216815712}
+--- !u!65 &2518456082664859178
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355842020691157832}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.4352169, y: 1.3464413, z: 0.46390355}
+  m_Center: {x: -0.02076107, y: 0.6232357, z: -0.041743487}
 --- !u!1001 &3990884463677551259
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34580,7 +35242,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1713757880596917200, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: m_VersionIndex
-      value: 2624
+      value: 2633
       objectReference: {fileID: 0}
     - target: {fileID: 2214941433687442627, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: m_Name
@@ -34779,19 +35441,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.81506234
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5793732
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -34799,7 +35461,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 70.813
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -34993,6 +35655,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6886544507694524163}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2727360742768540146}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
@@ -35499,6 +36164,14 @@ PrefabInstance:
     - target: {fileID: 7053741937067519333, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321247584405079362, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 96c42e3fa5359a74db1b0c5842c67797, type: 2}
+    - target: {fileID: 7321247584405079362, guid: 8cadac6d8a1940940abb3a270f9b2fd9, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -36580,7 +37253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5389424566079319576, guid: 650ae464608f39e498d9116e1af7bbdd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5389424566079319576, guid: 650ae464608f39e498d9116e1af7bbdd, type: 3}
       propertyPath: m_TagString
@@ -36995,6 +37668,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 96c8fca93ce077c40ae720e5f3c5f01e, type: 2}
+    - target: {fileID: 6703576772361245076, guid: 9e4beca7156960543ae480e9e2842db2, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 96c42e3fa5359a74db1b0c5842c67797, type: 2}
+    - target: {fileID: 6703576772361245076, guid: 9e4beca7156960543ae480e9e2842db2, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6770843772758168170, guid: 9e4beca7156960543ae480e9e2842db2, type: 3}
       propertyPath: m_Name
       value: P_ReloadStation

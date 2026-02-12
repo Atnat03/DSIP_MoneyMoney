@@ -127,8 +127,16 @@ public class PauseGame : NetworkBehaviour
     public void QuitTheGame()
     {
         Debug.Log("QuittingTheGame");
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.Shutdown();
+        }
+        else
+        {
+            NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+        }
         
-        NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
         Application.Quit();
     }
 }

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1052032771692814880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2711976018243410140}
+  m_Layer: 0
+  m_Name: RainPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2711976018243410140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052032771692814880}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.593, y: 0.702, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5546027341763427187}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3762112307421586323
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +560,7 @@ MonoBehaviour:
   sittingPos: {fileID: 4343889453299615423}
   interactionAssoirName: S'assoir
   interactionDeboutName: Se lever
+  outline: []
 --- !u!1 &4787207542248907342
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,7 +659,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: c2e40fa84d53ccd428f640eac126b1fb, type: 2}
+      objectReference: {fileID: 2100000, guid: 8ceb289ec3f7f1d40aadfd0012e0b940, type: 2}
     - target: {fileID: 919132149155446097, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       propertyPath: m_Name
       value: P_BusStop
@@ -638,6 +670,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 882454460096591855}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d682306a736e37e47be653c04af2c33a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2711976018243410140}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d682306a736e37e47be653c04af2c33a, type: 3}
       insertIndex: -1
@@ -688,6 +723,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbribusBehaviour
   timeForTP: 10
+  rain: {fileID: 4101852619715060903, guid: eae26498c8947ba43bf78f31e4f84e7c, type: 3}
+  posRain: {fileID: 2711976018243410140}
   _currentTimer: 0
   playerWaiting: {fileID: 0}
 --- !u!54 &3614076803438809504

@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -36,12 +37,8 @@ public class Sangles : NetworkBehaviour, IInteractible
 
     public override void OnNetworkSpawn()
     {
-        Log($"OnNetworkSpawn | Server={IsServer} | Client={IsClient} | Owner={OwnerClientId}");
-
         storedObjectId.OnValueChanged += OnStoredObjectChanged;
-
-        if (storedObjectId.Value != 0)
-            UpdateStoredObjectReference();
+        OnStoredObjectChanged(0, storedObjectId.Value);
     }
 
     public override void OnNetworkDespawn()
@@ -51,8 +48,27 @@ public class Sangles : NetworkBehaviour, IInteractible
 
     private void OnStoredObjectChanged(ulong oldVal, ulong newVal)
     {
-        Log($"StoredObject changed {oldVal} → {newVal}");
-        UpdateStoredObjectReference();
+        if (newVal == 0)
+        {
+            if (interactionObject != null)
+            {
+                SetObjectPhysics(interactionObject, false);
+                interactionObject = null;
+            }
+            return;
+        }
+
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(newVal, out var obj))
+        {
+            return;
+        }
+
+        interactionObject = obj;
+
+        if (IsServer)
+        {
+            SetObjectPhysics(obj, true);
+        }
     }
 
     #endregion
@@ -64,122 +80,113 @@ public class Sangles : NetworkBehaviour, IInteractible
 
     private void HitInteract(GameObject obj, GameObject player)
     {
-        if (obj != gameObject) return;
+        if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
 
         NetworkObject playerNet = player.GetComponent<NetworkObject>();
-        if (playerNet == null)
+        if (playerNet == null) return;
+
+        ulong heldId = 0;
+        GrabPoint gp = player.GetComponent<GrabPoint>();
+        if (gp != null)
         {
-            LogError("Player has no NetworkObject!");
-            return;
+            GameObject held = gp.GetCurrentObjectInHand();
+            if (held != null)
+            {
+                NetworkObject n = held.GetComponent<NetworkObject>();
+                if (n != null) heldId = n.NetworkObjectId;
+            }
         }
 
-        Log($"Interact by Player {playerNet.OwnerClientId}");
-        TryInteractServerRpc(playerNet.NetworkObjectId);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void TryInteractServerRpc(ulong playerNetId, ServerRpcParams rpcParams = default)
-    {
-        Log($"TryInteractServerRpc | Sender={rpcParams.Receive.SenderClientId}");
-
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects
-            .TryGetValue(playerNetId, out var playerNet))
-        {
-            LogError("Player not found in SpawnedObjects!");
-            return;
-        }
-
-        if (storedObjectId.Value == 0)
-            TryStock(playerNet, rpcParams.Receive.SenderClientId);
-        else
-            TryRelease(rpcParams.Receive.SenderClientId);
+        TryInteractServerRpc(playerNet.NetworkObjectId, heldId);
     }
 
     #endregion
 
-    #region STOCK
+    #region SERVER RPC - INTERACT
 
-    private void TryStock(NetworkObject playerNetObj, ulong senderId)
+    [ServerRpc(RequireOwnership = false)]
+    private void TryInteractServerRpc(ulong playerNetId, ulong heldObjectNetId, ServerRpcParams rpcParams = default)
     {
-        Log("=== TryStock START ===");
-
-        var grabPoint = playerNetObj.GetComponent<GrabPoint>();
-        if (grabPoint == null)
-        {
-            LogError("GrabPoint NULL côté serveur");
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(playerNetId, out _))
             return;
-        }
 
-        GameObject heldObject = grabPoint.GetCurrentObjectInHand();
-        if (heldObject == null)
+        ulong senderClientId = rpcParams.Receive.SenderClientId;
+
+        if (storedObjectId.Value == 0)
         {
-            LogWarning("Le joueur ne tient rien côté serveur !");
-            return;
-        }
+            // ── STOCKAGE ─────────────────────────────────────
+            if (heldObjectNetId == 0) return;
 
-        var grabbable = heldObject.GetComponent<GrabbableObject>();
-        if (grabbable == null || grabbable.type != GrabType.Sac)
+            if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(heldObjectNetId, out var heldNetObj))
+                return;
+
+            var grabbable = heldNetObj.GetComponent<GrabbableObject>();
+            if (grabbable == null || grabbable.type != GrabType.Sac)
+                return;
+
+            // Validation ownership (tu peux remettre plus strict si besoin)
+            if (heldNetObj.OwnerClientId != senderClientId && heldNetObj.OwnerClientId != 0)
+                return;
+
+            // Force release main du joueur
+            ForceClientHandReleaseClientRpc(senderClientId, heldObjectNetId);
+
+            // Positionnement
+            heldNetObj.transform.position = stayPos.position;
+            heldNetObj.transform.rotation = stayPos.rotation;
+
+            SetObjectPhysics(heldNetObj, true);
+            heldNetObj.ChangeOwnership(0);
+
+            SyncPositionClientRpc(heldObjectNetId, stayPos.position, stayPos.rotation);
+
+            storedObjectId.Value = heldObjectNetId;
+            interactionObject = heldNetObj;
+
+            dropTimer.Value = Random.Range(mini_TimeBeforeDrop, max_TimeBeforeDrop);
+        }
+        else
         {
-            LogWarning("Ce n’est PAS un sac côté serveur !");
-            return;
+            // ── LIBERATION / DROP ─────────────────────────────
+            TryRelease(senderClientId);
         }
-
-        var objectNet = heldObject.GetComponent<NetworkObject>();
-        if (objectNet == null)
-        {
-            LogError("L'objet n'a pas de NetworkObject !");
-            return;
-        }
-
-        // ✅ Force la release du joueur avant de stocker
-        grabPoint.ForceLocalRelease();
-
-        // ✅ Stock l'objet côté serveur
-        storedObjectId.Value = objectNet.NetworkObjectId;
-        interactionObject = objectNet;
-
-        // Reparent côté serveur pour physique
-        objectNet.transform.SetParent(stayPos);
-        objectNet.transform.localPosition = Vector3.zero;
-        objectNet.transform.localRotation = Quaternion.identity;
-
-        SetObjectPhysics(objectNet, true);
-
-        dropTimer.Value = Random.Range(mini_TimeBeforeDrop, max_TimeBeforeDrop);
-
-        Log($"Object stocked | Timer={dropTimer.Value}");
-
-        StartCoroutine(WaitForSpawnThenUpdate(objectNet));
     }
 
-    private System.Collections.IEnumerator WaitForSpawnThenUpdate(NetworkObject objNet)
-    {
-        while (!objNet.IsSpawned)
-            yield return null;
+    #endregion
 
-        UpdateObjectClientRpc(objNet.NetworkObjectId, stayPos.position, stayPos.rotation);
-    }
-
+    #region CLIENT RPCs
 
     [ClientRpc]
-    private void UpdateObjectClientRpc(ulong objectId, Vector3 position, Quaternion rotation)
+    private void SyncPositionClientRpc(ulong objectId, Vector3 pos, Quaternion rot)
     {
-        Debug.Log($"[SANGLES][ClientRpc] Received update for {objectId}");
-        
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out var obj))
             return;
 
-        Debug.Log($"[SANGLES][ClientRpc] UpdateObjectClientRpc for object {objectId}");
-        
-        obj.transform.position = position;
-        obj.transform.rotation = rotation;
+        obj.transform.position = pos;
+        obj.transform.rotation = rot;
+    }
 
-        SetObjectPhysics(obj, true);
+    [ClientRpc]
+    private void ForceClientHandReleaseClientRpc(ulong targetClientId, ulong objectNetId)
+    {
+        if (NetworkManager.Singleton.LocalClientId != targetClientId) return;
+
+        var localPlayer = NetworkManager.Singleton.LocalClient?.PlayerObject;
+        GrabPoint grabPoint = localPlayer?.GetComponentInChildren<GrabPoint>();
+
+        if (grabPoint != null)
+        {
+            GameObject current = grabPoint.GetCurrentObjectInHand();
+            if (current != null && current.GetComponent<NetworkObject>()?.NetworkObjectId == objectNetId)
+            {
+                grabPoint.ForceLocalRelease();
+            }
+        }
     }
 
     #endregion
 
-    #region RELEASE
+    #region RELEASE & DROP
 
     private void TryRelease(ulong playerId)
     {
@@ -192,65 +199,25 @@ public class Sangles : NetworkBehaviour, IInteractible
             return;
         }
 
-        // Déparent côté serveur
-        netObj.transform.SetParent(null);
-        SetObjectPhysics(netObj, false);
+        if (netObj.TryGetComponent<GrabbableObject>(out var grabbable))
+        {
+            grabbable.IsGrabbed.Value = false;
+        }
 
-        ReleaseClientRpc(storedObjectId.Value, playerId);
+        // On lâche simplement — PAS de tentative de reprise
+        SetObjectPhysics(netObj, false);
+        netObj.transform.position += Vector3.up * 0.2f; // petit lift anti-clip
+
+        DropClientRpc(storedObjectId.Value);
 
         storedObjectId.Value = 0;
         interactionObject = null;
         dropTimer.Value = 0;
     }
 
-    [ClientRpc]
-    private void ReleaseClientRpc(ulong objectId, ulong playerId)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out var obj)) return;
-
-        // Déparent côté client et physique
-        obj.transform.SetParent(null);
-        SetObjectPhysics(obj, false);
-
-        // Si c'est le client qui relâche, relancer le grab
-        if (NetworkManager.Singleton.LocalClientId == playerId)
-            RequestGrabServerRpc(objectId, playerId);
-    }
-
-    #endregion
-
-    #region CLIENT RPCs
-
-    [ServerRpc(RequireOwnership = false)]
-    private void RequestGrabServerRpc(ulong id, ulong playerId)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(id, out var obj))
-            return;
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(playerId, out var client))
-            return;
-
-        var grabPoint = client.PlayerObject.GetComponent<GrabPoint>();
-        grabPoint?.TryGrab(obj);
-    }
-
-    #endregion
-
-    #region DROP TIMER
-
-    private void Update()
-    {
-        if (!IsServer) return;
-        if (storedObjectId.Value == 0) return;
-
-        if (dropTimer.Value > 0)
-            dropTimer.Value -= Time.deltaTime;
-        else
-            ForceDrop();
-    }
-
     private void ForceDrop()
     {
-        Log("ForceDrop triggered");
+        if (storedObjectId.Value == 0) return;
 
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(storedObjectId.Value, out var obj))
         {
@@ -258,7 +225,14 @@ public class Sangles : NetworkBehaviour, IInteractible
             return;
         }
 
+        if (obj.TryGetComponent<GrabbableObject>(out var grabbable))
+        {
+            grabbable.IsGrabbed.Value = false;
+        }
+
         SetObjectPhysics(obj, false);
+        obj.transform.position += Vector3.up * 0.2f;
+
         DropClientRpc(storedObjectId.Value);
 
         storedObjectId.Value = 0;
@@ -269,7 +243,9 @@ public class Sangles : NetworkBehaviour, IInteractible
     [ClientRpc]
     private void DropClientRpc(ulong id)
     {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(id, out var obj)) return;
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(id, out var obj))
+            return;
+
         SetObjectPhysics(obj, false);
     }
 
@@ -283,40 +259,40 @@ public class Sangles : NetworkBehaviour, IInteractible
         {
             rb.isKinematic = stocked;
             rb.useGravity = !stocked;
+            if (!stocked)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
         }
 
         if (obj.TryGetComponent<Collider>(out var col))
+        {
             col.enabled = !stocked;
+        }
 
-        obj.gameObject.layer = LayerMask.NameToLayer(
-            stocked ? "Ignore Raycast" : "Interactable"
-        );
+        obj.gameObject.layer = LayerMask.NameToLayer(stocked ? "IgnoreRaycast" : "Interactable");
     }
 
-    private void UpdateStoredObjectReference()
+    private void Update()
     {
-        if (storedObjectId.Value == 0)
-        {
-            interactionObject = null;
-            return;
-        }
+        if (!IsServer) return;
+        if (storedObjectId.Value == 0) return;
 
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(storedObjectId.Value, out var obj))
-        {
-            LogError("Stored object not found on update reference");
-            return;
-        }
+        dropTimer.Value -= Time.deltaTime;
 
-        interactionObject = obj;
-        obj.transform.position = stayPos.position;
-        SetObjectPhysics(obj, true);
+        if (dropTimer.Value <= 0)
+        {
+            ForceDrop();
+        }
     }
 
-    private void Log(string msg) => Debug.Log($"[SANGLES][{name}][Client:{NetworkManager.Singleton.LocalClientId}] {msg}");
-    private void LogWarning(string msg) => Debug.LogWarning($"[SANGLES][{name}] {msg}");
-    private void LogError(string msg) => Debug.LogError($"[SANGLES][{name}] {msg}");
-
-    public bool IsStock() => storedObjectId.Value != 0;
+    private void Log(string msg) => Debug.Log($"[SANGLES][{name}] {msg}");
 
     #endregion
+
+    public bool IsStock()
+    {
+        return storedObjectId.Value != 0;
+    }
 }
