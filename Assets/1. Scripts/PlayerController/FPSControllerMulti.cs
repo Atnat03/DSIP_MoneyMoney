@@ -527,38 +527,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         truckRb = null;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetParentServerRpc(bool setParent)
-    {
-        if (setParent)
-        {
-            Transform truckTransform = TruckController.instance.transform;
-            if (truckParent == null)
-            {
-                truckParent = truckTransform;
-            }
-        
-            NetworkObject netObj = GetComponent<NetworkObject>();
-            if (netObj != null)
-            {
-                netObj.TrySetParent(truckParent);
-            }
-            
-            controller.enabled = false;
-        }
-        else
-        {
-            NetworkObject netObj = GetComponent<NetworkObject>();
-            if (netObj != null)
-            {
-                netObj.TrySetParent((Transform)null);
-            }
-            
-            controller.enabled = true;
-        }
-    }
     
-        [ServerRpc(RequireOwnership = false)]
+    
+    [ServerRpc(RequireOwnership = false)]
     public void SetPassengerModeServerRpc(bool isPassenger, Vector3 desiredLocalPos)
     {
         // Le serveur peut valider si besoin (ex: vraiment dans le camion ?)
@@ -572,10 +543,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
         if (isPassenger)
         {
-            if (controller != null)
-            {
-                controller.enabled = false;
-            }
 
             var netTransform = GetComponent<NetworkTransform>();
             if (netTransform != null)
@@ -587,11 +554,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         }
         else
         {
-            if (controller != null)
-            {
-                controller.enabled = true;
-            }
-
             var netTransform = GetComponent<NetworkTransform>();
             if (netTransform != null)
             {
