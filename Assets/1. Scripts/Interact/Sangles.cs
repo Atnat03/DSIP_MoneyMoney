@@ -149,17 +149,28 @@ public class Sangles : NetworkBehaviour, IInteractible
 
         Log($"Object stocked | Timer={dropTimer.Value}");
 
-        // Update clients pour position/rotation seulement
-        UpdateObjectClientRpc(objectNet.NetworkObjectId, stayPos.position, stayPos.rotation);
+        StartCoroutine(WaitForSpawnThenUpdate(objectNet));
     }
+
+    private System.Collections.IEnumerator WaitForSpawnThenUpdate(NetworkObject objNet)
+    {
+        while (!objNet.IsSpawned)
+            yield return null;
+
+        UpdateObjectClientRpc(objNet.NetworkObjectId, stayPos.position, stayPos.rotation);
+    }
+
 
     [ClientRpc]
     private void UpdateObjectClientRpc(ulong objectId, Vector3 position, Quaternion rotation)
     {
+        Debug.Log($"[SANGLES][ClientRpc] Received update for {objectId}");
+        
         if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out var obj))
             return;
 
-        // On suit juste la position et rotation, pas le parent
+        Debug.Log($"[SANGLES][ClientRpc] UpdateObjectClientRpc for object {objectId}");
+        
         obj.transform.position = position;
         obj.transform.rotation = rotation;
 
