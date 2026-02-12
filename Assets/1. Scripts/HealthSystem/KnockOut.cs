@@ -18,11 +18,13 @@ public class KnockOut : NetworkBehaviour, IInteractible
     private float soloElapsed = 0;
 
     [SerializeField] private Image reviveImage;
-    [SerializeField] private Ragdoll ragdollController;
+    private Ragdoll ragdollController;
     
     public Animator cameraAnimator;
 
     private ulong local_clientId;
+
+    private FPSControllerMulti fps;
     
     public override void OnNetworkSpawn()
     {
@@ -31,6 +33,10 @@ public class KnockOut : NetworkBehaviour, IInteractible
         reviveImage.transform.parent.gameObject.SetActive(false);
 
         local_clientId = NetworkManager.Singleton.LocalClientId;
+        
+        fps = GetComponent<FPSControllerMulti>();
+
+        ragdollController = fps.GetRagdoll();
     }
 
     private void Update()
