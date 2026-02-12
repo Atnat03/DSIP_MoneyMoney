@@ -86,6 +86,9 @@ public class GrabPoint : NetworkBehaviour
     public void TryGrab(NetworkObject item)
     {
         if (handState != HandState.Free) return;
+        
+        GetComponent<FPSControllerMulti>().animator.SetTrigger("Grab");
+        
         GrabServerRpc(item.NetworkObjectId);
     }
 
@@ -164,6 +167,8 @@ public class GrabPoint : NetworkBehaviour
 
             float ratio = _chargeTimer / _maxChargeTime;
             float force = Mathf.Lerp(_minThrowStrength, _maxThrowStrength, ratio);
+            
+            GetComponent<FPSControllerMulti>().animator.SetTrigger("Throw");
 
             ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
 

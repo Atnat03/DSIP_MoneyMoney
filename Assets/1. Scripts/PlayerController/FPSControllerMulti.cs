@@ -203,33 +203,16 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             SetLayerRecursively(child.gameObject, newLayer);
         }
     }
-
-    private Vector3 lastTruckPosition;
-
+    
     public CharacterController controller;
     public bool canEnterInTruck = false;
-    
-    [ServerRpc(RequireOwnership = false)]
-    void UpdateAnimationServerRpc(float speed)
-    {
-        UpdateAnimationClientRpc(speed);
-    }
-    
-    [ClientRpc]
-    void UpdateAnimationClientRpc(float speed)
-    {
-        if (animator != null)
-        {
-            animator.SetFloat("Speed", speed);
-        }
-    }
     
     void Update()
     {
         if (!IsOwner) return;
         
-        float isMoving = controller.velocity.magnitude;
-
+        float isMoving = controller.isGrounded ? controller.velocity.magnitude : 0;
+        
         animator.SetFloat("Speed", isMoving);
 
         //UpdateAnimationServerRpc(isMoving);
@@ -271,7 +254,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             if (Input.GetKeyDown(resetTruckKey))
             {
-                print("KEY RESET");
                 TruckController.instance.AddValueToReset();
             }
         }
@@ -348,6 +330,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     public void Sit(Transform sitPos)
     {
+        GetComponent<FPSControllerMulti>().animator.SetBool("Sit", true);
         isSitting = true;
         canSit = false;
         sittingPos = sitPos;
@@ -355,6 +338,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     public void StandUp()
     {
+        GetComponent<FPSControllerMulti>().animator.SetBool("Sit", false);
         sittingPos = null;
         isSitting = false;
     }
@@ -458,8 +442,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                         verticalVelocity = -2f;
 
                     if (Input.GetKeyDown(KeyCode.Space) && !isOnLadder)
+                    {
+                        GetComponent<FPSControllerMulti>().animator.SetTrigger("Jump");
+
                         verticalVelocity = jumpForce;
-                    
+                    }
                 }
                 else
                 {
@@ -541,7 +528,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         capsuleCollider.enabled = false;
         
         truckRb = TruckController.instance.GetComponent<Rigidbody>();
-        lastTruckPosition = truckRb.position;
         
         var netTransform = GetComponent<NetworkTransform>();
         if (netTransform != null) {

@@ -74,11 +74,7 @@ namespace Shooting
         {
             _currentAmmo = _maxAmmo;
             gunAnimator.SetTrigger("Reload");
-
-            Animator a = GetComponent<FPSControllerMulti>().animator;
             
-            if(a)
-                a.SetTrigger("Reload");
         }
 
         public void StartToReload()
@@ -88,7 +84,12 @@ namespace Shooting
         
         public IEnumerator Reloading()
         {
-            GetComponent<FPSControllerMulti>().StartFreeze();
+            FPSControllerMulti a = GetComponent<FPSControllerMulti>();
+            
+            if(a.animator)
+                a.animator.SetTrigger("Reload");
+            
+            a.StartFreeze();
             SFX_Manager.instance.PlaySFX(5);
             Reload();
             Image circleCD = VariableManager.instance.circleCD;
@@ -99,7 +100,7 @@ namespace Shooting
                 yield return null;
                 circleCD.fillAmount =  count / reloadingTime;
             }
-            GetComponent<FPSControllerMulti>().StopFreeze();
+            a.StopFreeze();
         }
 
         private void MakeTrail()
@@ -150,6 +151,7 @@ namespace Shooting
             else
             {
                 canShoot = true;
+                GetComponent<FPSControllerMulti>().animator.SetBool("Shoot", false);
             }
             
             HandleInputs();
@@ -209,8 +211,10 @@ namespace Shooting
             }
             
             gunAnimator.SetTrigger("Shoot");
+            fps.animator.SetBool("Shoot", true);
 
             ShoopClientRpc();
+            
             
 
             elpased = FireRate;
