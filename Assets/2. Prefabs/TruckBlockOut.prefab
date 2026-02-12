@@ -10979,8 +10979,8 @@ GameObject:
   - component: {fileID: 5562408584761631046}
   - component: {fileID: 847054314169942515}
   - component: {fileID: 7914902467731061745}
-  - component: {fileID: 8862083765017529877}
   - component: {fileID: 3791038558047578449}
+  - component: {fileID: 65044307277934740}
   m_Layer: 9
   m_Name: Sangle (4)
   m_TagString: Sangles
@@ -11098,10 +11098,35 @@ MonoBehaviour:
   stayPos: {fileID: 26763853618172188}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 8862083765017529877}
+  - {fileID: 65044307277934740}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &8862083765017529877
+--- !u!114 &3791038558047578449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2178084953455473798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2667854993
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &65044307277934740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11119,31 +11144,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &3791038558047578449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2178084953455473798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2667854993
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &2410932539606952759
 GameObject:
   m_ObjectHideFlags: 0
@@ -11961,8 +11961,8 @@ GameObject:
   - component: {fileID: 739821218473259244}
   - component: {fileID: 7862303961672755378}
   - component: {fileID: 6282952160217280489}
-  - component: {fileID: 616405915163035070}
   - component: {fileID: 8203078542498799245}
+  - component: {fileID: 7637064798596906953}
   m_Layer: 9
   m_Name: Sangle (8)
   m_TagString: Sangles
@@ -12080,10 +12080,35 @@ MonoBehaviour:
   stayPos: {fileID: 1905928408722422282}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 616405915163035070}
+  - {fileID: 7637064798596906953}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &616405915163035070
+--- !u!114 &8203078542498799245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2547839770448374107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 32524881
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &7637064798596906953
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12101,31 +12126,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &8203078542498799245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2547839770448374107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 32524881
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &2576513305556131234
 GameObject:
   m_ObjectHideFlags: 0
@@ -12139,8 +12139,8 @@ GameObject:
   - component: {fileID: 7686427492401374556}
   - component: {fileID: 8948203354969625686}
   - component: {fileID: 1808353111478915688}
-  - component: {fileID: 8291231493014606459}
   - component: {fileID: 8956229991128186093}
+  - component: {fileID: 5405425508115331755}
   m_Layer: 9
   m_Name: Sangle (2)
   m_TagString: Sangles
@@ -12258,10 +12258,35 @@ MonoBehaviour:
   stayPos: {fileID: 8649906077136130500}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 8291231493014606459}
+  - {fileID: 5405425508115331755}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &8291231493014606459
+--- !u!114 &8956229991128186093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2576513305556131234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1539510838
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5405425508115331755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12279,31 +12304,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &8956229991128186093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2576513305556131234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1539510838
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &2581860026275991997
 GameObject:
   m_ObjectHideFlags: 0
@@ -17360,8 +17360,8 @@ GameObject:
   - component: {fileID: 301741238369722444}
   - component: {fileID: 7501393468485511516}
   - component: {fileID: 1528966654375929528}
-  - component: {fileID: 1298697183365460976}
   - component: {fileID: 2144453200040929948}
+  - component: {fileID: 5229614967062199540}
   m_Layer: 9
   m_Name: Sangle (3)
   m_TagString: Sangles
@@ -17479,10 +17479,35 @@ MonoBehaviour:
   stayPos: {fileID: 6895688377678388771}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 8855214057821957046}
+  - {fileID: 2576326251898492207}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &1298697183365460976
+--- !u!114 &2144453200040929948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984033824784976083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1349089545
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5229614967062199540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17500,31 +17525,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &2144453200040929948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3984033824784976083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1349089545
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &3999915605408601907
 GameObject:
   m_ObjectHideFlags: 0
@@ -22906,8 +22906,8 @@ GameObject:
   - component: {fileID: 3516853547784241464}
   - component: {fileID: 7998697709309964052}
   - component: {fileID: 5717207698658827151}
-  - component: {fileID: 7277485491873017082}
   - component: {fileID: 855684311896206834}
+  - component: {fileID: 2638996716125616307}
   m_Layer: 9
   m_Name: Sangle (8)
   m_TagString: Sangles
@@ -23025,10 +23025,35 @@ MonoBehaviour:
   stayPos: {fileID: 5579257819286247212}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 7277485491873017082}
+  - {fileID: 2638996716125616307}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &7277485491873017082
+--- !u!114 &855684311896206834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596449762266382153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1029284154
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &2638996716125616307
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -23046,31 +23071,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &855684311896206834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5596449762266382153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1029284154
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &5771500549078586793
 GameObject:
   m_ObjectHideFlags: 0
@@ -24656,8 +24656,8 @@ GameObject:
   - component: {fileID: 1383534344942013954}
   - component: {fileID: 4937149271392606455}
   - component: {fileID: 2683048474320106148}
-  - component: {fileID: 7235819893231707989}
   - component: {fileID: 1336180334587871080}
+  - component: {fileID: 5644253311499902937}
   m_Layer: 9
   m_Name: Sangle (6)
   m_TagString: Sangles
@@ -24775,10 +24775,35 @@ MonoBehaviour:
   stayPos: {fileID: 5624855390146977435}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 7235819893231707989}
+  - {fileID: 5644253311499902937}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &7235819893231707989
+--- !u!114 &1336180334587871080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5935024326764770332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 247273684
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5644253311499902937
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24796,31 +24821,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &1336180334587871080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5935024326764770332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 247273684
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &5937974364036305129
 GameObject:
   m_ObjectHideFlags: 0
@@ -25757,8 +25757,8 @@ GameObject:
   - component: {fileID: 1550906586221999198}
   - component: {fileID: 6289493338916603873}
   - component: {fileID: 6997149783354210142}
-  - component: {fileID: 8855214057821957046}
   - component: {fileID: 3030937352890958507}
+  - component: {fileID: 2576326251898492207}
   m_Layer: 9
   m_Name: Sangle (3)
   m_TagString: Sangles
@@ -25876,10 +25876,35 @@ MonoBehaviour:
   stayPos: {fileID: 5400104923930699094}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 8855214057821957046}
+  - {fileID: 2576326251898492207}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &8855214057821957046
+--- !u!114 &3030937352890958507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6145911970774091801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1672699706
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &2576326251898492207
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -25897,31 +25922,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &3030937352890958507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6145911970774091801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1672699706
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &6160043959960118693
 GameObject:
   m_ObjectHideFlags: 0
@@ -26442,8 +26442,8 @@ GameObject:
   - component: {fileID: 2070527100848278655}
   - component: {fileID: 5102282055980486822}
   - component: {fileID: 8179331925687348023}
-  - component: {fileID: 1137436013208390413}
   - component: {fileID: 5009480081287213271}
+  - component: {fileID: 4165563554632835467}
   m_Layer: 9
   m_Name: Sangle (1)
   m_TagString: Sangles
@@ -26561,10 +26561,35 @@ MonoBehaviour:
   stayPos: {fileID: 442737586395789853}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 1137436013208390413}
+  - {fileID: 4165563554632835467}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &1137436013208390413
+--- !u!114 &5009480081287213271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6544139472557916194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1416127317
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &4165563554632835467
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -26582,31 +26607,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &5009480081287213271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6544139472557916194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1416127317
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &6560385871709170247
 GameObject:
   m_ObjectHideFlags: 0
@@ -27068,8 +27068,8 @@ GameObject:
   - component: {fileID: 6952429935535396355}
   - component: {fileID: 4990392536089392194}
   - component: {fileID: 8965409459936119015}
-  - component: {fileID: 1686605403979354493}
   - component: {fileID: 4246516384719857757}
+  - component: {fileID: 5760415853756783090}
   m_Layer: 9
   m_Name: Sangle (5)
   m_TagString: Sangles
@@ -27187,10 +27187,35 @@ MonoBehaviour:
   stayPos: {fileID: 8312688197490957091}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 1686605403979354493}
+  - {fileID: 5760415853756783090}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &1686605403979354493
+--- !u!114 &4246516384719857757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6763516643170196853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2357632987
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &5760415853756783090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -27208,31 +27233,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &4246516384719857757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6763516643170196853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2357632987
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &6829267402790344156
 GameObject:
   m_ObjectHideFlags: 0
@@ -32381,8 +32381,8 @@ GameObject:
   - component: {fileID: 2820748416362780716}
   - component: {fileID: 5555101941141048566}
   - component: {fileID: 657071950675924866}
-  - component: {fileID: 1828569257021605738}
   - component: {fileID: 6585847725999422730}
+  - component: {fileID: 8577563403708075338}
   m_Layer: 9
   m_Name: Sangle (7)
   m_TagString: Sangles
@@ -32500,10 +32500,35 @@ MonoBehaviour:
   stayPos: {fileID: 7024369268705168456}
   interactionName: Accrocher le sac
   outline:
-  - {fileID: 1828569257021605738}
+  - {fileID: 8577563403708075338}
   max_TimeBeforeDrop: 250
   mini_TimeBeforeDrop: 30
---- !u!114 &1828569257021605738
+--- !u!114 &6585847725999422730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8720514864262516576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3756177205
+  InScenePlacedSourceGlobalObjectIdHash: 4245292978
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &8577563403708075338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -32521,31 +32546,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &6585847725999422730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8720514864262516576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3756177205
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &8769209891873612492
 GameObject:
   m_ObjectHideFlags: 0
@@ -35038,6 +35038,200 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5445144798190912924, guid: ac6cdd841af2ee5469450385859d05bc, type: 3}
   m_PrefabInstance: {fileID: 3527784733297507131}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3672116871678019320
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5729001311705654942}
+    m_Modifications:
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.3710804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.40700006
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.5730972
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.879243
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.47637364
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -56.898
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Name
+      value: P_Pastis
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2567954739779193117, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2723500451364008137, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3925650740219368190, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4363196100749785567}
+    - targetCorrespondingSourceObject: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2518456082664859178}
+    - targetCorrespondingSourceObject: {fileID: 2723500451364008137, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7533412685962068899}
+    - targetCorrespondingSourceObject: {fileID: 2567954739779193117, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3253881076216815712}
+  m_SourcePrefab: {fileID: 100100000, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+--- !u!1 &1249414559727849445 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2567954739779193117, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3253881076216815712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249414559727849445}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!1 &1674824412013835825 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2723500451364008137, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7533412685962068899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674824412013835825}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!4 &2727360742768540146 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1669835954028166922, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3355842020691157832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2046783086241670576, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+  m_PrefabInstance: {fileID: 3672116871678019320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4363196100749785567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355842020691157832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c316e0ac26274674a9de2433c2c0e6a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  interactionName: Prendre un PASTIS
+  outline:
+  - {fileID: 7533412685962068899}
+  - {fileID: 3253881076216815712}
+--- !u!65 &2518456082664859178
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355842020691157832}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.4352169, y: 1.3464413, z: 0.46390355}
+  m_Center: {x: -0.02076107, y: 0.6232357, z: -0.041743487}
 --- !u!1001 &3990884463677551259
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35461,6 +35655,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6886544507694524163}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca2c647abcf38614497889c331112d59, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2727360742768540146}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ca2c647abcf38614497889c331112d59, type: 3}
       insertIndex: -1

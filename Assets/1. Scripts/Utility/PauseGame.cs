@@ -130,11 +130,10 @@ public class PauseGame : NetworkBehaviour
 
         if (IsServer)
         {
-            NetworkManager.Singleton.Shutdown();
-        }
-        else
-        {
             NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+         
+            if(IsHost)
+                NetworkManager.Singleton.Shutdown();
         }
         
         Application.Quit();

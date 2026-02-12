@@ -168,13 +168,18 @@ namespace Shooting
 
         public bool TryShoot()
         {
-            if(GetComponent<FPSControllerMulti>().hasSomethingInHand)
+            FPSControllerMulti fps = GetComponent<FPSControllerMulti>();
+            
+            if(fps.hasSomethingInHand)
                 return false;
 
-            if (GetComponent<FPSControllerMulti>().isMapActive)
+            if (fps.isMapActive)
                 return false;
             
-            if (GetComponent<FPSControllerMulti>().IsFreeze)
+            if (fps.IsFreeze)
+                return false;
+
+            if (fps.isDriver)
                 return false;
             
             if (_currentAmmo <= 0)
@@ -213,7 +218,7 @@ namespace Shooting
             muzzleFlash.transform.SetParent(_instantPos);
             GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
         }
-
+        
         /// <summary>
         /// Invokes feedbacks on every target that is shot.
         /// </summary>

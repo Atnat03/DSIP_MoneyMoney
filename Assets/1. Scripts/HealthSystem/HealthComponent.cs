@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Shooting;
 using Unity.Netcode;
 using UnityEngine;
@@ -37,6 +38,7 @@ public class HealthComponent : NetworkBehaviour
     [SerializeField] private UnityEvent _onDamageTaken;
     [SerializeField] private UnityEvent _onRegeneration;
     [SerializeField] private UnityEvent _onDeath;
+    [SerializeField] private DamageEffectController effetDamage;
 
     public Image healthBar;
 
@@ -100,6 +102,10 @@ public class HealthComponent : NetworkBehaviour
     public bool TryTakeDamage(BulletInfo bulletInfo)
     {
         if (!CanTakeDamage()) return false;
+        
+        if(hitDamageCoroutine != null)
+            StopCoroutine(hitDamageCoroutine);
+        hitDamageCoroutine = StartCoroutine(Effecting());
 
         TakeDamageServerRpc(bulletInfo.Damage);
         return true;
@@ -132,6 +138,21 @@ public class HealthComponent : NetworkBehaviour
     {
         _health.Value = Mathf.Max(_health.Value - damage, 0f);
         EventBus.Invoke("LocalPlayerDamage", new DataPacket(damage));
+    }
+    
+    Coroutine hitDamageCoroutine;
+    
+    IEnumerator Effecting()
+    {
+        effetDamage.SetColor(Color.red);
+        effetDamage.SetDizziness(0);
+        effetDamage.SetIntensity(0.5f);
+        
+        yield return new WaitForSeconds(0.2f);
+
+        effetDamage.SetIntensity(0);
+
+        hitDamageCoroutine = null;
     }
 
     private void OnTriggerEnter(Collider other)

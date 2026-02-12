@@ -24,10 +24,11 @@ public class AutoJoinedLobby : MonoBehaviour
 
     [Header("UI Fields")]
     public TMP_InputField inputName;
-    public TMP_InputField inputRelayCode; // ✅ CHANGÉ : Input pour le code Relay
+    public TMP_InputField inputRelayCode;
     
     public string LocalPlayerName { get; private set; }
-    public string RelayCode { get; private set; } // ✅ CHANGÉ : Stocke le code Relay
+    public int LocalPlayerSkin { get; private set; }
+    public string RelayCode { get; private set; } 
     
     public Color LocalPlayerColor { get; set; }
     public Color[] colorsList;
@@ -63,12 +64,19 @@ public class AutoJoinedLobby : MonoBehaviour
         ConnectingTXT.SetActive(true);
         ElementsToConnect.SetActive(false);
         
+        print("SKIN : " + LocalPlayerSkin);
+        
         EnterGame();
     }
 
     public void ChangeColor(int colorIndex)
     {
         LocalPlayerColor = colorsList[colorIndex];
+    }
+
+    public void ChangeSkin(int skinIndex)
+    {
+        LocalPlayerSkin = skinIndex;
     }
 
     private async void EnterGame()
