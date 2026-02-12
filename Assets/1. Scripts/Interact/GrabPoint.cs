@@ -86,6 +86,9 @@ public class GrabPoint : NetworkBehaviour
     public void TryGrab(NetworkObject item)
     {
         if (handState != HandState.Free) return;
+        
+        GetComponent<FPSControllerMulti>().animator.SetTrigger("Grab");
+        
         GrabServerRpc(item.NetworkObjectId);
     }
 
@@ -164,6 +167,8 @@ public class GrabPoint : NetworkBehaviour
 
             float ratio = _chargeTimer / _maxChargeTime;
             float force = Mathf.Lerp(_minThrowStrength, _maxThrowStrength, ratio);
+            
+            GetComponent<FPSControllerMulti>().animator.SetTrigger("Throw");
 
             ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
 
@@ -295,6 +300,9 @@ public class GrabPoint : NetworkBehaviour
         if (item.OwnerClientId != rpc.Receive.SenderClientId)
             return;
 
+        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
+            return;
+        
         item.transform.position = pos;
         item.transform.rotation = rot;
 
@@ -302,6 +310,31 @@ public class GrabPoint : NetworkBehaviour
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+
+            rb.isKinematic = true;
+        }
+        
+        UpdateHeldPositionClientRpc(itemId, pos, rot);
+    }
+
+    [ClientRpc(Delivery = RpcDelivery.Unreliable)]
+    private void UpdateHeldPositionClientRpc(ulong itemId, Vector3 pos, Quaternion rot)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item)) return;
+
+        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
+            return;
+
+        if (item.OwnerClientId == NetworkManager.Singleton.LocalClientId) return;
+
+        item.transform.position = pos;
+        item.transform.rotation = rot;
+
+        if (item.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
         }
     }
 

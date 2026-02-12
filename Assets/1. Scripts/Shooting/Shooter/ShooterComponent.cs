@@ -74,6 +74,7 @@ namespace Shooting
         {
             _currentAmmo = _maxAmmo;
             gunAnimator.SetTrigger("Reload");
+            
         }
 
         public void StartToReload()
@@ -83,7 +84,13 @@ namespace Shooting
         
         public IEnumerator Reloading()
         {
-            GetComponent<FPSControllerMulti>().StartFreeze();
+            FPSControllerMulti a = GetComponent<FPSControllerMulti>();
+            
+            if(a.animator)
+                a.animator.SetTrigger("Reload");
+            
+            a.StartFreeze();
+            SFX_Manager.instance.PlaySFX(5);
             Reload();
             Image circleCD = VariableManager.instance.circleCD;
             float count = reloadingTime;
@@ -93,7 +100,7 @@ namespace Shooting
                 yield return null;
                 circleCD.fillAmount =  count / reloadingTime;
             }
-            GetComponent<FPSControllerMulti>().StopFreeze();
+            a.StopFreeze();
         }
 
         private void MakeTrail()
@@ -144,6 +151,7 @@ namespace Shooting
             else
             {
                 canShoot = true;
+                GetComponent<FPSControllerMulti>().animator.SetBool("Shoot", false);
             }
             
             HandleInputs();
@@ -184,6 +192,7 @@ namespace Shooting
             
             if (_currentAmmo <= 0)
             {
+                SFX_Manager.instance.PlaySFX(4);
                 return false;
             }
             
@@ -202,8 +211,10 @@ namespace Shooting
             }
             
             gunAnimator.SetTrigger("Shoot");
+            fps.animator.SetBool("Shoot", true);
 
             ShoopClientRpc();
+            
             
 
             elpased = FireRate;
@@ -216,7 +227,7 @@ namespace Shooting
         {
             GameObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity);
             muzzleFlash.transform.SetParent(_instantPos);
-            GetComponent<AudioSource>().PlayOneShot(shootClip, 0.25f);
+            SFX_Manager.instance.PlaySFX(3);
         }
         
         /// <summary>

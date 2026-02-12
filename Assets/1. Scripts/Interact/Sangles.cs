@@ -271,7 +271,17 @@ public class Sangles : NetworkBehaviour, IInteractible
             col.enabled = !stocked;
         }
 
-        obj.gameObject.layer = LayerMask.NameToLayer(stocked ? "IgnoreRaycast" : "Interactable");
+
+        g = obj.gameObject;
+        UpdateLayerClientRpc(stocked);
+    }
+
+    private GameObject g;
+
+    [ClientRpc]
+    private void UpdateLayerClientRpc(bool stocked)
+    {
+        g.layer = LayerMask.NameToLayer(stocked ? "IgnoreRaycast" : "Interactable");
     }
 
     private void Update()

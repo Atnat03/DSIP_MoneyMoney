@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using UnityEditor.Experimental.GraphView;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DefaultExecutionOrder(-100)]
 public class TruckController : NetworkBehaviour
 {
     public static TruckController instance;
@@ -72,8 +73,12 @@ public class TruckController : NetworkBehaviour
     [SerializeField] float velocityToTriggerShake = 25f;
     [SerializeField] float cameraShakeDuration = 0.25f;
     [SerializeField] float cameraShakeMagnitude = 0.1f;
-
+    
     public List<IParentable> parentable;
+    
+    [Header("SFX")]
+    public AudioSource engineAudioSource;
+    public AudioSource klaxonAudioSource;
     
     private void Awake()
     {
@@ -97,6 +102,8 @@ public class TruckController : NetworkBehaviour
         isFallen.OnValueChanged += OnIsFallenChanged;
         BackLightOn.OnValueChanged += OnBackLightsChanged;
         FrontLightOn.OnValueChanged += OnFrontLigthChanged;
+        
+        engineAudioSource.Play();
         
         UpdateJauge();    
     }
@@ -134,6 +141,8 @@ public class TruckController : NetworkBehaviour
             verticalInput = 0f;
             isBreaking = false;
         }
+        
+        engineAudioSource.volume = rb.linearVelocity.magnitude/100;
     
         UpdateWheels();
         CheckFall();
@@ -222,6 +231,8 @@ public class TruckController : NetworkBehaviour
 
         parentable.OnParented(transform);
 
+        netObj.GetComponent<NetworkTransform>().InLocalSpace = true;
+
         Debug.Log($"{netObj.name} parenté au camion");
     }
 
@@ -233,6 +244,8 @@ public class TruckController : NetworkBehaviour
         trackedParentables.Remove(netObj);
 
         parentable.OnUnparented();
+        
+        netObj.GetComponent<NetworkTransform>().InLocalSpace = false;
 
         Debug.Log($"{netObj.name} déparenté du camion");
     }
@@ -260,7 +273,7 @@ public class TruckController : NetworkBehaviour
     [ClientRpc]
     private void PlayHornClientRpc()
     {
-        GetComponent<AudioSource>().PlayOneShot(klaxon);
+        klaxonAudioSource.PlayOneShot(klaxon);
     }
 
 
@@ -474,9 +487,6 @@ public class TruckController : NetworkBehaviour
         Gizmos.matrix = Matrix4x4.TRS(worldCenter, transform.rotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, boundsSize);
         Gizmos.matrix = oldMatrix;
-        
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(reload.position, raduisToReload);
         
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, raduisReset);

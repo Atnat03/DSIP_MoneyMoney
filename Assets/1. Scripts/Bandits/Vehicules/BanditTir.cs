@@ -39,6 +39,8 @@ public class BanditTir : NetworkBehaviour
     public BanditVehicleAI banditAI;
     public HelicopterVehicleAI helicoAI;
     
+    private string targetTag;
+    
     public override void OnNetworkSpawn()
     {
         if (banditAI != null)
@@ -49,7 +51,7 @@ public class BanditTir : NetworkBehaviour
         else
         {
             isRight = helicoAI.sideOffset >= 0;
-            GetComponent<NetworkObject>().TrySetParent(banditAI.transform);
+            GetComponent<NetworkObject>().TrySetParent(helicoAI.transform);
         }
        
     }
@@ -78,6 +80,7 @@ public class BanditTir : NetworkBehaviour
             (isRight && TruckLife.instance.canShootPlayerRight) ||
             (!isRight && TruckLife.instance.canShootPlayerLeft);
 
+        Debug.Log(canShootPlayer + "stpp");
         if (canShootPlayer)
         {
             Transform visiblePlayer = FindClosestVisiblePlayer();
@@ -147,11 +150,13 @@ public class BanditTir : NetworkBehaviour
         Vector3 dir = (target.position - origin).normalized;
 
         RaycastHit hit;
+        Debug.DrawRay(origin, dir, Color.red);
         if (Physics.Raycast(origin, dir, out hit, detectionRadius, visibilityMask, QueryTriggerInteraction.Ignore))
         {
+            
             return hit.transform == target;
         }
-        
+        Debug.Log("invisiiiible   " + hit.transform.name);
         return false;
     }
 
@@ -177,6 +182,8 @@ public class BanditTir : NetworkBehaviour
 
     private void Shoot(Transform target)
     {
+        //SFX_Manager.instance.PlaySFX(3, .2f);
+        
         Vector3 origin = firePoint.position;
         Vector3 dir = (target.position - origin).normalized;
 
@@ -186,6 +193,7 @@ public class BanditTir : NetworkBehaviour
         if (Physics.Raycast(origin, dir, out hit, detectionRadius, shootMask, QueryTriggerInteraction.Ignore))
         {
             hitPoint = hit.point;
+            targetTag = hit.collider.tag;
 
             if (hit.collider.CompareTag("Player"))
             {
@@ -204,7 +212,7 @@ public class BanditTir : NetworkBehaviour
     {
         GameObject bullet = Instantiate(bulletVisualPrefab, start, Quaternion.identity);
         //bullet.GetComponent<NetworkObject>().Spawn();
-        bullet.GetComponent<BulletVisual>().Init(end, bulletVisualSpeed);
+        bullet.GetComponent<BulletVisual>().Init(end, bulletVisualSpeed, targetTag);
     }
 
     #endregion

@@ -214,7 +214,10 @@ public class PlayerRayCast : NetworkBehaviour
 
     public IEnumerator RepairPart(GameObject part)
     {
+        GetComponent<FPSControllerMulti>().animator.SetBool("Repare", true);
+        
         playerFPS.StartFreeze();
+        SFX_Manager.instance.PlaySFX(10);
         float count = durationRepair;
         while (count > 0)
         {
@@ -225,6 +228,8 @@ public class PlayerRayCast : NetworkBehaviour
         Interact.RayInteract(part, gameObject, RepearInteractionName);
         playerFPS.StopFreeze();
         TakeMaterial();
+        
+        GetComponent<FPSControllerMulti>().animator.SetBool("Repare", false);
     }
     
     private void ResetRevive()

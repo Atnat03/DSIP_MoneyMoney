@@ -1030,7 +1030,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 460320727
+    m_Bits: 997191639
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -6126,6 +6126,7 @@ GameObject:
   - component: {fileID: 738059765283072650}
   - component: {fileID: 6095605793997815558}
   - component: {fileID: 8501137336355525466}
+  - component: {fileID: 1917285660641705863}
   m_Layer: 11
   m_Name: Head
   m_TagString: Player
@@ -6198,6 +6199,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageEffectController
   _fullscreenEffect: {fileID: 2100000, guid: e8735f62473e6ab458d75cf2db28b3f2, type: 2}
+--- !u!114 &1917285660641705863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6735231894082441938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ce9150ad6ff2544498813e5d5e60df1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DrunkEffectCamera
+  intensity: 2
+  speed: 2
+  duration: 0.5
 --- !u!1 &6762169179017282632
 GameObject:
   m_ObjectHideFlags: 0
@@ -6819,9 +6835,9 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -6957,6 +6973,7 @@ MonoBehaviour:
   map: {fileID: 4189398515390452713}
   isMapActive: 0
   skinManager: {fileID: 4777024543633471025}
+  animator: {fileID: 0}
   controller: {fileID: 6002100493801107169}
   canEnterInTruck: 0
   isFreeze: 0
@@ -7337,6 +7354,7 @@ MonoBehaviour:
   throwBottleForce: 25
   throwRotateTroqueForce: {x: 1000, y: 0, z: 0}
   uiClique: {fileID: 4634971724312730908}
+  effet: {fileID: 0}
 --- !u!1 &7267270393736431613
 GameObject:
   m_ObjectHideFlags: 0
@@ -9743,6 +9761,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 312440419176987698, guid: fa7b14041e3a8204984040b2076383bd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8993386842106308484}
+    - targetCorrespondingSourceObject: {fileID: 312440419176987698, guid: fa7b14041e3a8204984040b2076383bd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7082205057882669282}
     - targetCorrespondingSourceObject: {fileID: 948746191758581577, guid: fa7b14041e3a8204984040b2076383bd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5320809458555016552}
@@ -9855,7 +9876,7 @@ Animator:
   m_GameObject: {fileID: 319565798716754634}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 035091abab744784d822b292c7e8d052, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -9887,6 +9908,86 @@ MonoBehaviour:
   meshList:
   - {fileID: 8217363286805659665}
   - {fileID: 8744964148635544521}
+--- !u!114 &7082205057882669282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319565798716754634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 1511472216348885401}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 181564851
+    TransitionDuration: 0.25
+    TriggerNameHash: -1525363869
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 984155314
+    TransitionDuration: 0.25
+    TriggerNameHash: -1347921612
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 1757557519
+    TransitionDuration: 0.25
+    TriggerNameHash: -1907200461
+    TransitionIndex: 6
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Speed
+      NameHash: -823668238
+      Synchronize: 1
+      ParameterType: 1
+    - name: Repare
+      NameHash: -1548910774
+      Synchronize: 1
+      ParameterType: 4
+    - name: Sit
+      NameHash: 1928080432
+      Synchronize: 1
+      ParameterType: 4
+    - name: Grab
+      NameHash: -1347921612
+      Synchronize: 1
+      ParameterType: 9
+    - name: Throw
+      NameHash: -1907200461
+      Synchronize: 1
+      ParameterType: 9
+    - name: Jump
+      NameHash: 125937960
+      Synchronize: 1
+      ParameterType: 9
+    - name: Shoot
+      NameHash: -1316629574
+      Synchronize: 1
+      ParameterType: 4
+    - name: Reload
+      NameHash: -1525363869
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!1 &755027624444638344 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 739492070406079088, guid: fa7b14041e3a8204984040b2076383bd, type: 3}
@@ -11401,6 +11502,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6173821242808783625, guid: 0faf7676dbf959f4c937f53be172012e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 630717027418638108}
+    - targetCorrespondingSourceObject: {fileID: 6173821242808783625, guid: 0faf7676dbf959f4c937f53be172012e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6698168419898223593}
     - targetCorrespondingSourceObject: {fileID: 6688211516893835378, guid: 0faf7676dbf959f4c937f53be172012e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8009682933121639829}
@@ -11802,7 +11906,7 @@ Animator:
   m_GameObject: {fileID: 5055068220736852160}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 035091abab744784d822b292c7e8d052, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -11814,6 +11918,86 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6698168419898223593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5055068220736852160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 630717027418638108}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 181564851
+    TransitionDuration: 0.25
+    TriggerNameHash: -1525363869
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 984155314
+    TransitionDuration: 0.25
+    TriggerNameHash: -1347921612
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 1757557519
+    TransitionDuration: 0.25
+    TriggerNameHash: -1907200461
+    TransitionIndex: 6
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Speed
+      NameHash: -823668238
+      Synchronize: 1
+      ParameterType: 1
+    - name: Repare
+      NameHash: -1548910774
+      Synchronize: 1
+      ParameterType: 4
+    - name: Sit
+      NameHash: 1928080432
+      Synchronize: 1
+      ParameterType: 4
+    - name: Grab
+      NameHash: -1347921612
+      Synchronize: 1
+      ParameterType: 9
+    - name: Throw
+      NameHash: -1907200461
+      Synchronize: 1
+      ParameterType: 9
+    - name: Jump
+      NameHash: 125937960
+      Synchronize: 1
+      ParameterType: 9
+    - name: Shoot
+      NameHash: -1316629574
+      Synchronize: 1
+      ParameterType: 4
+    - name: Reload
+      NameHash: -1525363869
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!1 &5202224070701330050 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6609286769322077515, guid: 0faf7676dbf959f4c937f53be172012e, type: 3}
@@ -14504,6 +14688,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2147517661573180615, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3776166681
+      objectReference: {fileID: 0}
     - target: {fileID: 3925650740219368190, guid: 3806672358f486b4d84ebee65e45d8cb, type: 3}
       propertyPath: m_Name
       value: Liquide
@@ -14929,6 +15117,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2436393883790077803, guid: db077ce411957b245829ed3edc7c1f35, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8692520734631358813}
+    - targetCorrespondingSourceObject: {fileID: 2436393883790077803, guid: db077ce411957b245829ed3edc7c1f35, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7914474060831123657}
     - targetCorrespondingSourceObject: {fileID: 2932778018327694352, guid: db077ce411957b245829ed3edc7c1f35, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2487263245521308028}
@@ -15634,7 +15825,7 @@ Animator:
   m_GameObject: {fileID: 6684689899574590715}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 035091abab744784d822b292c7e8d052, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -15646,6 +15837,86 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7914474060831123657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6684689899574590715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 8692520734631358813}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 181564851
+    TransitionDuration: 0.25
+    TriggerNameHash: -1525363869
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 984155314
+    TransitionDuration: 0.25
+    TriggerNameHash: -1347921612
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 1757557519
+    TransitionDuration: 0.25
+    TriggerNameHash: -1907200461
+    TransitionIndex: 6
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Speed
+      NameHash: -823668238
+      Synchronize: 1
+      ParameterType: 1
+    - name: Repare
+      NameHash: -1548910774
+      Synchronize: 1
+      ParameterType: 4
+    - name: Sit
+      NameHash: 1928080432
+      Synchronize: 1
+      ParameterType: 4
+    - name: Grab
+      NameHash: -1347921612
+      Synchronize: 1
+      ParameterType: 9
+    - name: Throw
+      NameHash: -1907200461
+      Synchronize: 1
+      ParameterType: 9
+    - name: Jump
+      NameHash: 125937960
+      Synchronize: 1
+      ParameterType: 9
+    - name: Shoot
+      NameHash: -1316629574
+      Synchronize: 1
+      ParameterType: 4
+    - name: Reload
+      NameHash: -1525363869
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!1 &7360723321750180933 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1958379206235604949, guid: db077ce411957b245829ed3edc7c1f35, type: 3}
@@ -16417,6 +16688,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1273130260277429105, guid: 5511bb01b3db1b9428ffa2c563311d8b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3788197001066514964}
+    - targetCorrespondingSourceObject: {fileID: 1273130260277429105, guid: 5511bb01b3db1b9428ffa2c563311d8b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7302756382904509218}
     - targetCorrespondingSourceObject: {fileID: 1790053842983968778, guid: 5511bb01b3db1b9428ffa2c563311d8b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1611981495302326588}
@@ -17522,7 +17796,7 @@ Animator:
   m_GameObject: {fileID: 7968216845505542348}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 035091abab744784d822b292c7e8d052, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -17534,6 +17808,86 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7302756382904509218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7968216845505542348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 3788197001066514964}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 181564851
+    TransitionDuration: 0.25
+    TriggerNameHash: -1525363869
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 984155314
+    TransitionDuration: 0.25
+    TriggerNameHash: -1347921612
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 2126784345
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 1757557519
+    TransitionDuration: 0.25
+    TriggerNameHash: -1907200461
+    TransitionIndex: 6
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: Speed
+      NameHash: -823668238
+      Synchronize: 1
+      ParameterType: 1
+    - name: Repare
+      NameHash: -1548910774
+      Synchronize: 1
+      ParameterType: 4
+    - name: Sit
+      NameHash: 1928080432
+      Synchronize: 1
+      ParameterType: 4
+    - name: Grab
+      NameHash: -1347921612
+      Synchronize: 1
+      ParameterType: 9
+    - name: Throw
+      NameHash: -1907200461
+      Synchronize: 1
+      ParameterType: 9
+    - name: Jump
+      NameHash: 125937960
+      Synchronize: 1
+      ParameterType: 9
+    - name: Shoot
+      NameHash: -1316629574
+      Synchronize: 1
+      ParameterType: 4
+    - name: Reload
+      NameHash: -1525363869
+      Synchronize: 1
+      ParameterType: 9
+  AnimatorParametersExpanded: 0
 --- !u!1 &8345748851882135843 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 931634232085195422, guid: 5511bb01b3db1b9428ffa2c563311d8b, type: 3}

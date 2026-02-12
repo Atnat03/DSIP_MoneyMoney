@@ -55,7 +55,6 @@ public class AutoJoinedLobby : MonoBehaviour
 
     public void Join()
     {
-        // Définir le nom du joueur
         if (!string.IsNullOrEmpty(inputName.text))
             LocalPlayerName = inputName.text;
         else
@@ -64,9 +63,7 @@ public class AutoJoinedLobby : MonoBehaviour
         ConnectingTXT.SetActive(true);
         ElementsToConnect.SetActive(false);
         
-        print("SKIN : " + LocalPlayerSkin);
-        
-        EnterGame();
+        _ = EnterGame();
     }
 
     public void ChangeColor(int colorIndex)
@@ -79,7 +76,7 @@ public class AutoJoinedLobby : MonoBehaviour
         LocalPlayerSkin = skinIndex;
     }
 
-    private async void EnterGame()
+    private async Task EnterGame()
     {
         if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
         {
@@ -89,17 +86,14 @@ public class AutoJoinedLobby : MonoBehaviour
     
         await InitializeServices();
         
-        // ✅ CHANGÉ : Utiliser le code Relay
         string relayCode = inputRelayCode.text.Trim();
         
         if (string.IsNullOrEmpty(relayCode))
         {
-            // Pas de code → Créer un lobby
             await CreateLobbyAndHost();
         }
         else
         {
-            // Code fourni → Rejoindre directement avec le code Relay
             await JoinByRelayCode(relayCode);
         }
     }
