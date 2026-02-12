@@ -82,7 +82,7 @@ public class PlayerPastis : NetworkBehaviour
         
         if (currentGorgerBottle == 0)
         {
-            fps.MyCamera().transform.parent.GetComponent<DrunkEffectCamera>().AddDrunk(0.5f);
+            fps.MyCamera().transform.parent.GetComponent<DrunkEffectCamera>().AddDrunk();
         }
 
         animator.SetTrigger("Drink");

@@ -6108,6 +6108,7 @@ GameObject:
   - component: {fileID: 738059765283072650}
   - component: {fileID: 6095605793997815558}
   - component: {fileID: 6502196373859403675}
+  - component: {fileID: 8501137336355525466}
   m_Layer: 11
   m_Name: Head
   m_TagString: Player
@@ -6182,7 +6183,19 @@ MonoBehaviour:
   intensity: 10
   speed: 5
   duration: 5
-  fps: {fileID: 5307100726240828314}
+--- !u!114 &8501137336355525466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6735231894082441938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84ecc6c8097f7eb43a0809a7e49a14c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageEffectController
+  _fullscreenEffect: {fileID: 2100000, guid: e8735f62473e6ab458d75cf2db28b3f2, type: 2}
 --- !u!1 &6762169179017282632
 GameObject:
   m_ObjectHideFlags: 0
@@ -6708,7 +6721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3557140025
+  GlobalObjectIdHash: 4055741435
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
