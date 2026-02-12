@@ -48,6 +48,7 @@ public class Helicopter : MonoBehaviour, IVehicule
         {
             NetworkObject explosionParticleIntance = Instantiate(explosionParticle, transform.position, transform.rotation).GetComponent<NetworkObject>();
             explosionParticleIntance.Spawn();
+            SFX_Manager.instance.PlaySFX(9,.4f);
             
             GetComponent<NetworkObject>().Despawn();
             BanditSpawnManager.instance.canSpawnHelico = true;

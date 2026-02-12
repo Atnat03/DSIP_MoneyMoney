@@ -182,7 +182,7 @@ public class BanditTir : NetworkBehaviour
 
     private void Shoot(Transform target)
     {
-        SFX_Manager.instance.PlaySFX(3);
+        //SFX_Manager.instance.PlaySFX(3, .2f);
         
         Vector3 origin = firePoint.position;
         Vector3 dir = (target.position - origin).normalized;
