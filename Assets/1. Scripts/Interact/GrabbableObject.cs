@@ -46,6 +46,11 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
         IsGrabbed.OnValueChanged -= OnGrabbedChanged;
     }
 
+    public void ResetGrabState()
+    {
+        IsGrabbed.Value = false;
+    }
+    
     private void HitInteract(GameObject obj, GameObject player)
     {
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
