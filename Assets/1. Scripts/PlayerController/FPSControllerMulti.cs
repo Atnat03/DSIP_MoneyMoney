@@ -450,7 +450,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         {
             transform.rotation = Quaternion.Euler(0, yaw, 0);
             
-            cameraTransform.rotation = Quaternion.Euler(pitch + drunkZOffset * 0.15f, yaw + drunkZOffset * 0.3f, drunkZOffset);
+            cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
 
             cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position,
                 Time.deltaTime * cameraSmoothFollow);

@@ -6180,8 +6180,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DrunkEffectCamera
   intensity: 10
-  speed: 10
-  duration: 100
+  speed: 5
+  duration: 5
   fps: {fileID: 5307100726240828314}
 --- !u!1 &6762169179017282632
 GameObject:
@@ -6708,7 +6708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4055741435
+  GlobalObjectIdHash: 3557140025
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -7320,7 +7320,7 @@ MonoBehaviour:
   rotSFX: {fileID: 8300000, guid: f14b761c82e81f149a658daaba25964a, type: 3}
   throwBottlePrefab: {fileID: 6114090475348168334, guid: c1ec540c927914345800c15941e7a9db, type: 3}
   throwPos: {fileID: 1959629027819541335}
-  throwBottleForce: 10
+  throwBottleForce: 25
   throwRotateTroqueForce: {x: 1000, y: 0, z: 0}
   uiClique: {fileID: 4634971724312730908}
 --- !u!1 &7267270393736431613
