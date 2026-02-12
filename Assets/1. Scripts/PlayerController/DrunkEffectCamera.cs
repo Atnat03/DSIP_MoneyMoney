@@ -1,24 +1,40 @@
+using System.Collections;
 using UnityEngine;
 
 public class DrunkEffectCamera : MonoBehaviour
 {
     public float intensity = 2f;
-    public float speed = 1f;
+    public float speed = 2f;
+    public float duration = 0.5f;
 
-    private float drunkAmount = 0f;
-    
-    void Update()
-    {
-        if (drunkAmount > 0f)
-        {
-            float angle = Mathf.Sin(Time.time * speed) * intensity * drunkAmount;
-            transform.localRotation = Quaternion.Euler(0f, 0f, angle);
-        }
-    }
+    private Coroutine drunkCoroutine;
+    private Quaternion initialRotation;
+
+    public FPSControllerMulti fps;
 
     public void AddDrunk(float amount)
     {
-        drunkAmount += amount;
-        drunkAmount = Mathf.Clamp01(drunkAmount);
+        if (drunkCoroutine != null)
+            StopCoroutine(drunkCoroutine);
+
+        drunkCoroutine = StartCoroutine(DrunkRoutine());
+    }
+
+    private IEnumerator DrunkRoutine()
+    {
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            float angle = Mathf.Sin(Time.time * speed) * intensity;
+
+            fps.SetDrunkOffset(angle);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        fps.SetDrunkOffset(0f);
+        drunkCoroutine = null;
     }
 }

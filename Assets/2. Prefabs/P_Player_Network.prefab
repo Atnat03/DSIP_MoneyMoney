@@ -6179,8 +6179,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ce9150ad6ff2544498813e5d5e60df1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DrunkEffectCamera
-  intensity: 2
-  speed: 2
+  intensity: 10
+  speed: 10
+  duration: 100
+  fps: {fileID: 5307100726240828314}
 --- !u!1 &6762169179017282632
 GameObject:
   m_ObjectHideFlags: 0

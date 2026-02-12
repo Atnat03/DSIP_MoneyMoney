@@ -1,13 +1,8 @@
-using System;
-using System.Numerics;
 using Shooting;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Object = System.Object;
 using Quaternion = UnityEngine.Quaternion;
-using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 
@@ -438,6 +433,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     private CameraShake cameraShake;
     
+    private float drunkZOffset = 0f;
+
+    public void SetDrunkOffset(float value)
+    {
+        drunkZOffset = value;
+    }
+    
     void LateUpdate()
     {
         if (!IsOwner) return;
@@ -447,7 +449,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if(!isFreeze)
         {
             transform.rotation = Quaternion.Euler(0, yaw, 0);
-            cameraTransform.rotation = Quaternion.Euler(pitch, yaw, 0);
+            
+            cameraTransform.rotation = Quaternion.Euler(pitch + drunkZOffset * 0.15f, yaw + drunkZOffset * 0.3f, drunkZOffset);
 
             cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTarget.position,
                 Time.deltaTime * cameraSmoothFollow);
