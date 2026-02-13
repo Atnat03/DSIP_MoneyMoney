@@ -24,7 +24,7 @@ public class SpawnBarrage : MonoBehaviour
         {
             BanditSpawnManager.instance.hasToSpawnBarrage = false;
             BanditSpawnManager.instance._timeUntilBanditBarrage.Value = BanditSpawnManager.instance.timeUntilBanditBarrage[BanditSpawnManager.instance.bankVisited-1];
-
+            Debug.Log("1");
             if (vertical)
             {
                 isSouthEast = other.transform.position.x > transform.position.x;
@@ -34,10 +34,13 @@ public class SpawnBarrage : MonoBehaviour
                 isSouthEast = other.transform.position.z > transform.position.z;
             }
             
+            Debug.Log("2");
+            
             if (isSouthEast)
             {
                 foreach (Voiture voiture in voituresSouthWest)
                 {
+                    Debug.Log("3");
                     GameObject bandit = Instantiate(prefabBandit, voiture.start.position, voiture.start.rotation);
                     bandit.GetComponent<BanditBarrage>().pointA = voiture.start;
                     bandit.GetComponent<BanditBarrage>().pointB = voiture.end;
@@ -48,10 +51,12 @@ public class SpawnBarrage : MonoBehaviour
             {
                 foreach (Voiture voiture in voituresNorthEast)
                 {
+                    Debug.Log("4");
                     GameObject bandit = Instantiate(prefabBandit, voiture.start.position, voiture.start.rotation);
                     bandit.GetComponent<BanditBarrage>().pointA = voiture.start;
                     bandit.GetComponent<BanditBarrage>().pointB = voiture.end;
                     bandit.GetComponent<NetworkObject>().Spawn();
+                    Debug.Log("bandit : " + bandit.gameObject.name);
                 } 
             }
             
