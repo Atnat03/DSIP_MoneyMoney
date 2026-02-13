@@ -1071,9 +1071,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2720923380287564076}
+  - component: {fileID: 7180674001884962020}
   - component: {fileID: 792700703697483768}
   - component: {fileID: 2426944586062192942}
-  - component: {fileID: 7180674001884962020}
   - component: {fileID: 2281370101811331839}
   - component: {fileID: 7475640001014927665}
   - component: {fileID: 6988800169906220}
@@ -1103,6 +1103,31 @@ Transform:
   - {fileID: 8100457542360563936}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7180674001884962020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6959080630503955993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1782731183
+  InScenePlacedSourceGlobalObjectIdHash: 1158135261
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &792700703697483768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1115,6 +1140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9df44c174103b8b4da58849d4d681b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BanditVehicleAI
+  ShowTopMostFoldoutHeaderGroup: 1
   truck: {fileID: 0}
   flankPosition: 0
   flankDistance: 8
@@ -1129,7 +1155,8 @@ MonoBehaviour:
   driftSlowdown: 3
   lookAtTarget: {fileID: 582672426505465266}
   vfxMort: {fileID: 6230730314918658108, guid: 87c7b0d474bb8824c874173c6b5d8ad9, type: 3}
-  tourelle: {fileID: 7934255063006774804}
+  turretBase: {fileID: 8100457542360563936}
+  turretGun: {fileID: 2701318513231575200}
   debris: {fileID: 2686164804792606758, guid: d71b9ebea77b6dd4695e51dfaa82e99e, type: 3}
 --- !u!65 &2426944586062192942
 BoxCollider:
@@ -1152,31 +1179,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.157391, y: 2.6795795, z: 8.022377}
   m_Center: {x: 0.02171874, y: 1.6506213, z: 0.1954689}
---- !u!114 &7180674001884962020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6959080630503955993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1158135261
-  InScenePlacedSourceGlobalObjectIdHash: 1158135261
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &2281370101811331839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1238,8 +1240,6 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   maxHealth: 20
   healthBar: {fileID: 4189391593949609610}
-  core: {fileID: 1632604596322147935}
-  pieces: {fileID: 0}
 --- !u!195 &6988800169906220
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1560,8 +1560,6 @@ GameObject:
   - component: {fileID: 8434589997821328377}
   - component: {fileID: 190399315537617311}
   - component: {fileID: 3482198906709756664}
-  - component: {fileID: 5952251429939239181}
-  - component: {fileID: 4660150390191727994}
   m_Layer: 15
   m_Name: Turret_base
   m_TagString: Untagged
@@ -1682,77 +1680,6 @@ MonoBehaviour:
   place: {fileID: 0}
   banditAI: {fileID: 792700703697483768}
   helicoAI: {fileID: 0}
---- !u!114 &5952251429939239181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7934255063006774804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 115276739
-  InScenePlacedSourceGlobalObjectIdHash: 1158135261
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
---- !u!114 &4660150390191727994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7934255063006774804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AutoOwnerAuthorityTickOffset: 1
-  PositionInterpolationType: 0
-  RotationInterpolationType: 0
-  ScaleInterpolationType: 0
-  PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.1
-  RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.1
-  ScaleLerpSmoothing: 1
-  ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
-  TickSyncChildren: 0
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  SwitchTransformSpaceWhenParented: 0
-  Interpolate: 1
-  SlerpPosition: 0
 --- !u!1 &8640502346276464078
 GameObject:
   m_ObjectHideFlags: 0

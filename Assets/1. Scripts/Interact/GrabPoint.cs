@@ -1,5 +1,6 @@
 using System.Linq;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -64,16 +65,24 @@ public class GrabPoint : NetworkBehaviour
         
         if (_heldItem != null && handState == HandState.Grab && _camera != null)
         {
-            Vector3 pos = _camera.position + _camera.forward * holdDistance;
-            Quaternion rot = _camera.rotation;
+            if (_heldItem.TryGetComponent<Rigidbody>(out var rb))
+            {
+                rb.isKinematic = true;
 
-            UpdateHeldPositionServerRpc(_heldItem.NetworkObjectId, pos, rot);
+                Vector3 holdPos = _camera.TransformPoint(Vector3.forward * holdDistance);
+                Quaternion holdRot = _camera.rotation;
+
+                rb.MovePosition(holdPos);
+                rb.MoveRotation(holdRot);
+            }
         }
+
         
         uiThrow.SetActive(_heldItem != null);
 
         HandleThrowInput();
     }
+
 
     public bool IsSacInHand()
     {
@@ -251,6 +260,9 @@ public class GrabPoint : NetworkBehaviour
         if (item.gameObject.CompareTag("Material"))
             return;
 
+        // ✅ Déparenter l'objet
+        item.gameObject.GetComponent<NetworkObject>().TrySetParent((Transform)null);
+
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.isKinematic = false;
@@ -275,10 +287,16 @@ public class GrabPoint : NetworkBehaviour
     }
 
 
+
     [ClientRpc]
     private void ReleaseClientRpc(ulong ownerId)
     {
         if (NetworkManager.Singleton.LocalClientId != ownerId) return;
+
+        if (_heldItem != null)
+        {
+            _heldItem.gameObject.GetComponent<NetworkObject>().TrySetParent((Transform)null);
+        }
 
         GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
 
@@ -287,58 +305,9 @@ public class GrabPoint : NetworkBehaviour
         _onThrow?.Invoke();
     }
 
-    #endregion
-
-    #region HOLD POSITION
-
-    [ServerRpc(Delivery = RpcDelivery.Unreliable, RequireOwnership = false)]
-    private void UpdateHeldPositionServerRpc(ulong itemId, Vector3 pos, Quaternion rot, ServerRpcParams rpc = default)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
-            return;
-
-        if (item.OwnerClientId != rpc.Receive.SenderClientId)
-            return;
-
-        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
-            return;
-        
-        item.transform.position = pos;
-        item.transform.rotation = rot;
-
-        if (item.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-
-            rb.isKinematic = true;
-        }
-        
-        UpdateHeldPositionClientRpc(itemId, pos, rot);
-    }
-
-    [ClientRpc(Delivery = RpcDelivery.Unreliable)]
-    private void UpdateHeldPositionClientRpc(ulong itemId, Vector3 pos, Quaternion rot)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item)) return;
-
-        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
-            return;
-
-        if (item.OwnerClientId == NetworkManager.Singleton.LocalClientId) return;
-
-        item.transform.position = pos;
-        item.transform.rotation = rot;
-
-        if (item.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-        }
-    }
 
     #endregion
+
 
     public GameObject GetCurrentObjectInHand()
     {

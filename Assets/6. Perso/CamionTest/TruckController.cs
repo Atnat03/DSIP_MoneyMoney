@@ -14,6 +14,7 @@ public class TruckController : NetworkBehaviour
     [SerializeField] float motorForce = 100f;
     [SerializeField] float breakForce = 1000f;
     [SerializeField] float maxSteerAngle = 30f;
+    [SerializeField] float vitesseMax = 30;
 
     [SerializeField] Vector3 centerOfMass;
     
@@ -118,11 +119,16 @@ public class TruckController : NetworkBehaviour
 
     void Update()
     {
-        if (!IsServer) 
+        if(!IsServer)
         {
-            UpdateWheelsVisual();
-            return;
+            UpdateWheelsVisualServerRpc();
         }
+        else
+        {
+            UpdateWheelsVisualClientRpc();
+        }
+
+        rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, vitesseMax);
         
         CheckPassengersBounds();
     
@@ -142,7 +148,10 @@ public class TruckController : NetworkBehaviour
             isBreaking = false;
         }
         
-        engineAudioSource.volume = rb.linearVelocity.magnitude/100;
+        float speedRatio = rb.linearVelocity.magnitude / vitesseMax;
+        speedRatio = Mathf.Clamp01(speedRatio);
+
+        engineAudioSource.pitch = Mathf.Lerp(0.8f, 1.2f, speedRatio);
     
         UpdateWheels();
         CheckFall();
@@ -333,7 +342,14 @@ public class TruckController : NetworkBehaviour
         UpdateSingleWheel(backRightWheelCollider, backRightWheelTransform);
     }
     
-    private void UpdateWheelsVisual()
+    [ServerRpc]
+    private void UpdateWheelsVisualServerRpc()
+    {
+        UpdateWheelsVisualClientRpc();
+    }
+
+    [ClientRpc]
+    private void UpdateWheelsVisualClientRpc()
     {
         UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
         UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);

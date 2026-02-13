@@ -305,8 +305,6 @@ GameObject:
   - component: {fileID: 2272104959300000436}
   - component: {fileID: 3943975824340195667}
   - component: {fileID: 7082859207399937899}
-  - component: {fileID: 3782076642692252569}
-  - component: {fileID: 4846424315834456908}
   m_Layer: 15
   m_Name: Turret_base
   m_TagString: Untagged
@@ -322,14 +320,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4362230961777344545}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.39041027, z: -0, w: 0.920641}
+  m_LocalRotation: {x: -0, y: -0.80425495, z: -0, w: 0.59428453}
   m_LocalPosition: {x: 14, y: -74, z: 39}
   m_LocalScale: {x: 104.112, y: 30, z: 104.112}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8301900696457249136}
   m_Father: {fileID: 3615118056360332491}
-  m_LocalEulerAnglesHint: {x: 0, y: 674.04, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 612.923, z: 0}
 --- !u!33 &2272104959300000436
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -425,77 +423,6 @@ MonoBehaviour:
   place: {fileID: 180311111750770259}
   banditAI: {fileID: 0}
   helicoAI: {fileID: 8801634063880407855}
---- !u!114 &3782076642692252569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4362230961777344545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3044304841
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
---- !u!114 &4846424315834456908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4362230961777344545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AutoOwnerAuthorityTickOffset: 1
-  PositionInterpolationType: 0
-  RotationInterpolationType: 0
-  ScaleInterpolationType: 0
-  PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.1
-  RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.1
-  ScaleLerpSmoothing: 1
-  ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
-  TickSyncChildren: 0
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  SwitchTransformSpaceWhenParented: 0
-  Interpolate: 1
-  SlerpPosition: 0
 --- !u!1 &4897268952229661958
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,14 +449,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4897268952229661958}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: -0.0011029515, y: 0.70729303, z: 0.00037996483, w: 0.70691955}
   m_LocalPosition: {x: 0, y: 0, z: 0.572}
   m_LocalScale: {x: 0.59261, y: 0.69408, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8699160269240570624}
   m_Father: {fileID: 5146999362374400352}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.12, y: 90.03, z: -0.059}
 --- !u!33 &4875120268984473473
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1006,10 +933,10 @@ PrefabInstance:
       addedObject: {fileID: 3809262632910638000}
     - targetCorrespondingSourceObject: {fileID: 100002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9025293551441427614}
+      addedObject: {fileID: 7064880152496618411}
     - targetCorrespondingSourceObject: {fileID: 100002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7064880152496618411}
+      addedObject: {fileID: 9025293551441427614}
     - targetCorrespondingSourceObject: {fileID: 100002, guid: e731a1ac8914e2548ae80adaba4759b1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4701372982985935780}
@@ -1065,24 +992,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 287.89157, y: 319.81137, z: 1299.1978}
   m_Center: {x: 0, y: 160.84352, z: -260.59393}
---- !u!114 &9025293551441427614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3615118056360169707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37d0d451e94bbc0498234df102b068dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Helicopter
-  rotor: {fileID: 2168215543845179175}
-  rotorRotateSpeed: 2000
-  helicopter: {fileID: 3615118056360169707}
-  isDead: 0
-  explosionParticle: {fileID: 6230730314918658108, guid: 87c7b0d474bb8824c874173c6b5d8ad9, type: 3}
-  tourelle: {fileID: 4362230961777344545}
 --- !u!114 &7064880152496618411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1095,7 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2061302133
+  GlobalObjectIdHash: 2582449628
   InScenePlacedSourceGlobalObjectIdHash: 2061302133
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1108,6 +1017,26 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &9025293551441427614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3615118056360169707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d0d451e94bbc0498234df102b068dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Helicopter
+  ShowTopMostFoldoutHeaderGroup: 1
+  rotor: {fileID: 2168215543845179175}
+  rotorRotateSpeed: 2000
+  helicopter: {fileID: 3615118056360169707}
+  isDead: 0
+  explosionParticle: {fileID: 6230730314918658108, guid: 87c7b0d474bb8824c874173c6b5d8ad9, type: 3}
+  turretBase: {fileID: 5146999362374400352}
+  turretGun: {fileID: 5146999362374400352}
 --- !u!114 &4701372982985935780
 MonoBehaviour:
   m_ObjectHideFlags: 0

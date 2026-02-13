@@ -20,8 +20,8 @@ public class BanditTir : NetworkBehaviour
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Raycast Masks (VERY IMPORTANT)")]
-    [SerializeField] private LayerMask visibilityMask; // murs + player
-    [SerializeField] private LayerMask shootMask;      // murs + player + truckpart
+    [SerializeField] private LayerMask visibilityMask;
+    [SerializeField] private LayerMask shootMask;
 
     [Header("Shooting")]
     [SerializeField] private float fireRate = 0.5f;
@@ -164,7 +164,7 @@ public class BanditTir : NetworkBehaviour
 
     #region Aiming
 
-    private void AimAt(Transform target)
+    void AimAt(Transform target)
     {
         Vector3 dir = target.position - firePoint.position;
 
@@ -173,7 +173,7 @@ public class BanditTir : NetworkBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, baseRot, rotationSpeed * Time.deltaTime);
 
         Quaternion gunRot = Quaternion.LookRotation(dir);
-        turretGun.rotation = Quaternion.Slerp(turretGun.rotation, gunRot, gunElevationSpeed * Time.deltaTime);
+        turretGun.localRotation = Quaternion.Slerp(turretGun.localRotation, gunRot, gunElevationSpeed * Time.deltaTime);
     }
 
     #endregion

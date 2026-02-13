@@ -24,28 +24,40 @@ public class SFX_Manager : NetworkBehaviour
 
     public void PlaySFX(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
     {
-        PlaySoundClientRpc(clipID, volume, pitch, loop);
-    }
-
-    [ClientRpc]
-    public void PlaySoundClientRpc(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
-    {
-        audioSource.pitch = pitch;
-        if (loop)
+        if (IsServer)
         {
-            print("sfx looping");
-
-            if (loopAudioSource.clip != data.clips[clipID])
-            {
-                loopAudioSource.clip = data.clips[clipID];
-                loopAudioSource.volume = volume;
-                loopAudioSource.Play();
-            }
-           
+            PlaySoundClientRpc(clipID, volume, pitch, loop);
         }
         else
         {
-            audioSource.PlayOneShot(data.clips[clipID], volume);  
-        }    
+            RequestPlaySFXServerRpc(clipID, volume, pitch, loop);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void RequestPlaySFXServerRpc(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
+    {
+        PlaySoundClientRpc(clipID, volume, pitch, loop);
+    }
+
+
+    [ClientRpc]
+    void PlaySoundClientRpc(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
+    {
+        if (loop)
+        {
+            if (loopAudioSource.clip != data.clips[clipID])
+            {
+                loopAudioSource.clip = data.clips[clipID];
+                loopAudioSource.volume = volume / 2f;
+                loopAudioSource.pitch = pitch;
+                loopAudioSource.Play();
+            }
+        }
+        else
+        {
+            audioSource.pitch = pitch;
+            audioSource.PlayOneShot(data.clips[clipID], volume);
+        }
     }
 }

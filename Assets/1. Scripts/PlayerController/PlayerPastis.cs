@@ -101,11 +101,11 @@ public class PlayerPastis : NetworkBehaviour
 
         effet.SetColor(Color.darkOliveGreen);
         
-        effet.SetDizziness(0.5f);
+        effet.SetDizziness(1f);
         
         while (elapsed <  duration)
         {
-            effet.SetIntensity(elapsed / (duration + 0.25f));
+            effet.SetIntensity(elapsed / (duration + 0.75f));
             
             elapsed += Time.deltaTime;
             yield return null;
@@ -117,7 +117,7 @@ public class PlayerPastis : NetworkBehaviour
         
         while (elapsed > 0)
         {
-            effet.SetIntensity(elapsed / (duration + 0.25f));
+            effet.SetIntensity(elapsed / (duration + 0.75f));
             
             elapsed -= Time.deltaTime;
             yield return null;

@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052032771692814880}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.593, y: 0.702, z: 0}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 2.71, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5546027341763427187}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &3762112307421586323
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbribusBehaviour
   timeForTP: 10
-  rain: {fileID: 4101852619715060903, guid: eae26498c8947ba43bf78f31e4f84e7c, type: 3}
+  rain: {fileID: 8479359486784881918, guid: fbd479a9d36426d4e8ce7d00dd370099, type: 3}
   posRain: {fileID: 2711976018243410140}
   _currentTimer: 0
   playerWaiting: {fileID: 0}
