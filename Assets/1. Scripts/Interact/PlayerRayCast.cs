@@ -32,6 +32,7 @@ public class PlayerRayCast : NetworkBehaviour
     private KnockOut targetKO;
     
     private bool isReviving = false;
+    private bool isRepairing = false; // ✅ NOUVEAU : État de réparation
     
     private IInteractible lastInteractible;
 
@@ -112,13 +113,13 @@ public class PlayerRayCast : NetworkBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (hit.collider.CompareTag("TruckPart") && hasMaterial)
+                    if (hit.collider.CompareTag("TruckPart") && hasMaterial && !isRepairing)
                     {
                         TruckPart part = hit.collider.GetComponent<TruckPart>();
                         
                         if (part.isBroke.Value)
                         {
-                            StartCoroutine(RepairPart(hit.collider.gameObject));
+                            StartCoroutine(RepairPart(part));
                             return;
                         }
                     }
@@ -131,8 +132,12 @@ public class PlayerRayCast : NetworkBehaviour
                         Interact.RayInteract(hit.collider.gameObject, gameObject, RepearInteractionName);
                     }
                 }
-                else
-                if ((!hit.collider.CompareTag("TruckPart") || 
+                // ✅ Gestion de l'annulation de réparation
+                else if (Input.GetKeyUp(KeyCode.E) && isRepairing)
+                {
+                    StopRepair();
+                }
+                else if ((!hit.collider.CompareTag("TruckPart") || 
                     (hit.collider.CompareTag("TruckPart") && hit.collider.GetComponent<TruckPart>().isBroke.Value && hasMaterial)))
                 {
                     if(hit.collider.CompareTag("Sangles"))
@@ -212,23 +217,84 @@ public class PlayerRayCast : NetworkBehaviour
         materialVisual.SetActive(hasMaterial);
     }
 
-    public IEnumerator RepairPart(GameObject part)
+    // ✅ MODIFIÉ : Prend maintenant TruckPart en paramètre au lieu de GameObject
+    private IEnumerator RepairPart(TruckPart part)
     {
+        isRepairing = true;
+        
         GetComponent<FPSControllerMulti>().animator.SetBool("Repare", true);
         
         playerFPS.StartFreeze();
         SFX_Manager.instance.PlaySFX(10);
+        
         float count = durationRepair;
-        while (count > 0)
+        
+        while (count > 0 && isRepairing)
         {
             count -= Time.deltaTime;
+            circleCD.fillAmount = count / durationRepair;
             yield return null;
-            circleCD.fillAmount =  count / durationRepair;
         }
-        Interact.RayInteract(part, gameObject, RepearInteractionName);
-        playerFPS.StopFreeze();
-        TakeMaterial();
         
+        // ✅ Si la réparation n'a pas été annulée
+        if (isRepairing)
+        {
+            // ✅ Envoyer la réparation au serveur
+            RepairPartServerRpc(part.NetworkObjectId);
+            
+            playerFPS.StopFreeze();
+            TakeMaterial();
+            circleCD.fillAmount = 0;
+        }
+        
+        GetComponent<FPSControllerMulti>().animator.SetBool("Repare", false);
+        isRepairing = false;
+    }
+
+    // ✅ NOUVEAU : ServerRpc pour synchroniser la réparation
+    [ServerRpc(RequireOwnership = false)]
+    private void RepairPartServerRpc(ulong partNetworkId, ServerRpcParams rpc = default)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(partNetworkId, out var networkObject))
+        {
+            Debug.LogWarning($"TruckPart avec NetworkObjectId {partNetworkId} introuvable");
+            return;
+        }
+
+        TruckPart part = networkObject.GetComponent<TruckPart>();
+        if (part != null)
+        {
+            // ✅ Réparer la pièce sur le serveur
+            part.Repair();
+            
+            // ✅ Notifier tous les clients
+            RepairPartClientRpc(partNetworkId);
+        }
+    }
+
+    // ✅ NOUVEAU : ClientRpc pour notifier tous les clients
+    [ClientRpc]
+    private void RepairPartClientRpc(ulong partNetworkId)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(partNetworkId, out var networkObject))
+            return;
+
+        TruckPart part = networkObject.GetComponent<TruckPart>();
+        if (part != null)
+        {
+            // Mettre à jour visuellement la pièce pour tous les clients
+            part.OnRepaired();
+        }
+    }
+
+    // ✅ NOUVEAU : Annuler la réparation
+    private void StopRepair()
+    {
+        if (!isRepairing) return;
+
+        isRepairing = false;
+        playerFPS.StopFreeze();
+        circleCD.fillAmount = 0;
         GetComponent<FPSControllerMulti>().animator.SetBool("Repare", false);
     }
     

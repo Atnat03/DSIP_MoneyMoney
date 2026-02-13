@@ -40,4 +40,45 @@ public class Skins : MonoBehaviour
             }
         }
     }
+
+    // ✅ NOUVELLE MÉTHODE : Masquer les renderers d'un skin pour le joueur local
+    public void HideSkinnedMeshRenderersForOwner(int id)
+    {
+        GameObject[] meshes = GetSkinnedMeshRenderers(id);
+        
+        if (meshes == null || meshes.Length < 2)
+        {
+            Debug.LogWarning($"Impossible de récupérer les meshes pour le skin {id}");
+            return;
+        }
+
+        foreach (var mesh in meshes)
+        {
+            var renderer = mesh.GetComponent<SkinnedMeshRenderer>();
+            if (renderer != null)
+            {
+                renderer.enabled = false;
+            }
+        }
+    }
+
+    public void ShowSkinnedMeshRenderersForOthers(int id)
+    {
+        GameObject[] meshes = GetSkinnedMeshRenderers(id);
+        
+        if (meshes == null || meshes.Length < 2)
+        {
+            Debug.LogWarning($"Impossible de récupérer les meshes pour le skin {id}");
+            return;
+        }
+
+        foreach (var mesh in meshes)
+        {
+            var renderer = mesh.GetComponent<SkinnedMeshRenderer>();
+            if (renderer != null)
+            {
+                renderer.enabled = true;
+            }
+        }
+    }
 }
