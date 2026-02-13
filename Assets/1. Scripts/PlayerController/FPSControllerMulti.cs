@@ -140,12 +140,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         if (!IsOwner)
         {
-            GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(currentSkinId.Value);
-            
-            int ragdollLayer = LayerMask.NameToLayer("PlayerRagdoll");
-            SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
-            SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
-            
             myCamera.gameObject.SetActive(false);
             
             gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
@@ -155,6 +149,12 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             ui.SetActive(false);
             return;
         }
+        
+        GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(currentSkinId.Value);
+            
+        int ragdollLayer = LayerMask.NameToLayer("Default");
+        SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
+        SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
         
         gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
 
@@ -318,6 +318,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         // NOUVEAU: Gestion du mouvement pour les passagers
         if (isPassenger && isInTruck && !isDriver)
         {
+            HandlePassengerLadder();
             HandlePassengerMovement();
             HandleCameraInput();
             return;
@@ -537,6 +538,24 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             }
         }
     }
+    
+    void HandlePassengerLadder()
+    {
+        if (!isPassenger || !isInTruck) return;
+        if (!isOnLadder) return;
+
+        float verticalInput = Input.GetAxisRaw("Vertical");
+
+        Vector3 climb = new Vector3(0f, verticalInput, 0f);
+
+        transform.localPosition += climb * ladderClimbSpeed * Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isOnLadder = false;
+        }
+    }
+
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
     {

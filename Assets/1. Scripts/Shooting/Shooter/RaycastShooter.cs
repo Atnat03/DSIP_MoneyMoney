@@ -74,7 +74,7 @@ namespace Shooting
 
             if (EnablePenetration)
             {
-                int layerMask = ~LayerMask.GetMask("Blockmoney", "Blockmoney");
+                int layerMask = ~LayerMask.GetMask("BlockMoney", "Blockmoney");
                 
                 RaycastHit[] hitInfos = Physics.RaycastAll(Pos, Dir, MaxDistance, layerMask);
                 

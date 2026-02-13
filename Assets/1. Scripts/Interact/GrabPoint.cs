@@ -63,7 +63,10 @@ public class GrabPoint : NetworkBehaviour
     {
         if (!IsOwner) return;
         
-        if (_heldItem != null && handState == HandState.Grab && _camera != null)
+        if (_heldItem != null 
+            && handState == HandState.Grab 
+            && _camera != null
+            && _heldItem.OwnerClientId == NetworkManager.Singleton.LocalClientId)
         {
             if (_heldItem.TryGetComponent<Rigidbody>(out var rb))
             {
@@ -122,13 +125,29 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.enabled = false;
-            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
+            SetGrabVisualClientRpc(itemId, true);
         }
 
         if (item.TryGetComponent<GrabbableObject>(out var grab))
             grab.IsGrabbed.Value = true;
 
         ConfirmGrabClientRpc(itemId, rpc.Receive.SenderClientId);
+    }
+    
+    [ClientRpc]
+    private void SetGrabVisualClientRpc(ulong itemId, bool grabbed)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects
+                .TryGetValue(itemId, out var item))
+            return;
+
+        if (item.TryGetComponent<Collider>(out var col))
+        {
+            col.enabled = !grabbed;
+            col.gameObject.layer = grabbed 
+                ? LayerMask.NameToLayer("IgnoreRaycast")
+                : LayerMask.NameToLayer("Interactable");
+        }
     }
 
     [ClientRpc]
@@ -259,10 +278,7 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.gameObject.CompareTag("Material"))
             return;
-
-        // ✅ Déparenter l'objet
-        item.gameObject.GetComponent<NetworkObject>().TrySetParent((Transform)null);
-
+        
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.isKinematic = false;
@@ -276,7 +292,7 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.TryGetComponent<Collider>(out var col))
         {
-            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
+            SetGrabVisualClientRpc(itemId, false);
             col.enabled = true;
         }
 

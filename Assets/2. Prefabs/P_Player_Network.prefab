@@ -2420,7 +2420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4693862745794434461}
   - component: {fileID: 4777024543633471025}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Skins
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3394,7 +3394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00012207031, y: 0}
+  m_AnchoredPosition: {x: 0.01001, y: -221}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4052374636317604745
@@ -6643,7 +6643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3557140025
+  GlobalObjectIdHash: 4055741435
   InScenePlacedSourceGlobalObjectIdHash: 3557140025
   DeferredDespawnTick: 0
   Ownership: 1
@@ -9384,6 +9384,10 @@ PrefabInstance:
       value: PP_Player_04
       objectReference: {fileID: 0}
     - target: {fileID: 5216514072691336695, guid: fa7b14041e3a8204984040b2076383bd, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216514072691336695, guid: fa7b14041e3a8204984040b2076383bd, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -11107,6 +11111,10 @@ PrefabInstance:
     - target: {fileID: 5216514072691336695, guid: 0faf7676dbf959f4c937f53be172012e, type: 3}
       propertyPath: m_Name
       value: PP_Player_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216514072691336695, guid: 0faf7676dbf959f4c937f53be172012e, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5254316384854997734, guid: 0faf7676dbf959f4c937f53be172012e, type: 3}
       propertyPath: m_Layer
@@ -14682,6 +14690,10 @@ PrefabInstance:
       value: PP_Player_03
       objectReference: {fileID: 0}
     - target: {fileID: 5216514072691336695, guid: db077ce411957b245829ed3edc7c1f35, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216514072691336695, guid: db077ce411957b245829ed3edc7c1f35, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -16255,6 +16267,10 @@ PrefabInstance:
     - target: {fileID: 5216514072691336695, guid: 5511bb01b3db1b9428ffa2c563311d8b, type: 3}
       propertyPath: m_Name
       value: PP_Player_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216514072691336695, guid: 5511bb01b3db1b9428ffa2c563311d8b, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5216514072691336695, guid: 5511bb01b3db1b9428ffa2c563311d8b, type: 3}
       propertyPath: m_IsActive
