@@ -120,11 +120,6 @@ public class GrabPoint : NetworkBehaviour
             rb.WakeUp();
         }
 
-        if (item.TryGetComponent<NetworkRigidbody>(out var netRb))
-        {
-            netRb.enabled = false;
-        }
-
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.enabled = false;
@@ -221,11 +216,6 @@ public class GrabPoint : NetworkBehaviour
         
         ulong itemOwnerId = item.OwnerClientId;
 
-        if (item.TryGetComponent<NetworkRigidbody>(out var netRb))
-        {
-            netRb.enabled = true;
-        }
-
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.linearVelocity = Vector3.zero;
@@ -243,6 +233,7 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<GrabbableObject>(out var g))
             g.IsGrabbed.Value = false;
 
+        SetGrabVisualClientRpc(itemId, false);
         ReleaseClientRpc(itemOwnerId);
     }
 
@@ -261,7 +252,6 @@ public class GrabPoint : NetworkBehaviour
 
     public void Throw()
     {
-        Debug.Log("Slow Throw");
         ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, _minThrowStrength);
     }
 
@@ -277,95 +267,42 @@ public class GrabPoint : NetworkBehaviour
         if (item.gameObject.CompareTag("Material"))
             return;
 
-        StartCoroutine(ThrowDelayed(item, direction, force, rpc.Receive.SenderClientId));
-    }
-    
-    private System.Collections.IEnumerator ThrowDelayed(NetworkObject item, Vector3 direction, float force, ulong ownerId)
-    {
-        Debug.Log($"[Server] Throw delayed start - Item: {item.name}");
-    
-        // ✅ Réactiver le collider
+        // Réactiver le collider
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.gameObject.layer = LayerMask.NameToLayer("Interactable");
             col.enabled = true;
         }
 
-        // ✅ IMPORTANT : Désactiver NetworkRigidbody temporairement
-        NetworkRigidbody netRb = null;
-        if (item.TryGetComponent<NetworkRigidbody>(out netRb))
+        // Configurer le Rigidbody sur le serveur
+        if (item.TryGetComponent<Rigidbody>(out var rb))
         {
-            Debug.Log($"[Server] Disabling NetworkRigidbody for throw");
-            netRb.enabled = false;
-        }
-
-        // ✅ Configurer le Rigidbody
-        Rigidbody rb = null;
-        if (item.TryGetComponent<Rigidbody>(out rb))
-        {
-            Debug.Log($"[Server] Setting up Rigidbody");
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.WakeUp();
-        }
 
-        // ✅ Attendre 1 physics frame
-        yield return new WaitForFixedUpdate();
-
-        // ✅ Appliquer la force
-        if (rb != null)
-        {
-            Debug.Log($"[Server] Applying force: {force} in direction: {direction}");
+            // Appliquer la force immédiatement
             rb.AddForce(direction.normalized * force, ForceMode.Impulse);
-            Debug.Log($"[Server] Velocity after force: {rb.linearVelocity}");
         }
 
-        // ✅ Attendre que la force soit appliquée (2-3 physics frames)
-        yield return new WaitForFixedUpdate();
-        yield return new WaitForFixedUpdate();
-
-        // ✅ Réactiver NetworkRigidbody APRÈS que la force soit bien appliquée
-        if (netRb != null)
-        {
-            Debug.Log($"[Server] Re-enabling NetworkRigidbody");
-            netRb.enabled = true;
-        }
-
-        if (rb != null)
-        {
-            Debug.Log($"[Server] Final velocity: {rb.linearVelocity}");
-        }
-
-        SetGrabVisualClientRpc(item.NetworkObjectId, false);
+        SetGrabVisualClientRpc(itemId, false);
 
         if (item.TryGetComponent<GrabbableObject>(out var g))
             g.IsGrabbed.Value = false;
 
-        ReleaseClientRpc(ownerId);
+        ReleaseClientRpc(rpc.Receive.SenderClientId);
     }
 
     [ClientRpc]
     private void ReleaseClientRpc(ulong ownerId)
     {
-        Debug.Log($"[Client {NetworkManager.Singleton.LocalClientId}] ReleaseClientRpc called for owner {ownerId}");
-
         if (NetworkManager.Singleton.LocalClientId != ownerId) return;
 
         if (_heldItem != null)
         {
-            var rb = _heldItem.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                Debug.Log($"[Client] RB state - isKinematic: {rb.isKinematic}, velocity: {rb.linearVelocity}");
-            }
-            
             _heldItem.gameObject.GetComponent<NetworkObject>().TrySetParent((Transform)null);
-        }
-        else
-        {
-            Debug.LogWarning($"[Client] _heldItem is NULL in ReleaseClientRpc!");
         }
 
         GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
