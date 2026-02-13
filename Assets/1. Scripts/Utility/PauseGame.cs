@@ -68,15 +68,6 @@ public class PauseGame : NetworkBehaviour
         }
     }
     
-    private void LateUpdate()
-    {
-        if (!isPause && Cursor.lockState != CursorLockMode.Locked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-    
     private void SetCursorState(bool paused)
     {
         if (paused)
