@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BanditSpawnManager : MonoBehaviour
+public class BanditSpawnManager : NetworkBehaviour
 {
     public static BanditSpawnManager instance;
     
