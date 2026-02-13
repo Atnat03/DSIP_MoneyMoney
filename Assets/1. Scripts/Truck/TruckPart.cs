@@ -37,10 +37,8 @@ public class TruckPart : NetworkBehaviour, IInteractible
 
     public override void OnNetworkSpawn()
     {
-        // S'abonner aux changements d'état
         isBroke.OnValueChanged += OnBrokeStateChanged;
         
-        // Appliquer l'état initial
         UpdateVisuals(isBroke.Value);
     }
 
@@ -100,11 +98,8 @@ public class TruckPart : NetworkBehaviour, IInteractible
     [ClientRpc]
     private void ShowBreakEffectClientRpc()
     {
-        // Son de cassure
-        if (SFX_Manager.instance != null)
-        {
-            SFX_Manager.instance.PlaySFX(13); // Son de métal qui casse
-        }
+        UpdateVisuals(true);
+        GetComponent<Collider>().isTrigger = true;
     }
     
     #endregion
@@ -126,7 +121,7 @@ public class TruckPart : NetworkBehaviour, IInteractible
         }
 
         isBroke.Value = false;
-        currentHealth = maxHealth; // ✅ Restaurer la santé complète
+        currentHealth = maxHealth;
         Debug.Log($"[Server] {gameObject.name} has been repaired");
     }
 
@@ -139,6 +134,9 @@ public class TruckPart : NetworkBehaviour, IInteractible
         {
             SFX_Manager.instance.PlaySFX(11);
         }
+        
+        if (TryGetComponent<Collider>(out var col))
+            col.isTrigger = false;
     }
 
     #endregion
@@ -147,17 +145,11 @@ public class TruckPart : NetworkBehaviour, IInteractible
     {
         if (mesh != null)
         {
-            if (broken)
+            mesh.enabled = !broken;
+
+            if (!broken && repairedMaterial != null)
             {
-                mesh.enabled = false;
-                if (brokenMaterial != null)
-                    mesh.material = brokenMaterial;
-            }
-            else
-            {
-                mesh.enabled = false; // Caché quand réparé
-                if (repairedMaterial != null)
-                    mesh.material = repairedMaterial;
+                mesh.material = repairedMaterial;
             }
         }
     }
