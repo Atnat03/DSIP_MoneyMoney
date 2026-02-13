@@ -104,6 +104,8 @@ public class Radio : NetworkBehaviour
     void PlaySynced()
     {
         if (clipsList.Length == 0) return;
+        
+        audioSource.Stop();
 
         audioSource.clip = clipsList[CurrentClip.Value];
 

@@ -80,12 +80,10 @@ public class GrabPoint : NetworkBehaviour
             }
         }
 
-        
         uiThrow.SetActive(_heldItem != null);
 
         HandleThrowInput();
     }
-
 
     public bool IsSacInHand()
     {
@@ -122,6 +120,11 @@ public class GrabPoint : NetworkBehaviour
             rb.WakeUp();
         }
 
+        if (item.TryGetComponent<NetworkRigidbody>(out var netRb))
+        {
+            netRb.enabled = false;
+        }
+
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.enabled = false;
@@ -133,7 +136,7 @@ public class GrabPoint : NetworkBehaviour
 
         ConfirmGrabClientRpc(itemId, rpc.Receive.SenderClientId);
     }
-    
+
     [ClientRpc]
     private void SetGrabVisualClientRpc(ulong itemId, bool grabbed)
     {
@@ -200,10 +203,6 @@ public class GrabPoint : NetworkBehaviour
 
             ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
 
-            _heldItem = null;
-            handState = HandState.Free;
-            GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
-
             _chargeTimer = 0;
             throwJauge.fillAmount = 0;
         }
@@ -222,12 +221,17 @@ public class GrabPoint : NetworkBehaviour
         
         ulong itemOwnerId = item.OwnerClientId;
 
+        if (item.TryGetComponent<NetworkRigidbody>(out var netRb))
+        {
+            netRb.enabled = true;
+        }
+
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-
-            rb.isKinematic = true;
+            rb.isKinematic = false;
+            rb.useGravity = true;
         }
 
         if (item.TryGetComponent<Collider>(out var col))
@@ -242,7 +246,6 @@ public class GrabPoint : NetworkBehaviour
         ReleaseClientRpc(itemOwnerId);
     }
 
-    // ✅ Méthode publique pour relâcher localement
     public void ForceLocalRelease()
     {
         if (_heldItem != null)
@@ -260,12 +263,7 @@ public class GrabPoint : NetworkBehaviour
     {
         Debug.Log("Slow Throw");
         ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, _minThrowStrength);
-    
-        _heldItem = null;
-        handState = HandState.Free;
-        GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
     }
-
 
     [ServerRpc(RequireOwnership = false)]
     private void ThrowServerRpc(ulong itemId, Vector3 direction, float force, ServerRpcParams rpc = default)
@@ -278,52 +276,105 @@ public class GrabPoint : NetworkBehaviour
 
         if (item.gameObject.CompareTag("Material"))
             return;
-        
-        if (item.TryGetComponent<Rigidbody>(out var rb))
+
+        StartCoroutine(ThrowDelayed(item, direction, force, rpc.Receive.SenderClientId));
+    }
+    
+    private System.Collections.IEnumerator ThrowDelayed(NetworkObject item, Vector3 direction, float force, ulong ownerId)
+    {
+        Debug.Log($"[Server] Throw delayed start - Item: {item.name}");
+    
+        // ✅ Réactiver le collider
+        if (item.TryGetComponent<Collider>(out var col))
         {
+            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
+            col.enabled = true;
+        }
+
+        // ✅ IMPORTANT : Désactiver NetworkRigidbody temporairement
+        NetworkRigidbody netRb = null;
+        if (item.TryGetComponent<NetworkRigidbody>(out netRb))
+        {
+            Debug.Log($"[Server] Disabling NetworkRigidbody for throw");
+            netRb.enabled = false;
+        }
+
+        // ✅ Configurer le Rigidbody
+        Rigidbody rb = null;
+        if (item.TryGetComponent<Rigidbody>(out rb))
+        {
+            Debug.Log($"[Server] Setting up Rigidbody");
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.WakeUp();
-
-            rb.AddForce(direction.normalized * force, ForceMode.Impulse);
         }
 
-        if (item.TryGetComponent<Collider>(out var col))
+        // ✅ Attendre 1 physics frame
+        yield return new WaitForFixedUpdate();
+
+        // ✅ Appliquer la force
+        if (rb != null)
         {
-            SetGrabVisualClientRpc(itemId, false);
-            col.enabled = true;
+            Debug.Log($"[Server] Applying force: {force} in direction: {direction}");
+            rb.AddForce(direction.normalized * force, ForceMode.Impulse);
+            Debug.Log($"[Server] Velocity after force: {rb.linearVelocity}");
         }
+
+        // ✅ Attendre que la force soit appliquée (2-3 physics frames)
+        yield return new WaitForFixedUpdate();
+        yield return new WaitForFixedUpdate();
+
+        // ✅ Réactiver NetworkRigidbody APRÈS que la force soit bien appliquée
+        if (netRb != null)
+        {
+            Debug.Log($"[Server] Re-enabling NetworkRigidbody");
+            netRb.enabled = true;
+        }
+
+        if (rb != null)
+        {
+            Debug.Log($"[Server] Final velocity: {rb.linearVelocity}");
+        }
+
+        SetGrabVisualClientRpc(item.NetworkObjectId, false);
 
         if (item.TryGetComponent<GrabbableObject>(out var g))
             g.IsGrabbed.Value = false;
 
-        ReleaseClientRpc(rpc.Receive.SenderClientId);
+        ReleaseClientRpc(ownerId);
     }
-
-
 
     [ClientRpc]
     private void ReleaseClientRpc(ulong ownerId)
     {
+        Debug.Log($"[Client {NetworkManager.Singleton.LocalClientId}] ReleaseClientRpc called for owner {ownerId}");
+
         if (NetworkManager.Singleton.LocalClientId != ownerId) return;
 
         if (_heldItem != null)
         {
+            var rb = _heldItem.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Debug.Log($"[Client] RB state - isKinematic: {rb.isKinematic}, velocity: {rb.linearVelocity}");
+            }
+            
             _heldItem.gameObject.GetComponent<NetworkObject>().TrySetParent((Transform)null);
+        }
+        else
+        {
+            Debug.LogWarning($"[Client] _heldItem is NULL in ReleaseClientRpc!");
         }
 
         GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
-
         _heldItem = null;
         handState = HandState.Free;
         _onThrow?.Invoke();
     }
 
-
     #endregion
-
 
     public GameObject GetCurrentObjectInHand()
     {

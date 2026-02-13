@@ -5,10 +5,10 @@ public class Chair : MonoBehaviour, IInteractible
 {
     public Transform sittingPos;
     public Collider col;
+    public Collider col2;
 
     private void OnEnable()
     {
-        col = GetComponent<Collider>();
         Interact.OnInteract += HitInteract;
     }
 
@@ -35,6 +35,7 @@ public class Chair : MonoBehaviour, IInteractible
         }
 
         col.enabled = !isSit;
+        col2.enabled = isSit;
     }
 
     private bool isSit = false;
