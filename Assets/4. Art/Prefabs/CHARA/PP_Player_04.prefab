@@ -99,7 +99,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: fdd6cba79ec70b7428b4e056fe4455c6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -171,10 +171,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7801714620601929713, guid: a384e999f25843042a6c297dab581ad8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e64fec66cae88ab40bef5a1fbeedc63f, type: 2}
+    - target: {fileID: -7748957488530602415, guid: a384e999f25843042a6c297dab581ad8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fdd6cba79ec70b7428b4e056fe4455c6, type: 2}
+    - target: {fileID: -1249178122185086566, guid: a384e999f25843042a6c297dab581ad8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0245bfc36fe30eb4d800cf4f66b5f291, type: 2}
+    - target: {fileID: 98768592229567770, guid: a384e999f25843042a6c297dab581ad8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fdd6cba79ec70b7428b4e056fe4455c6, type: 2}
     - target: {fileID: 919132149155446097, guid: a384e999f25843042a6c297dab581ad8, type: 3}
       propertyPath: m_Name
       value: SK_Player_04
       objectReference: {fileID: 0}
+    - target: {fileID: 8498470599844950921, guid: a384e999f25843042a6c297dab581ad8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7ab997e8639716a4b8ac3b31e0a1bf08, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
