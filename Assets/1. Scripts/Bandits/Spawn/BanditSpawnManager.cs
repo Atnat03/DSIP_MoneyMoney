@@ -11,7 +11,6 @@ public class BanditSpawnManager : MonoBehaviour
     public NetworkVariable<float> _timeUntilBanditBarrage = new(0);
     public NetworkVariable<float> _timeUntilHelicopter = new(0);
     
-    
     public float[] timeUntilBanditFollow;
     public float[] timeUntilBanditBarrage;
     public float[] timeUntilHelicopter;
@@ -33,9 +32,9 @@ public class BanditSpawnManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        _timeUntilBanditFollow.Value = timeUntilBanditFollow[bankVisited-1]/3;
+        _timeUntilBanditFollow.Value = timeUntilBanditFollow[bankVisited-1];
         _timeUntilBanditBarrage.Value = timeUntilBanditBarrage[bankVisited-1];
-        _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1]/2;
+        _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1];
         
         _timeUntilBanditFollow.OnValueChanged += OnTimeUntilBFChaned;
         _timeUntilBanditBarrage.OnValueChanged += OnTimeUntilBBChaned;
