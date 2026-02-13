@@ -89,11 +89,12 @@ public class TruckController : NetworkBehaviour
         jaugeMashing.transform.parent.gameObject.SetActive(false);
         
         parentable = new List<IParentable>();
+        
+        rb = GetComponent<Rigidbody>();
     }
 
     public override void OnNetworkSpawn()
     {
-        rb = GetComponent<Rigidbody>();
         rb.angularDamping = 1.5f;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;

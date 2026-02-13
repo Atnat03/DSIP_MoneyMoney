@@ -32,7 +32,7 @@ public class PlayerRayCast : NetworkBehaviour
     private KnockOut targetKO;
     
     private bool isReviving = false;
-    private bool isRepairing = false; // ✅ NOUVEAU : État de réparation
+    private bool isRepairing = false;
     
     private IInteractible lastInteractible;
 
@@ -264,15 +264,12 @@ public class PlayerRayCast : NetworkBehaviour
         TruckPart part = networkObject.GetComponent<TruckPart>();
         if (part != null)
         {
-            // ✅ Réparer la pièce sur le serveur
             part.Repair();
             
-            // ✅ Notifier tous les clients
             RepairPartClientRpc(partNetworkId);
         }
     }
 
-    // ✅ NOUVEAU : ClientRpc pour notifier tous les clients
     [ClientRpc]
     private void RepairPartClientRpc(ulong partNetworkId)
     {
@@ -282,12 +279,10 @@ public class PlayerRayCast : NetworkBehaviour
         TruckPart part = networkObject.GetComponent<TruckPart>();
         if (part != null)
         {
-            // Mettre à jour visuellement la pièce pour tous les clients
             part.OnRepaired();
         }
     }
 
-    // ✅ NOUVEAU : Annuler la réparation
     private void StopRepair()
     {
         if (!isRepairing) return;

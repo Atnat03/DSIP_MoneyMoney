@@ -3,216 +3,217 @@ using UnityEngine;
 
 public class TruckPart : NetworkBehaviour, IInteractible
 {
-    #region Inspector
-    [Header("Health")]
-    [SerializeField] private float maxHealth = 50f;
-
-    [Header("Detached Prefab")]
-    [SerializeField] private GameObject detachedPrefab;
-    [SerializeField] private float ejectForce = 5f;
-    [SerializeField] private float ejectUpwardForce = 2f;
-
-    [Header("Debug")]
-    [SerializeField] private bool startDestroyed = false;
-    #endregion
-
-    public NetworkVariable<float> currentHealth = new NetworkVariable<float>(
-        value: 100f,
-        readPerm: NetworkVariableReadPermission.Everyone,
-        writePerm: NetworkVariableWritePermission.Server
-    );
-    
-    private NetworkVariable<ulong> detachedInstanceId = new NetworkVariable<ulong>(
-        value: 0,
-        readPerm: NetworkVariableReadPermission.Everyone,
-        writePerm: NetworkVariableWritePermission.Server
-    );
-
-    public float mult;
-    public bool lifeMode;
-    
+    [Header("Network State")]
     public NetworkVariable<bool> isBroke = new NetworkVariable<bool>(
-        value: false,
-        readPerm: NetworkVariableReadPermission.Everyone,
-        writePerm: NetworkVariableWritePermission.Server
+        false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
     );
 
+    [Header("Visual")]
     public MeshRenderer mesh;
-    public Material baseMaterial;
-    
+    public Material brokenMaterial;
+    public Material repairedMaterial;
+
+    [Header("Interactible")]
+    public string InteractionName { get; set; } = "Réparer";
+    public Outline[] Outline { get; set; }
+
+    [Header("Health Settings")]
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float currentHealth = 100f;
+    [SerializeField] private bool showHealthBar = false;
+
+    private void Awake()
+    {
+        // Récupérer les Outlines si non assignés
+        if (Outline == null || Outline.Length == 0)
+        {
+            Outline = GetComponentsInChildren<Outline>();
+        }
+        
+        currentHealth = maxHealth;
+    }
+
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
-            currentHealth.Value = maxHealth;
-
-        mesh = GetComponent<MeshRenderer>();
-        
-        Interact.OnInteract += HitInteract;
-        
+        // S'abonner aux changements d'état
         isBroke.OnValueChanged += OnBrokeStateChanged;
         
-        outline[0] = GetComponent<Outline>();
-        
-        UpdateVisuals();
+        // Appliquer l'état initial
+        UpdateVisuals(isBroke.Value);
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
-        Interact.OnInteract -= HitInteract;
-        if (isBroke != null)
-            isBroke.OnValueChanged -= OnBrokeStateChanged;
+        isBroke.OnValueChanged -= OnBrokeStateChanged;
     }
+
+    private void OnBrokeStateChanged(bool previousValue, bool newValue)
+    {
+        UpdateVisuals(newValue);
+    }
+
+    #region Damage System
+
+    // ✅ Méthode appelée par BanditTir quand il tire
+    public void TakeDamage(float damage)
+    {
+        if (!IsServer)
+        {
+            Debug.LogWarning("TakeDamage should only be called on the server!");
+            return;
+        }
+
+        if (isBroke.Value)
+        {
+            Debug.Log($"{gameObject.name} is already broken, ignoring damage");
+            return;
+        }
+
+        currentHealth -= damage;
+        Debug.Log($"[Server] {gameObject.name} took {damage} damage. Health: {currentHealth}/{maxHealth}");
+
+        if (currentHealth <= 0f)
+        {
+            Break();
+        }
+    }
+
+    // ✅ Casser la pièce
+    private void Break()
+    {
+        if (!IsServer) return;
+
+        if (isBroke.Value)
+        {
+            Debug.Log($"{gameObject.name} is already broken!");
+            return;
+        }
+
+        isBroke.Value = true;
+        Debug.Log($"[Server] {gameObject.name} has been broken by damage!");
+
+        ShowBreakEffectClientRpc();
+    }
+
+    [ClientRpc]
+    private void ShowBreakEffectClientRpc()
+    {
+        // Son de cassure
+        if (SFX_Manager.instance != null)
+        {
+            SFX_Manager.instance.PlaySFX(13); // Son de métal qui casse
+        }
+    }
+    
+    #endregion
+
+    #region Repair System
 
     public void Repair()
     {
-        if (!IsServer) return;
-        
+        if (!IsServer)
+        {
+            Debug.LogWarning("Repair() should only be called on the server!");
+            return;
+        }
+
+        if (!isBroke.Value)
+        {
+            Debug.Log($"{gameObject.name} is already repaired!");
+            return;
+        }
+
         isBroke.Value = false;
-        Debug.Log($"[Server] {gameObject.name} réparé");
+        currentHealth = maxHealth; // ✅ Restaurer la santé complète
+        Debug.Log($"[Server] {gameObject.name} has been repaired");
     }
-    
+
     public void OnRepaired()
     {
-        // Mettre à jour les visuels, sons, etc.
+        Debug.Log($"[Client] {gameObject.name} visually repaired");
+        UpdateVisuals(false);
+
+        if (SFX_Manager.instance != null)
+        {
+            SFX_Manager.instance.PlaySFX(11);
+        }
+    }
+
+    #endregion
+
+    private void UpdateVisuals(bool broken)
+    {
         if (mesh != null)
         {
-            mesh.enabled = false;
-        }
-        
-        // Autres effets visuels/sonores
-        Debug.Log($"[Client] {gameObject.name} visuellement réparé");
-    }
-
-    
-    private void OnBrokeStateChanged(bool previousValue, bool newValue)
-    {
-        UpdateVisuals();
-    }
-
-    void Update()
-    {
-        if (mesh == null) return;
-        
-        if(!isBroke.Value && !mesh.enabled)
-            UpdateVisuals();
-    }
-
-    private void UpdateVisuals()
-    {
-        mesh.enabled = !isBroke.Value;
-        GetComponent<BoxCollider>().isTrigger = isBroke.Value;
-    }
-
-    #region Damage
-
-    public void TakeDamage(float amount)
-    {
-        TakeDamageServerRpc(amount);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void TakeDamageServerRpc(float amount)
-    {
-        print("Take Dmg (Server)");
-        
-        if (!lifeMode)
-        {
-            if (currentHealth.Value <= 0) return;
-
-            currentHealth.Value -= amount;
-
-            if (currentHealth.Value <= 0)
+            if (broken)
             {
-                BreakOnServer();
+                mesh.enabled = false;
+                if (brokenMaterial != null)
+                    mesh.material = brokenMaterial;
+            }
+            else
+            {
+                mesh.enabled = false; // Caché quand réparé
+                if (repairedMaterial != null)
+                    mesh.material = repairedMaterial;
             }
         }
     }
 
-    #endregion
-
-    #region Break / Detach
-
-    private void BreakOnServer()
+    // ✅ Méthode pour casser la pièce via ServerRpc (pour d'autres systèmes)
+    [ServerRpc(RequireOwnership = false)]
+    public void BreakPartServerRpc()
     {
         if (!IsServer) return;
         
-        print("break (Server)");
-        
-        if (detachedPrefab != null)
-        {
-            GameObject detachedInstance = Instantiate(detachedPrefab, transform.position, transform.rotation);
-            NetworkObject netObj = detachedInstance.GetComponent<NetworkObject>();
-            netObj.Spawn();
-            
-            // Stocker l'ID pour pouvoir le détruire plus tard
-            detachedInstanceId.Value = netObj.NetworkObjectId;
-            
-            Rigidbody rb = detachedInstance.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                Vector3 localDir = transform.localPosition;
-                Vector3 ejectDir = new Vector3(0f,0f,-Mathf.Sign(localDir.z)).normalized; 
-                ejectDir += Vector3.up * 0.2f; 
-                rb.AddForce(ejectDir * (ejectForce * mult) + Vector3.up * ejectUpwardForce, ForceMode.Impulse);
-                rb.AddTorque(30,0,0);
-            }
-        }
-
-        SFX_Manager.instance.PlaySFX(9, .4f);
-        
-        isBroke.Value = true;
-        TruckLife.instance.DetermineIfShootable();
+        Break();
     }
-    
-    #endregion
 
-    #region Repair
-
-    private void HitInteract(GameObject obj, GameObject player)
+    // ✅ Méthodes utilitaires pour debug
+    [ContextMenu("Force Break")]
+    public void ForceBreak()
     {
-        if (obj.gameObject.GetInstanceID() == gameObject.GetInstanceID())
+        if (IsServer)
         {
-            RepairServerRpc();
+            Break();
+        }
+        else
+        {
+            BreakPartServerRpc();
         }
     }
-    
-    [ServerRpc(RequireOwnership = false)]
-    private void RepairServerRpc()
-    {
-        if (!IsServer) return;
-        
-        isBroke.Value = false;
-        currentHealth.Value = maxHealth;
 
-        // Supprime la partie tombée
-        if (detachedInstanceId.Value != 0)
+    [ContextMenu("Force Repair")]
+    public void ForceRepair()
+    {
+        if (IsServer)
         {
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(detachedInstanceId.Value, out NetworkObject netObj))
-            {
-                netObj.Despawn();
-                Destroy(netObj.gameObject);
-            }
-            detachedInstanceId.Value = 0;
+            Repair();
         }
-        
-        mesh.material = baseMaterial;
     }
-    
-    #endregion
 
-    public string InteractionName
+    [ContextMenu("Take 50 Damage")]
+    public void TestDamage()
     {
-        get { return interactionName;}
-        set { }
+        if (IsServer)
+        {
+            TakeDamage(50f);
+        }
     }
 
-    public string interactionName;
-    
-    public Outline[] Outline     
+    // ✅ Pour afficher la santé dans l'inspector (debug)
+    private void OnGUI()
     {
-        get { return outline; ; }
-        set { }
-    }
+        if (!showHealthBar || !IsServer) return;
 
-    public Outline[] outline;
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2f);
+        if (screenPos.z > 0)
+        {
+            GUI.color = Color.red;
+            GUI.Label(new Rect(screenPos.x - 50, Screen.height - screenPos.y, 100, 20), 
+                $"HP: {currentHealth:F0}/{maxHealth:F0}");
+        }
+    }
 }

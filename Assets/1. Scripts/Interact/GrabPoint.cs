@@ -62,7 +62,16 @@ public class GrabPoint : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-        
+
+        uiThrow.SetActive(_heldItem != null);
+        HandleThrowInput();
+    }
+
+    // ✅ Utiliser FixedUpdate pour la physique
+    private void FixedUpdate()
+    {
+        if (!IsOwner) return;
+    
         if (_heldItem != null 
             && handState == HandState.Grab 
             && _camera != null
@@ -70,19 +79,18 @@ public class GrabPoint : NetworkBehaviour
         {
             if (_heldItem.TryGetComponent<Rigidbody>(out var rb))
             {
-                rb.isKinematic = true;
-
                 Vector3 holdPos = _camera.TransformPoint(Vector3.forward * holdDistance);
                 Quaternion holdRot = _camera.rotation;
 
-                rb.MovePosition(holdPos);
-                rb.MoveRotation(holdRot);
+                // ✅ Position et rotation instantanées
+                rb.transform.position = holdPos;
+                rb.transform.rotation = holdRot;
+            
+                // ✅ IMPORTANT : Reset des velocités pour éviter l'accumulation
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
         }
-
-        uiThrow.SetActive(_heldItem != null);
-
-        HandleThrowInput();
     }
 
     public bool IsSacInHand()
@@ -267,24 +275,23 @@ public class GrabPoint : NetworkBehaviour
         if (item.gameObject.CompareTag("Material"))
             return;
 
-        // Réactiver le collider
+        // ✅ Réactiver le collider
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.gameObject.layer = LayerMask.NameToLayer("Interactable");
             col.enabled = true;
         }
 
-        // Configurer le Rigidbody sur le serveur
+        // ✅ Configurer et appliquer la force
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.isKinematic = false;
             rb.useGravity = true;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
             rb.WakeUp();
-
-            // Appliquer la force immédiatement
-            rb.AddForce(direction.normalized * force, ForceMode.Impulse);
+            
+            // ✅ Appliquer la vélocité directement (plus fiable que AddForce)
+            rb.linearVelocity = direction.normalized * force;
+            rb.angularVelocity = Vector3.zero;
         }
 
         SetGrabVisualClientRpc(itemId, false);
@@ -292,7 +299,27 @@ public class GrabPoint : NetworkBehaviour
         if (item.TryGetComponent<GrabbableObject>(out var g))
             g.IsGrabbed.Value = false;
 
+        // ✅ NOUVEAU : Synchroniser la vélocité sur tous les clients
+        SyncThrowVelocityClientRpc(itemId, direction.normalized * force);
+
         ReleaseClientRpc(rpc.Receive.SenderClientId);
+    }
+
+    // ✅ NOUVEAU : ClientRpc pour forcer la vélocité sur tous les clients
+    [ClientRpc]
+    private void SyncThrowVelocityClientRpc(ulong itemId, Vector3 velocity)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
+            return;
+
+        if (item.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.linearVelocity = velocity;
+            rb.angularVelocity = Vector3.zero;
+            rb.WakeUp();
+        }
     }
 
     [ClientRpc]

@@ -134,14 +134,12 @@ public override void OnNetworkSpawn()
         SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
     }
 
-    // ✅ Activer le skin initial
     skinManager.SetSkin(currentSkinId.Value);
     animator = skinManager.GetAnimator(currentSkinId.Value);
     networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
     
     if (!IsOwner)
     {
-        // ✅ Pour les autres joueurs : configurer les layers ET afficher les renderers
         ConfigureOtherPlayerLayers(currentSkinId.Value);
         skinManager.ShowSkinnedMeshRenderersForOthers(currentSkinId.Value);
         
@@ -155,7 +153,6 @@ public override void OnNetworkSpawn()
         return;
     }
     
-    // ✅ Pour le joueur local : masquer les renderers
     skinManager.HideSkinnedMeshRenderersForOwner(currentSkinId.Value);
     
     gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
@@ -188,7 +185,6 @@ public override void OnNetworkSpawn()
     cameraShake = MyCamera().GetComponent<CameraShake>();
 }
 
-// ✅ Méthode pour configurer les layers des autres joueurs
 private void ConfigureOtherPlayerLayers(int skinId)
 {
     GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(skinId);
@@ -235,7 +231,7 @@ private void ConfigureOtherPlayerLayers(int skinId)
         animator.SetFloat("Speed", isMoving);
         
         textGoInCamion.SetActive(canEnterInTruck);
-        textGoOUTCamion.SetActive(isDriver || isPassenger); // MODIFIÉ: afficher aussi pour les passagers
+        textGoOUTCamion.SetActive(isDriver);
         textReload.SetActive(canReload);
 
         isInTruck = transform.parent == TruckController.instance.transform;
@@ -587,9 +583,9 @@ private void ConfigureOtherPlayerLayers(int skinId)
             netTransform.InLocalSpace = true;
         }
         
-        animator.SetBool("Sit", asDriver); // MODIFIÉ: seulement le conducteur est assis
+        animator.SetBool("Sit", asDriver);
         
-        isPassenger = !asDriver; // NOUVEAU: marquer comme passager si pas conducteur
+        isPassenger = !asDriver; 
         
         controller.enabled = false;
         
@@ -611,7 +607,7 @@ private void ConfigureOtherPlayerLayers(int skinId)
         
         animator.SetBool("Sit", false);
         
-        isPassenger = false; // NOUVEAU: ne plus être passager
+        isPassenger = false;
         
         SetVisibleGun();
         
