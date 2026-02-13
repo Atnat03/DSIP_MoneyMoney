@@ -78,10 +78,9 @@ public class PlayerPastis : NetworkBehaviour
         float yScale = Mathf.Lerp(0.05f, 1f, t);
         liquide.localScale = new Vector3(liquide.localScale.x, yScale, liquide.localScale.z);
         
-        if (IsServer)
-            PlayRotSoundClientRpc();
-        else
-            PlayRotSoundServerRpc();
+        AudioClip c = currentGorgerBottle != 0 ?  drinkSFX : rotSFX;
+
+        audioSource.PlayOneShot(c);
         
         if (currentGorgerBottle == 0)
         {
@@ -126,20 +125,6 @@ public class PlayerPastis : NetworkBehaviour
         effet.SetDizziness(0f);
         
         effet.SetIntensity(0);
-    }
-    
-    [ServerRpc(RequireOwnership = false)]
-    private void PlayRotSoundServerRpc()
-    {
-        PlayRotSoundClientRpc();
-    }
-
-    [ClientRpc]
-    private void PlayRotSoundClientRpc()
-    {
-        AudioClip c = currentGorgerBottle != 0 ?  drinkSFX : rotSFX;
-
-        audioSource.PlayOneShot(c);
     }
 
     [ServerRpc]

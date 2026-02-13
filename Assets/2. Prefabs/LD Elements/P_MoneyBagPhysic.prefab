@@ -105,6 +105,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2211880393532029633}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7288210642382107413}
   m_SourcePrefab: {fileID: 100100000, guid: d6e31456caa39404d9d8c77869d9fffe, type: 3}
 --- !u!4 &2613075368045438823 stripped
 Transform:
@@ -274,6 +277,23 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &-7288210642382107413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3389049563541913053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 0
+  AutoUpdateKinematicState: 1
+  AutoSetKinematicOnDespawn: 1
 --- !u!1001 &7270867894550748193
 PrefabInstance:
   m_ObjectHideFlags: 0

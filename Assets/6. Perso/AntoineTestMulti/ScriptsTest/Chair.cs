@@ -4,6 +4,8 @@ using UnityEngine;
 public class Chair : MonoBehaviour, IInteractible
 {
     public Transform sittingPos;
+    public Collider colFirst;
+    public Collider col2;
 
     private void OnEnable()
     {
@@ -20,7 +22,7 @@ public class Chair : MonoBehaviour, IInteractible
         if (obj.GetInstanceID() != gameObject.GetInstanceID()) return;
         
         FPSControllerMulti fps = player.GetComponent<FPSControllerMulti>();
-
+        
         if (fps.isSitting)
         {
             fps.StandUp();
@@ -31,6 +33,9 @@ public class Chair : MonoBehaviour, IInteractible
             fps.Sit(sittingPos);
             isSit = true;
         }
+        
+        colFirst.enabled = !isSit;
+        col2.enabled = isSit;
     }
 
     private bool isSit = false;

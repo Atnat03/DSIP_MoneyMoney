@@ -50,11 +50,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     public bool isInTruck = false;
     private Transform truckParent;
+    public bool isPassenger = false; // NOUVEAU: pour distinguer passager du conducteur
 
     [Header("Truck Interaction")]
     [SerializeField] float interactDistance = 5f;
     [SerializeField] LayerMask truckLayer;
     [SerializeField, Range(0, 1f)] float truckFollowStrength = 0.5f;
+    [SerializeField] float passengerMoveSpeed = 2f; // NOUVEAU: vitesse de déplacement dans le camion
     
     private TruckInteraction truckInteraction;
     
@@ -126,23 +128,19 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     public override void OnNetworkSpawn()
     {
         currentSkinId.OnValueChanged += OnSkinChanged;
-    
+
         if(IsOwner)
         {
             SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
         }
-    
+
         skinManager.SetSkin(currentSkinId.Value);
         animator = skinManager.GetAnimator(currentSkinId.Value);
         networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
         
         if (!IsOwner)
         {
-            GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(currentSkinId.Value);
-            
-            int ragdollLayer = LayerMask.NameToLayer("PlayerRagdoll");
-            SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
-            SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
+            ConfigureOtherPlayerLayers(currentSkinId.Value);
             
             myCamera.gameObject.SetActive(false);
             
@@ -184,6 +182,21 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         cameraShake = MyCamera().GetComponent<CameraShake>();
     }
 
+    private void ConfigureOtherPlayerLayers(int skinId)
+    {
+        GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(skinId);
+        
+        if (listSkins == null || listSkins.Length < 2)
+        {
+            Debug.LogWarning($"Impossible de récupérer les meshes pour le skin {skinId}");
+            return;
+        }
+        
+        int ragdollLayer = LayerMask.NameToLayer("Default");
+        SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
+        SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
+    }
+
     public override void OnNetworkDespawn()
     {
         currentSkinId.OnValueChanged -= OnSkinChanged;
@@ -216,7 +229,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         animator.SetFloat("Speed", isMoving);
         
         textGoInCamion.SetActive(canEnterInTruck);
-        textGoOUTCamion.SetActive(isDriver);
+        textGoOUTCamion.SetActive(isDriver || isPassenger); // MODIFIÉ: afficher aussi pour les passagers
         textReload.SetActive(canReload);
 
         isInTruck = transform.parent == TruckController.instance.transform;
@@ -234,6 +247,10 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         if (Input.GetKeyDown(KeyCode.E) && (canEnterInTruck || isInTruck))
         {
             if (isInTruck && isDriver)
+            {
+                truckInteraction.TryExitTruck(this);
+            }
+            else if (isInTruck && isPassenger)
             {
                 truckInteraction.TryExitTruck(this);
             }
@@ -308,6 +325,21 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             HandleCameraInput();
             return;
         }
+        
+        if (isPassenger && isInTruck && !isDriver)
+        {
+            HandleCameraInput();
+        
+            if (isOnLadder)
+            {
+                HandlePassengerLadder();
+            }
+            else
+            {
+                HandlePassengerMovement();
+            }
+            return;
+        }
 
         if (isSitting && sittingPos != null)
         {
@@ -325,6 +357,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             HandleMovement();
         }
     }
+    
 
     public void Sit(Transform sitPos)
     {
@@ -374,7 +407,7 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     private void HandleHeadbob()
     {
-        if (isOnLadder || isDriver) return;
+        if (isOnLadder || isDriver || isPassenger) return; // MODIFIÉ: pas de headbob pour les passagers non plus
         
         if (!controller.isGrounded || new Vector2(horizontalInput, verticalInput).magnitude < 0.1f)
         {
@@ -453,7 +486,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
                 move.y = verticalVelocity;
             }
 
+            controller.enabled = true;
             controller.Move(move * Time.deltaTime);
+            controller.enabled = false;
         }
     }    
     
@@ -489,6 +524,75 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             }
         }
     }
+    
+    void HandlePassengerLadder()
+    {
+        if (!isPassenger || !isInTruck) return;
+
+        float vertInput = Input.GetAxisRaw("Vertical");
+        float horizInput = Input.GetAxisRaw("Horizontal");
+
+        // Mouvement vertical sur l'échelle
+        Vector3 climb = new Vector3(horizInput * 0.3f, vertInput, 0f); // Petit mouvement horizontal autorisé
+        Vector3 localClimb = transform.parent.InverseTransformDirection(
+            transform.TransformDirection(climb)
+        );
+        
+        transform.localPosition += localClimb * ladderClimbSpeed * Time.deltaTime;
+
+        // Vérifier les limites du camion
+        if (TruckController.instance != null)
+        {
+            Vector3 localPos = transform.localPosition;
+            Vector3 boundsCenter = TruckController.instance.boundsCenter;
+            Vector3 boundsSize = TruckController.instance.boundsSize;
+            Vector3 halfSize = boundsSize * 0.5f;
+            
+            localPos.x = Mathf.Clamp(localPos.x, boundsCenter.x - halfSize.x, boundsCenter.x + halfSize.x);
+            localPos.y = Mathf.Clamp(localPos.y, boundsCenter.y - halfSize.y, boundsCenter.y + halfSize.y);
+            localPos.z = Mathf.Clamp(localPos.z, boundsCenter.z - halfSize.z, boundsCenter.z + halfSize.z);
+            
+            transform.localPosition = localPos;
+        }
+
+        // Sortir de l'échelle avec Espace
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isOnLadder = false;
+        }
+    }
+
+    // ✅ MODIFIÉ: Fonction de mouvement passager (sans échelle)
+    void HandlePassengerMovement()
+    {
+        if (isFreeze) return;
+
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        // Mouvement local dans le camion
+        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+        Vector3 worldMove = transform.TransformDirection(localMove) * passengerMoveSpeed * Time.deltaTime;
+        
+        // Déplacer en position locale pour rester attaché au camion
+        transform.localPosition += transform.parent.InverseTransformDirection(worldMove);
+        
+        // Vérifier les limites du camion
+        if (TruckController.instance != null)
+        {
+            Vector3 localPos = transform.localPosition;
+            Vector3 boundsCenter = TruckController.instance.boundsCenter;
+            Vector3 boundsSize = TruckController.instance.boundsSize;
+            Vector3 halfSize = boundsSize * 0.5f;
+            
+            localPos.x = Mathf.Clamp(localPos.x, boundsCenter.x - halfSize.x, boundsCenter.x + halfSize.x);
+            localPos.y = Mathf.Clamp(localPos.y, boundsCenter.y - halfSize.y, boundsCenter.y + halfSize.y);
+            localPos.z = Mathf.Clamp(localPos.z, boundsCenter.z - halfSize.z, boundsCenter.z + halfSize.z);
+            
+            transform.localPosition = localPos;
+        }
+    }
+
 
     public void EnterTruck(bool asDriver, Vector3 spawnPosition) 
     {
@@ -501,7 +605,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             netTransform.InLocalSpace = true;
         }
         
-        animator.SetBool("Sit", true);
+        animator.SetBool("Sit", asDriver); // MODIFIÉ: seulement le conducteur est assis
+        
+        isPassenger = !asDriver; // NOUVEAU: marquer comme passager si pas conducteur
+        
+        controller.enabled = false;
         
         SetVisibleGun();
         
@@ -517,8 +625,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         print("ExitTruck");
         
         capsuleCollider.enabled = true;
+        controller.enabled = true;
         
         animator.SetBool("Sit", false);
+        
+        isPassenger = false; // NOUVEAU: ne plus être passager
         
         SetVisibleGun();
         
@@ -536,11 +647,11 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     }
 
     [ClientRpc]
-    private void SetPassengerModeClientRpc(bool isPassenger, Vector3 desiredLocalPos)
+    private void SetPassengerModeClientRpc(bool isPassengerMode, Vector3 desiredLocalPos)
     {
-        isInTruck = isPassenger;
+        isInTruck = isPassengerMode;
 
-        if (isPassenger)
+        if (isPassengerMode)
         {
 
             var netTransform = GetComponent<NetworkTransform>();
@@ -565,6 +676,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
 
     public void OnTriggerEnter(Collider other)
     {
+        if (!IsOwner) return;
+        
         if (other.transform.CompareTag("PorteConducteur") && 
             truckInteraction.hasDriver.Value == false &&
             !hasSomethingInHand)
@@ -581,6 +694,8 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     public void OnTriggerExit(Collider other)
     {
+        if (!IsOwner) return;
+        
         if (other.transform.CompareTag("PorteConducteur"))
         {
             canEnterInTruck = false;
@@ -629,6 +744,13 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     private void OnSkinChanged(int previousValue, int newValue)
     {
         skinManager.SetSkin(newValue);
+        animator = skinManager.GetAnimator(newValue);
+    
+        if (!IsOwner)
+        {
+            ConfigureOtherPlayerLayers(newValue);
+        }
+    
         print("NEW VALUE SKIN : " + newValue);
     }
 

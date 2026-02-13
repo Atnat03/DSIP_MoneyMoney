@@ -1,5 +1,6 @@
 using System.Linq;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -62,18 +63,29 @@ public class GrabPoint : NetworkBehaviour
     {
         if (!IsOwner) return;
         
-        if (_heldItem != null && handState == HandState.Grab && _camera != null)
+        if (_heldItem != null 
+            && handState == HandState.Grab 
+            && _camera != null
+            && _heldItem.OwnerClientId == NetworkManager.Singleton.LocalClientId)
         {
-            Vector3 pos = _camera.position + _camera.forward * holdDistance;
-            Quaternion rot = _camera.rotation;
+            if (_heldItem.TryGetComponent<Rigidbody>(out var rb))
+            {
+                rb.isKinematic = true;
 
-            UpdateHeldPositionServerRpc(_heldItem.NetworkObjectId, pos, rot);
+                Vector3 holdPos = _camera.TransformPoint(Vector3.forward * holdDistance);
+                Quaternion holdRot = _camera.rotation;
+
+                rb.MovePosition(holdPos);
+                rb.MoveRotation(holdRot);
+            }
         }
+
         
         uiThrow.SetActive(_heldItem != null);
 
         HandleThrowInput();
     }
+
 
     public bool IsSacInHand()
     {
@@ -110,16 +122,38 @@ public class GrabPoint : NetworkBehaviour
             rb.WakeUp();
         }
 
+        if (item.TryGetComponent<NetworkRigidbody>(out var netRb))
+        {
+            netRb.enabled = false;
+        }
+
         if (item.TryGetComponent<Collider>(out var col))
         {
             col.enabled = false;
-            col.gameObject.layer = LayerMask.NameToLayer("IgnoreRaycast");
+            SetGrabVisualClientRpc(itemId, true);
         }
 
         if (item.TryGetComponent<GrabbableObject>(out var grab))
             grab.IsGrabbed.Value = true;
 
         ConfirmGrabClientRpc(itemId, rpc.Receive.SenderClientId);
+    }
+
+    
+    [ClientRpc]
+    private void SetGrabVisualClientRpc(ulong itemId, bool grabbed)
+    {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects
+                .TryGetValue(itemId, out var item))
+            return;
+
+        if (item.TryGetComponent<Collider>(out var col))
+        {
+            col.enabled = !grabbed;
+            col.gameObject.layer = grabbed 
+                ? LayerMask.NameToLayer("IgnoreRaycast")
+                : LayerMask.NameToLayer("Interactable");
+        }
     }
 
     [ClientRpc]
@@ -251,34 +285,80 @@ public class GrabPoint : NetworkBehaviour
         if (item.gameObject.CompareTag("Material"))
             return;
 
+        StartCoroutine(ThrowDelayed(item, direction, force, rpc.Receive.SenderClientId));
+    }
+    
+    private System.Collections.IEnumerator ThrowDelayed(NetworkObject item, Vector3 direction, float force, ulong ownerId)
+    {
+        Debug.Log($"[Server] Throw delayed start - Item: {item.name}");
+    
+        // Réactiver le collider
+        if (item.TryGetComponent<Collider>(out var col))
+        {
+            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
+            col.enabled = true;
+            Debug.Log($"[Server] Collider enabled: {col.enabled}");
+        }
+
+        // Réactiver NetworkRigidbody AVANT le Rigidbody
+        if (item.TryGetComponent<NetworkRigidbody>(out var netRb))
+        {
+            Debug.Log($"[Server] NetworkRigidbody was: {netRb.enabled}, setting to true");
+            netRb.enabled = true;
+        }
+
+        // Configurer le Rigidbody
         if (item.TryGetComponent<Rigidbody>(out var rb))
         {
+            Debug.Log($"[Server] RB before - isKinematic: {rb.isKinematic}, useGravity: {rb.useGravity}");
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.WakeUp();
-
-            rb.AddForce(direction.normalized * force, ForceMode.Impulse);
+            Debug.Log($"[Server] RB after - isKinematic: {rb.isKinematic}, useGravity: {rb.useGravity}");
         }
 
-        if (item.TryGetComponent<Collider>(out var col))
+        // ✅ Attendre 1 frame pour que NetworkRigidbody se synchronise
+        yield return null;
+
+        // ✅ IMPORTANT : Récupérer le Rigidbody à nouveau après le yield
+        if (item != null && item.TryGetComponent<Rigidbody>(out var rb2))
         {
-            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
-            col.enabled = true;
+            Debug.Log($"[Server] Applying force: {force} in direction: {direction}");
+            rb2.AddForce(direction.normalized * force, ForceMode.Impulse);
+            Debug.Log($"[Server] RB velocity after force: {rb2.linearVelocity}");
         }
+        else
+        {
+            Debug.LogError($"[Server] Impossible de récupérer le Rigidbody après yield!");
+        }
+
+        SetGrabVisualClientRpc(item.NetworkObjectId, false);
 
         if (item.TryGetComponent<GrabbableObject>(out var g))
             g.IsGrabbed.Value = false;
 
-        ReleaseClientRpc(rpc.Receive.SenderClientId);
+        ReleaseClientRpc(ownerId);
     }
-
 
     [ClientRpc]
     private void ReleaseClientRpc(ulong ownerId)
     {
+        Debug.Log($"[Client {NetworkManager.Singleton.LocalClientId}] ReleaseClientRpc called for owner {ownerId}");
+    
         if (NetworkManager.Singleton.LocalClientId != ownerId) return;
+
+        if (_heldItem != null)
+        {
+            var rb = _heldItem.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Debug.Log($"[Client] RB state - isKinematic: {rb.isKinematic}, velocity: {rb.linearVelocity}");
+            }
+        
+            _heldItem.gameObject.GetComponent<NetworkObject>().TrySetParent((Transform)null);
+        }
 
         GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
 
@@ -287,58 +367,9 @@ public class GrabPoint : NetworkBehaviour
         _onThrow?.Invoke();
     }
 
-    #endregion
-
-    #region HOLD POSITION
-
-    [ServerRpc(Delivery = RpcDelivery.Unreliable, RequireOwnership = false)]
-    private void UpdateHeldPositionServerRpc(ulong itemId, Vector3 pos, Quaternion rot, ServerRpcParams rpc = default)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item))
-            return;
-
-        if (item.OwnerClientId != rpc.Receive.SenderClientId)
-            return;
-
-        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
-            return;
-        
-        item.transform.position = pos;
-        item.transform.rotation = rot;
-
-        if (item.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-
-            rb.isKinematic = true;
-        }
-        
-        UpdateHeldPositionClientRpc(itemId, pos, rot);
-    }
-
-    [ClientRpc(Delivery = RpcDelivery.Unreliable)]
-    private void UpdateHeldPositionClientRpc(ulong itemId, Vector3 pos, Quaternion rot)
-    {
-        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(itemId, out var item)) return;
-
-        if (item.TryGetComponent<GrabbableObject>(out var g) && !g.IsGrabbed.Value)
-            return;
-
-        if (item.OwnerClientId == NetworkManager.Singleton.LocalClientId) return;
-
-        item.transform.position = pos;
-        item.transform.rotation = rot;
-
-        if (item.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-        }
-    }
 
     #endregion
+
 
     public GameObject GetCurrentObjectInHand()
     {
