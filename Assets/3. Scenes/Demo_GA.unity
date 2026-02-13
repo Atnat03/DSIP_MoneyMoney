@@ -807,7 +807,7 @@ GameObject:
   - component: {fileID: 432423119}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4476,11 +4476,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  speed: 1
-  sprintModifier: 3
+  speed: 0.1
+  sprintModifier: 5
   mouseSensibility: 2.5
   verticalLimit: {x: -90, y: 90}
   IsEnabled: 0
+  camTransform: {fileID: 0}
 --- !u!1001 &1189841904
 PrefabInstance:
   m_ObjectHideFlags: 0
