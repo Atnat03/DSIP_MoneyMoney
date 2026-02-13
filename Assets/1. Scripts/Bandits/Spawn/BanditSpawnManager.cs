@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine;
 
-public class BanditSpawnManager : MonoBehaviour
+public class BanditSpawnManager : NetworkBehaviour
 {
     public static BanditSpawnManager instance;
     
@@ -27,11 +27,15 @@ public class BanditSpawnManager : MonoBehaviour
     public int bankVisited;
     public bool canSpawnHelico = true;
     
-
-
     void Awake()
     {
         instance = this;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        
         _timeUntilBanditFollow.Value = timeUntilBanditFollow[bankVisited-1];
         _timeUntilBanditBarrage.Value = timeUntilBanditBarrage[bankVisited-1];
         _timeUntilHelicopter.Value = timeUntilHelicopter[bankVisited-1];

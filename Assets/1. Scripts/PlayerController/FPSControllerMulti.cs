@@ -225,6 +225,16 @@ private void ConfigureOtherPlayerLayers(int skinId)
     void Update()
     {
         if (!IsOwner) return;
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if (IsServer)
+            {
+                GameManager.instance.GetComponent<BanditSpawnManager>().SpawnBanditFollowServerRpc();
+                GameManager.instance.GetComponent<BanditSpawnManager>().SpawnBanditHelicoServerRpc();
+            }
+        }
+        
         
         float isMoving = controller.isGrounded ? controller.velocity.magnitude : 0;
         
