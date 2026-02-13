@@ -44,20 +44,6 @@ public class SFX_Manager : NetworkBehaviour
     [ClientRpc]
     void PlaySoundClientRpc(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
     {
-        if (loop)
-        {
-            if (loopAudioSource.clip != data.clips[clipID])
-            {
-                loopAudioSource.clip = data.clips[clipID];
-                loopAudioSource.volume = volume / 2f;
-                loopAudioSource.pitch = pitch;
-                loopAudioSource.Play();
-            }
-        }
-        else
-        {
-            audioSource.pitch = pitch;
-            audioSource.PlayOneShot(data.clips[clipID], volume);
-        }
+
     }
 }
