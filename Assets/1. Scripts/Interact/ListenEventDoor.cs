@@ -8,25 +8,11 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
 {
     private Animator animator;
     private NetworkAnimator networkAnimator;
-
-    public bool isTrappe = false;
     
     private NetworkVariable<bool> isOpenDoor = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private void Start()
     {
-        if (isTrappe)
-        {
-            if (IsServer)
-            {
-                ToggleDoor();
-            }
-            else
-            {
-                ToggleDoorServerRpc();
-            }
-        }
-        
         animator = GetComponent<Animator>();
         networkAnimator = GetComponent<NetworkAnimator>();
 
@@ -68,6 +54,7 @@ public class ListenEventDoor : NetworkBehaviour, IInteractible
     {
         isOpenDoor.Value = !isOpenDoor.Value;
         SFX_Manager.instance.PlaySFX(13);
+        print("DOOR : " + isOpenDoor.Value);
     }
 
     private void OnDoorStateChanged(bool previousValue, bool newValue)

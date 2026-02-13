@@ -4,7 +4,7 @@ using UnityEngine;
 public class Chair : MonoBehaviour, IInteractible
 {
     public Transform sittingPos;
-    public Collider col;
+    public Collider colFirst;
     public Collider col2;
 
     private void OnEnable()
@@ -33,8 +33,8 @@ public class Chair : MonoBehaviour, IInteractible
             fps.Sit(sittingPos);
             isSit = true;
         }
-
-        col.enabled = !isSit;
+        
+        colFirst.enabled = !isSit;
         col2.enabled = isSit;
     }
 

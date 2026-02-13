@@ -1869,7 +1869,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4757
+  m_VersionIndex: 4769
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2136,7 +2136,6 @@ GameObject:
   - component: {fileID: 5039984757033610257}
   - component: {fileID: 3485649448330407148}
   - component: {fileID: 3099607851713749939}
-  - component: {fileID: 706360751911038136}
   m_Layer: 9
   m_Name: Chair
   m_TagString: Chairs
@@ -2529,7 +2528,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2669
+  m_VersionIndex: 2681
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2649,10 +2648,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chair
   sittingPos: {fileID: 1959664522685996358}
-  col: {fileID: 8269219806327710920}
-  col2: {fileID: 9042899987159841819}
-  interactionAssoirName: S'assoir
-  interactionDeboutName: Se lever
+  col: {fileID: 0}
+  interactionAssoirName: 
+  interactionDeboutName: 
   outline:
   - {fileID: 3099607851713749939}
 --- !u!114 &3099607851713749939
@@ -2673,27 +2671,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!65 &706360751911038136
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900532834454080246}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.44, y: 1.7015929, z: 0.05}
-  m_Center: {x: -0.07807016, y: 0.73496115, z: 0.72}
 --- !u!1 &929595177078623647
 GameObject:
   m_ObjectHideFlags: 0
@@ -4633,7 +4610,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4047
+  m_VersionIndex: 4059
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6494,7 +6471,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4047
+  m_VersionIndex: 4059
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7198,7 +7175,6 @@ GameObject:
   - component: {fileID: 8269219806327710920}
   - component: {fileID: 3167068353197915456}
   - component: {fileID: 747399071955506429}
-  - component: {fileID: 9042899987159841819}
   m_Layer: 9
   m_Name: Chair
   m_TagString: Chairs
@@ -7591,7 +7567,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2669
+  m_VersionIndex: 2681
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7711,10 +7687,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chair
   sittingPos: {fileID: 3917678930102848396}
-  col: {fileID: 8269219806327710920}
-  col2: {fileID: 9042899987159841819}
-  interactionAssoirName: S'assoir
-  interactionDeboutName: Se lever
+  col: {fileID: 0}
+  interactionAssoirName: 
+  interactionDeboutName: 
   outline:
   - {fileID: 747399071955506429}
 --- !u!114 &747399071955506429
@@ -7735,27 +7710,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!65 &9042899987159841819
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1628118382708041051}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.44, y: 1.7015929, z: 0.05}
-  m_Center: {x: -0.07807112, y: 0.7349614, z: 0.72}
 --- !u!1 &1655433973110997348
 GameObject:
   m_ObjectHideFlags: 0
@@ -10707,7 +10661,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3942
+  m_VersionIndex: 3954
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11665,7 +11619,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4757
+  m_VersionIndex: 4769
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13267,7 +13221,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4695
+  m_VersionIndex: 4707
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -13776,8 +13730,8 @@ Transform:
   m_GameObject: {fileID: 2943292020964695423}
   serializedVersion: 2
   m_LocalRotation: {x: 1.110223e-17, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.2020588, y: 0.18361473, z: 4.2453}
-  m_LocalScale: {x: 1, y: 1, z: 1.5354}
+  m_LocalPosition: {x: -3.2020588, y: 0.18361473, z: 4.176}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8445393200883016178}
@@ -13994,7 +13948,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2625
+  m_VersionIndex: 2637
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15264,7 +15218,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4047
+  m_VersionIndex: 4059
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -17822,7 +17776,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3325
+  m_VersionIndex: 3337
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18148,7 +18102,6 @@ GameObject:
   - component: {fileID: 5589104052404641052}
   - component: {fileID: 8248998802926170064}
   - component: {fileID: 3552758472967140599}
-  - component: {fileID: 7362755207902232198}
   m_Layer: 9
   m_Name: Chair
   m_TagString: Chairs
@@ -18541,7 +18494,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2669
+  m_VersionIndex: 2681
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -18661,10 +18614,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chair
   sittingPos: {fileID: 7901696997711536647}
-  col: {fileID: 8269219806327710920}
-  col2: {fileID: 9042899987159841819}
-  interactionAssoirName: S'assoir
-  interactionDeboutName: Se lever
+  col: {fileID: 0}
+  interactionAssoirName: 
+  interactionDeboutName: 
   outline:
   - {fileID: 3552758472967140599}
 --- !u!114 &3552758472967140599
@@ -18685,27 +18637,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!65 &7362755207902232198
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4223480435297108016}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.44, y: 1.7015929, z: 0.05}
-  m_Center: {x: -0.07807112, y: 0.73496115, z: 0.72}
 --- !u!1 &4278991332850774437
 GameObject:
   m_ObjectHideFlags: 0
@@ -22378,7 +22309,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4047
+  m_VersionIndex: 4059
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -23506,8 +23437,8 @@ Transform:
   m_GameObject: {fileID: 5808531060194893895}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -2.7247791, y: 0.18361473, z: 1.1587}
-  m_LocalScale: {x: 1, y: 1, z: 1.8746113}
+  m_LocalPosition: {x: -2.7247791, y: 0.18361473, z: 1.2719998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8445393200883016178}
@@ -23724,7 +23655,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2625
+  m_VersionIndex: 2637
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -26033,7 +25964,6 @@ Transform:
   - {fileID: 2048244679905010426}
   - {fileID: 8959208131811005031}
   - {fileID: 1238040007338901073}
-  - {fileID: 1865844580104141291}
   - {fileID: 3653436053174138292}
   - {fileID: 8520535031430606395}
   - {fileID: 3273402090793795749}
@@ -28530,7 +28460,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3325
+  m_VersionIndex: 3337
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -32028,7 +31958,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3942
+  m_VersionIndex: 3954
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -33368,7 +33298,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4695
+  m_VersionIndex: 4707
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -34380,10 +34310,6 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 779000670485659857, guid: cac5cc48fd3c9724cbcc03a8725a784e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 779000670485659857, guid: cac5cc48fd3c9724cbcc03a8725a784e, type: 3}
       propertyPath: m_TagString
       value: EditorOnly
       objectReference: {fileID: 0}
@@ -35336,7 +35262,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1713757880596917200, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: m_VersionIndex
-      value: 2669
+      value: 2681
       objectReference: {fileID: 0}
     - target: {fileID: 2214941433687442627, guid: 1857adc1b427e1843a6fcbd3f8f4890e, type: 3}
       propertyPath: m_Name
@@ -35524,112 +35450,6 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8020099165207676700, guid: 395eac506072d2a41ad045801023c9d1, type: 3}
   m_PrefabInstance: {fileID: 4755145399091262544}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &4771936306688014232
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4894324515495574289}
-    m_Modifications:
-    - target: {fileID: -9199731556564991683, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: maxHealth
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: -9199731556564991683, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: startDestroyed
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -177557146693375530, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: GlobalObjectIdHash
-      value: 2017545978
-      objectReference: {fileID: 0}
-    - target: {fileID: -177557146693375530, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: SceneMigrationSynchronization
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -177557146693375530, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 2609799560
-      objectReference: {fileID: 0}
-    - target: {fileID: 857470417288647235, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 8a5858cba668a024ab1618c5ded6329d, type: 2}
-    - target: {fileID: 1296893049900858096, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_Name
-      value: "D\xE9brisGauche (1)"
-      objectReference: {fileID: 0}
-    - target: {fileID: 1296893049900858096, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1296893049900858096, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_TagString
-      value: TruckPart
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.12499997
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.76906866
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5500001
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.4340003
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.7028
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.2360003
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
---- !u!4 &1865844580104141291 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6619619699113873011, guid: 09d242e1e8614f74ebe223b6503cca0c, type: 3}
-  m_PrefabInstance: {fileID: 4771936306688014232}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5191305854926389621
 PrefabInstance:

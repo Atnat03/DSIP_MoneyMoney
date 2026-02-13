@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class BanditVehicleAI : NetworkBehaviour, IVehicule
+public class BanditVehicleAI : MonoBehaviour, IVehicule
 {
     public enum FlankPosition { Left, Right }
 
@@ -42,37 +42,13 @@ public class BanditVehicleAI : NetworkBehaviour, IVehicule
     public GameObject vfxMort;
 
     public float currentSpeed => agent != null ? agent.velocity.magnitude : 0f;
-
-    [Header("Turret Sync")]
-    public Transform turretBase;
-    public Transform turretGun;
-
-    private NetworkVariable<Quaternion> syncedTurretYaw   = new NetworkVariable<Quaternion>(
-        Quaternion.identity,
-        readPerm: NetworkVariableReadPermission.Everyone,
-        writePerm: NetworkVariableWritePermission.Server
-    );
-
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-
-        if (IsServer)
-        {
-            // Valeur initiale
-            syncedTurretYaw.Value = turretBase.rotation;
-        }
-
-        // Les clients s'abonnent aux changements
-        if (IsClient)
-        {
-            syncedTurretYaw.OnValueChanged += OnTurretYawChanged;
-        }
-    }
+    public GameObject tourelle;
 
     void Start()
     {
         SetupNavMeshAgent();
+
+        tourelle.GetComponent<NetworkObject>().Spawn();
     }
 
     void SetupNavMeshAgent()
@@ -177,40 +153,30 @@ public class BanditVehicleAI : NetworkBehaviour, IVehicule
         }
     }
 
-    private void OnDestroy()    
-    {
-        if (IsClient)
-        {
-            syncedTurretYaw.OnValueChanged -= OnTurretYawChanged;
-        }
-    }
-
-    private void OnTurretYawChanged(Quaternion prev, Quaternion next)
-    {
-        if (turretBase != null)
-            turretBase.rotation = Quaternion.Slerp(turretBase.rotation, next, 12f * Time.deltaTime);
-    }
-
-
     #endregion
 
     public GameObject debris;
     public void Die()
     {
-        if (!IsServer) return;
+        if (!NetworkManager.Singleton.IsServer) return;
         
         NetworkObject explosionParticleIntance = Instantiate(vfxMort, transform.position, transform.rotation).GetComponent<NetworkObject>();
         explosionParticleIntance.Spawn();
         SFX_Manager.instance.PlaySFX(9,.4f);
+
+        if (TryGetComponent<NetworkObject>(out var netObj))
+        {
+            netObj.Despawn();
+        }
         
+        if (tourelle.TryGetComponent<NetworkObject>(out var netObj2))
+        {
+            netObj2.Despawn();
+        }
+
         GameObject debriss = Instantiate(debris, transform.position, transform.rotation);
         debriss.GetComponent<NetworkObject>().Spawn();
-
-        var netObj = GetComponent<NetworkObject>();
-        if (netObj != null)
-        {
-            netObj.Despawn(true);
-        }
+        Destroy(gameObject);
     }
 
     void OnDrawGizmosSelected()

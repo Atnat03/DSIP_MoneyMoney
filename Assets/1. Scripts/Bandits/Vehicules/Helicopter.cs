@@ -8,40 +8,20 @@ public interface IVehicule
     public void Die();
 }
 
-public class Helicopter : NetworkBehaviour, IVehicule
+public class Helicopter : MonoBehaviour, IVehicule
 {
     [SerializeField] private Transform rotor;
     [SerializeField] private float rotorRotateSpeed = 5f;
     [SerializeField] private GameObject helicopter;
     [SerializeField] public bool isDead = false;
     [SerializeField] public GameObject explosionParticle;
+    public GameObject tourelle;
 
-    [Header("Turret Sync")]
-    public Transform turretBase;
-    public Transform turretGun;
 
-    private NetworkVariable<Quaternion> syncedTurretYaw   = new NetworkVariable<Quaternion>(
-        Quaternion.identity,
-        readPerm: NetworkVariableReadPermission.Everyone,
-        writePerm: NetworkVariableWritePermission.Server
-    );
-
-    public override void OnNetworkSpawn()
+    public void Start()
     {
-        base.OnNetworkSpawn();
-
-        if (IsServer)
-        {
-            syncedTurretYaw.Value = turretBase.rotation;
-        }
-
-        if (IsClient)
-        {
-            syncedTurretYaw.OnValueChanged += OnTurretYawChanged;
-        }
+        tourelle.GetComponent<NetworkObject>().Spawn();
     }
-
-
     private void Update()
     {
         if (!isDead)
@@ -72,21 +52,11 @@ public class Helicopter : NetworkBehaviour, IVehicule
             
             GetComponent<NetworkObject>().Despawn();
             BanditSpawnManager.instance.canSpawnHelico = true;
+            if (tourelle.TryGetComponent<NetworkObject>(out var netObj2))
+            {
+                netObj2.Despawn();
+            }
             Destroy(ai.gameObject);
         }
-    }
-
-        private void OnDestroy()    
-    {
-        if (IsClient)
-        {
-            syncedTurretYaw.OnValueChanged -= OnTurretYawChanged;
-        }
-    }
-
-    private void OnTurretYawChanged(Quaternion prev, Quaternion next)
-    {
-        if (turretBase != null)
-            turretBase.rotation = Quaternion.Slerp(turretBase.rotation, next, 12f * Time.deltaTime);
     }
 }

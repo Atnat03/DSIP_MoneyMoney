@@ -10,6 +10,7 @@ public class PauseGame : NetworkBehaviour
     [SerializeField] private GameObject uiPause;
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button debugCamionButton;
+    [SerializeField] private Button continueButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private TextMeshProUGUI buttonPauseText;
     [SerializeField] private TextMeshProUGUI PartyCodeTxt;
@@ -34,6 +35,7 @@ public class PauseGame : NetworkBehaviour
             debugCamionButton.onClick.AddListener(ResetCametar);
         }
         
+        continueButton.onClick.AddListener(ContinueTheGame);
         quitButton.onClick.AddListener(QuitTheGame);
         
         fpsController = GetComponent<FPSControllerMulti>();
@@ -60,37 +62,20 @@ public class PauseGame : NetworkBehaviour
             isPause = !isPause;
 
             if (isPause)
+            {
                 fpsController.StartFreeze();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
             else
+            {
                 fpsController.StopFreeze();
-
-            SetCursorState(isPause);
+                            
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
-    
-    private void LateUpdate()
-    {
-        if (!isPause && Cursor.lockState != CursorLockMode.Locked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-    
-    private void SetCursorState(bool paused)
-    {
-        if (paused)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
 
     private void PausingTheGame()
     {
@@ -102,10 +87,12 @@ public class PauseGame : NetworkBehaviour
         if(Time.timeScale == 0)
         {
             buttonPauseText.text = pauseText[0];
+            continueButton.interactable = true;
         }
         else
         {
             buttonPauseText.text = pauseText[1];
+            continueButton.interactable = false;
         }
         
         UpdateFreezeTimeClientRpc();
@@ -121,6 +108,19 @@ public class PauseGame : NetworkBehaviour
         else
         {
             Time.timeScale = 0;
+        }
+    }
+    
+    private void ContinueTheGame()
+    {
+        Debug.Log("ContinueTheGame");
+
+        if (isPause)
+        {
+            fpsController.StopFreeze();
+            isPause = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
     

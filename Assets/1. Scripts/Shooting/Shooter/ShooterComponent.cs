@@ -213,14 +213,17 @@ namespace Shooting
             gunAnimator.SetTrigger("Shoot");
             fps.animator.SetBool("Shoot", true);
 
-            SpawnMuzzleFlashLocal();
+            ShoopClientRpc();
+            
+            
 
             elpased = FireRate;
 
             return didShoot;
         }
         
-        private void SpawnMuzzleFlashLocal()
+        [ClientRpc]
+        private void ShoopClientRpc()
         {
             GameObject muzzleFlash = Instantiate(muzzleFlashEffect, _instantPos.position, Quaternion.identity);
             muzzleFlash.transform.SetParent(_instantPos);

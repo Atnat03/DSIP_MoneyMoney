@@ -77,7 +77,7 @@ public class PlayerPastis : NetworkBehaviour
         float t = (float)currentGorgerBottle / numberGorgerToEndBottle;
         float yScale = Mathf.Lerp(0.05f, 1f, t);
         liquide.localScale = new Vector3(liquide.localScale.x, yScale, liquide.localScale.z);
-
+        
         AudioClip c = currentGorgerBottle != 0 ?  drinkSFX : rotSFX;
 
         audioSource.PlayOneShot(c);
@@ -100,11 +100,11 @@ public class PlayerPastis : NetworkBehaviour
 
         effet.SetColor(Color.darkOliveGreen);
         
-        effet.SetDizziness(1f);
+        effet.SetDizziness(0.5f);
         
         while (elapsed <  duration)
         {
-            effet.SetIntensity(elapsed / (duration + 0.75f));
+            effet.SetIntensity(elapsed / (duration + 0.25f));
             
             elapsed += Time.deltaTime;
             yield return null;
@@ -116,7 +116,7 @@ public class PlayerPastis : NetworkBehaviour
         
         while (elapsed > 0)
         {
-            effet.SetIntensity(elapsed / (duration + 0.75f));
+            effet.SetIntensity(elapsed / (duration + 0.25f));
             
             elapsed -= Time.deltaTime;
             yield return null;
@@ -126,7 +126,7 @@ public class PlayerPastis : NetworkBehaviour
         
         effet.SetIntensity(0);
     }
-    
+
     [ServerRpc]
     private void ThrowBottleServerRpc()
     {

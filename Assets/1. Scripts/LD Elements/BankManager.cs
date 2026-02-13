@@ -15,7 +15,7 @@ public class BankManager : MonoBehaviour
         int count = 0;
         foreach (BankBehaviour bank in banks)
         {
-            if (bank.visited.Value) count++;
+            if (bank.visited) count++;
         }
         if (count == 0) return 1;
         return count;

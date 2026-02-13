@@ -118,13 +118,10 @@ public class TruckController : NetworkBehaviour
 
     void Update()
     {
-        if(!IsServer)
+        if (!IsServer) 
         {
-            UpdateWheelsVisualServerRpc();
-        }
-        else
-        {
-            UpdateWheelsVisualClientRpc();
+            UpdateWheelsVisual();
+            return;
         }
         
         CheckPassengersBounds();
@@ -145,10 +142,7 @@ public class TruckController : NetworkBehaviour
             isBreaking = false;
         }
         
-        float speedRatio = rb.linearVelocity.magnitude / 200;
-        speedRatio = Mathf.Clamp01(speedRatio);
-
-        engineAudioSource.pitch = Mathf.Lerp(0.8f, 1.2f, speedRatio);
+        engineAudioSource.volume = rb.linearVelocity.magnitude/100;
     
         UpdateWheels();
         CheckFall();
@@ -237,13 +231,8 @@ public class TruckController : NetworkBehaviour
 
         parentable.OnParented(transform);
 
-        FPSControllerMulti fps = netObj.GetComponent<FPSControllerMulti>();
-        if(fps)
-        {
-            fps.GetComponent<CapsuleCollider>().enabled = false;
-            fps.controller.enabled = false;
-        }
-        
+        netObj.GetComponent<NetworkTransform>().InLocalSpace = true;
+
         Debug.Log($"{netObj.name} parenté au camion");
     }
 
@@ -255,13 +244,6 @@ public class TruckController : NetworkBehaviour
         trackedParentables.Remove(netObj);
 
         parentable.OnUnparented();
-        
-        FPSControllerMulti fps = netObj.GetComponent<FPSControllerMulti>();
-        if(fps)
-        {
-            fps.GetComponent<CapsuleCollider>().enabled = true;
-            fps.controller.enabled = true;
-        }
         
         netObj.GetComponent<NetworkTransform>().InLocalSpace = false;
 
@@ -339,14 +321,7 @@ public class TruckController : NetworkBehaviour
         UpdateSingleWheel(backRightWheelCollider, backRightWheelTransform);
     }
     
-    [ServerRpc]
-    private void UpdateWheelsVisualServerRpc()
-    {
-        UpdateWheelsVisualClientRpc();
-    }
-
-    [ClientRpc]
-    private void UpdateWheelsVisualClientRpc()
+    private void UpdateWheelsVisual()
     {
         UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
         UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -9,7 +8,7 @@ public class SFX_SO : ScriptableObject
     public List<AudioClip> clips;
 }
 
-public class SFX_Manager : NetworkBehaviour
+public class SFX_Manager : MonoBehaviour
 {
     public static SFX_Manager instance;
     
@@ -24,40 +23,30 @@ public class SFX_Manager : NetworkBehaviour
 
     public void PlaySFX(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
     {
-        if (IsServer)
-        {
-            PlaySoundClientRpc(clipID, volume, pitch, loop);
-        }
-        else
-        {
-            RequestPlaySFXServerRpc(clipID, volume, pitch, loop);
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    void RequestPlaySFXServerRpc(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
-    {
-        PlaySoundClientRpc(clipID, volume, pitch, loop);
-    }
-
-
-    [ClientRpc]
-    void PlaySoundClientRpc(int clipID, float volume = 0.5f, float pitch = 1f, bool loop = false)
-    {
+        audioSource.pitch = pitch;
         if (loop)
         {
+            print("sfx looping");
+
             if (loopAudioSource.clip != data.clips[clipID])
             {
                 loopAudioSource.clip = data.clips[clipID];
-                loopAudioSource.volume = volume / 2f;
-                loopAudioSource.pitch = pitch;
+                loopAudioSource.volume = volume;
                 loopAudioSource.Play();
             }
+           
         }
         else
         {
-            audioSource.pitch = pitch;
-            audioSource.PlayOneShot(data.clips[clipID], volume);
+            audioSource.PlayOneShot(data.clips[clipID], volume);  
         }
+    }
+    
+    public void StopSFX()
+    {
+        print("sfx stopped");
+
+        loopAudioSource.clip = null;
+        loopAudioSource.Stop();
     }
 }

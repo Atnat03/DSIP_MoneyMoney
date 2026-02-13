@@ -125,84 +125,78 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         gunOwner.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
     }
     
-public override void OnNetworkSpawn()
-{
-    currentSkinId.OnValueChanged += OnSkinChanged;
-
-    if(IsOwner)
+    public override void OnNetworkSpawn()
     {
-        SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
-    }
+        currentSkinId.OnValueChanged += OnSkinChanged;
 
-    // ✅ Activer le skin initial
-    skinManager.SetSkin(currentSkinId.Value);
-    animator = skinManager.GetAnimator(currentSkinId.Value);
-    networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
-    
-    if (!IsOwner)
-    {
-        // ✅ Pour les autres joueurs : configurer les layers ET afficher les renderers
-        ConfigureOtherPlayerLayers(currentSkinId.Value);
-        skinManager.ShowSkinnedMeshRenderersForOthers(currentSkinId.Value);
+        if(IsOwner)
+        {
+            SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
+        }
+
+        skinManager.SetSkin(currentSkinId.Value);
+        animator = skinManager.GetAnimator(currentSkinId.Value);
+        networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
         
-        myCamera.gameObject.SetActive(false);
+        if (!IsOwner)
+        {
+            ConfigureOtherPlayerLayers(currentSkinId.Value);
+            
+            myCamera.gameObject.SetActive(false);
+            
+            gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
+            map.gameObject.layer = LayerMask.NameToLayer("Other");
+            SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
+            
+            ui.SetActive(false);
+            return;
+        }
         
-        gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
-        map.gameObject.layer = LayerMask.NameToLayer("Other");
-        SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
+        gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
+
+        foreach (Transform t in gunOther.transform)
+        {
+            t.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
         
-        ui.SetActive(false);
-        return;
-    }
-    
-    // ✅ Pour le joueur local : masquer les renderers
-    skinManager.HideSkinnedMeshRenderersForOwner(currentSkinId.Value);
-    
-    gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
+        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
+        map.gameObject.layer = LayerMask.NameToLayer("Owner");
+        
+        myCamera.cullingMask = maskCameraPlayer;
+        startPos = cameraTransform.localPosition;
 
-    foreach (Transform t in gunOther.transform)
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
+
+        yaw = transform.eulerAngles.y;
+        pitch = cameraTransform.localEulerAngles.x;
+        
+        speed = moveSpeed;
+        
+        shooter = gameObject.GetComponent<ShooterComponent>();
+
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        
+        cameraShake = MyCamera().GetComponent<CameraShake>();
+    }
+
+    private void ConfigureOtherPlayerLayers(int skinId)
     {
-        t.gameObject.layer = LayerMask.NameToLayer("Default");
+        GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(skinId);
+        
+        if (listSkins == null || listSkins.Length < 2)
+        {
+            Debug.LogWarning($"Impossible de récupérer les meshes pour le skin {skinId}");
+            return;
+        }
+        
+        int ragdollLayer = LayerMask.NameToLayer("Default");
+        SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
+        SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
     }
-    
-    gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
-    map.gameObject.layer = LayerMask.NameToLayer("Owner");
-    
-    myCamera.cullingMask = maskCameraPlayer;
-    startPos = cameraTransform.localPosition;
 
-    Cursor.lockState = CursorLockMode.Locked;
-    Cursor.visible = false;
-    
-    truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
-
-    yaw = transform.eulerAngles.y;
-    pitch = cameraTransform.localEulerAngles.x;
-    
-    speed = moveSpeed;
-    
-    shooter = gameObject.GetComponent<ShooterComponent>();
-
-    capsuleCollider = GetComponent<CapsuleCollider>();
-    
-    cameraShake = MyCamera().GetComponent<CameraShake>();
-}
-
-// ✅ Méthode pour configurer les layers des autres joueurs
-private void ConfigureOtherPlayerLayers(int skinId)
-{
-    GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(skinId);
-    
-    if (listSkins == null || listSkins.Length < 2)
-    {
-        Debug.LogWarning($"Impossible de récupérer les meshes pour le skin {skinId}");
-        return;
-    }
-    
-    int ragdollLayer = LayerMask.NameToLayer("Default");
-    SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
-    SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
-}
     public override void OnNetworkDespawn()
     {
         currentSkinId.OnValueChanged -= OnSkinChanged;
@@ -334,6 +328,8 @@ private void ConfigureOtherPlayerLayers(int skinId)
         
         if (isPassenger && isInTruck && !isDriver)
         {
+            HandleCameraInput();
+        
             if (isOnLadder)
             {
                 HandlePassengerLadder();
@@ -342,8 +338,6 @@ private void ConfigureOtherPlayerLayers(int skinId)
             {
                 HandlePassengerMovement();
             }
-
-            HandleCameraInput();
             return;
         }
 
@@ -363,38 +357,7 @@ private void ConfigureOtherPlayerLayers(int skinId)
             HandleMovement();
         }
     }
-
-    // NOUVELLE FONCTION: Gestion du mouvement des passagers dans le camion
-    void HandlePassengerMovement()
-    {
-        if (isFreeze) return;
-
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-
-        // Mouvement local dans le camion
-        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        Vector3 worldMove = transform.TransformDirection(localMove) * passengerMoveSpeed * Time.deltaTime;
-        
-        // Déplacer en position locale pour rester attaché au camion
-        transform.localPosition += transform.parent.InverseTransformDirection(worldMove);
-        
-        // Vérifier les limites du camion
-        if (TruckController.instance != null)
-        {
-            Vector3 localPos = transform.localPosition;
-            Vector3 boundsCenter = TruckController.instance.boundsCenter;
-            Vector3 boundsSize = TruckController.instance.boundsSize;
-            Vector3 halfSize = boundsSize * 0.5f;
-            
-            // Clamper la position pour rester dans les limites
-            localPos.x = Mathf.Clamp(localPos.x, boundsCenter.x - halfSize.x, boundsCenter.x + halfSize.x);
-            localPos.y = Mathf.Clamp(localPos.y, boundsCenter.y - halfSize.y, boundsCenter.y + halfSize.y);
-            localPos.z = Mathf.Clamp(localPos.z, boundsCenter.z - halfSize.z, boundsCenter.z + halfSize.z);
-            
-            transform.localPosition = localPos;
-        }
-    }
+    
 
     public void Sit(Transform sitPos)
     {
@@ -564,14 +527,69 @@ private void ConfigureOtherPlayerLayers(int skinId)
     
     void HandlePassengerLadder()
     {
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        if (!isPassenger || !isInTruck) return;
 
-        Vector3 climb = new Vector3(0f, verticalInput, 0f);
-        transform.localPosition += climb * ladderClimbSpeed * Time.deltaTime;
+        float vertInput = Input.GetAxisRaw("Vertical");
+        float horizInput = Input.GetAxisRaw("Horizontal");
 
+        // Mouvement vertical sur l'échelle
+        Vector3 climb = new Vector3(horizInput * 0.3f, vertInput, 0f); // Petit mouvement horizontal autorisé
+        Vector3 localClimb = transform.parent.InverseTransformDirection(
+            transform.TransformDirection(climb)
+        );
+        
+        transform.localPosition += localClimb * ladderClimbSpeed * Time.deltaTime;
+
+        // Vérifier les limites du camion
+        if (TruckController.instance != null)
+        {
+            Vector3 localPos = transform.localPosition;
+            Vector3 boundsCenter = TruckController.instance.boundsCenter;
+            Vector3 boundsSize = TruckController.instance.boundsSize;
+            Vector3 halfSize = boundsSize * 0.5f;
+            
+            localPos.x = Mathf.Clamp(localPos.x, boundsCenter.x - halfSize.x, boundsCenter.x + halfSize.x);
+            localPos.y = Mathf.Clamp(localPos.y, boundsCenter.y - halfSize.y, boundsCenter.y + halfSize.y);
+            localPos.z = Mathf.Clamp(localPos.z, boundsCenter.z - halfSize.z, boundsCenter.z + halfSize.z);
+            
+            transform.localPosition = localPos;
+        }
+
+        // Sortir de l'échelle avec Espace
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isOnLadder = false;
+        }
+    }
+
+    // ✅ MODIFIÉ: Fonction de mouvement passager (sans échelle)
+    void HandlePassengerMovement()
+    {
+        if (isFreeze) return;
+
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        // Mouvement local dans le camion
+        Vector3 localMove = new Vector3(horizontalInput, 0, verticalInput).normalized;
+        Vector3 worldMove = transform.TransformDirection(localMove) * passengerMoveSpeed * Time.deltaTime;
+        
+        // Déplacer en position locale pour rester attaché au camion
+        transform.localPosition += transform.parent.InverseTransformDirection(worldMove);
+        
+        // Vérifier les limites du camion
+        if (TruckController.instance != null)
+        {
+            Vector3 localPos = transform.localPosition;
+            Vector3 boundsCenter = TruckController.instance.boundsCenter;
+            Vector3 boundsSize = TruckController.instance.boundsSize;
+            Vector3 halfSize = boundsSize * 0.5f;
+            
+            localPos.x = Mathf.Clamp(localPos.x, boundsCenter.x - halfSize.x, boundsCenter.x + halfSize.x);
+            localPos.y = Mathf.Clamp(localPos.y, boundsCenter.y - halfSize.y, boundsCenter.y + halfSize.y);
+            localPos.z = Mathf.Clamp(localPos.z, boundsCenter.z - halfSize.z, boundsCenter.z + halfSize.z);
+            
+            transform.localPosition = localPos;
         }
     }
 
@@ -658,6 +676,8 @@ private void ConfigureOtherPlayerLayers(int skinId)
 
     public void OnTriggerEnter(Collider other)
     {
+        if (!IsOwner) return;
+        
         if (other.transform.CompareTag("PorteConducteur") && 
             truckInteraction.hasDriver.Value == false &&
             !hasSomethingInHand)
@@ -674,6 +694,8 @@ private void ConfigureOtherPlayerLayers(int skinId)
     
     public void OnTriggerExit(Collider other)
     {
+        if (!IsOwner) return;
+        
         if (other.transform.CompareTag("PorteConducteur"))
         {
             canEnterInTruck = false;
@@ -727,11 +749,6 @@ private void ConfigureOtherPlayerLayers(int skinId)
         if (!IsOwner)
         {
             ConfigureOtherPlayerLayers(newValue);
-            skinManager.ShowSkinnedMeshRenderersForOthers(newValue);
-        }
-        else
-        {
-            skinManager.HideSkinnedMeshRenderersForOwner(newValue);
         }
     
         print("NEW VALUE SKIN : " + newValue);
