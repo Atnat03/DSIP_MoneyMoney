@@ -128,22 +128,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TruckPart
   ShowTopMostFoldoutHeaderGroup: 1
-  maxHealth: 50
-  detachedPrefab: {fileID: 122698938714386719, guid: 9c966ef186892914bb653f1f7c2e9e2d, type: 3}
-  ejectForce: 5
-  ejectUpwardForce: 2
-  startDestroyed: 0
-  currentHealth:
-    m_InternalValue: 100
-  mult: 1
-  lifeMode: 0
   isBroke:
     m_InternalValue: 0
   mesh: {fileID: 0}
-  baseMaterial: {fileID: 2100000, guid: 8a5858cba668a024ab1618c5ded6329d, type: 2}
-  interactionName: "R\xE9parer"
-  outline:
-  - {fileID: 0}
+  brokenMaterial: {fileID: 2100000, guid: be1e57385f8c36043a4998d50408863e, type: 2}
+  repairedMaterial: {fileID: 2100000, guid: 8a5858cba668a024ab1618c5ded6329d, type: 2}
+  maxHealth: 50
+  currentHealth: 100
+  showHealthBar: 0
 --- !u!114 &-7057207311426488058
 MonoBehaviour:
   m_ObjectHideFlags: 0

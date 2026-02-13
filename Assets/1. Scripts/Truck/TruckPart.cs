@@ -26,19 +26,18 @@ public class TruckPart : NetworkBehaviour, IInteractible
 
     private void Awake()
     {
-        // Récupérer les Outlines si non assignés
         if (Outline == null || Outline.Length == 0)
         {
             Outline = GetComponentsInChildren<Outline>();
         }
-        
         currentHealth = maxHealth;
+
+        mesh = GetComponent<MeshRenderer>();
     }
 
     public override void OnNetworkSpawn()
     {
         isBroke.OnValueChanged += OnBrokeStateChanged;
-        
         UpdateVisuals(isBroke.Value);
     }
 
@@ -50,11 +49,25 @@ public class TruckPart : NetworkBehaviour, IInteractible
     private void OnBrokeStateChanged(bool previousValue, bool newValue)
     {
         UpdateVisuals(newValue);
+
+        if (!newValue) // vient d'être réparé
+        {
+            Debug.Log($"[Client] {gameObject.name} visually repaired");
+            if (SFX_Manager.instance != null)
+            {
+                SFX_Manager.instance.PlaySFX(11);
+            }
+        }
+        else if (newValue)
+        {
+            if (SFX_Manager.instance != null)
+            {
+                SFX_Manager.instance.PlaySFX(13); // son de cassure si tu veux
+            }
+        }
     }
 
     #region Damage System
-
-    // ✅ Méthode appelée par BanditTir quand il tire
     public void TakeDamage(float damage)
     {
         if (!IsServer)
@@ -78,34 +91,17 @@ public class TruckPart : NetworkBehaviour, IInteractible
         }
     }
 
-    // ✅ Casser la pièce
     private void Break()
     {
         if (!IsServer) return;
-
-        if (isBroke.Value)
-        {
-            Debug.Log($"{gameObject.name} is already broken!");
-            return;
-        }
+        if (isBroke.Value) return;
 
         isBroke.Value = true;
         Debug.Log($"[Server] {gameObject.name} has been broken by damage!");
-
-        ShowBreakEffectClientRpc();
     }
-
-    [ClientRpc]
-    private void ShowBreakEffectClientRpc()
-    {
-        UpdateVisuals(true);
-        GetComponent<Collider>().isTrigger = true;
-    }
-    
     #endregion
 
     #region Repair System
-
     public void Repair()
     {
         if (!IsServer)
@@ -123,89 +119,56 @@ public class TruckPart : NetworkBehaviour, IInteractible
         isBroke.Value = false;
         currentHealth = maxHealth;
         Debug.Log($"[Server] {gameObject.name} has been repaired");
-    }
 
-    public void OnRepaired()
-    {
-        Debug.Log($"[Client] {gameObject.name} visually repaired");
-        UpdateVisuals(false);
-
-        if (SFX_Manager.instance != null)
-        {
-            SFX_Manager.instance.PlaySFX(11);
-        }
-        
+        // Remettre le collider en mode solide (si tu l'avais mis en trigger)
         if (TryGetComponent<Collider>(out var col))
+        {
             col.isTrigger = false;
+        }
     }
-
     #endregion
 
     private void UpdateVisuals(bool broken)
     {
-        if (mesh != null)
+        if (mesh == null) return;
+
+        if (broken)
         {
-            mesh.enabled = !broken;
-
-            if (!broken && repairedMaterial != null)
-            {
-                mesh.material = repairedMaterial;
-            }
-        }
-    }
-
-    // ✅ Méthode pour casser la pièce via ServerRpc (pour d'autres systèmes)
-    [ServerRpc(RequireOwnership = false)]
-    public void BreakPartServerRpc()
-    {
-        if (!IsServer) return;
-        
-        Break();
-    }
-
-    // ✅ Méthodes utilitaires pour debug
-    [ContextMenu("Force Break")]
-    public void ForceBreak()
-    {
-        if (IsServer)
-        {
-            Break();
+            mesh.enabled = false; // ou true + brokenMaterial si tu veux montrer des débris
+            if (brokenMaterial != null)
+                mesh.material = brokenMaterial;
         }
         else
         {
-            BreakPartServerRpc();
+            mesh.enabled = true; // ← IMPORTANT : visible quand réparé
+            if (repairedMaterial != null)
+                mesh.material = repairedMaterial;
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void BreakPartServerRpc()
+    {
+        Break();
+    }
+
+    // Debug utils
+    [ContextMenu("Force Break")]
+    public void ForceBreak()
+    {
+        if (IsServer) Break();
+        else BreakPartServerRpc();
     }
 
     [ContextMenu("Force Repair")]
     public void ForceRepair()
     {
-        if (IsServer)
-        {
-            Repair();
-        }
+        if (IsServer) Repair();
     }
 
     [ContextMenu("Take 50 Damage")]
     public void TestDamage()
     {
-        if (IsServer)
-        {
-            TakeDamage(50f);
-        }
-    }
-
-    // ✅ Pour afficher la santé dans l'inspector (debug)
-    private void OnGUI()
-    {
-        if (!showHealthBar || !IsServer) return;
-
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2f);
-        if (screenPos.z > 0)
-        {
-            GUI.color = Color.red;
-            GUI.Label(new Rect(screenPos.x - 50, Screen.height - screenPos.y, 100, 20), 
-                $"HP: {currentHealth:F0}/{maxHealth:F0}");
-        }
+        if (IsServer) TakeDamage(50f);
     }
 }
