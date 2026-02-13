@@ -14,7 +14,6 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
     public Transform Transform => transform;
     public NetworkObject NetworkObject => GetComponent<NetworkObject>();
 
-    // ✅ Cooldown local pour éviter le re-grab immédiat
     private float lastReleaseTime = -999f;
     private const float REGRAB_COOLDOWN = 0.3f;
 
@@ -22,7 +21,6 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
     {
         Interact.OnInteract += HitInteract;
         
-        // ✅ Détecter quand IsGrabbed change
         IsGrabbed.OnValueChanged += OnGrabbedChanged;
     }
 
@@ -30,7 +28,6 @@ public class GrabbableObject : NetworkBehaviour, IGrabbable, IParentable, IInter
     {
         SFX_Manager.instance.PlaySFX(14);
         
-        // Quand l'objet passe de grabbed à non-grabbed
         if (oldValue == true && newValue == false)
         {
             lastReleaseTime = Time.time;

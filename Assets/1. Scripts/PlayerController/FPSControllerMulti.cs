@@ -125,67 +125,84 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         gunOwner.SetActive(!hasSomethingInHand && !isMapActive && !isDriver);
     }
     
-    public override void OnNetworkSpawn()
+public override void OnNetworkSpawn()
+{
+    currentSkinId.OnValueChanged += OnSkinChanged;
+
+    if(IsOwner)
     {
-        currentSkinId.OnValueChanged += OnSkinChanged;
-    
-        if(IsOwner)
-        {
-            SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
-        }
-    
-        skinManager.SetSkin(currentSkinId.Value);
-        animator = skinManager.GetAnimator(currentSkinId.Value);
-        networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
-        
-        if (!IsOwner)
-        {
-            GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(currentSkinId.Value);
-            
-            int ragdollLayer = LayerMask.NameToLayer("Default");
-            SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
-            SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
-            
-            myCamera.gameObject.SetActive(false);
-            
-            gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
-            map.gameObject.layer = LayerMask.NameToLayer("Other");
-            SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
-            
-            ui.SetActive(false);
-            return;
-        }
-        
-        gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
-
-        foreach (Transform t in gunOther.transform)
-        {
-            t.gameObject.layer = LayerMask.NameToLayer("Default");
-        }
-        
-        gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
-        map.gameObject.layer = LayerMask.NameToLayer("Owner");
-        
-        myCamera.cullingMask = maskCameraPlayer;
-        startPos = cameraTransform.localPosition;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
-        truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
-
-        yaw = transform.eulerAngles.y;
-        pitch = cameraTransform.localEulerAngles.x;
-        
-        speed = moveSpeed;
-        
-        shooter = gameObject.GetComponent<ShooterComponent>();
-
-        capsuleCollider = GetComponent<CapsuleCollider>();
-        
-        cameraShake = MyCamera().GetComponent<CameraShake>();
+        SubmitSkinServerRpc(AutoJoinedLobby.Instance.LocalPlayerSkin);
     }
 
+    // ✅ Activer le skin initial
+    skinManager.SetSkin(currentSkinId.Value);
+    animator = skinManager.GetAnimator(currentSkinId.Value);
+    networkAnimator = animator.gameObject.GetComponent<NetworkAnimator>();
+    
+    if (!IsOwner)
+    {
+        // ✅ Pour les autres joueurs : configurer les layers ET afficher les renderers
+        ConfigureOtherPlayerLayers(currentSkinId.Value);
+        skinManager.ShowSkinnedMeshRenderersForOthers(currentSkinId.Value);
+        
+        myCamera.gameObject.SetActive(false);
+        
+        gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
+        map.gameObject.layer = LayerMask.NameToLayer("Other");
+        SetLayerRecursively(gunOther, LayerMask.NameToLayer("Default"));
+        
+        ui.SetActive(false);
+        return;
+    }
+    
+    // ✅ Pour le joueur local : masquer les renderers
+    skinManager.HideSkinnedMeshRenderersForOwner(currentSkinId.Value);
+    
+    gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
+
+    foreach (Transform t in gunOther.transform)
+    {
+        t.gameObject.layer = LayerMask.NameToLayer("Default");
+    }
+    
+    gunOwner.gameObject.layer = LayerMask.NameToLayer("Owner");
+    map.gameObject.layer = LayerMask.NameToLayer("Owner");
+    
+    myCamera.cullingMask = maskCameraPlayer;
+    startPos = cameraTransform.localPosition;
+
+    Cursor.lockState = CursorLockMode.Locked;
+    Cursor.visible = false;
+    
+    truckInteraction = TruckController.instance.GetComponent<TruckInteraction>();
+
+    yaw = transform.eulerAngles.y;
+    pitch = cameraTransform.localEulerAngles.x;
+    
+    speed = moveSpeed;
+    
+    shooter = gameObject.GetComponent<ShooterComponent>();
+
+    capsuleCollider = GetComponent<CapsuleCollider>();
+    
+    cameraShake = MyCamera().GetComponent<CameraShake>();
+}
+
+// ✅ Méthode pour configurer les layers des autres joueurs
+private void ConfigureOtherPlayerLayers(int skinId)
+{
+    GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(skinId);
+    
+    if (listSkins == null || listSkins.Length < 2)
+    {
+        Debug.LogWarning($"Impossible de récupérer les meshes pour le skin {skinId}");
+        return;
+    }
+    
+    int ragdollLayer = LayerMask.NameToLayer("Default");
+    SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
+    SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
+}
     public override void OnNetworkDespawn()
     {
         currentSkinId.OnValueChanged -= OnSkinChanged;
@@ -315,11 +332,17 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             return;
         }
         
-        // NOUVEAU: Gestion du mouvement pour les passagers
         if (isPassenger && isInTruck && !isDriver)
         {
-            HandlePassengerLadder();
-            HandlePassengerMovement();
+            if (isOnLadder)
+            {
+                HandlePassengerLadder();
+            }
+            else
+            {
+                HandlePassengerMovement();
+            }
+
             HandleCameraInput();
             return;
         }
@@ -541,13 +564,9 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     
     void HandlePassengerLadder()
     {
-        if (!isPassenger || !isInTruck) return;
-        if (!isOnLadder) return;
-
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         Vector3 climb = new Vector3(0f, verticalInput, 0f);
-
         transform.localPosition += climb * ladderClimbSpeed * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -703,6 +722,18 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
     private void OnSkinChanged(int previousValue, int newValue)
     {
         skinManager.SetSkin(newValue);
+        animator = skinManager.GetAnimator(newValue);
+    
+        if (!IsOwner)
+        {
+            ConfigureOtherPlayerLayers(newValue);
+            skinManager.ShowSkinnedMeshRenderersForOthers(newValue);
+        }
+        else
+        {
+            skinManager.HideSkinnedMeshRenderersForOwner(newValue);
+        }
+    
         print("NEW VALUE SKIN : " + newValue);
     }
 

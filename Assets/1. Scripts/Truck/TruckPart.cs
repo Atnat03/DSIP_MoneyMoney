@@ -63,6 +63,27 @@ public class TruckPart : NetworkBehaviour, IInteractible
             isBroke.OnValueChanged -= OnBrokeStateChanged;
     }
 
+    public void Repair()
+    {
+        if (!IsServer) return;
+        
+        isBroke.Value = false;
+        Debug.Log($"[Server] {gameObject.name} réparé");
+    }
+    
+    public void OnRepaired()
+    {
+        // Mettre à jour les visuels, sons, etc.
+        if (mesh != null)
+        {
+            mesh.enabled = false;
+        }
+        
+        // Autres effets visuels/sonores
+        Debug.Log($"[Client] {gameObject.name} visuellement réparé");
+    }
+
+    
     private void OnBrokeStateChanged(bool previousValue, bool newValue)
     {
         UpdateVisuals();
