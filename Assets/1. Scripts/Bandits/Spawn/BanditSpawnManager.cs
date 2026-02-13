@@ -62,7 +62,7 @@ public class BanditSpawnManager : MonoBehaviour
         if (!NetworkManager.Singleton.IsServer)
             return;
 
-        if (truck.GetComponent<Rigidbody>().linearVelocity.sqrMagnitude < 3)
+        if (truck.GetComponent<Rigidbody>().linearVelocity.sqrMagnitude < 1)
             return;
         
         if (_timeUntilBanditBarrage.Value > 0) { _timeUntilBanditBarrage.Value-= Time.deltaTime; }
@@ -93,6 +93,8 @@ public class BanditSpawnManager : MonoBehaviour
         {
             GameObject bandit = Instantiate(banditFollowPrefab, closest.position, Quaternion.identity);
             
+            bandit.GetComponent<NetworkObject>().Spawn();
+            
             bandit.GetComponent<BanditVehicleAI>().truck = truck.transform;
             bandit.GetComponent<BanditVehicleAI>().lookAtTarget.target = truck.transform;
             
@@ -100,9 +102,6 @@ public class BanditSpawnManager : MonoBehaviour
             bool goRight = (rdm == 0);      
             if(rdm ==0) bandit.GetComponent<BanditVehicleAI>().flankPosition = BanditVehicleAI.FlankPosition.Right;
             else bandit.GetComponent<BanditVehicleAI>().flankPosition = BanditVehicleAI.FlankPosition.Left;
-           
-            
-            bandit.GetComponent<NetworkObject>().Spawn();
         }
     }
     
