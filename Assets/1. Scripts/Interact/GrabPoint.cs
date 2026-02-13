@@ -201,14 +201,15 @@ public class GrabPoint : NetworkBehaviour
 
             float ratio = _chargeTimer / _maxChargeTime;
             float force = Mathf.Lerp(_minThrowStrength, _maxThrowStrength, ratio);
-            
+        
             GetComponent<FPSControllerMulti>().animator.SetTrigger("Throw");
 
             ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, force);
 
-            _heldItem = null;
-            handState = HandState.Free;
-            GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
+            // ❌ NE PAS RÉINITIALISER ICI - laissez le ReleaseClientRpc le faire
+            // _heldItem = null;
+            // handState = HandState.Free;
+            // GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
 
             _chargeTimer = 0;
             throwJauge.fillAmount = 0;
@@ -266,10 +267,11 @@ public class GrabPoint : NetworkBehaviour
     {
         Debug.Log("Slow Throw");
         ThrowServerRpc(_heldItem.NetworkObjectId, _camera.forward, _minThrowStrength);
-    
-        _heldItem = null;
-        handState = HandState.Free;
-        GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
+
+        // ❌ NE PAS RÉINITIALISER ICI NON PLUS
+        // _heldItem = null;
+        // handState = HandState.Free;
+        // GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
     }
 
 
@@ -342,11 +344,12 @@ public class GrabPoint : NetworkBehaviour
         ReleaseClientRpc(ownerId);
     }
 
+    
     [ClientRpc]
     private void ReleaseClientRpc(ulong ownerId)
     {
         Debug.Log($"[Client {NetworkManager.Singleton.LocalClientId}] ReleaseClientRpc called for owner {ownerId}");
-    
+
         if (NetworkManager.Singleton.LocalClientId != ownerId) return;
 
         if (_heldItem != null)
@@ -359,14 +362,16 @@ public class GrabPoint : NetworkBehaviour
         
             _heldItem.gameObject.GetComponent<NetworkObject>().TrySetParent((Transform)null);
         }
+        else
+        {
+            Debug.LogWarning($"[Client] _heldItem is NULL in ReleaseClientRpc!");
+        }
 
         GetComponent<FPSControllerMulti>().hasSomethingInHand = false;
-
         _heldItem = null;
         handState = HandState.Free;
         _onThrow?.Invoke();
     }
-
 
     #endregion
 
