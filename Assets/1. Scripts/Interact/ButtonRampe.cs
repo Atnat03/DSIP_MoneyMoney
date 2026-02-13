@@ -17,6 +17,15 @@ public class ButtonRampe : NetworkBehaviour, IInteractible
 
     public override void OnNetworkSpawn()
     {
+        if (NetworkManager.Singleton.IsServer)
+        {
+            ToggleRampe();
+        }
+        else
+        {
+            ToggleRampeServerRpc();
+        }
+        
         Interact.OnInteract += TouchButtonRampe;
         isOpenRampe.OnValueChanged += OnRampeStateChanged;
     }

@@ -14,7 +14,6 @@ public class TruckController : NetworkBehaviour
     [SerializeField] float motorForce = 100f;
     [SerializeField] float breakForce = 1000f;
     [SerializeField] float maxSteerAngle = 30f;
-    [SerializeField] float vitesseMax = 30;
 
     [SerializeField] Vector3 centerOfMass;
     
@@ -127,8 +126,6 @@ public class TruckController : NetworkBehaviour
         {
             UpdateWheelsVisualClientRpc();
         }
-
-        rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, vitesseMax);
         
         CheckPassengersBounds();
     
@@ -148,7 +145,7 @@ public class TruckController : NetworkBehaviour
             isBreaking = false;
         }
         
-        float speedRatio = rb.linearVelocity.magnitude / vitesseMax;
+        float speedRatio = rb.linearVelocity.magnitude / 200;
         speedRatio = Mathf.Clamp01(speedRatio);
 
         engineAudioSource.pitch = Mathf.Lerp(0.8f, 1.2f, speedRatio);
