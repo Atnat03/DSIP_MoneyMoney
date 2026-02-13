@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_CellShading 1
+  m_Name: M_Main_Transparent 1
   m_Shader: {fileID: -6465566751694194690, guid: 6bbec085c06e81247893daeb200b966a, type: 3}
-  m_Parent: {fileID: -876546973899608171, guid: 6bbec085c06e81247893daeb200b966a, type: 3}
+  m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -23,22 +23,39 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: daa56301f30f6c44bb67c01f9a65b76a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Float: 0.492
-    - _Float_1: 2.04
+    - _Float: 0.6
+    - _Highlight_Size: 2
     - _Outline: 1
     - _QueueControl: 0
-    - _Rim_Size: 0.5
+    - _QueueOffset: 0
+    - _Rim_Size: 0.691
+    - _Shadow_Size: 0.48
     m_Colors:
-    - _Color_Base: {r: 0.36934692, g: 0.7490196, b: 0.18950199, a: 1}
-    - _Color_Highlight: {r: 1.2407511, g: 1.4980392, b: 0.3466051, a: 1}
-    - _Color_Rim_Light: {r: 0.6573807, g: 1, b: 0.3066038, a: 1}
-    - _Color_Shadow: {r: 0.09631336, g: 0.41799998, b: 0.19262674, a: 1}
+    - _Color_Base: {r: 0.47843137, g: 1, b: 0.23137255, a: 1}
+    - _Color_Highlight: {r: 0.41505086, g: 0.7735849, b: 0.15690638, a: 1}
+    - _Color_Shadow: {r: 0.5647059, g: 0.5058824, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &8720463583840316277
+--- !u!114 &37439197403238902
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
