@@ -60,20 +60,37 @@ public class PauseGame : NetworkBehaviour
             isPause = !isPause;
 
             if (isPause)
-            {
                 fpsController.StartFreeze();
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
             else
-            {
                 fpsController.StopFreeze();
-                            
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
+
+            SetCursorState(isPause);
         }
     }
+    
+    private void LateUpdate()
+    {
+        if (!isPause && Cursor.lockState != CursorLockMode.Locked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+    
+    private void SetCursorState(bool paused)
+    {
+        if (paused)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
 
     private void PausingTheGame()
     {

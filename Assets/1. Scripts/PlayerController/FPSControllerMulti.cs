@@ -140,6 +140,12 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
         
         if (!IsOwner)
         {
+            GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(currentSkinId.Value);
+            
+            int ragdollLayer = LayerMask.NameToLayer("Default");
+            SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
+            SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
+            
             myCamera.gameObject.SetActive(false);
             
             gunOwner.gameObject.layer = LayerMask.NameToLayer("Other");
@@ -149,12 +155,6 @@ public class FPSControllerMulti : NetworkBehaviour, IParentable
             ui.SetActive(false);
             return;
         }
-        
-        GameObject[] listSkins = skinManager.GetSkinnedMeshRenderers(currentSkinId.Value);
-            
-        int ragdollLayer = LayerMask.NameToLayer("Default");
-        SetLayerRecursively(listSkins[0].gameObject, ragdollLayer);
-        SetLayerRecursively(listSkins[1].gameObject, ragdollLayer);
         
         gunOther.gameObject.layer = LayerMask.NameToLayer("Default");
 
